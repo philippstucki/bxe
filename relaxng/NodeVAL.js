@@ -40,8 +40,12 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 	}
 	debug ("_isNodeValid " + this.nodeName );
 	try {
-		debug ("just before new ContextVDOM (NodeVAL.js line 43)");
-		var ctxt = new ContextVDOM(this,this.vdom);
+		if (this.vdom) {
+			debug ("just before new ContextVDOM (NodeVAL.js line 43)");
+			var ctxt = new ContextVDOM(this, this.vdom);
+		} else {
+			return false;
+		}
 	
 	} catch (e) { bxe_catch_alert(e); debug ("couldn't make new context..");}
 	if (ctxt && ctxt.node) {
@@ -106,7 +110,7 @@ function ContextVDOM (node,vdom) {
 	this.errormsg = new Array();
 	this.refs = new Array();
 
-	if (typeof vdom.firstChild != "undefined") {
+	if (vdom && typeof vdom.firstChild != "undefined") {
 		this.vdom = vdom.getFirstChild(this);
 	} else {
 		this.vdom = null;

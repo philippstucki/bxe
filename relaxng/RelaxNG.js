@@ -8,6 +8,8 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 
 	
 	//do includes
+	var endTimer = new Date();
+	dump ("Total Start Time: " + (endTimer - startTimer)/1000 + " sec\n"); 
 	this.parseIncludes();
 	
 	debug("start remove whitespace");
@@ -44,7 +46,11 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 	
 	
 	debug("end remove whitespace");
-	debug(this.xmldoc.saveXML(this.xmldoc));
+	var endTimer = new Date();
+	dump ("Total Start Time: " + (endTimer - startTimer)/1000 + " sec\n"); 
+	if (DebugOutput) {
+		debug(this.xmldoc.saveXML(this.xmldoc));
+	}	
 	
 	var rootChildren = this.xmldoc.documentElement.childNodes;
 
@@ -449,11 +455,12 @@ RefVDOM.prototype.getFirstChild = function (ctxt) {
 }
 NodeVDOM.prototype.getNextSibling = function(ctxt) {
 	var nextSib = this.nextSibling;
+	/*
 	for (var i = 0; i < ctxt.refs.length; i++) {
 		dump (".");
 	}
 	dump ("NodeName: " + this.nodeName + " " + this.name +  " Node: " + ctxt.node.nodeName);
-	dump ("\n");
+	dump ("\n");*/
 	if (!nextSib && this.parentNode && this.parentNode.nodeName == "RELAXNG_DEFINE") {
 		return this.parentNode.getNextSibling(ctxt);
 	} 
@@ -510,11 +517,12 @@ DefineVDOM.prototype.allowedElements = function(ctxt) {
 
 DefineVDOM.prototype.getNextSibling = function(ctxt) {
 
+	/*
 	for (var i = 0; i < ctxt.refs.length; i++) {
 		dump (".");
 	}
 	dump ("NodeName: " + this.nodeName + " " + this.name + " Node: " + ctxt.node.nodeName);
-	dump ("\n");
+	dump ("\n");*/
 	if (ctxt.refs.length == 0) {
 		debug ("	: " + ctxt.nr + "... 0");
 		return null;
@@ -563,11 +571,11 @@ ChoiceVDOM.prototype = new NodeVDOM();
 ChoiceVDOM.prototype.isValid = function(ctxt) {
 	var refsPosition = ctxt.refs.length;
 	var child = this.getFirstChild(ctxt);
-	dump ("Choice.isValid?: " + this.nodeName+"\n");
+	//debug ("Choice.isValid?: " + this.nodeName+"\n");
 	var hasEmpty = false;
 	
 	while (child) {
-		dump ("Choice.child.isValid?: " + child.nodeName + "\n");
+	//	debug ("Choice.child.isValid?: " + child.nodeName + "\n");
 		if (child.type == "RELAXNG_EMPTY") {
 			hasEmpty = true;
 		}
