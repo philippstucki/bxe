@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- $Id: config.xml,v 1.12 2003/09/09 15:25:16 chregu Exp $ -->
+<!-- $Id: config.xml,v 1.13 2003/10/09 13:58:23 chregu Exp $ -->
 <config>
     <files>
     <!-- the following file definitions are presumably the most important
@@ -134,4 +134,8 @@
       <xmlns prefix="unzih" uri="http://unizh.ch/doctypes/elements/1.0"/>
       <xmlns prefix="dcterms" uri="http://purl.org/dc/terms/"/>
     </namespaces>
+    <callbacks>
+        <element name="object" ns="http://www.w3.org/1999/xhtml" type="popup">../../picturesExample/index.html</element>
+    </callbacks>
+    
 </config>
