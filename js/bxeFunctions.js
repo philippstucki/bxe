@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.120 2003/12/01 16:47:48 chregu Exp $
+// $Id: bxeFunctions.js,v 1.121 2003/12/01 22:24:21 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -1170,9 +1170,6 @@ function bxe_InsertLink(e) {
 	if (bxe_checkForSourceMode(sel)) {
 		return false;
 	}
-	if (!bxe_checkIsAllowedChild(XHTMLNS,"a",sel)) {
-		return false;
-	}
 	var aValue = "";
 	if (sel.anchorNode.parentNode.XMLNode.localName == "a") {
 		aValue = sel.anchorNode.parentNode.getAttribute("href");
@@ -1180,11 +1177,21 @@ function bxe_InsertLink(e) {
 	else if(sel.isCollapsed) { // must have a selection or don't prompt
 		return;
 	}
-
+	
+	if (!bxe_checkIsAllowedChild(XHTMLNS,"a",sel)) {
+		return false;
+	}
+	
+	
 	var mod = mozilla.getWidgetModalBox("Enter a URL:", function(values) {
 		var href = values["href"];
 		if(href == null) // null href means prompt canceled - BUG FIX FROM Karl Guertin
 			return;
+		var sel = window.getSelection();
+		if (sel.anchorNode.parentNode.XMLNode.localName == "a") {
+		 sel.anchorNode.parentNode.setAttribute("href", href);
+		 return true;
+		}
 		if(href != "") 
 			sel.linkText(href);
 		else

@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: NodeVAL.js,v 1.27 2003/12/01 01:28:44 chregu Exp $
+// $Id: NodeVAL.js,v 1.28 2003/12/01 22:24:21 chregu Exp $
 
 const BXE_VALID_NOMESSAGE = 1;
 
@@ -189,11 +189,8 @@ ContextVDOM.prototype.nextVDOM = function() {
 	var nextSib = this.vdom.getNextSibling(this);
 	if (nextSib) {
 		this.vdom = nextSib;
-	} /*else if (this.vdom.parentNode && this.vdom.parentNode.nodeName == "RELAXNG_DEFINE") {
-		debug ("nextVDOM parent DEFINE " + this.vdom.nodeName + this.vdom.parentNode.name);
+	}  else {
 		return null;
-	} */else {
-			return null;
 	}
 	return this.vdom;
 }

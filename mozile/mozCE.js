@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: mozCE.js,v 1.15 2003/12/01 01:28:44 chregu Exp $
+// $Id: mozCE.js,v 1.16 2003/12/01 22:24:21 chregu Exp $
 
 /* 
  * mozCE V0.5
@@ -268,6 +268,8 @@ Selection.prototype.styleText = function(styleName, styleValue)
 
 Selection.prototype.linkText = function(href)
 {
+	
+	
 	var cssr = this.getEditableRange();
 
 	if(!cssr)
