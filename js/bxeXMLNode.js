@@ -11,7 +11,15 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLNode.js,v 1.39 2004/01/13 11:30:46 chregu Exp $
+// $Id: bxeXMLNode.js,v 1.40 2004/01/13 17:01:37 chregu Exp $
+
+function bxe_XMLNodeInit (nodein, localName, nodeType, autocreate) {
+	if (nodein.nodeType == 1 || typeof nodein == "string") {
+		return new XMLNodeElement(nodein, localName, nodeType, autocreate);
+	} else {
+		return new XMLNode(nodein, localName, nodeType, autocreate);
+	}
+}
 
 
 function XMLNode  ( nodein, localName, nodeType, autocreate) {
@@ -30,9 +38,6 @@ XMLNode.prototype.copy  = function () {
 	// clipboard.setData(deletedFragment.saveXML(), "text/html"); // go back to this once, paste supports html paste!
 	clipboard.setData(cssr,MozClipboard.TEXT_FLAVOR);
 }
-
-
-
 
 XMLNode.prototype.init = function ( nodein, localName, nodeType, autocreate) {
 	if (typeof nodein != "undefined" && typeof nodein != "string") {

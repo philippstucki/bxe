@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.137 2004/01/13 11:30:46 chregu Exp $
+// $Id: bxeFunctions.js,v 1.138 2004/01/13 17:01:37 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -423,7 +423,7 @@ function bxe_NodeInsertedParent(e) {
 	var oldNode = e.target.XMLNode;
 	var parent = e.additionalInfo;
 	
-	parent.XMLNode =  new XMLNode(parent);
+	parent.XMLNode =  bxe_XMLNodeInit(parent);
 	parent.XMLNode.previousSibling = oldNode.previousSibling;
 	parent.XMLNode.nextSibling = oldNode.nextSibling;
 	if (parent.XMLNode.previousSibling) {
@@ -643,7 +643,7 @@ function bxe_NodeChanged(e) {
 
 	var newNode = e.target;
 	var oldNode = e.additionalInfo.XMLNode;
-	newNode.XMLNode = new XMLNode(newNode);
+	newNode.XMLNode = bxe_XMLNodeInit(newNode);
 	newNode.XMLNode.previousSibling = oldNode.previousSibling;
 	newNode.XMLNode.nextSibling = oldNode.nextSibling;
 	newNode.XMLNode.parentNode = oldNode.parentNode;
@@ -669,7 +669,7 @@ function bxe_NodeInsertedBefore(e) {
 	try {
 		var oldNode = e.target.XMLNode;
 		var newNode = e.additionalInfo;
-		newNode.XMLNode =  new XMLNode(newNode);
+		newNode.XMLNode =  bxe_XMLNodeInit(newNode);
 		if (oldNode.parentNode) {
 			oldNode.parentNode.insertBeforeIntern(newNode.XMLNode, oldNode);
 		}
