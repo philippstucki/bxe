@@ -312,7 +312,7 @@ Widget_Menu.prototype.addMenuPopup = function(submenus) {
 			submenu.addMenuItem(label, submenus.shift());
 		}
 	}
-	submenu.position(this.node.offsetLeft + 5, this.node.offsetTop + this.node.offsetHeight   ,"absolute");
+	submenu.position(this.node.offsetLeft + 5, this.node.offsetTop + this.node.offsetHeight   ,"fixed");
 	this.MenuPopup = submenu;
 	this.node.addEventListener("click", function(e) {
 		this.Widget.MenuPopup.draw();
@@ -423,7 +423,7 @@ function Widget_AboutBox() {
 	this.node.appendToBody();
 	this.node.style.width = width + "px";
 	this.node.style.height = height + "px";
-	this.position((window.innerWidth- width)/2,(window.innerHeight-height)/3,"absolute");
+	this.position((window.innerWidth- width)/2,(window.innerHeight-height)/3,"fixed");
 	this.node.onclick = function(e) { this.style.display = 'none';}
 	var htmltext = "<a href='http://bitfluxeditor.org' target='_new'>http://bitfluxeditor.org</a> <br/> Version: " + BXE_VERSION;
 	htmltext += "<br/><br/> Based on <a href='http://mozile.mozdev.org' target='_new'>Mozile</a>";
@@ -530,7 +530,8 @@ Widget_StatusBar.prototype.buildPopup = function (node) {
 			this.Popup.appendAllowedSiblings(node);
 		}
 		this.Popup.draw();
-		this.Popup.position(node.offsetParent.offsetLeft +node.offsetLeft + window.scrollX, window.scrollY + node.offsetParent.offsetTop + node.offsetTop -this.Popup.node.offsetHeight ,"absolute");
+		this.Popup.position(node.offsetParent.offsetLeft +node.offsetLeft,  node.offsetParent.offsetTop + node.offsetTop -this.Popup.node.offsetHeight ,"fixed");
+		
 		this.Popup.draw();
 		this.Popup._node = node;
 }
