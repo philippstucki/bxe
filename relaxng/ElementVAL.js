@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: ElementVAL.js,v 1.17 2004/01/18 17:25:32 chregu Exp $
+// $Id: ElementVAL.js,v 1.18 2004/01/18 23:25:36 chregu Exp $
 
 
 XMLNodeElement.prototype.__defineGetter__(
@@ -92,7 +92,7 @@ XMLNodeElement.prototype.isValidNextSibling = function(ctxt) {
 XMLNodeElement.prototype.__defineGetter__(
 "allowedNextSiblings", function() {
 		// everything which isn't an Element, can't have children
-	if ( typeof this._allowedNextSiblings == "undefined") {
+	if (typeof this._allowedNextSiblings == "undefined") {
 		var ctxt = new ContextVDOM(this.parentNode,this.parentNode.vdom);
 		var ac = new Array();
 		var subac = null;

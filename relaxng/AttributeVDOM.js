@@ -11,13 +11,13 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: AttributeVDOM.js,v 1.9 2003/11/18 21:41:10 chregu Exp $
+// $Id: AttributeVDOM.js,v 1.10 2004/01/18 23:25:36 chregu Exp $
 
 function AttributeVDOM(node, option) {
 	this.type = "RELAXNG_ATTRIBUTE";
 	this.name = node.getAttribute("name");
 	this.dataType = "NCName";
-	if (option == "optional") {
+	if (option == "optional" || node.getAttribute("type") == "optional") {
 		this.optional = true;
 	} else {
 		this.optional = false;
@@ -42,7 +42,13 @@ function AttributeVDOM(node, option) {
 	
 }
 
-AttributeVDOM.prototype.isValid = function() {
-	debug ("AttributeVDOM.prototype.isValid");
-	return false;
+AttributeVDOM.prototype.isValid = function(ctxt) {
+
+	if (ctxt.node._node && !this.optional && !ctxt.node._node.hasAttribute(this.name)) {
+		ctxt.setErrorMessage(ctxt.node.nodeName + " does not have the required attribute " + this.name);
+		return false;
+	} else {
+		return true;
+	}
+	
 }

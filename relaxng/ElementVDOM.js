@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: ElementVDOM.js,v 1.13 2004/01/15 08:24:48 chregu Exp $
+// $Id: ElementVDOM.js,v 1.14 2004/01/18 23:25:36 chregu Exp $
 
 function ElementVDOM(node) {
 	this.node = node;
@@ -81,6 +81,12 @@ ElementVDOM.prototype.__defineGetter__ (
 ElementVDOM.prototype.isValid = function(ctxt) {
 //dump(ctxt.node.nodeType + " " + ctxt.node.localName+" == "+this.localName+" && "+ctxt.node.namespaceURI+" == "+this.namespaceURI+"\n");
 	if (ctxt.node.localName == this.localName && ctxt.node.namespaceURI == this.namespaceURI) {
+		
+		
+		var _attr = this.attributes;
+		for(var i in _attr) {
+			 _attr[i].isValid(ctxt);
+		}
 		ctxt.node.vdom = this;
 		ctxt.nextVDOM();
 		return true;
