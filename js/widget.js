@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: widget.js,v 1.68 2004/02/11 14:51:50 chregu Exp $
+// $Id: widget.js,v 1.69 2004/02/11 21:22:59 chregu Exp $
 
 function Widget () {}
 
@@ -659,7 +659,7 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 	var sel  = window.getSelection();
 	var cssr = sel.getEditableRange();
 	//var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
-	if (!(sel.isCollapsed)) {
+	if (!(sel.isCollapsed) && !(node.XMLNode.localName == "object" && node.XMLNode.namespaceURI == XHTMLNS)) {
 			var ac = node.XMLNode.allowedChildren;
 			ac.sort(bxe_nodeSort);
 			for (i = 0; i < ac.length; i++) {
