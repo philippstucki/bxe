@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.114 2003/12/01 01:28:44 chregu Exp $
+// $Id: bxeFunctions.js,v 1.115 2003/12/01 08:08:16 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -473,12 +473,12 @@ function bxe_ContextPopup(e) {
 	var popup = e.additionalInfo;
 	if (node.vdom && node.vdom.hasAttributes ) {
 		
-		var menui = popup.addMenuItem("Edit Attributes..", mozilla.getWidgetGlobals().EditAttributes.popup);
+		var menui = popup.addMenuItem("Edit " + e.target.XMLNode.nodeName  + " Attributes", mozilla.getWidgetGlobals().EditAttributes.popup);
 		menui.MenuPopup._node = node._node;
 	}
 
 	
-	popup.addMenuItem("Copy Node", function (e) {
+	popup.addMenuItem("Copy "  + e.target.XMLNode.nodeName  + " Element", function (e) {
 		var widget = e.currentTarget.Widget;
 		var delNode = widget.MenuPopup.MainNode;
 		delNode.copy();
@@ -486,7 +486,7 @@ function bxe_ContextPopup(e) {
 	var clip = mozilla.getClipboard();
 	if (clip._clipboard) {
 		if (node.parentNode.isAllowedChild(clip._clipboard.firstChild.namespaceURI, clip._clipboard.firstChild.localName)) {
-		popup.addMenuItem("Append Clipboard Node", function (e) {
+		popup.addMenuItem("Append " + clip._clipboard.firstChild.nodeName + " from Clipboard", function (e) {
 			var widget = e.currentTarget.Widget;
 			var appNode = widget.MenuPopup.MainNode;
 			var clip = mozilla.getClipboard();
@@ -498,7 +498,7 @@ function bxe_ContextPopup(e) {
 
 	}
 	
-	popup.addMenuItem("Delete Node", function (e) {
+	popup.addMenuItem("Delete "  + e.target.XMLNode.nodeName  + " Element", function (e) {
 		var widget = e.currentTarget.Widget;
 		var delNode = widget.MenuPopup.MainNode._node;
 		var _par = delNode.parentNode;
