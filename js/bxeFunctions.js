@@ -13,7 +13,13 @@ function __bxeSave(e) {
 	} else {
 		td.Exit = null;
 	}
-	var xmlstr = bxe_getXmlDocument()
+	var xml = bxe_getXmlDomDocument();
+	if (!(xml.XMLNode.validateDocument())) 
+	{
+		return false;
+	}
+	var xmlstr =xml.saveXML(xml);
+	
 	function callback (e) {
 		if (e.isError) {
 			alert("Document couldn't be saved\n"+e.statusText);
@@ -107,8 +113,7 @@ function bxe_history_undo() {
 	} 
 }
 
-function bxe_getXmlDocument() {
-	
+function bxe_getXmlDomDocument() {
 	var areaNodes = bxe_getAllEditableAreas();
 	var xml;
 	for (var i = 0; i < areaNodes.length; i++) {
@@ -120,7 +125,14 @@ function bxe_getXmlDocument() {
 		xml = areaNodes[i].XMLNode.buildXML();
 		
 	}
-	return xml.ownerDocument.saveXML(xml.ownerDocument);
+	return xml.ownerDocument;
+}
+	
+
+function bxe_getXmlDocument() {
+	
+	var xml = bxe_getXmlDomDocument();
+	return xml.saveXML(xml);
 
 //	return areaNodes[0].XMLNode.ownerDocument.buildXML();
 }
@@ -1211,5 +1223,9 @@ function bxe_validationAlert(messages) {
 	}
 	widg.show((window.innerWidth- 500)/2,50, "fixed");
 	
+}
+function bxe_getDirPart(path) {
+	
+	return path.substring(0,path.lastIndexOf("/") + 1);
 }
 
