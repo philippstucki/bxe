@@ -20,12 +20,17 @@ DocumentVDOM.prototype.parseIncludes = function() {
 	var rootChild = this.xmldoc.documentElement.firstChild;
 	var alreadyNext;
 	this.replaceIncludePaths(this.xmldoc,this.directory);
+	var loadedPaths = new Array();
 	while (rootChild) {
 		alreadyNext = false;
 		if (rootChild.isRelaxNGElement("include")) {
 			var td = new mozileTransportDriver("http");
 			var href = rootChild.getAttribute("href");
 			bxe_about_box.addText(rootChild.getAttribute("href") + " " );
+			if (loadedPaths[href]) {
+			debug (href + " was already loaded...");
+			}
+			else { 
 			var req =  td.load(href, null, false);
 			if (req.isError) {
 				debug("!!!RelaxNG file " + rootChild.getAttribute("href") + " could not be loaded!!!")
@@ -41,6 +46,7 @@ DocumentVDOM.prototype.parseIncludes = function() {
 						child = child.nextSibling;
 					}
 				}
+			}
 			}
 			var rootChildOld = rootChild;
 			var rootChild = rootChild.nextSibling;
@@ -217,7 +223,6 @@ NodeVDOM.prototype.parseChildren = function(node) {
 				if (!defineChild.isParsed) {
 					defineChild.isParsed = true;
 					this.parseChildren(defineChild);
-					
 				} 
 			}
 		} 
