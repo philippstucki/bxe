@@ -519,7 +519,7 @@ Range.prototype.styleText = function(styleName, styleValue, isClass, namespaceUR
 		if(!styleValue || document.defaultView.getComputedStyle(textContainer, null).getPropertyValue(styleName) != styleValue)
 		{	
 			// if text doesn't have exclusive parent then will need to give it one!
-			if(textContainer.childNodes.length > 1)
+			if(textContainer.childNodes.length > 1 || (textContainer.childNodes.length == 1 && textContainer.getCStyle("display") != "inline"))
 			{
 				var styleHolder;
 
