@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: mozilekb.js,v 1.27 2004/01/13 05:32:41 chregu Exp $
+// $Id: mozilekb.js,v 1.28 2004/01/13 09:00:20 chregu Exp $
 
 /* 
  * mozilekb V0.46
@@ -266,7 +266,10 @@ function nonctrlKeyPressHandler(event)
 	// BACKSPACE AND DELETE (DOM_VK_BACK_SPACE, DOM_VK_DELETE)
 	if((event.keyCode == 8) || (event.keyCode == 46)) {
 		var backspace = (event.keyCode == 46);
-		if (!sel.isCollapsed && sel.anchorNode.nodeType == 3 && sel.anchorOffset == 0) {
+		if (sel.isCollapsed) {
+			sel.deleteSelection(backspace);
+		}
+		else if (!sel.isCollapsed && sel.anchorNode.nodeType == 3 && sel.anchorOffset == 0) {
 			bxe_history_snapshot();
 			var n = sel.focusNode;
 			var o = sel.focusOffset;
@@ -276,12 +279,12 @@ function nonctrlKeyPressHandler(event)
 			sel = window.getSelection();
 			sel.deleteSelection(false);
 			sel.anchorNode.updateXMLNode();
-			
-		} else if (sel.isCollapsed) {
-			sel.deleteSelection(backspace);
-			
 		} else {
 			bxe_history_snapshot();
+			cssr = sel.getEditableRange();
+			
+			var _conode = cssr.commonAncestorContainer;
+			
 			sel.deleteSelection(backspace);
 			
 			if (sel.anchorNode.nodeType == 3) {
@@ -289,7 +292,21 @@ function nonctrlKeyPressHandler(event)
 			} else {
 				var n = sel.anchorNode;
 			}
-			n.updateXMLNode();
+			var i = 0;
+			if (!cssr.top._SourceMode) {
+				if (_conode ) {
+					while (n && n != _conode && !n.xmlBridge && i < 10) {
+						i++;
+						n.updateXMLNode();
+						n = n.parentNode;
+					}
+					_conode.updateXMLNode();
+				} else {
+					n.updateXMLNode();
+				}
+			}
+			//_node.updateXMLNode();
+			
 			
 			
 		}

@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: ElementVAL.js,v 1.13 2003/11/18 21:41:10 chregu Exp $
+// $Id: ElementVAL.js,v 1.14 2004/01/13 09:00:20 chregu Exp $
 
 
 XMLNodeElement.prototype.__defineGetter__(
@@ -53,8 +53,12 @@ XMLNodeElement.prototype.__defineGetter__(
 
 XMLNodeElement.prototype.__defineGetter__ ("canHaveText",
 	function() {
-		if (typeof this.vdom._canHaveText == "undefined") {
-			debug ("not cached...");
+		
+		if (typeof this.vdom == "undefined") {
+			//bad hack...
+			return true;
+		}
+		else if ( typeof this.vdom._canHaveText == "undefined") {
 			var ac = this.allowedChildren;
 			if (ac) {
 				for (var i = 0; i < ac.length; i++) {
@@ -67,9 +71,9 @@ XMLNodeElement.prototype.__defineGetter__ ("canHaveText",
 			this.vdom._canHaveText = false;
 			return false;
 		} else {
-			debug("CCCAAACCCHHHHEEEEEDDDD");
 			return this.vdom._canHaveText;
 		}
+		return true;
 	}
 	)
 	
