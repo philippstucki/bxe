@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: AttributeVDOM.js,v 1.10 2004/01/18 23:25:36 chregu Exp $
+// $Id$
 
 function AttributeVDOM(node, option) {
 	this.type = "RELAXNG_ATTRIBUTE";
@@ -43,10 +43,22 @@ function AttributeVDOM(node, option) {
 }
 
 AttributeVDOM.prototype.isValid = function(ctxt) {
-
 	if (ctxt.node._node && !this.optional && !ctxt.node._node.hasAttribute(this.name)) {
 		ctxt.setErrorMessage(ctxt.node.nodeName + " does not have the required attribute " + this.name);
 		return false;
+	} else if (ctxt.node._node && this.choices) {
+		var value = ctxt.node._node.getAttribute(this.name);
+		if (value) {
+			for (var i = 0; i < this.choices.length; i++) {
+				if (this.choices[i] == value) {
+					return true;
+				}
+			}
+			ctxt.setErrorMessage("'" +value + "' is not an allowed value for attribute '" + this.name + "' in '" + ctxt.node.nodeName +"'");
+			return false
+		} else {
+			return true;
+		}
 	} else {
 		return true;
 	}
