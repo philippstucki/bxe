@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.126 2003/12/17 15:16:59 chregu Exp $
+// $Id: bxeFunctions.js,v 1.127 2003/12/18 11:19:34 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -519,12 +519,19 @@ function bxe_ContextPopup(e) {
 	
 	popup.addMenuItem("Delete "  + e.target.XMLNode.nodeName  + " Element", function (e) {
 		var widget = e.currentTarget.Widget;
-		var delNode = widget.MenuPopup.MainNode._node;
+		var delNode = widget.MenuPopup.MainNode;
+		if (delNode._node.InternalParentNode) {
+			delNode = delNode._node.InternalParentNode.XMLNode
+		}
 		var _par = delNode.parentNode;
-		_upNode = delNode.previousSibling;
+		
+		var _upNode = delNode.previousSibling;
+		if (!_upNode) {
+			_upNode = delNode.parentNode;
+		}
 		bxe_history_snapshot();
 		_par.removeChild(delNode);
-		_upNode.updateXMLNode();
+//		_upNode.updateXMLNode();
 		
 	});
 	popup.addSeparator();
@@ -1370,6 +1377,7 @@ documentCreateXHTMLElement = function (elementName,attribs) {
 		}	
 		newNode.appendChild(childNode);
 		newNode.InternalChildNode = childNode;
+		childNode.InternalParentNode = newNode;
 		newNode.eDOMaddEventListener("NodeAttributesModified",bxe_InternalChildNodesAttrChanged,false);
 	
 	}
