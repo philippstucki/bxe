@@ -13,7 +13,7 @@
 XSL transformation from Kupu Library XML to HTML for the library
 drawer.
 
-$Id: librarydrawer.xsl 4131 2004-04-23 09:15:49Z paul $
+$Id$
 -->
 <xsl:stylesheet
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -33,10 +33,13 @@ $Id: librarydrawer.xsl 4131 2004-04-23 09:15:49Z paul $
               select="/libraries/*[@selected]"
               mode="header"
               />
+          <!--
           <form onsubmit="return false;">
             <input id="kupu-searchbox" name="searchbox" value=""
                    onkeyup="if (event.keyCode == 13 ) drawertool.current_drawer.search();" />
           </form>
+          
+          -->
           </div>
           <div id="kupu-panels">
             <table>
@@ -94,8 +97,10 @@ $Id: librarydrawer.xsl 4131 2004-04-23 09:15:49Z paul $
   </xsl:template>
 
   <xsl:template match="library|collection|resource" mode="header">
+    <!--
     <xsl:text>Current location: </xsl:text>
     <xsl:value-of select="uri/text()" />
+    -->
   </xsl:template>
 
   <xsl:template match="resource|collection">
@@ -110,7 +115,7 @@ $Id: librarydrawer.xsl 4131 2004-04-23 09:15:49Z paul $
         <xsl:attribute name="style">background-color: #C0C0C0</xsl:attribute>
       </xsl:if>
       <xsl:if test="icon">
-        <img src="{icon}" title="{title}" alt="{title}" />
+    <img src="{icon}" title="{title}" alt="{title}" />
       </xsl:if>
       <xsl:apply-templates select="title"/>
     </div>

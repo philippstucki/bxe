@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupudrawertool.js 4123 2004-04-22 15:19:45Z philikon $
+// $Id$
 
 function DrawerTool() {
     /* a tool to open and fill drawers
@@ -25,10 +25,11 @@ function DrawerTool() {
     };
 
     this.registerDrawer = function(id, drawer) {
+        
         this.drawers[id] = drawer;
         drawer.initialize(this.editor, this);
     };
-
+    
     this.openDrawer = function(id) {
         /* open a drawer */
         if (this.current_drawer) {
@@ -38,7 +39,7 @@ function DrawerTool() {
         drawer.createContent();
         this.current_drawer = drawer;
     };
-
+    
     this.updateState = function(selNode) {
         if (this.current_drawer) {
             this.closeDrawer();
@@ -49,6 +50,7 @@ function DrawerTool() {
         if (!this.current_drawer) {
             return;
         };
+        
         this.current_drawer.hide();
         this.current_drawer = null;
     };

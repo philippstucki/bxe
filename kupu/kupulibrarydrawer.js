@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupulibrarydrawer.js 4105 2004-04-21 23:56:13Z guido $
+// $Id$
 
 function LibraryDrawer(tool, xsluri, libsuri, searchuri) {
     /* a drawer that loads XSLT and XML from the server 

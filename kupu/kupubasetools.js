@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupubasetools.js 4105 2004-04-21 23:56:13Z guido $
+// $Id$
 
 
 //----------------------------------------------------------------------------
@@ -489,6 +489,8 @@ function LinkTool() {
     
     // the order of the arguments is a bit odd here because of backward compatibility
     this.createLink = function(url, type, name, target) {
+        alert(url);
+        
         var currnode = this.editor.getSelectedNode();
         var linkel = this.editor.getNearestParentOfType(currnode, 'A');
         if (!linkel) {
