@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLDocument.js,v 1.35 2004/02/20 15:08:46 chregu Exp $
+// $Id: bxeXMLDocument.js,v 1.36 2004/02/26 15:48:33 chregu Exp $
 
 
 XMLDocument.prototype.init = function (startNode) {
@@ -215,7 +215,6 @@ XMLNodeDocument.prototype.buildXML = function() {
 }
 
 XMLNode.prototype.buildXML = function () {
-	debug("buildXML " + this.localName)
 	var nsResolver = new bxe_nsResolver(this.ownerDocument.documentElement);
 	
 	var walker = new XMLNodeWalker(this);
@@ -229,9 +228,11 @@ XMLNode.prototype.buildXML = function () {
 	
 	srcNode.removeAllChildren();
 	var xmldoc = srcNode.ownerDocument;
+	
 	var node = walker.nextNode();
 	
 	srcNode.XMLNode._sernode = srcNode;
+	
 	var child ;
 	var attribs;
 	while (node) {
@@ -248,7 +249,7 @@ XMLNode.prototype.buildXML = function () {
 				child.removeAttribute("class");
 			}
 		} else if (node.nodeType == 3) {
-			child = xmldoc.createTextNode(node.data);
+			child = xmldoc.importNode(node._node.cloneNode(true),true);
 		} else {
 			child = xmldoc.importNode(node._node.cloneNode(true),true);
 		}
@@ -263,7 +264,6 @@ XMLNode.prototype.buildXML = function () {
 		}
 		node = walker.nextNode();
 	}
-	
 	return srcNode;
 }
 
