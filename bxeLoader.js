@@ -56,7 +56,10 @@ var bxe_config = new Object();
 var bxe_about_box = null;
 var bxe_format_list = null;
 var bxe_toolbar = null;
+var bxe_menubar = null;
 var bxe_context_menu = null;
+var bxe_plugins = new Array();
+
 var bxe_delayedUpdate = false;
 var eDOM_bxe_mode = true; 
 var bxe_editable_page = true;
@@ -225,7 +228,7 @@ function corescript_loaded(e) {
 function bxe_plugin_script_loaded(e) {
 	bxe_plugin_script_loaded_counter++;
 	if ( bxe_plugin_scripts.length <= bxe_plugin_script_loaded_counter ) {
-		bxe_init_plugins();
+		 bxe_init_plugins();
 	} else {
 		//bxe_about_box.addText(bxe_plugin_script_loaded_counter );
 	}
@@ -272,23 +275,23 @@ function bxe_load_plugins() {
 			var p = eval ("new Bxe" + ps[i]);
 			// load css
 			var css = p.getCss();
-			for (var i=0; i < css.length; i++) {
+			for (var j=0; j < css.length; j++) {
 				var scr = document.createElementNS(XHTMLNS,"link");
 				scr.setAttribute("type","text/css");
 				scr.setAttribute("rel","stylesheet");
-				if (css[i].substring(0,1) == "/" || css[i].indexOf("://") > 0) {
-					var src = css[i];
+				if (css[j].substring(0,1) == "/" || css[i].indexOf("://") > 0) {
+					var src = css[j];
 				} else {
-					var src = mozile_root_dir +css[i];
+					var src = mozile_root_dir +css[j];
 				}
 				scr.setAttribute("href",src);
 				head.appendChild(scr);
 			}
 			
 			var js = p.getScripts();
-			for (var i=0; i < js.length; i++) 
+			for (var j=0; j < js.length; j++) 
 			{
-				bxe_plugin_scripts.push(mozile_root_dir +js[i]);
+				bxe_plugin_scripts.push(mozile_root_dir +js[j]);
 			}
 			
 		}
@@ -310,12 +313,14 @@ function bxe_load_plugins() {
 }
 
 function bxe_init_plugins () {
+	
 	var ps = bxe_config.getPlugins();
 	
 	if (ps.length > 0) {
 		for (var i = 0; i < ps.length; i++) {
 			var p = eval ("new Bxe" + ps[i]);
 			p.init(bxe_config.getPluginOptions(ps[i]));
+			bxe_plugins[ps[i]] = p;
 		}
 	}
 	bxe_about_box.addText("Plugins initialized");
