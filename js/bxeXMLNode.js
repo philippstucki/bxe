@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLNode.js,v 1.40 2004/01/13 17:01:37 chregu Exp $
+// $Id: bxeXMLNode.js,v 1.41 2004/01/15 08:24:48 chregu Exp $
 
 function bxe_XMLNodeInit (nodein, localName, nodeType, autocreate) {
 	if (nodein.nodeType == 1 || typeof nodein == "string") {
@@ -302,6 +302,20 @@ XMLNode.prototype.__defineGetter__(
 	function()
 	{
 		var ac = this.vdom.allowedChildren;
+		if (ac) {
+			return ac;
+		} else {
+			return new Array();
+		}
+	}
+);
+
+XMLNode.prototype.__defineGetter__( 
+	"allowedNextSiblings",
+	function()
+	{
+		var ac = this.vdom.allowedNextSiblings;
+		
 		if (ac) {
 			return ac;
 		} else {
@@ -633,12 +647,14 @@ XMLNodeElement.prototype = new XMLNode();
 
 
 XMLNodeElement.prototype.hasAttributes = function() {
-	var attribs = this._node.attributes;
-	for (var i = 0; i < attribs.length; i++) {
-		if (attribs[i].localName.substr(0,5) != "_edom" && attribs[i].localName.substr(0,5) != "__bxe") {
-			return true;
+	if (this._node) {
+		var attribs = this._node.attributes;
+		for (var i = 0; i < attribs.length; i++) {
+			if (attribs[i].localName.substr(0,5) != "_edom" && attribs[i].localName.substr(0,5) != "__bxe") {
+				return true;
+			}
 		}
-	}
+	} 
 	return false;
 }
 // FIXME: slow part for buildXML!!

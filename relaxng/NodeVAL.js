@@ -11,26 +11,30 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: NodeVAL.js,v 1.30 2004/01/13 05:04:06 chregu Exp $
+// $Id: NodeVAL.js,v 1.31 2004/01/15 08:24:48 chregu Exp $
 
 const BXE_VALID_NOMESSAGE = 1;
 
-XMLNode.prototype.isNodeValid = function(deep, wFValidityCheckLevel ) {
-	if ( this._node._SourceMode == true) {
+XMLNode.prototype.isNodeValid = function(deep, wFValidityCheckLevel, noError ) {
+	if ( this._node && this._node._SourceMode == true) {
 		return true;
 	}
 	var c  = this._isNodeValid(deep,wFValidityCheckLevel);
 	if (c.isError) {
 		c.dumpErrorMessages();
+		if (!noError) {
+			
 		
-		for (i in c.errormsg) {
-			if (c.errormsg[i]["node"]._node.nodeType == 1) {
-				c.errormsg[i]["node"]._node.setAttribute("__bxe_invalid","true");
-			} 
-		}
-		if (!(wFValidityCheckLevel & 1)) {
-			bxe_validationAlert(c.errormsg);
-		}
+			for (i in c.errormsg) {
+				if (c.errormsg[i]["node"]._node && c.errormsg[i]["node"]._node.nodeType == 1) {
+					c.errormsg[i]["node"]._node.setAttribute("__bxe_invalid","true");
+				} 
+			}
+			if (!(wFValidityCheckLevel & 1)) {
+				bxe_validationAlert(c.errormsg);
+			}
+		} 
+			
 		return false;
 	} else {
 		return true;
@@ -60,13 +64,13 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 			debug ("just before new ContextVDOM (NodeVAL.js line 43)");
 			var ctxt = new ContextVDOM(this, this.vdom);
 		} else {
+			dump ("no vdom for " + this.localName +"\n");
 			return false;
 		}
 	
 	} catch (e) { bxe_catch_alert(e); debug ("couldn't make new context..");}
 	if (ctxt && ctxt.node) {
 	do {
-		
 		if (ctxt.node.nodeType == "3" && ctxt.node.isWhitespaceOnly) {
 			continue;
 		} 	
@@ -83,17 +87,10 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 				var refsPosition = ctxt.refs.length;
 				//var oldVdom = ctxt.node.vdom;
 				oldVdom = ctxt.vdom;	
-				debug(oldVdom.nodeName + " ..... ");
-				debug("*****Go deeper " + ctxt.node.nodeName);
 				var retctxt = ctxt.node._isNodeValid(deep,  wFValidityCheckLevel )
-				
-				debug("*****back deeper " + ctxt.node.nodeName);
 				if (retctxt.isError) {
 					ctxt.addErrorMessages(retctxt.errormsg);
-				} else {
-//					ctxt.setVDOM(oldVdom, refsPosition);
-				}
-				
+				} 
 			}
 			if(ctxt.node.hasAttributes()) {
 				for( var i = 0; i < ctxt.node.attributes.length; i++) {
@@ -102,6 +99,7 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 					}
 				}
 			}
+
 		} else {
 				var _msg = "";
 				if (ctxt.node.nodeType == 3) {
@@ -119,7 +117,7 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 				ctxt.setErrorMessage(_msg);
 		}
 		//debug ("---------");
-	} while (ctxt.next())
+	} while (ctxt.next() )
 
 	
 		}
@@ -153,7 +151,7 @@ ContextVDOM.prototype.next = function() {
 	if (this.node.nextSibling) {
 		
 		this.node = this.node.nextSibling;
-		if (this.node._node.nodeType == 3 ) {
+		if (this.node.nodeType == 3 ) {
 			debug("ctxt.next next.nodeName is null...");
 			return this.next();
 		}
@@ -223,17 +221,13 @@ ContextVDOM.prototype.isValid = function() {
 ContextVDOM.prototype.setVDOM = function(vdom, refsPosition) {
 
 	if (refsPosition && this.refs.length >  0 ) {
-		debug("//////// setVDOM " + vdom.nodeName);
-		debug("////////         " + this.refs[this.refs.length -1].name);
 		while (this.refs.length > refsPosition) {
 			var bla = this.refs.pop();
 			debug ("this.refs.pop" + bla.name);
 			 
 		}
-		debug("last refs " + this.refs[this.refs.length -1].name);
 	}
 	this.vdom = vdom;
-	debug("this.vdom " + this.vdom.nodeName);
 }
 
 XMLNode.prototype.__defineGetter__(

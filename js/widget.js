@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: widget.js,v 1.65 2003/12/03 18:13:33 chregu Exp $
+// $Id: widget.js,v 1.66 2004/01/15 08:24:48 chregu Exp $
 
 function Widget () {}
 
@@ -720,8 +720,10 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 
 
 Widget_MenuPopup.prototype.appendAllowedSiblings = function( node) {
-	var ac = node.XMLNode.parentNode.allowedChildren;
-	
+	var start = new Date();
+	var ac = node.XMLNode.allowedNextSiblings;
+	var end = new Date();
+	dump ("appendAllowedSiblings " +(end-start) + " \n"); 
 	function nodeSort(a,b) {
 		if (a.nodeName > b.nodeName) {
 			return 1;

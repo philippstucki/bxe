@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: ElementVAL.js,v 1.14 2004/01/13 09:00:20 chregu Exp $
+// $Id: ElementVAL.js,v 1.15 2004/01/15 08:24:48 chregu Exp $
 
 
 XMLNodeElement.prototype.__defineGetter__(
@@ -47,6 +47,65 @@ XMLNodeElement.prototype.__defineGetter__(
 		} 
 	} else { 
 		return this._allowedChildren;
+	}
+}
+)
+
+XMLNodeElement.prototype.__defineGetter__(
+"allowedNextSiblings", function() {
+		// everything which isn't an Element, can't have children
+	if ( typeof this._allowedNextSiblings == "undefined") {
+		var ctxt = new ContextVDOM(this.parentNode,this.parentNode.vdom);
+		var ac = new Array();
+		var subac = null;
+		
+		
+		try{
+			if (ctxt.vdom ) {
+			
+				do {
+					
+					subac = ctxt.vdom.allowedElements(ctxt);
+					
+					if (subac && subac.nodeName) {
+						if (subac[i].localName != "#text") {
+							var bla =  new XMLNodeElement(subac.namespaceURI, subac.localName, 1);
+							this.parentNode.insertBeforeIntern(bla,this.nextSibling);
+							if( bla.parentNode.isNodeValid(false,2,true)) {
+								ac.push(subac);
+							}
+							bla.unlink();
+							bla=null;
+						}
+						
+					} else if (subac) {
+						for (var i = 0; i < subac.length; i++) {
+							if (subac[i].localName != "#text") {
+								var bla =  new XMLNodeElement(subac[i].namespaceURI, subac[i].localName, 1);
+								this.parentNode.insertBeforeIntern(bla,this.nextSibling);
+								if( bla.parentNode.isNodeValid(false,2,true)) {
+									ac.push(subac[i]);
+								}
+								bla.unlink();
+								bla = null;
+							}
+							
+						}
+					}
+					
+				} while (ctxt.nextVDOM())
+			}
+			ac.sort(bxe_nodeSort);
+			
+			this._allowedNextSiblings = ac;
+			return ac;
+		} catch(e){
+			dump("end with catch get allowed nextSibling for " + this.nodeName);
+			bxe_catch_alert(e);
+			return ac;
+		} 
+	} else { 
+		return this._allowedNextSiblings;
 	}
 }
 )
