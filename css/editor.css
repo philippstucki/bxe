@@ -98,14 +98,20 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
     padding-top: 4px;
 }
 
-.StatusBar span {
+.StatusBar span, .StatusBar div {
     font: 10px Geneva, Verdana, sans-serif; 
     margin: 3px 0px 3px 0px;
     border: 1px solid transparent; 
     padding: 3px 2px 3px 2px;
 }
 
-
+.StatusBar div {
+    border: 1px dotted black;
+    cursor: inherit; 
+    background-color: #aa3300 !important;
+	color: #FFFFFF;
+    margin-left: 20px;
+}
 .StatusBar span:hover {
     border: 1px dotted black;
     cursor: pointer; 

@@ -557,7 +557,21 @@ Widget_AboutBox.prototype.addText = function(text) {
 	window.status = this.TextNode.data;
 }
 
+function Widget_StatusBar_Message (statusbarNode) {
+	this.statusbarNode = statusbarNode
+}
+	
+Widget_StatusBar_Message.prototype = new Widget();
 
+Widget_StatusBar_Message.prototype.showMessage = function(text) {
+	if (!(this.node && this.node.parentNode )) {
+		this.node= this.initNode("div","StatusBarMessage","StatusBarMessage");
+		this.statusbarNode.appendChild(this.node);
+	}
+	this.node.removeAllChildren();
+	this.node.style.display="inline";
+	this.node.appendChild(document.createTextNode(text));
+}
 function Widget_StatusBar () {
 	this.node = this.initNode("div","StatusBar","StatusBar");
 	this.node.appendToBody();
@@ -569,9 +583,16 @@ function Widget_StatusBar () {
 	this.draw();	
 }
 
-
-
 Widget_StatusBar.prototype = new Widget();
+
+Widget_StatusBar.prototype.showMessage = function (text) {
+	if (!this.messageArea) {
+		this.messageArea = new Widget_StatusBar_Message(this.node);
+	} 
+	this.messageArea.showMessage(text);
+	
+}
+	
 
 Widget_StatusBar.prototype.positionize = function (e) {
 	// it's an event, do nothing...

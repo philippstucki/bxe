@@ -55,23 +55,19 @@ function __bxeSave(e) {
 	var xmlstr =xml.saveXML(xml);
 	
 	function callback (e) {
-		var widg = mozilla.getWidgetModalBox("Saving");
+		
 		
 		if (e.isError) {
+			var widg = mozilla.getWidgetModalBox("Saving");
 			widg.addText("Document couldn't be saved\n"+e.statusText);
 			widg.show((window.innerWidth- 500)/2,50, "fixed");
 			return;
 		}
 		bxe_lastSavedXML = bxe_getXmlDocument();
-		widg.addText( "" );
-		widg.addText( "" );
-		widg.addText( "" );
-		widg.addText( "Document saved" );
-		widg.addText( "" );
-		widg.addText( "" );
-		widg.addText( "" );
+		bxe_status_bar.showMessage("Document successfully saved");
 		
-		widg.show((window.innerWidth- 500)/2,50, "fixed");
+		
+		//widg.show((window.innerWidth- 500)/2,50, "fixed");
 		if (e.td.Exit) {
 			eDOMEventCall("Exit",document);
 		}
