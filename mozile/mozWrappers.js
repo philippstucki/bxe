@@ -93,7 +93,7 @@ var mozilla = new Moz();
 
 function Moz()
 {
-	try {
+	/*try {
 		// try enable xpconnect
 		netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
 	}
@@ -102,7 +102,9 @@ function Moz()
 		this.__allowedNativeCalls = false;
 		return;
 	}
-	this.__allowedNativeCalls = true;
+	this.__allowedNativeCalls = true;*/
+	this.__allowedNativeCalls = false;
+	
 }
 
 /*******************************************************************************************************

@@ -690,22 +690,9 @@ Selection.prototype.copy = function()
 
 Selection.prototype.cut = function()
 {
-	var cssr = this.getEditableRange();
-
-	if(!cssr || cssr.collapsed) // not an editable area or nothing selected
-		return;
-
-	var clipboard = mozilla.getClipboard();
-
-	// clipboard.setData(deletedFragment.saveXML(), MozClipboard.HTML_FLAVOR); // go back to this once, paste supports html paste! 
-	// above (conversion from selection to HTML text) to be handled in mozClipboard, IMHO (chregu) 
-	clipboard.setData(cssr, MozClipboard.TEXT_FLAVOR);
-
-	var deletedFragment = cssr.extractContentsByCSS();
-	
-
-	this.removeAllRanges();
-	this.addRange(cssr);
+	this.copy();
+	bxe_history_snapshot();
+	this.deleteSelection(false);
 }
 
 /*
