@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- $Id: config.xml,v 1.7 2003/08/26 14:07:14 chregu Exp $ -->
+<!-- $Id: config.xml,v 1.8 2003/08/26 14:07:44 chregu Exp $ -->
 <config>
     <files>
     <!-- the following file definitions are presumably the most important
@@ -32,7 +32,7 @@
             If you want to provide the location via an URL-Parameter:
             <file name="BX_xmlfile" isConfigParam="true">keyNameOfArrayElement</file>
             
-            and the request bxe_start("config.xml",true/false, array("xml"=>"xml/article.xml")) leads to the same as the above
+            and the request bxe_start("config.xml",true/false, array("keyNameOfArrayElement"=>"xml/article.xml")) leads to the same as the above
             example. (note: the example doesn't work, you have to create your array in another way...
             
             
