@@ -223,28 +223,14 @@ XMLNode.prototype.__defineGetter__(
 	}
 );
 
-/*
-XMLNode.prototype.__defineSetter__( 
-	"localName",
-	function(value)
-	{
-		this._localName = value;
-	}
-);
-
-XMLNode.prototype.__defineGetter__( 
-	"localName",
-	function()
-	{
-		return this._localName;
-	}
-);
-*/
 
 XMLNode.prototype.__defineSetter__( 
 	"namespaceURI",
 	function(value)
 	{
+		if (value == null) {
+			value = "";
+		}
 		this._namespaceURI = value;
 		if (this._node && this.isInHTMLDocument() && this.nodeType == 1 ) {
 			this._node.setAttribute("__bxe_ns",value);
