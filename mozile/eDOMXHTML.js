@@ -584,7 +584,9 @@ Range.prototype.styleText = function(styleName, styleValue, isClass, namespaceUR
 			}
 			if (isClass) {
 				if (styleValue) {
-					textContainer.addClass(styleName);
+					if (textContainer.localName != styleName) {
+						textContainer.addClass(styleName);
+					}
 				} else {
 					textContainer.removeClass(styleName);
 				}
