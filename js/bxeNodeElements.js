@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeNodeElements.js,v 1.36 2004/01/09 10:03:42 chregu Exp $
+// $Id: bxeNodeElements.js,v 1.37 2004/01/19 16:41:47 chregu Exp $
 
 Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 	alert("Node.prototype.insertIntoHTMLDocument is deprecated");
@@ -463,20 +463,10 @@ Node.prototype.prepareForInsert = function(onlyChildren) {
 	var firstChild = false;
 	do  {
 			var newNode;
-			
-			if (node.nodeType == 1 ) {
-				newNode = node.makeHTMLNode()
-		/*		if (! node.hasChildNodes() && !(node.namespaceURI == XHTMLNS && node.localName == "img")) {
-						var xmlstring = node.getBeforeAndAfterString(false,true);
-						
-						newNode.setAttribute("_edom_tagnameopen", xmlstring[0]);
-				}*/
-			} else {
-				newNode = node.makeHTMLNode();
-			}
-			if (node.nodeType == 3) {
-				newNode = node.makeHTMLNode();
-			}
+	
+
+			newNode = node.makeHTMLNode();
+
 			if (!firstChild) {
 				firstChild = newNode;
 			}
@@ -494,7 +484,6 @@ Node.prototype.prepareForInsert = function(onlyChildren) {
 Node.prototype.makeHTMLNode = function () {
 	var _node;
 	if (this.nodeType == 1) {
-		dump (this.localName + " " + this.namespaceURI  + "\n");
 		_node = this.createNS(this.namespaceURI, this.attributes);
 	} else if (this.nodeType == 3 ) {
 		_node = this.createNS(this.data);
