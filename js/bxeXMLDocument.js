@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLDocument.js,v 1.33 2004/01/18 17:25:23 chregu Exp $
+// $Id: bxeXMLDocument.js,v 1.34 2004/02/06 11:02:37 chregu Exp $
 
 
 XMLDocument.prototype.init = function (startNode) {
@@ -58,6 +58,10 @@ XMLDocument.prototype.insertIntoHTMLDocument = function(htmlnode) {
 			}
 			for (var j = 0; j < xmlresults.length; j++) {
 				//dump ("result node type " + xmlresults[j].nodeType + xmlresults[j].nodeName+ "\n");
+				if (!xmlresults[j].hasChildNodes()) {
+					xmlresults[j].XMLNode.setContent("",true);//appendChild(xmlresults[j].ownerDocument.createTextNode("lalaland"));
+				}
+				
 				xmlresults[j].XMLNode.xmlBridge = xmlresults[j]; 
 				var menu = new Widget_AreaInfo(nodes[i]);
 				bxe_alignAreaNode(menu,nodes[i]);

@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLNode.js,v 1.43 2004/02/05 11:20:14 chregu Exp $
+// $Id: bxeXMLNode.js,v 1.44 2004/02/06 11:02:37 chregu Exp $
 
 function bxe_XMLNodeInit (nodein, localName, nodeType, autocreate) {
 	if (nodein.nodeType == 1 || typeof nodein == "string") {
@@ -194,7 +194,7 @@ XMLNode.prototype.unlinkChildren = function () {
 XMLNode.prototype.appendChild = function(newNode) {
 	//BX_debug(newNode);
 	
-	if (this._node.ownerDocument == document ) {
+	if (this._node.ownerDocument == document && this.nodeType == 1 ) {
 		newNode.createNS(newNode.namespaceURI, newNode.localName, newNode.attributes);
 	}
 
@@ -256,9 +256,9 @@ XMLNode.prototype.appendChildIntern = function (newNode) {
 }
 
 
-XMLNode.prototype.setContent = function (text) {
+XMLNode.prototype.setContent = function (text, autocreate) {
 	this.removeAllChildren();
-	var mmmh = new XMLNode(text, null, 3);
+	var mmmh = new XMLNode(text, null, 3, autocreate);
 	this.appendChild(mmmh);
 }
 
