@@ -1,62 +1,14 @@
-XMLDocument.prototype.init= function () {
-	var walker = this.createTreeWalker(
-		this.documentElement,NodeFilter.SHOW_ALL,
-	{
-		acceptNode : function(node) {			
-			return NodeFilter.FILTER_ACCEPT;
-		}
-	}
-	, true);
 
-	var node = this.documentElement;
-	var firstChild = false;
-	var x;
-	do  {
-		x= node.initXMLNode();
-		node = walker.nextNode();
-	}  while(node );
-	
-	walker.currentNode = this.documentElement;
-	node = walker.currentNode;
-	do  {
-		x= node.XMLNode;
-		if (node.parentNode) {
-			x.parentNode = node.parentNode.XMLNode;
-		}
-		if (node.previousSibling) {
-			x.previousSibling = node.previousSibling.XMLNode;
-		}
-		if (node.nextSibling) {
-			x.nextSibling = node.nextSibling.XMLNode;
-		}
-		if (node.firstChild) {
-			x.firstChild = node.firstChild.XMLNode;
-		}
-		if (node.lastChild) {
-			x.lastChild = node.lastChild.XMLNode;
-		}
-		x.nodeType = node.nodeType;
-		x.data = node.data;
-		node = walker.nextNode();
-	}  while(node );
-	
-/*	var xw = new XMLNodeWalker(this.documentElement.XMLNode.firstChild);
-	node = xw.currentNode;
-	while (node) {
-		
-		dump(node + node.localName + "\n");
-		node = xw.nextNode();
-		
-	}*/
+XMLDocument.prototype.insertIntoHTMLDocument = function() {
 	
 	
-}
+	//this.transformToInternalFormat();
+	
 
-
-XMLDocument.prototype.insertIntoHTMLDocument = function(htmlnode) {
-
+	//var nsResolver = this.createNSResolver(this.documentElement);
 	var nsResolver = new bxe_nsResolver(this.documentElement);
-
+	
+	
 	var nodes = bxe_getAllEditableAreas();
 	var bxe_areaHolder;
 	for (var i = 0; i < nodes.length; i++) {
@@ -75,26 +27,20 @@ XMLDocument.prototype.insertIntoHTMLDocument = function(htmlnode) {
 		bxe_areaHolder.setAttribute("name","bxe_areaHolder");
 		nodes[i].parentNode.insertBefore(bxe_areaHolder,nodes[i]);
 		bxe_areaHolder.appendChild(nodes[i]);
-		xmlnode = xmlresult.iterateNext();
-		var xmlresults = new Array;
-		while (xmlnode) {
-			xmlresults.push(xmlnode);
-			xmlnode = xmlresult.iterateNext();
-		}
-		for (var j = 0; j < xmlresults.length; j++) {
-			if (xmlresults[j].nodeType == 1) {
-				var fc = xmlresults[j].XMLNode.insertIntoHTMLDocument(nodes[i],true);
-				
+		xmlnode = xmlresult.iterateNext()
+		while (xmlnode ) {
+			if (xmlnode.nodeType == 1) {
+				nodes[i].XMLNode.setNode( xmlnode);
+				xmlnode.insertIntoHTMLDocument(nodes[i],true);
 			} else {
-				xmlresults[j].XMLNode.insertIntoHTMLDocument(nodes[i],false);
+				nodes[i].XMLNode._xmlnode = xmlnode.parentNode;
+				xmlnode.insertIntoHTMLDocument(nodes[i]);
 			}
 			var menu = new Widget_AreaInfo(nodes[i]);
 			bxe_alignAreaNode(menu,nodes[i]);
 			nodes[i].AreaInfo = menu;
 			menu.editableArea = nodes[i];
-			//nodes[i].xmlBridge = x;
-			 
-			
+			xmlnode = xmlresult.iterateNext()
 		}
 		
 	}

@@ -323,6 +323,7 @@ function bxe_draw_widgets() {
 	var img = document.createElement("img");
 	img.setAttribute("src",mozile_root_dir + "images/bxe.png");
 	
+	//imgspan.appendChild(img);
 	img.setAttribute("align","right");
 	menubar.node.appendChild(img);
 	var submenu = new Array("Save",function() {eDOMEventCall("DocumentSave",document);});

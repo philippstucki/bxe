@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- $Id: config.xml,v 1.4 2003/08/22 16:40:39 chregu Exp $ -->
+<!-- $Id: config.xml,v 1.5 2003/08/22 16:51:20 chregu Exp $ -->
 <config>
     <files>
     <!-- the following file definitions are presumably the most important
@@ -55,7 +55,7 @@
 -->
             <file name="BX_xslfile">test.xsl</file>
             
-            <!--<file name="BX_validationfile">relaxng.xml</file> -->
+            <file name="BX_validationfile">relaxng.xml</file>
         </input>
         <output>
             <file name="BX_exitdestination">../../index.html</file>

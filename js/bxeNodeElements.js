@@ -10,15 +10,13 @@ Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 	}
 	, true);
 	var node;
-	
 	if(onlyChildren) {
 		node = walker.nextNode();
 	} else {
 		node = this;
 	}
-	var firstChild = false;
 	do  {
-			var newNode;
+		var newNode;
 			if (node.parentNode && node.parentNode.nodeType == 1 && node.parentNode.htmlNode) {
 				parentN = node.parentNode.htmlNode;
 			} else {
@@ -54,11 +52,10 @@ Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 						}
 					}
 				}
-				if (!firstChild) {
-					firstChild = newElement;
-				}
+					
 				newElement.XMLNode.namespaceURI = node.namespaceURI;
 				newNode = parentN.appendChild(newElement);
+				newNode.setAttribute("__bxe_ns",node.namespaceURI);
 			} else {
 				newNode = parentN.appendChild(document.importNode(node,true));
 			}
@@ -69,7 +66,6 @@ Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 			}
 			node = walker.nextNode()
 	}  while(node );
-	return firstChild;
 }
 
 
@@ -168,7 +164,37 @@ Node.prototype.convertToXMLNode = function(xmldoc) {
 
 
 
+//XMLNode.prototype = new Node();
 
+Node.prototype.getXMLComponents = function () {
+	var localName = "";
+	var namespaceURI = null;
+	var prefix = null;
+	
+	if (this.nodeType == 1 ) {
+		if (this.localName.toLowerCase() != "span" && (this.namespaceURI == XHTMLNS )) {
+			localName = this.localName.toLowerCase();
+			namespaceURI = XHTMLNS;
+		} else {
+			var classes = this.getClasses();
+			if (classes.length > 0) {
+				for (var i = classes.length - 1; i >= 0; i--) {
+					if (newElement != null) {
+						newElement.appendChild(xmldoc.createElementNS(this.XMLNode.namespaceURI,classes[i]));
+					} else {
+						newElement = xmldoc.createElementNS(this.XMLNode.namespaceURI,classes[i]);
+					}
+				}
+			} else {
+				namespaceURI = "null";
+				localName = this.localName;
+			}
+		}
+	}
+	
+	return ({"localName": localName, "namespaceURI": namespaceURI});
+	
+}
 
 
 
@@ -274,17 +300,3 @@ Element.prototype.getBeforeAndAfterString = function (hasChildNodes, noParent) {
 	
 }
 
-Node.prototype.initXMLNode = function () {
-	this.XMLNode = new XMLNode();
-	if (this.ownerDocument == document) {
-		this.XMLNode._node = this;
-		this.NodeMode = "html";
-	} else {
-		this.XMLNode._node = this;
-		this.NodeMode = "xml";
-	}
-	//this.XMLNode.reset();
-	this.XMLNode.reset();
-	return this.XMLNode;
-	
-}
