@@ -1,3 +1,24 @@
+23 November 2004, Version 1.0.0RC1
+
+- Added "Move up/Move down" for elements to context menu (r851)
+- Added possibility to insert children of a editable area root node 
+    (even if there are no elements in editable area) (r851)
+- Added valid RelaxNG attribute checking on root nodes.
+- Improved checking of attribute-values against RelaxNG (r859)
+- Fixed an issue with TextNodes in Mozilla 1.8 (r844)
+- Fixed wrong detection of empty tablecells (prevents adding unneeded 
+    spaces) (r849)
+- Fixed applying non-xhtml inline style to whole paragraphs (r857)
+- Fixed deletion code in inline elements (preventing deleting too much) (r860)
+- Fixed applying inline styles over several paragraphs (r861)
+- Fixed deletion of table cell, if it contains a paragraph (r867)
+- Fixed problem with wrongly inserting new elements on hitting enter (r884/887)
+- Fixed issue with attributes in the xmlns namespace (by Niklas Therning) (r896)
+- Fixed plugin loader code for loading more than one plugin (r909)
+- Fixed a infinite loop condition during buildXPath() (r919)
+- Fixed insertIntoHTMLDocument() to not insert more AreaPointer and Widgets 
+    after first call (prevents slowdown on undo/redo) (r920)
+
 26 October 2004, Version 0.9.6
 
 - Added missing xhtml namespace (firefox 1.0 fix)
