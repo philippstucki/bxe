@@ -311,7 +311,7 @@ Node.prototype.updateXMLNode = function (force) {
 	}
 	var next = this.nextNotInternalSibling;
 	if (next ) {
-		if (!next._XMLNode || force || next.nodeType == 3) {
+		if (!next._XMLNode || force || next.nodeType == 3) {
 			next.updateXMLNode(force);
 		}
 		this.XMLNode.nextSibling = next.XMLNode;
