@@ -309,13 +309,24 @@ Node.prototype.initXMLNode = function () {
 
 
 Node.prototype.updateXMLNode = function () {
-	if (this.previousSibling && this.previousSibling.XMLNode) {
+	if (!this.parentNode._XMLNode) {
+		return this.parentNode.updateXMLNode();
+	}
+	
+	if (this.previousSibling ) {
+		if (!this.previousSibling._XMLNode) {
+			this.previousSibling.updateXMLNode();
+		}
 		this.XMLNode.previousSibling = this.previousSibling.XMLNode;
 		this.previousSibling.XMLNode.nextSibling = this.XMLNode;
 	} else {
 		this.XMLNode.previousSibling = null;
 	}
-	if (this.nextSibling && this.nextSibling.XMLNode) {
+	if (this.nextSibling ) {
+		if (!this.nextSibling._XMLNode) {
+			this.nextSibling.updateXMLNode();
+		}
+		
 		this.XMLNode.nextSibling = this.nextSibling.XMLNode;
 		this.nextSibling.XMLNode.previousSibling = this.XMLNode;
 	} else {

@@ -51,6 +51,7 @@ function eDOMEvent () { }
 
 eDOMEvent.prototype.initEvent = function (eventType) {
 	this.eventType = eventType.toLowerCase();
+	dump ("Event: " + eventType + " " + this.target + " "  + this.additionalInfo  +"\n");
 	this.target.doEvents(this);
 }
 

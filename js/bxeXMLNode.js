@@ -3,8 +3,6 @@ function XMLNode  ( nodein, localName, nodeType, autocreate) {
 	this.init( nodein, localName, nodeType, autocreate);
 }
 
-
-
 XMLNode.prototype.init = function ( nodein, localName, nodeType, autocreate) {
 	if (typeof nodein != "undefined" && typeof nodein != "string") {
 		this.nodeType = nodein.nodeType;
@@ -141,7 +139,26 @@ XMLNode.prototype.appendChild = function(newNode) {
 }
 
 XMLNode.prototype.appendChildIntern = function (newNode) {
+	
+	// unlink from old Place
+	dump (newNode.localName + " " + newNode.parentNode + "\n");
+	if (newNode.parentNode) {
+		if (newNode.parentNode.firstChild == newNode) {
+			newNode.parentNode.firstChild = newNode.nextSibling;
+		}
+		if (newNode.parentNode.lastChild == newNode) {
+			newNode.parentNode.lastChild = newNode.previousSibling;
+		}
+	}
+	if (newNode.previousSibling) {
+		newNode.previousSibling.nextSibling = newNode.nextSibling;
+	}
+	if (newNode.nextSibling) {
+		newNode.nextSibling.previousSibling = newNode.previousSibling;
+	}
+	
 	newNode.parentNode = this;
+
 	if (this.firstChild == null) {
 
 		this.firstChild = newNode;
@@ -155,7 +172,7 @@ XMLNode.prototype.appendChildIntern = function (newNode) {
 		this.lastChild = newNode;
 		newNode.nextSibling = null;
 	}
-
+	
 	newNode.ownerDocument = this.ownerDocument;
 }
 
@@ -561,6 +578,8 @@ function XMLNodeElement ( nodein, localName, nodeType, autocreate) {
 }
 
 XMLNodeElement.prototype = new XMLNode();
+
+
 
 
 XMLNodeElement.prototype.hasAttributes = function() {

@@ -237,7 +237,96 @@ function bxe_toggleTextClass(e) {
 
 function bxe_NodeInsertedParent(e) {
 //	alert("document wide");
+	var oldNode = e.target.XMLNode;
+	var parent = e.additionalInfo;
 	
+	parent.XMLNode =  new XMLNode(parent);
+	parent.XMLNode.previousSibling = oldNode.previousSibling;
+	parent.XMLNode.nextSibling = oldNode.nextSibling;
+	if (parent.XMLNode.previousSibling) {
+		parent.XMLNode.previousSibling.nextSibling = parent.XMLNode;
+	} 
+	if (parent.XMLNode.nextSibling) {
+		parent.XMLNode.nextSibling.previousSibling = parent.XMLNode;
+	}
+	parent.XMLNode.firstChild = oldNode;
+	parent.XMLNode.lastChild = oldNode;
+	parent.XMLNode.parentNode = oldNode.parentNode;
+	oldNode.parentNode = parent.XMLNode;
+	oldNode.previousSibling = null;
+	oldNode.nextSibling = null;
+	
+}
+
+function bxe_NodeRemovedChild (e) {
+	var parent = e.target.XMLNode;
+	var oldNode  = e.additionalInfo.XMLNode;
+	oldNode.unlink();
+}
+
+function bxe_NodeAppendedChild(e) {
+	var parent = e.target.XMLNode;
+	var newNode  = e.additionalInfo.XMLNode;
+	parent.appendChildIntern(newNode);
+	
+}
+
+function bxe_NodeRemovedChildOnly (e) {
+	var parent = e.target.XMLNode;
+	var oldNode  = e.additionalInfo.XMLNode;
+
+	var div = oldNode.lastChild;
+	if (oldNode.firstChild) {
+		var child = oldNode.firstChild;
+		while (child ) {
+			child.parentNode = oldNode.parentNode;
+			child = child.nextSibling;
+		}
+		oldNode.previousSibling.nextSibling = oldNode.firstChild;
+		oldNode.nextSibling.previousSibling = oldNode.lastChild;
+		oldNode.firstChild.previousSibling = oldNode.previousSibling;
+		oldNode.lastChild.nextSibling = oldNode.nextSibling;
+		
+	} else {
+		oldNode.previousSibling.nextSibling = old.nextSibling;
+		oldNode.nextSibling.previousSibling = old.previousSibling;
+	}
+	if (parent.firstChild == oldNode) {
+		parent.firstChild = oldNode.nextSibling;
+	}
+	if (parent.lastChild == oldNode) {
+		parent.lastChild = oldNode.previousSibling;
+	}
+	//oldNode.unlink();
+
+	
+}
+
+function bxe_NodeChanged(e) {
+
+	var newNode = e.target;
+	var oldNode = e.additionalInfo.XMLNode;
+	newNode.XMLNode = new XMLNode(newNode);
+	newNode.XMLNode.previousSibling = oldNode.previousSibling;
+	newNode.XMLNode.nextSibling = oldNode.nextSibling;
+	newNode.XMLNode.parentNode = oldNode.parentNode;
+	newNode.XMLNode.firstChild = oldNode.firstChild;
+	newNode.XMLNode.lastChild = oldNode.lastChild;
+
+	if (!newNode.XMLNode.previousSibling ) {
+		newNode.XMLNode.parentNode.firstChild = newNode.XMLNode;
+	} else {
+		newNode.XMLNode.previousSibling.nextSibling = newNode.XMLNode;
+	}
+	if (!newNode.XMLNode.nextSibling ) {
+		newNode.XMLNode.parentNode.lastChild = newNode.XMLNode;
+	} else {
+		newNode.XMLNode.nextSibling.previousSibling = newNode.XMLNode;
+	}
+		
+	oldNode.unlink();
+	
+
 }
 
 function bxe_NodeInsertedBefore(e) {
@@ -250,8 +339,6 @@ function bxe_NodeInsertedBefore(e) {
 	if (newNode.firstChild ) {
 		newNode.updateXMLNode();
 	}
-	
-	
 	if (oldNode.firstChild ) {
 		oldNode.unlinkChildren();
 		oldNode._node.updateXMLNode();
@@ -517,17 +604,17 @@ function bxe_ContextMenuEvent(e) {
 	bxe_context_menu.show(e,no);
 	e.stopPropagation();
 	e.returnValue = false;
-  	e.preventDefault();
-  	return false;
+	e.preventDefault();
+	return false;
 }
 
 function bxe_UnorderedList() {
 	function callback(e) {
-		alert("function event");
+
 	}
-	document.eDOMaddEventListener("NodeInsertedParent",callback,false);
+	//document.eDOMaddEventListener("NodeInsertedParent",callback,false);
 	window.getSelection().toggleListLines("ul", "ol");
-	document.eDOMremoveEventListener("NodeInsertedParent",callback,false);
+	//document.eDOMremoveEventListener("NodeInsertedParent",callback,false);
 	/*var sel = window.getSelection();
 	var cssr = sel.getEditableRange();
 	if (cssr) {
