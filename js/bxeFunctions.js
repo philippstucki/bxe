@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.129 2003/12/18 17:29:50 chregu Exp $
+// $Id: bxeFunctions.js,v 1.130 2003/12/18 17:40:26 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -404,7 +404,7 @@ function bxe_toggleTextClass(e) {
 	
 	var _node = cssr.commonAncestorContainer;
 	_node.updateXMLNode();
-	
+	cssr.startContainer.updateXMLNode();
 	debug("isValid?" + _node.XMLNode.isNodeValid());
 
 }
