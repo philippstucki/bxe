@@ -1766,7 +1766,7 @@ function bxe_insertContent_async(node,replaceNode, options) {
 	var oldStyleInsertion = false;
 	if (replaceNode == BXE_SELECTION) {
 		var sel = window.getSelection();
-		var  _currentNode = docfrag.firstChild;
+		var  _currentNode = docfrag.lastChild;
 		var _node = _currentNode.prepareForInsert();
 		if (options & BXE_SPLIT_IF_INLINE) {
 			if (!bxe_checkIsAllowedChild(_node.XMLNode.namespaceURI,_node.XMLNode.localName,sel, true)) {
@@ -1783,7 +1783,7 @@ function bxe_insertContent_async(node,replaceNode, options) {
 			sel.insertNodeRaw(_node,oldStyleInsertion);
 			_node.updateXMLNode();
 			
-			_currentNode = _currentNode.nextSibling;
+			_currentNode = _currentNode.previousSibling;
 			if (_currentNode) {
 				_node = _currentNode.prepareForInsert();
 			}
