@@ -65,7 +65,10 @@ function __bxeSave(e) {
 		}
 		bxe_lastSavedXML = bxe_getXmlDocument();
 		bxe_status_bar.showMessage("Document successfully saved");
-		
+		if	(e.status == 201 && bxe_config.options['onSaveFileCreated']) {
+			eval(bxe_config.options['onSaveFileCreated']);
+			
+		}
 		
 		//widg.show((window.innerWidth- 500)/2,50, "fixed");
 		if (e.td.Exit) {
@@ -80,6 +83,7 @@ function __bxeSave(e) {
 	}
 	td.save(url, xmlstr, callback);
 }
+
 
 function bxe_addParamToUrl(url, param) {
 	if (url.indexOf("?") == -1) {
