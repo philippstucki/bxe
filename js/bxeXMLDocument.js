@@ -12,9 +12,11 @@ XMLDocument.prototype.insertIntoHTMLDocument = function() {
 	var nodes = bxe_getAllEditableAreas();
 	
 	for (var i = 0; i < nodes.length; i++) {
+
 		nodes[i].removeAllChildren();
 		var xpath = nodes[i].getAttribute("bxe_xpath");
-		var xmlresult = document.evaluate(xpath, this.documentElement, nsResolver, 0, null);
+		var xmlresult = this.evaluate(xpath, this.documentElement, nsResolver, 0, null);
+
 		if (document.defaultView.getComputedStyle(nodes[i], null).getPropertyValue("display") == "inline") { 
 			var bxe_areaHolder = document.createElement("span");
 			nodes[i].display = "inline";
