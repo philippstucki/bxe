@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: ElementVAL.js,v 1.16 2004/01/15 10:19:40 chregu Exp $
+// $Id: ElementVAL.js,v 1.17 2004/01/18 17:25:32 chregu Exp $
 
 
 XMLNodeElement.prototype.__defineGetter__(
@@ -104,7 +104,7 @@ XMLNodeElement.prototype.__defineGetter__(
 					
 					subac = ctxt.vdom.allowedElements(ctxt);
 					if (subac && subac.nodeName) {
-						if (subac[i].localName != "#text") {
+						if (subac.localName != "#text") {
 							var bla =  new XMLNodeElement(subac.namespaceURI, subac.localName, 1);
 							this.parentNode.insertBeforeIntern(bla,this.nextSibling);
 							
