@@ -9,13 +9,13 @@
 </head>
 <body>
 <script>
-vdom = new DocumentVDOM();
-vdom.loadSchema("./schema.xml", parsed);
+document.loadSchema("./schema.xml", parsed);
 
 function parsed () {
-    
 }
 </script>
+
+<div onclick="alert(this.vdom)">hello world</div>
 </body>
 </html>
 

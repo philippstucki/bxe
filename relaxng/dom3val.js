@@ -9,6 +9,11 @@
  * http://www.w3.org/TR/2003/WD-DOM-Level-3-Val-20030205/validation.html#VAL-Interfaces-ElementEditVAL
  */
  
+Document.prototype.loadSchema = function(file ,callback) {
+	this.vdom = new DocumentVDOM();
+	this.vdom.loadSchema("./schema.xml", callback);
+}
+
  
 function DocumentVDOM() {} 
  
@@ -40,10 +45,8 @@ DocumentVDOM.prototype.parseSchema = function() {
 				this.globalElements[node.getAttribute("name")].addAllowedChild(this.globalElements[child.getAttribute("ref")]);
 			}
 		}
-		alert(node.getAttribute("name")  + " : " +this.globalElements[node.getAttribute("name")].allowedChildren);
+		dump(node.getAttribute("name")  + " : " +this.globalElements[node.getAttribute("name")].allowedChildren + "\n");
 	}
-	
-	//do it again for the allowed children
 
 	this.onparse();
 } 
@@ -70,6 +73,12 @@ DocumentVDOM.prototype.loadSchema = function(file, callback) {
 	return true;
 }
 
+DocumentVDOM.prototype.getAllowedChildren = function (name) {
+	//FIXME: toLowerCase is HTML specific... make switch latere
+	alert(name);
+	return this.globalElements[name.toLowerCase()].allowedChildren;
+}
+
 
 XMLDocument.prototype.saveXML = function(snode)
 {
@@ -92,6 +101,7 @@ function ElementVDOM(name) {
 	this._allowedChildren = new Array();
 }
 
+
 ElementVDOM.prototype.addAllowedChild = function(node) {
 	this._allowedChildren[node.name] = node;
 }
@@ -105,6 +115,19 @@ ElementVDOM.prototype.__defineGetter__(
 	return out;
 }
 )
+
+
+
+Element.prototype.__defineGetter__(
+	"vdom", function () {
+		if (!this._vdom) {
+			
+			this._vdom = this.ownerDocument.vdom.getAllowedChildren(this.nodeName);
+		}
+		return this._vdom;
+	}
+	)
+
 
 function BX_debug(object)
 {
