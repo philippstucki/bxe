@@ -90,86 +90,12 @@ Node.prototype.transformToDocumentFragment = function () {
 
 Node.prototype.convertToXMLDocFrag = function () {
 	return  this.XMLNode.buildXML();
-	//alert(node.ownerDocument.saveXML(node));	
-	
-	/*this.XMLNode._xmlnode.removeAllChildren();
-	var walker = document.createTreeWalker(
-	this,
-	NodeFilter.SHOW_ALL,
-	{
-		acceptNode : function(node) {
-			return NodeFilter.FILTER_ACCEPT;
-		}
-	}
-	, true);
-	
-	var node = walker.nextNode();
-	var lastChild = null;
-		
-	do {
-		var parentN = null;
-		if (node.parentNode.XMLNode._xmlnode) {
-			parentN = node.parentNode.XMLNode._xmlnode;
-		} else {
-			parentN = this.XMLNode._xmlnode;
-		}
-		var newNode = node.convertToXMLNode(document);
-		parentN.appendChild(newNode);
-		
-		lastChild = newNode.firstChild
-		while ( lastChild ) {
-			newNode = lastChild;
-			lastChild = newNode.firstChild;
-		}
-		node.XMLNode.setNode( newNode);
-		node = walker.nextNode()
-	} while(node )
-	return this.XMLNode._xmlnode;
-	*/
 }
 
 Node.prototype.convertToXMLNode = function(xmldoc) {
-	var newElement = null;
-	var i;
-	if (this.nodeType == 1 ) {
-		if (!this.XMLNode.namespaceURI) { this.XMLNode.namespaceURI = null;}
-		if (this.localName.toLowerCase() != "span" && (this.XMLNode.namespaceURI == XHTMLNS )) {
-			newElement = xmldoc.createElementNS(this.XMLNode.namespaceURI,this.localName.toLowerCase());
-		} else {
-			var classes = this.getClasses();
-			if (classes.length > 0) {
-				for (i = classes.length - 1; i >= 0; i--) {
-					if (newElement != null) {
-						newElement.appendChild(xmldoc.createElementNS(this.XMLNode.namespaceURI,classes[i]));
-					} else {
-						newElement = xmldoc.createElementNS(this.XMLNode.namespaceURI,classes[i]);
-					}
-				}
-			} else {
-				newElement = xmldoc.createElementNS(this.XMLNode.namespaceURI,this.localName);
-			}
-		}
-		if (this.hasAttributes()) {
-			var attribs = this.attributes;
-			for (i = 0; i < attribs.length; i++) {
-				if ( attribs[i].localName == "class" && this.XMLNode.namespaceURI == XHTMLNS  && attribs[i].value == newElement.localName) {
-					continue;
-				}
-				else if (!(this.XMLNode.namespaceURI != XHTMLNS && attribs[i].localName == "class" )) {
-					if (attribs[i].localName.substr(0,5) != "_edom" && attribs[i].localName.substr(0,5) != "__bxe") {
-						newElement.setAttributeNode(attribs[i]);
-					}
-				}
-			}
-		}
-		
-	} else {
-		newElement = this.cloneNode(true);
-	}
-	return newElement;
+	alert("Node.convertToXMLNode is deprecated? please report to chregu@bitflux.ch that this method is stilll used somewhere");
+	return false;
 }
-
-
 
 Node.prototype.getNamespaceDefinitions = function () {
 	
