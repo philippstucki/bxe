@@ -15,9 +15,12 @@ title:first-child {
 
 
 .title, .article, .main, .para, .section, .itemizedlist, .listitem, .simplelist, .member, .blockquote, .attribution, .pre {
-    margin-top: 0.5em;
     display: block;
     max-width: 450px;
+}
+
+.title, .article, .main, .para, .section, .itemizedlist, .blockquote, .attribution, .pre {
+    margin-top: 0.5em;
 }
 
 .titel, .subtitle, .titel2 {
@@ -27,6 +30,21 @@ title:first-child {
    text-decoration: none;
    font-weight: bold;
    line-height: 20px;
+}
+
+.titel {
+   letter-spacing: 1px;
+   font-size: 18px;
+   line-height: 20px;
+}
+
+.subtitle {
+   font-size: 14px;
+   line-height: 18px;
+   }
+
+.titel2, .section .titel {
+   font-size: 12px;
 }
 
 .para {
