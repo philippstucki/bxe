@@ -335,6 +335,9 @@ function xml_loaded(xmldoc) {
 	for (a in bxe_config.events ) {
 		document.eDOMaddEventListener( a , eval(bxe_config.events[a] ), false);
 	}
+	document.eDOMaddEventListener("ClipboardCopy",function(e) { window.getSelection().copy()},false);
+	document.eDOMaddEventListener("ClipboardPaste",function(e) { window.getSelection().paste()},false);
+	document.eDOMaddEventListener("ClipboardCut",function(e) { window.getSelection().cut()},false);
 	
 	document.addEventListener("contextmenu",bxe_ContextMenuEvent, false);
 	bxe_context_menu = new Widget_ContextMenu();
