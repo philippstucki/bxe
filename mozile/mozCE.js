@@ -423,8 +423,8 @@ Selection.prototype.toggleListLines = function(requestedList, alternateList)
 
 }
 
-Selection.prototype.insertNodeRaw = function (node) {
-	debug("insertNodeRaw\n");
+Selection.prototype.insertNodeRaw = function (node, oldStyleInsertion) {
+
 	var cssr = this.getEditableRange();
 	if(!cssr)
 		return;
@@ -433,13 +433,15 @@ Selection.prototype.insertNodeRaw = function (node) {
 	{
 		cssr.extractContents();
 	}
-	
-	//var ip = cssr.firstInsertionPoint;
-	
-	cssr.insertNode(node);
+	if (oldStyleInsertion) {
+		var ip = cssr.firstInsertionPoint;
+		ip.insertNode(node);
+		var _upNode = ip.ipNode;	
+	} else {
+		cssr.insertNode(node);
+	}
 	
 	var _upNode = this.getEditableRange().startContainer;
-	
 		
 	if (_upNode.nodeType == 3) {
 		_upNode = _upNode.parentNode;
