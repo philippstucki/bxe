@@ -77,11 +77,17 @@ function listLinesToggle(cssr, listContainerName, listContainerToChange)
 			if((lines[i].lineType == CSSLine.CONTAINED_LINE) && (lines[i].container == topToNormalize)) {
 				topToNormalize = topToNormalize.parentNode;
 			}
+			// fix for http://cvs.wyona.org/cgi-bin/bugzilla/show_bug.cgi?id=2562 ( liste in tabelle funktioniert nicht richtig)
+			if (lines[i].container.getCStyle("display") == "table-cell") {
+				lines[i] = lines[i].setContainer(documentCreateXHTMLElement(defaultContainerName),false);
+			}
+				
 			lines[i] = lines[i].setContainer(documentCreateXHTMLElement("li"), true); // ok - this a/cs for top
-			// line may be bounded and empty => don't make into list-item!
+			// line may be bounded and empty => don't make into list-item!	
 			if(lines[i].lineType == CSSLine.CONTAINED_LINE)
 			{
 				var listContainer = documentCreateXHTMLElement(listContainerName);
+				
 				lines[i].container.insertParent(listContainer);
 				newListElement = true; 
 			}				
