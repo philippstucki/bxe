@@ -525,15 +525,13 @@ function bxe_toggleTextClass(e) {
 	do {
 		if (node.nodeType == 1) {
 			node.updateXMLNode();
-		} else {
-		}
+		} 
 		if (endContainer == node) {
 			break;
 		}
 		node =   walker.nextNode() 
 	} while(node)
-	/*cssr.startContainer.updateXMLNode();
-	cssr.endContainer.updateXMLNode();*/
+	
 	debug("isValid?" + _node.XMLNode.isNodeValid());
 	bxe_history_snapshot_async();
 }
