@@ -53,7 +53,7 @@ function Widget_AreaInfo (areaNode) {
 	this.node.style.width = "0px";
 	this.node.style.height = "0px";
 	areaNode.parentNode.insertBefore(this.node,areaNode);
-	this.MenuPopup = new Widget_MenuPopup(areaNode.XMLNode.getXPathString());
+	this.MenuPopup = new Widget_MenuPopup("XPath not defined yet");
 	var doo = this.MenuPopup.addMenuItem("View",null);
 	var submenu = new Widget_MenuPopup();
 	this.NormalModeMenu = submenu.addMenuItem("Normal",function(e) {eDOMEventCall("toggleNormalMode",e.target.Widget.AreaNode )});
@@ -64,10 +64,12 @@ function Widget_AreaInfo (areaNode) {
 	this.SourceModeMenu = submenu.addMenuItem("Source",function(e) {eDOMEventCall("toggleSourceMode",e.target.Widget.AreaNode )});
 	this.SourceModeMenu.AreaNode = areaNode;
 	doo.addMenu(submenu);
-	
 	this.node.addEventListener("contextmenu" , Widget_AreaInfo_eventHandler, false);
 	this.node.addEventListener("click" , Widget_AreaInfo_eventHandler, false);
 }
+
+
+	
 
 function Widget_AreaInfo_eventHandler(e) {
 	this.Widget.MenuPopup.position(e.pageX,e.pageY,"absolute");
@@ -95,6 +97,10 @@ Widget_MenuPopup.prototype.initTitle = function (title) {
 	titleNode.setAttribute("class","MenuPopupTitle");
 	titleNode.appendChild(document.createTextNode(title));
 }
+Widget_MenuPopup.prototype.setTitle = function (title) {
+	this.node.firstChild.firstChild.data = title;
+}
+	
 
 Widget_MenuPopup.prototype.draw = function() {
 	
