@@ -321,7 +321,7 @@ function bxe_draw_widgets() {
 	// make menubar
 	var menubar = new Widget_MenuBar();
 	var img = document.createElement("img");
-	img.setAttribute("src","images/bxe.png");
+	img.setAttribute("src",mozile_root_dir + "images/bxe.png");
 	
 	//imgspan.appendChild(img);
 	img.setAttribute("align","right");
