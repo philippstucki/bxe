@@ -11,9 +11,9 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeLoader.js,v 1.245 2004/02/26 15:54:51 chregu Exp $
+// $Id: bxeLoader.js,v 1.246 2004/02/26 17:43:25 chregu Exp $
 
-const BXE_VERSION = "0.9.3-dev";
+const BXE_VERSION = "0.9.3";
 const BXE_BUILD = "200402261654"
 
 const E_FATAL = 1;
