@@ -211,7 +211,7 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
     padding-right: 2px;
 }
 
-.ModalBox .ModalBoxPane input {
+.ModalBox .ModalBoxPane input, .ModalBoxPane select {
     border: dotted black 1px;
     width: 300px;
 }
