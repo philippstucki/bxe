@@ -471,6 +471,26 @@ function bxe_toggleTextClass(e) {
 		alert("You're in Source Mode. Not possible to use this button");
 		return false;
 	}
+	//search, if we are already in this mode for anchorNode
+	var node = sel.anchorNode.parentNode.XMLNode;
+	while (node) {
+		if (node.localName == e.additionalInfo.localName && node.namespaceURI == e.additionalInfo.namespaceURI) {
+			return bxe_CleanInlineIntern(e.additionalInfo.localName,e.additionalInfo.namespaceURI);
+		}
+		node = node.parentNode;
+	}
+	
+	if (sel.anchorNode != sel.focusNode) {
+		//Do the same for the endnode
+		
+		var node = sel.focusNode.parentNode.XMLNode;
+		while (node) {
+			if (node.localName == e.additionalInfo.localName && node.namespaceURI == e.additionalInfo.namespaceURI) {
+				return bxe_CleanInlineIntern(e.additionalInfo.localName,e.additionalInfo.namespaceURI);
+			}
+			node = node.parentNode;
+		}
+	}
 	
 	if (!bxe_checkIsAllowedChild( e.additionalInfo.namespaceURI,e.additionalInfo.localName,sel)) {
 		return false;
@@ -497,7 +517,6 @@ function bxe_toggleTextClass(e) {
 				
 			}
 	} else {
-		
 		sel.toggleTextClass(e.additionalInfo.localName,e.additionalInfo.namespaceURI);
 	}
 	sel = window.getSelection();
@@ -638,13 +657,17 @@ function bxe_ContextPopup(e) {
 	try {
 	var node = e.target.XMLNode;
 	var popup = e.additionalInfo;
+	
+	//return on xmlBridge Root nodes
+	if (node.xmlBridge) {
+		return 
+	}
 	if (node.vdom && node.vdom.hasAttributes ) {
 		
 		var menui = popup.addMenuItem("Edit " + e.target.XMLNode.nodeName  + " Attributes", mozilla.getWidgetGlobals().EditAttributes.popup);
 		menui.MenuPopup._node = node._node;
 	}
 
-	
 	popup.addMenuItem("Copy "  + e.target.XMLNode.nodeName  + " Element", function (e) {
 		var widget = e.currentTarget.Widget;
 		var delNode = widget.MenuPopup.MainNode;
@@ -869,14 +892,8 @@ function bxe_appendNode(e) {
 
 		aNode.parentNode.insertAfter(newNode,aNode);
 		newNode._node.updateXMLNode();
-
-		debug("valid? : " + newNode.isNodeValid());
-		
-		
-		//aNode.parentNode.insertBeforeIntern(newNode,aNode.nextSibling);
-		//newNode.insertIntoHTMLDocument(aNode._node);
-	}
-	else {
+		newNode.parentNode.isNodeValid(true,2);
+	} else {
 
 		var cb = bxe_getCallback(e.additionalInfo.localName,e.additionalInfo.namespaceURI);
 		
@@ -886,7 +903,8 @@ function bxe_appendNode(e) {
 		}
 		var newNode = new XMLNodeElement(e.additionalInfo.namespaceURI,e.additionalInfo.localName, 1 ) ;
 		aNode.parentNode.insertAfter(newNode,aNode);
-		debug("valid? : " + newNode.isNodeValid());
+		
+		newNode.parentNode.isNodeValid(true,2);
 		newNode.makeDefaultNodes(e.additionalInfo.noPlaceholderText);
 		
 	}
@@ -931,6 +949,7 @@ function bxe_appendChildNode(e) {
 				}
 			}
 		}
+		
 }
 
 
@@ -947,11 +966,10 @@ function bxe_changeLinesContainer(e) {
 		newContainer[i].XMLNode = new XMLNodeElement( nodeParts[1], nodeParts[0], newContainer[i].nodeType);
 		try {
 			newContainer[i].updateXMLNode();
-			
 		} catch(e) {alert(newContainer[i] + " can't be updateXMLNode()'ed\n" + e);
 		}
 	}
-	if (!newContainer[0].XMLNode.parentNode.isNodeValid()) {
+	if (!newContainer[0].XMLNode.parentNode.isNodeValid(false, 2)) {
 		bxe_history_undo();
 	}
 	bxe_history_snapshot_async();
@@ -1505,7 +1523,10 @@ function bxe_InsertTableCallback(node) {
 }
 
 function bxe_CleanInline(e) {
-	
+	bxe_CleanInlineIntern();
+}
+
+function bxe_CleanInlineIntern(localName, namespaceUri) {
 	var sel = window.getSelection();
 	if (bxe_checkForSourceMode(sel)) {
 		return false;
@@ -1517,42 +1538,46 @@ function bxe_CleanInline(e) {
  
 	// go through all text nodes in the range and link to them unless already set to cssr link
 	var textNodes = cssr.textNodes;
-	for(i=0; i<textNodes.length; i++)
-	{		
+	for(i=0; i<textNodes.length; i++) {
 		// figure out cssr and then it's on to efficiency before subroutines ... ex of sub ... 
 		// try text nodes returning one node ie/ node itself! could cut down on normalize calls ...
 		var textContainer = textNodes[i].parentNode;
-		//if(textContainer.nodeNamed("span") && textContainer.getAttribute("class") == "a" )	{
-			if (textContainer.getCStyle("display") == "inline") {
-			if(textContainer.childNodes.length > 1)
-			{
+		if (textContainer.getCStyle("display") == "inline") {
+			if (localName) {
+				if (textContainer.parentNode.firstChild == textContainer) {
+					textNodes.push(textContainer);
+				}
+				if(!(textContainer.XMLNode.localName == localName &&
+				 textContainer.XMLNode.namespaceURI == namespaceUri)) {
+					 continue;
+				}
+			}
+					 
+			if(textContainer.childNodes.length > 1) {
 				var siblingHolder;
-
+				
 				// leave any nodes before or after cssr one with their own copy of the container
-				if(textNodes[i].previousSibling)
-				{
+				if(textNodes[i].previousSibling) {
 					var siblingHolder = textContainer.cloneNode(false);
 					textContainer.parentNode.insertBefore(siblingHolder, textContainer);
 					siblingHolder.appendChild(textNodes[i].previousSibling);	
 				}
-
-				if(textNodes[i].nextSibling)
-				{
+				
+				if(textNodes[i].nextSibling) {
 					var siblingHolder = textContainer.cloneNode(false);
-					if(textContainer.nextSibling)
+					if(textContainer.nextSibling) {
 						textContainer.parentNode.insertBefore(siblingHolder, textContainer.nextSibling);
-					else 
+					} else {  
 						textContainer.parentNode.appendChild(siblingHolder);
+					}
 					siblingHolder.appendChild(textNodes[i].nextSibling);	
 				}
 			}
-
 			// rename it to span and remove its href. If span is empty then delete span
-
 			textContainer.parentNode.removeChildOnly(textContainer);
 		}
 	}
-
+	
 	// normalize A elements 
 	var normalizeRange = document.createRange();
 	normalizeRange.selectNode(cssr.commonAncestorContainer);
