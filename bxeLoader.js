@@ -107,11 +107,7 @@ function bxe_start(config_file,fromUrl, configArray) {
 
 // Detect Gecko but exclude Safari (for now); for now, only support XHTML
 
-
-
-function bxe_globals() {}
-
-bxe_globals.prototype.loadXML = function(xmlfile) {
+function bxe_load_xml (xmlfile) {
 	
 	
 	var td = new BXE_TransportDriver_webdav();
@@ -134,89 +130,6 @@ bxe_globals.prototype.loadXML = function(xmlfile) {
 	
 	return true;
 }
-
-
-function bxe_nsResolver (node) {
-	this.metaTagNSResolver = null;
-	this.metaTagNSResolverUri = null;
-	
-	//this.htmlDocNSResolver = null;
-	this.xmlDocNSResolver = null;
-	this.node = node;
-	
-	
-}
-
-bxe_nsResolver.prototype.lookupNamespaceURI = function (prefix) {
-	var url = null;
-	// if we never checked for meta bxeNS tags, do it here and save the values in an array for later reusal..
-	if (!this.metaTagNSResolver) {
-		var metas = document.getElementsByName("bxeNS");
-		this.metaTagNSResolver = new Array();
-		for (var i=0; i < metas.length; i++) {
-			if (metas[i].localName.toLowerCase() == "meta") {
-				var ns = metas[i].getAttribute("content").split("=");
-				this.metaTagNSResolver[ns[0]] = ns[1]
-			}
-		}
-	}
-	//check if the prefix was there and return it
-	if (this.metaTagNSResolver[prefix]) {
-		return this.metaTagNSResolver[prefix];
-	}
-	/* there are no namespaces in even xhtml documents (or mozilla discards them somehow or i made a stupid mistake
-	therefore no NS-lookup in document. */
-	/*
-	if (! this.htmlDocNSResolver) {
-		this.htmlDocNSResolver = document.createNSResolver(document.documentElement);
-	}
-	url = this.htmlDocNSResolver.lookupNamespaceURI(prefix);
-	if (url) {
-		return url;
-	}
-	*/
-	
-	//create NSResolver, if not done yet
-	if (! this.xmlDocNSResolver) {
-		this.xmlDocNSResolver = this.node.ownerDocument.createNSResolver(this.node.ownerDocument.documentElement);
-	}
-	
-	//lookup the prefix
-	url = this.xmlDocNSResolver.lookupNamespaceURI(prefix);
-	if (url) {
-		return url;
-	}
-	// if still not found and we want the bxe prefix.. return that
-	if (prefix == "bxe") {
-		return BXENS;
-	}
-	
-	//prefix not found
-	return null;
-}
-
-bxe_nsResolver.prototype.lookupNamespacePrefix = function (uri) {
-	
-	if (!this.metaTagNSResolverUri) {
-		var metas = document.getElementsByName("bxeNS");
-		this.metaTagNSResolverUri = new Array();
-		for (var i=0; i < metas.length; i++) {
-			if (metas[i].localName.toLowerCase() == "meta") {
-				var ns = metas[i].getAttribute("content").split("=");
-				this.metaTagNSResolverUri[ns[1]] = ns[0]
-			}
-		}
-	}
-	//check if the prefix was there and return it
-	if (this.metaTagNSResolverUri[uri]) {
-		return this.metaTagNSResolverUri[uri];
-	}
-	return null;
-}
-
-
-
-
 
 function widget_loaded() {
 	mozile_corescript_loaded++;
@@ -254,8 +167,7 @@ function mozile_core_loaded() {
 
 function mozile_loaded() {
 	bxe_about_box.addText("Load XML ...");
-	bxe_globals = new bxe_globals();
-	bxe_globals.loadXML(bxe_config.xmlfile);
+	bxe_load_xml(bxe_config.xmlfile);
 	
 }
 
@@ -283,6 +195,12 @@ function xml_loaded(xmldoc) {
 	document.eDOMaddEventListener("ClipboardCopy",function(e) { window.getSelection().copy()},false);
 	document.eDOMaddEventListener("ClipboardPaste",function(e) { window.getSelection().paste()},false);
 	document.eDOMaddEventListener("ClipboardCut",function(e) { window.getSelection().cut()},false);
+	
+	document.eDOMaddEventListener("Undo",function(e) { bxe_not_yet_implemented()}, false);
+	document.eDOMaddEventListener("Redo",function(e) { bxe_not_yet_implemented()}, false);
+
+	
+	
 	document.addEventListener("contextmenu",bxe_ContextMenuEvent, false);
 	
 	bxe_context_menu = new Widget_ContextMenu();
@@ -328,9 +246,5 @@ function config_loaded(bxe_config_in) {
 }
 
 
-
-function bxe_not_yet_implemented() {
-	alert("not yet implemented");
-}
 
 

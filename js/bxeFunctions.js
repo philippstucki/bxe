@@ -567,3 +567,91 @@ function bxe_catch_alert_message(e) {
 function bxe_exit(e) {
 	window.location = bxe_config.exitdestination;
 }
+
+function bxe_not_yet_implemented() {
+	alert("not yet implemented");
+}
+
+
+/* bxe_nsResolver */
+
+function bxe_nsResolver (node) {
+	this.metaTagNSResolver = null;
+	this.metaTagNSResolverUri = null;
+	
+	//this.htmlDocNSResolver = null;
+	this.xmlDocNSResolver = null;
+	this.node = node;
+	
+	
+}
+
+bxe_nsResolver.prototype.lookupNamespaceURI = function (prefix) {
+	var url = null;
+	// if we never checked for meta bxeNS tags, do it here and save the values in an array for later reusal..
+	if (!this.metaTagNSResolver) {
+		var metas = document.getElementsByName("bxeNS");
+		this.metaTagNSResolver = new Array();
+		for (var i=0; i < metas.length; i++) {
+			if (metas[i].localName.toLowerCase() == "meta") {
+				var ns = metas[i].getAttribute("content").split("=");
+				this.metaTagNSResolver[ns[0]] = ns[1]
+			}
+		}
+	}
+	//check if the prefix was there and return it
+	if (this.metaTagNSResolver[prefix]) {
+		return this.metaTagNSResolver[prefix];
+	}
+	/* there are no namespaces in even xhtml documents (or mozilla discards them somehow or i made a stupid mistake
+	therefore no NS-lookup in document. */
+	/*
+	if (! this.htmlDocNSResolver) {
+		this.htmlDocNSResolver = document.createNSResolver(document.documentElement);
+	}
+	url = this.htmlDocNSResolver.lookupNamespaceURI(prefix);
+	if (url) {
+		return url;
+	}
+	*/
+	
+	//create NSResolver, if not done yet
+	if (! this.xmlDocNSResolver) {
+		this.xmlDocNSResolver = this.node.ownerDocument.createNSResolver(this.node.ownerDocument.documentElement);
+	}
+	
+	//lookup the prefix
+	url = this.xmlDocNSResolver.lookupNamespaceURI(prefix);
+	if (url) {
+		return url;
+	}
+	// if still not found and we want the bxe prefix.. return that
+	if (prefix == "bxe") {
+		return BXENS;
+	}
+	
+	//prefix not found
+	return null;
+}
+
+bxe_nsResolver.prototype.lookupNamespacePrefix = function (uri) {
+	
+	if (!this.metaTagNSResolverUri) {
+		var metas = document.getElementsByName("bxeNS");
+		this.metaTagNSResolverUri = new Array();
+		for (var i=0; i < metas.length; i++) {
+			if (metas[i].localName.toLowerCase() == "meta") {
+				var ns = metas[i].getAttribute("content").split("=");
+				this.metaTagNSResolverUri[ns[1]] = ns[0]
+			}
+		}
+	}
+	//check if the prefix was there and return it
+	if (this.metaTagNSResolverUri[uri]) {
+		return this.metaTagNSResolverUri[uri];
+	}
+	return null;
+}
+
+
+

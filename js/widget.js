@@ -470,7 +470,7 @@ function Widget_StatusBar () {
 	window.onresize = this.positionize;
 	this.Display  = "block";
 	this.EditAttributes = new Widget_ModalAttributeBox();
-	this.buildXPath(bxe_globals.xmldoc.documentElement);
+	this.buildXPath(bxe_config.xmldoc.documentElement);
 	
 	this.draw();	
 }
