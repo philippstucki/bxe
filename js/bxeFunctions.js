@@ -492,11 +492,11 @@ function bxe_ContextMenuEvent(e) {
 }
 
 function bxe_UnorderedList() {
-	window.getSelection().toggleListLines("UL", "OL");
+	window.getSelection().toggleListLines("OL", "UL");
 }
 
 function bxe_OrderedList() {
-	window.getSelection().toggleListLines("OL", "UL");
+	window.getSelection().toggleListLines("UL", "OL");
 }
 
 function bxe_InsertImage() {
