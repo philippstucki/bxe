@@ -741,7 +741,8 @@ InsertionPoint.prototype.__defineGetter__(
 		var line = this.line;
 		var ipForCount = line.firstInsertionPoint;
 		var count = 0;
-		while(!ipForCount.equivalent(this))
+		//prevent endless loop in rare cases... with count < 10
+		while(!ipForCount.equivalent(this) && count < 10)
 		{
 			count++;
 			ipForCount.forwardOne();		

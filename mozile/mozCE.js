@@ -431,7 +431,7 @@ Selection.prototype.insertNodeRaw = function (node, oldStyleInsertion) {
 	// if there's a selection then delete it
 	if(!cssr.collapsed)
 	{
-		cssr.extractContents();
+		bxe_deleteEventKey(window.getSelection(), false);
 	}
 	if (oldStyleInsertion) {
 		var ip = cssr.firstInsertionPoint;

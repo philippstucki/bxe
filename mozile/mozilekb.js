@@ -265,56 +265,8 @@ function nonctrlKeyPressHandler(event)
 	var rng;
 	// BACKSPACE AND DELETE (DOM_VK_BACK_SPACE, DOM_VK_DELETE)
 	if((event.keyCode == 8) || (event.keyCode == 46)) {
-		var backspace = (event.keyCode == 46);
-		//switch focus and anchor, if focus is before anchor
-		// this prevents some problems with updateXMLNode and unifies the handling
-		// Bug 635 caused this
-		//BX_debug(sel.focusNode);
-		if (!sel.isCollapsed && sel.focusNode.nodeType == 3 && sel.focusOffset == 0 && sel.focusNode.compareDocumentPosition(sel.anchorNode) == 4) {
-			
-			var n = sel.anchorNode;
-			var o = sel.anchorOffset;
-			sel.collapse(sel.focusNode,0)
-			sel.extend(n,o);
-		}
-		if (sel.isCollapsed) {
-			sel.deleteSelection(backspace);
-		}
-		else if (!sel.isCollapsed && sel.anchorNode.nodeType == 3 && sel.anchorOffset == 0) {
-			
-			bxe_deleteWholeSelection(sel,backspace);
-			sel = window.getSelection();
-			sel.deleteSelection(false);
-			sel.anchorNode.parentNode.updateXMLNode();
-			
-		} else {
-			bxe_history_snapshot();
-			cssr = sel.getEditableRange();
-			
-			var _conode = cssr.commonAncestorContainer;
-			
-			sel.deleteSelection(backspace);
-			
-			if (sel.anchorNode.nodeType == 3) {
-				var n  = sel.anchorNode.parentNode;
-			} else {
-				var n = sel.anchorNode;
-			}
-			var i = 0;
-			if (!cssr.top._SourceMode) {
-				if (_conode && _conode.nodeType != 3 ) {
-					while (n && n != _conode && !n.XMLNode.xmlBridge && i < 10) {
-						i++;
-						n.updateXMLNode();
-						n = n.parentNode;
-					}
-					_conode.updateXMLNode();
-				} else {
-					n.updateXMLNode();
-				}
-			}
-		}
-		return true;
+		return bxe_deleteEventKey(sel,(event.keyCode == 46));
+
 	}
 
 	
@@ -539,4 +491,53 @@ function bxe_deleteWholeSelection(sel,backspace) {
 	sel.extend(n,o);
 	sel.deleteSelection(backspace);
 	sel.anchorNode.parentNode.updateXMLNode();
+}
+
+function bxe_deleteEventKey(sel, backspace) {
+
+		//switch focus and anchor, if focus is before anchor
+		// this prevents some problems with updateXMLNode and unifies the handling
+		// Bug 635 caused this
+		//BX_debug(sel.focusNode);
+		if (!sel.isCollapsed && sel.focusNode.nodeType == 3 && sel.focusOffset == 0 && sel.focusNode.compareDocumentPosition(sel.anchorNode) == 4) {
+			var n = sel.anchorNode;
+			var o = sel.anchorOffset;
+			sel.collapse(sel.focusNode,0)
+			sel.extend(n,o);
+		}
+		if (sel.isCollapsed) {
+			sel.deleteSelection(backspace);
+		}
+		else if (!sel.isCollapsed && sel.anchorNode.nodeType == 3 && sel.anchorOffset == 0) {
+			bxe_deleteWholeSelection(sel,backspace);
+			sel = window.getSelection();
+			sel.deleteSelection(false);
+			sel.anchorNode.parentNode.updateXMLNode();
+			
+		} else {
+			bxe_history_snapshot();
+			cssr = sel.getEditableRange();
+			
+			var _conode = cssr.commonAncestorContainer;
+			sel.deleteSelection(backspace);
+			if (sel.anchorNode.nodeType == 3) {
+				var n  = sel.anchorNode.parentNode;
+			} else {
+				var n = sel.anchorNode;
+			}
+			var i = 0;
+			if (!cssr.top._SourceMode) {
+				if (_conode && _conode.nodeType != 3 ) {
+					while (n && n != _conode && !n.XMLNode.xmlBridge && i < 10) {
+						i++;
+						n.updateXMLNode();
+						n = n.parentNode;
+					}
+					_conode.updateXMLNode();
+				} else {
+					n.updateXMLNode();
+				}
+			}
+		}
+		return true;
 }
