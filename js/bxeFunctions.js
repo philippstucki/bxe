@@ -1271,6 +1271,7 @@ function bxe_checkIsAllowedChild(namespaceURI, localName, sel, noAlert) {
 	if (!sel) {
 		sel = window.getSelection();
 	}
+	
 	var cssr = sel.getEditableRange();
 	var parentnode = null;
 	if (cssr.startContainer.nodeType != 1) {
@@ -1278,11 +1279,16 @@ function bxe_checkIsAllowedChild(namespaceURI, localName, sel, noAlert) {
 	} else {
 		parentnode = cssr.startContainer;
 	}
-	if (localName == null || parentnode.XMLNode.isAllowedChild(namespaceURI, localName) ) {
+	return bxe_checkIsAllowedChildOfNode(namespaceURI,localName, parentnode, noAlert);
+	
+}
+
+function bxe_checkIsAllowedChildOfNode(namespaceURI,localName, node, noAlert) {
+	if (localName == null || node.XMLNode.isAllowedChild(namespaceURI, localName) ) {
 		return true;
 	} else {
 		if (!noAlert) {
-			alert (localName + " is not allowed as child of " + parentnode.XMLNode.localName);
+			alert (localName + " is not allowed as child of " + node.XMLNode.localName);
 		}
 		return false;
 	}
@@ -1290,6 +1296,13 @@ function bxe_checkIsAllowedChild(namespaceURI, localName, sel, noAlert) {
 
 function bxe_InsertTable() {
 	var sel = window.getSelection();
+	var cssr = sel.getEditableRange();
+	
+	if (!bxe_checkIsAllowedChild(XHTMLNS,"table",sel, true) &&  !bxe_checkIsAllowedChildOfNode(XHTMLNS,"table",cssr.startContainer.parentNode.parentNode, true)) {
+		alert ("Table is not allowed here");
+		return false;
+	}
+
 	var object = documentCreateXHTMLElement("table");
 	//sel.insertNode(object);
 	window.bxe_ContextNode = BXE_SELECTION;
