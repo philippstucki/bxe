@@ -11,8 +11,9 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeConfig.js,v 1.21 2003/11/18 21:41:10 chregu Exp $
+// $Id: bxeConfig.js,v 1.22 2004/04/08 13:19:45 chregu Exp $
 
+const OPTION_DEFAULTTABLECLASS = "defaultTableClass";
 
 function  bxeConfig (filename,fromUrl, configArray) {
 	
@@ -81,6 +82,18 @@ bxeConfig.parseConfig = function  (e) {
 		tmpArray["content"] = node.firstChild.data;
 		bxe_config.callbacks[node.getAttribute("ns")+":"+node.getAttribute("name")] = tmpArray;
 		node = callbackNodes.iterateNext();
+	}
+
+	var configOptions = bxe_config.doc.evaluate("/config/options/option", bxe_config.doc, null, 0, null);
+	bxe_config.options = new Array();
+	
+	bxe_config.options[OPTION_DEFAULTTABLECLASS] = 'ornate';
+	node = configOptions.iterateNext();
+
+	while (node) {
+		// ignore the attribute namespace
+		bxe_config.options[node.getAttribute("name")] = node.firstChild.data;
+		node = configOptions.iterateNext();
 	}
 	bxe_config.getButtons();
 	config_loaded(bxe_config);

@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.156 2004/04/01 10:26:52 chregu Exp $
+// $Id: bxeFunctions.js,v 1.157 2004/04/08 13:19:45 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -1297,7 +1297,7 @@ function bxe_InsertTableCallback(node) {
 			alert("Can't create table: invalid data");
 		}
 		else if (window.bxe_ContextNode == BXE_SELECTION) {
-			te.setAttribute("class","ornate");
+			te.setAttribute("class", bxe_config.options[OPTION_DEFAULTTABLECLASS]);
 
 			var sel = window.getSelection(); 	
 			if (!bxe_checkIsAllowedChild(XHTMLNS,"table",sel, true)) {
@@ -1309,7 +1309,7 @@ function bxe_InsertTableCallback(node) {
 			sel.insertNodeRaw(te);
 			te.updateXMLNode();
 		} else if (window.bxe_ContextNode){
-			te.setAttribute("class","ornate");
+			te.setAttribute("class", bxe_config.options[OPTION_DEFAULTTABLECLASS]);
 			var newNode = te.init();
 			window.bxe_ContextNode.parentNode.insertAfter(newNode, window.bxe_ContextNode);
 			debug("valid? : " + newNode.isNodeValid());
