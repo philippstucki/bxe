@@ -24,6 +24,8 @@ XMLNodeElement.prototype.__defineGetter__(
 		}
 		return ac;
 	} catch(e){
+		/*bxe_catch_alert(e);
+		alert(ctxt.vdom.nodeName);*/
 		return new Array()
 	}
 }

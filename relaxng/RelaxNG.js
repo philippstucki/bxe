@@ -8,7 +8,7 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 	//do includes
 	this.parseIncludes();
 	
-	debug(this.xmldoc.saveXML(this.xmldoc));
+	//debug(this.xmldoc.saveXML(this.xmldoc));
 	var rootChildren = this.xmldoc.documentElement.childNodes;
 
 	for (var i = 0; i < rootChildren.length; i++) {
@@ -51,15 +51,15 @@ DocumentVDOM.prototype.parseIncludes = function() {
 								 
 									var comb = child.getAttribute("combine");
 									if(firstDefine) {
-										debug(firstDefine.getAttribute("name") + comb);
+										//debug(firstDefine.getAttribute("name") + comb);
 										var firstElement =  firstDefine.getXPathFirst("*[position() = 1]")
 										if (firstElement.nodeName == comb) {
-											debug("*******" + firstElement.nodeName);
+											//debug("*******" + firstElement.nodeName);
 											var newChild = this.xmldoc.importNode(child,true);
 											firstElement.appendAllChildren(newChild);
 											
 										} else {
-											debug ("make new...");
+											//debug ("make new...");
 											var newChild = this.xmldoc.createElementNS(RELAXNGNS,comb);
 											newChild.appendAllChildren(firstDefine);
 											firstDefine.appendChild(newChild);
@@ -68,7 +68,7 @@ DocumentVDOM.prototype.parseIncludes = function() {
 											
 										}
 									} else {
-										debug ("not already defined");
+										//debug ("not already defined");
 										var newChild = this.xmldoc.importNode(child,true);
 										rootChild.parentNode.insertBefore(newChild,insertionNode);
 									}
@@ -335,8 +335,35 @@ RefVDOM.prototype.isValid = function(ctxt) {
 	}
 
 }
+
+RefVDOM.prototype.allowedElements = function() {
+	
+	return this.DefineVDOM.allowedElements();
+}
+
+
 DefineVDOM.prototype = new NodeVDOM();
 
+DefineVDOM.prototype.allowedElements = function() {
+	var child = this.firstChild;
+	var ac = new Array();
+	
+	while (child) {
+		debug ("DefineVDOM.prototype.allowedElements" + child.nodeName);
+		var subac = child.allowedElements();
+		if (subac && subac.nodeName) {
+			ac.push(subac);
+		} else if (subac) {
+			for (var i = 0; i < subac.length; i++) {
+				ac.push(subac[i]);
+			}
+		}
+		child = child.nextSibling;
+	}
+	
+	return ac;
+	
+}
 
 function DefineVDOM(node) {
 	this.node = node;
@@ -487,6 +514,44 @@ OneOrMoreVDOM.prototype.isValid = function(ctxt) {
 	return false;
 }
 
+/*InterleaveVDOM.prototype.allowedElements = function() {
+	var child = this.firstChild;
+	var ac = new Array();
+	
+	while (child) {
+		var subac = child.allowedElements();
+		if (subac.nodeName) {
+			ac.push(subac);
+		} else {
+			for (var i = 0; i < subac.length; i++) {
+				ac.push(subac[i]);
+			}
+		}
+		child = child.nextSibling;
+	}
+	return ac;
+	
+}*/
+
+ChoiceVDOM.prototype.allowedElements = function() {
+	var child = this.firstChild;
+	var ac = new Array();
+	
+	while (child) {
+		var subac = child.allowedElements();
+		if (subac.nodeName) {
+			ac.push(subac);
+		} else {
+			for (var i = 0; i < subac.length; i++) {
+				ac.push(subac[i]);
+			}
+		}
+		child = child.nextSibling;
+	}
+	return ac;
+	
+}
+
 OneOrMoreVDOM.prototype.allowedElements = function() {
 	var child = this.firstChild;
 	var ac = new Array();
@@ -506,25 +571,7 @@ OneOrMoreVDOM.prototype.allowedElements = function() {
 	
 }
 
-ChoiceVDOM.prototype.allowedElements = function() {
-	var child = this.firstChild;
-	var ac = new Array();
-	
-	while (child) {
-		var subac = child.allowedElements();
-		if (subac && subac.nodeName) {
-			ac.push(subac);
-		} else if (subac) {
-			for (var i = 0; i < subac.length; i++) {
-				ac.push(subac[i]);
-			}
-		}
-		child = child.nextSibling;
-	}
-	
-	return ac;
-	
-}
+
 
 ElementVDOM.prototype.allowedElements = function() {
 	var nodeName = "" ;
