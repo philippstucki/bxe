@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: mozCE.js,v 1.20 2004/02/20 13:44:52 chregu Exp $
+// $Id$
 
 /* 
  * mozCE V0.5
@@ -453,6 +453,7 @@ Selection.prototype.insertNodeRaw = function (node) {
 	cssr.__clearTextBoundaries(); // POST05: don't want to have to use this
 
 	this.selectEditableRange(cssr);
+	return node;
 }
 
 Selection.prototype.insertNode = function(node)
@@ -483,7 +484,12 @@ Selection.prototype.insertNode = function(node)
 Selection.prototype.paste = function()
 {
 	var clipboard = mozilla.getClipboard();
-	window.getSelection().insertNode(clipboard.getData(MozClipboard.TEXT_FLAVOR));	
+	window.getSelection().insertNode(clipboard.getData(MozClipboard.TEXT_FLAVOR));
+	var node = window.getSelection().anchorNode;
+	if( node.nodeType == 3) {
+		node.normalize();
+	}
+	
 }
 // creates a hidden form field for interapp copy/paste support without native-method support
 Selection.prototype._createHiddenForm = function() {
