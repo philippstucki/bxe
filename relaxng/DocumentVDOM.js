@@ -9,7 +9,7 @@ DocumentVDOM.prototype.parseSchema = function() {
 		
 		alert("Validation Document could not be loaded. \n" + this.xmldoc.saveXML(this.xmldoc));
 	}
-	if (ths.xmldoc.documentElement.localName == "schema" &&
+	if (this.xmldoc.documentElement.localName == "schema" &&
 		this.xmldoc.documentElement.namespaceURI == "http://www.w3.org/2001/XMLSchema" ) {
 		alert("XML Schema validation is not supported at the moment");
 		//this.parseXMLSchema();
