@@ -249,8 +249,11 @@ Node.prototype.__defineGetter__ (
 	"nextNotInternalSibling",
 	function () {
 		var next = this.nextSibling;
+		dump ("next " + this + " " + next + "\n");
 		while (next) {
+			dump ("nextNot " + next.nodeName + "\n");
 			if(next.nodeType != 1  || ! next.hasAttribute("_edom_internal_node")) {
+				dump("return " +next+ " " + next.data + "\n");
 				return next;
 			}
 			next = next.nextSibling;
@@ -273,6 +276,7 @@ Node.prototype.__defineGetter__ (
 )
 
 Node.prototype.updateXMLNode = function (force) {
+	//dump("updateXMLNode " + this + "\n");
 	if (this.nodeType == 1 && !this.userModifiable && this.hasChildren) {
 		return;
 	}
@@ -310,11 +314,9 @@ Node.prototype.updateXMLNode = function (force) {
 	}
 	var next = this.nextNotInternalSibling;
 	if (next ) {
-		
-		if (!next._XMLNode || force) {
+		if (!next._XMLNode || force || next.nodeType == 3) {
 			next.updateXMLNode(force);
 		}
-		
 		this.XMLNode.nextSibling = next.XMLNode;
 		next.XMLNode.previousSibling = this.XMLNode;
 	} else {

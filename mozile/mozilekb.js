@@ -277,8 +277,9 @@ function nonctrlKeyPressHandler(event)
 			sel.extend(n,o);
 			sel.deleteSelection(backspace);
 			sel = window.getSelection();
-			sel.deleteSelection(false);
-			sel.anchorNode.updateXMLNode();
+			//sel.deleteSelection(false);
+			sel.anchorNode.parentNode.updateXMLNode();
+			
 		} else {
 			bxe_history_snapshot();
 			cssr = sel.getEditableRange();
