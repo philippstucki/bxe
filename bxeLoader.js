@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeLoader.js,v 1.253 2004/03/23 02:30:04 chregu Exp $
+// $Id: bxeLoader.js,v 1.254 2004/03/25 15:25:44 chregu Exp $
 
 var BXE_VERSION = "0.9.4-dev";
 var BXE_BUILD = "200403230330"
@@ -280,7 +280,11 @@ function config_loaded(bxe_config_in) {
 	for (var i=0; i < bxe_config.scriptfiles.length; i++) 
 	{
 		var scr = document.createElementNS("http://www.w3.org/1999/xhtml","script");
-		var src = mozile_root_dir + bxe_config.scriptfiles[i];
+		if (bxe_config.scriptfiles[i].substr(0,1) == "/") {
+			var src = bxe_config.scriptfiles[i];
+		} else {
+			var src = mozile_root_dir + bxe_config.scriptfiles[i];
+		}
 		scr.onload = script_loaded;
 		scr.setAttribute("src", src);
 		scr.setAttribute("language","JavaScript");
