@@ -124,7 +124,7 @@ function bxe_start(config_file,fromUrl, configArray) {
 
 function bxe_saveOnPart(evt) { 
 	var xmlstr = bxe_getXmlDocument();
-	if (xmlstr != bxe_lastSavedXML) {
+	if (bxe_editable_page && xmlstr && xmlstr != bxe_lastSavedXML) {
 		if (confirm('You have unsaved changes. Do you want to save before leaving the page?\n Click Cancel for leaving the page and not saving \n Click Ok for leaving the page and saving')) {
 			eDOMEventCall("DocumentSave",document);
 		}
