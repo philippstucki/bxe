@@ -339,24 +339,17 @@ function xml_loaded(xmldoc) {
 	document.eDOMaddEventListener("changeLinesContainer",bxe_changeLinesContainer,false);
 	document.eDOMaddEventListener("Exit",bxe_exit,false);
 	
-	document.eDOMaddEventListener("ClipboardCopy",function(e) { window.getSelection().copy()},false);
-	document.eDOMaddEventListener("ClipboardPaste",function(e) { window.getSelection().paste()},false);
-	document.eDOMaddEventListener("ClipboardCut",function(e) { window.getSelection().cut()},false);
 	
-	document.eDOMaddEventListener("Undo",function(e) { bxe_history_undo()}, false);
-	document.eDOMaddEventListener("Redo",function(e) { bxe_history_redo()}, false);
+	document.eDOMaddEventListener("Undo", bxe_history_undo, false);
+	document.eDOMaddEventListener("Redo", bxe_history_redo, false);
 
-	//document.eDOMaddEventListener("NodeInsertedParent",bxe_NodeInsertedParent, false);
 	document.eDOMaddEventListener("NodeInsertedBefore",bxe_NodeInsertedBefore,false);
 	document.eDOMaddEventListener("NodeBeforeDelete",bxe_NodeBeforeDelete,false);
-	/*document.eDOMaddEventListener("NodeChanged",bxe_NodeChanged,false);
-	
-	document.eDOMaddEventListener("NodeRemovedChildOnly",bxe_NodeRemovedChildOnly,false);
-	*/
-	//document.eDOMaddEventListener("NodeAppendedChild",bxe_NodeAppendedChild,false);
 	document.eDOMaddEventListener("NodePositionChanged",bxe_NodePositionChanged,false);
 	
 	document.eDOMaddEventListener("ContextPopup",bxe_ContextPopup,false);
+	
+	
 	document.addEventListener("contextmenu",bxe_ContextMenuEvent, false);
 	bxe_context_menu = new Widget_ContextMenu();
 	
