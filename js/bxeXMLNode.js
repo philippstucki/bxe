@@ -2,6 +2,21 @@ function XMLNode  ( nodein, localName, nodeType, autocreate) {
 	this.init( nodein, localName, nodeType, autocreate);
 }
 
+XMLNode.prototype.copy  = function () {
+	
+
+	var cssr = document.createRange();
+	cssr.selectNode(this._node);
+	// data to save - render as text (temporary thing - move to html later)
+	var clipboard = mozilla.getClipboard();
+
+	// clipboard.setData(deletedFragment.saveXML(), "text/html"); // go back to this once, paste supports html paste!
+	clipboard.setData(cssr,MozClipboard.TEXT_FLAVOR);
+}
+
+
+
+
 XMLNode.prototype.init = function ( nodein, localName, nodeType, autocreate) {
 	if (typeof nodein != "undefined" && typeof nodein != "string") {
 		this.nodeType = nodein.nodeType;

@@ -408,13 +408,19 @@ Selection.prototype.insertNode = function(node)
 		cssr.extractContentsByCSS();
 	}
 	var ip = cssr.firstInsertionPoint;
-
 	ip.insertNode(node);
+	//cssr.lines[0].container.updateXMLNode();
+	var _upNode = ip.ipNode;
+	if (_upNode.nodeType == 3) {
+		_upNode = _upNode.parentNode;
+	}
+	_upNode.updateXMLNode();
 	cssr.selectInsertionPoint(ip);
 
 	cssr.__clearTextBoundaries(); // POST05: don't want to have to use this
 
 	this.selectEditableRange(cssr);
+	
 }
 
 /**
@@ -523,7 +529,14 @@ Selection.prototype.pasteKeyUp = function () {
 	// than the content in the internal clipboard (then we assume, it's newer..)
 	var clipboard = mozilla.getClipboard();
 	if (rng.toString() != clipboard._clipboardText) {
-		clipboard.setData(rng);
+		var promptText = "Internal and System-Clipboard are differing: \n\n";
+		promptText += "Internal : '" + clipboard._clipboardText + "'\n\n";
+		promptText += "System   : '" + rng.toString() +"'\n\n";
+		promptText += "If you want to use the Internal, click OK, otherwise Cancel\n";
+			
+		if(!confirm( promptText)) {
+			clipboard.setData(rng);
+		}
 	}
 	//restore the selection
 	this.selectEditableRange(iframe._cssr);

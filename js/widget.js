@@ -40,6 +40,11 @@ Widget.prototype.fixOffscreenPosition = function() {
 	if (bottom > (window.innerHeight  + window.scrollY)) {
 			this.node.style.top = (this.node.offsetTop - (bottom - (window.innerHeight + window.scrollY))) + "px";
 	}
+	var right = (this.node.offsetLeft + this.node.offsetWidth);
+	if (right > (window.innerWidth  + window.scrollX)) {
+			this.node.style.left = (this.node.offsetLeft - (right - (window.innerWidth + window.scrollX))) + "px";
+	}
+
 	
 }
 

@@ -181,51 +181,50 @@ MozClipboard.prototype.getData = function(dataFlavor)
 	// if no native support, just return the internal clipboard (it's a document fragment, usually)
 	if (!this.nativeSupport) {
 		return this._clipboard.cloneNode(true);
-	// otherwise check the system clipboard and use that, if it has different data
+		// otherwise check the system clipboard and use that, if it has different data
 	} else {
-	
-	// enable xpconnect: must do again in this function even though enabled for constructor (seems daft)
-	netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
-
-	var trans = Components.classes['@mozilla.org/widget/transferable;1'].createInstance(Components.interfaces.nsITransferable);
-	if(dataFlavor != MozClipboard.TEXT_FLAVOR)
-		trans.addDataFlavor(dataFlavor); // can't share trans: need to do required flavor first or never shows up!
-	trans.addDataFlavor(MozClipboard.TEXT_FLAVOR);
-
-	this.clip.getData(trans, this.clip.kGlobalClipboard); // must use global - selection clipboard doesn't work and I don't know why!
-
-	var str = new Object();
-    	var len = new Object();
-
-	try 
-	{
-		trans.getTransferData(dataFlavor, str, len);
-	}
-	catch(e)
-	{
+		
+		// enable xpconnect: must do again in this function even though enabled for constructor (seems daft)
+		netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+		
+		var trans = Components.classes['@mozilla.org/widget/transferable;1'].createInstance(Components.interfaces.nsITransferable);
+		if(dataFlavor != MozClipboard.TEXT_FLAVOR)
+			trans.addDataFlavor(dataFlavor); // can't share trans: need to do required flavor first or never shows up!
+		trans.addDataFlavor(MozClipboard.TEXT_FLAVOR);
+		
+		this.clip.getData(trans, this.clip.kGlobalClipboard); // must use global - selection clipboard doesn't work and I don't know why!
+		
+		var str = new Object();
+		var len = new Object();
+		
 		try 
 		{
-			trans.getTransferData(MozClipboard.TEXT_FLAVOR, str, len);
+			trans.getTransferData(dataFlavor, str, len);
 		}
 		catch(e)
 		{
+			try 
+			{
+				trans.getTransferData(MozClipboard.TEXT_FLAVOR, str, len);
+			}
+			catch(e)
+			{
 				return this._clipboard.cloneNode(true); // nothing we can copy from the system clipboard
+			}
 		}
-	}
-	str= str.value.QueryInterface(Components.interfaces.nsISupportsString);
-	if(str)
-		str = (str.data.substring(0,len.value / 2));
-		
+		str= str.value.QueryInterface(Components.interfaces.nsISupportsString);
+		if(str)
+			str = (str.data.substring(0,len.value / 2));
 		// if system clipboard has the same text as the internal clipboard, take the docfragment from the internal
 		if (str == this._clipboardText) {
 			return this._clipboard.cloneNode(true);
-		// otherwise return the text from the system clipboard
+			// otherwise return the text from the system clipboard
 		} else {
 			return document.createTextNode(str);
 		}
 	}
-
-
+	
+	
 }
 
 /**
@@ -244,22 +243,21 @@ MozClipboard.prototype.setData = function(data, dataFlavor)
 	
 	//if nativeSupport, add the content to the system clipboard
 	if (this.nativeSupport) {
-
 		data = data.toString();
-	netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
-
-	// xpcom wrapper for data - note: wstring doesn't seem to work so choose string - seems arbitrary but it works!
-	var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
-	str.data = data;
-
-	var trans = Components.classes["@mozilla.org/widget/transferable;1"].createInstance(Components.interfaces.nsITransferable);
-	trans.addDataFlavor(dataFlavor);
-	trans.setTransferData(dataFlavor, str, data.length*2); 
-
-	this.clip.setData(trans, null, this.clip.kGlobalClipboard); // note: I don't know the difference between global and selection but selection works!
-
-	this.clip.forceDataToClipboard(this.clip.kGlobalClipboard);
-}
+		netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+		
+		// xpcom wrapper for data - note: wstring doesn't seem to work so choose string - seems arbitrary but it works!
+		var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
+		str.data = data;
+		
+		var trans = Components.classes["@mozilla.org/widget/transferable;1"].createInstance(Components.interfaces.nsITransferable);
+		trans.addDataFlavor(dataFlavor);
+		trans.setTransferData(dataFlavor, str, data.length*2); 
+		
+		this.clip.setData(trans, null, this.clip.kGlobalClipboard); // note: I don't know the difference between global and selection but selection works!
+		
+		this.clip.forceDataToClipboard(this.clip.kGlobalClipboard);
+	}
 }
 
 /************************************************************************************

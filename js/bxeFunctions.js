@@ -447,6 +447,13 @@ function bxe_ContextPopup(e) {
 		menui.MenuPopup._node = node._node;
 	}
 
+	
+	popup.addMenuItem("Copy Node", function (e) {
+		var widget = e.currentTarget.Widget;
+		var delNode = widget.MenuPopup.MainNode;
+		delNode.copy();
+	});
+	
 	popup.addMenuItem("Delete Node", function (e) {
 		var widget = e.currentTarget.Widget;
 		var delNode = widget.MenuPopup.MainNode._node;
