@@ -126,6 +126,22 @@
 
         <element name="a" ns="http://www.w3.org/1999/xhtml" type="popup">?lenya.usecase=bxeng&amp;lenya.step=link-show</element>
     </callbacks>
+    
+    <plugins>
+    <plugin name="XMLSnippets">
+        <option name="h1" >
+            <xhtml:h1 xmlns:xhtml="http://www.w3.org/1999/xhtml">hello</xhtml:h1>
+            <xhtml:p xmlns:xhtml="http://www.w3.org/1999/xhtml">world</xhtml:p>
+        </option>
+        <option name="inline">
+             <xhtml:a xmlns:xhtml="http://www.w3.org/1999/xhtml">hello</xhtml:a>
+             </option>
+             <option name="invalid">
+             <foobar> jkjkj </foobar>
+             <bar> </bar>
+             </option>
+    </plugin>
+    </plugins>
 <context type="dontShow">
          <!-- inline elements -->       
          <element name="abbr" ns="http://www.w3.org/1999/xhtml"/>
@@ -162,7 +178,7 @@
          <element name="pre" ns="http://www.w3.org/1999/xhtml"/>
          <element name="table" ns="http://www.w3.org/1999/xhtml"/>
          <element name="ol" ns="http://www.w3.org/1999/xhtml"/>
-         <element name="ul" ns="http://www.w3.org/1999/xhtml"/>
+    <element name="ul" ns="http://www.w3.org/1999/xhtml"/>
          <!-- attributes --> 
          <attribute name="id"/>      
          <attribute name="style"/>      
