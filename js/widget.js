@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: widget.js,v 1.69 2004/02/11 21:22:59 chregu Exp $
+// $Id: widget.js,v 1.70 2004/02/12 13:53:41 chregu Exp $
 
 function Widget () {}
 
@@ -505,11 +505,7 @@ function Widget_AboutBox() {
 Widget_AboutBox.prototype = new Widget();
 Widget_AboutBox.prototype.show = function (okButton) {
 
-	if (navigator.platform == "MacPPC") {
-		this.node.style.MozOpacity = 0.99;
-	} else {
-		this.node.style.MozOpacity = 1;
-	}
+	this.node.style.MozOpacity = 1;
 	if (okButton) { 
 		document.getElementById('okButton').style.display = "table-row";
 	}
