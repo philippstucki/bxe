@@ -60,6 +60,11 @@
     </options>
 <!-- here we define the buttons for the top button bar -->
     <buttons>
+    
+    <!-- The location of the image for the buttons
+           if none is provided, the images/buttons.png is taken 
+    <location src="../../images/bxe.png"/>
+    -->
      <!-- the dimension tag is for defining the dimensions of your button image and how
             large each button is. -->
     <dimension width="120" height="140" buttonwidth="20" buttonheight="20"/>
