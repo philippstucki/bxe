@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: RelaxNG.js,v 1.40 2004/01/19 01:38:48 chregu Exp $
+// $Id: RelaxNG.js,v 1.41 2004/02/24 21:14:43 chregu Exp $
 
 
 const RELAXNGNS= "http://relaxng.org/ns/structure/1.0";
@@ -22,46 +22,14 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 	this.xmldoc.documentElement.setAttributeNS("http://www.w3.org/2000/xmlns/","xmlns:rng","http://relaxng.org/ns/structure/1.0");
 
 	bxe_config.DocumentVDOM = this;
-	
+	//setup nsResolver
+	rng_nsResolver = new bxe_RelaxNG_nsResolver(this.xmldoc.documentElement);
 	//do includes
 	dump ("Start parseIncludes " + (new Date()- startTimer)/1000 + " sec\n"); 
 	this.parseIncludes();
 	dump ("Start derefAttributes " + (new Date() - startTimer)/1000 + " sec\n"); 
 	this.dereferenceAttributes();
-	debug("start remove whitespace");
 	
-	//delete all whitespace nodes
-	
-	/* not really need now 
-	var walker = this.xmldoc.createTreeWalker(
-	 this.xmldoc,NodeFilter.SHOW_ALL,
-	{
-		acceptNode : function(node) {
-			if (node.nodeType == 1 ) {
-				return NodeFilter.FILTER_SKIP;
-			}
-			else if (node.nodeType == 3) {
-				if( node.isWhitespaceOnly) {
-					return NodeFilter.FILTER_ACCEPT;
-				} else {
-					NodeFilter.FILTER_SKIP;
-				}
-			} 
-			return NodeFilter.FILTER_ACCEPT;
-		}
-	}
-	, true);
-	var node = walker.nextNode();
-	var newNode;
-	while (node) {
-			newNode = walker.nextNode();
-			node.parentNode.removeChild(node);
-			node = newNode;
-	}*/
-	//remove attributes and empty nodes...
-	
-	
-	debug("end remove whitespace");
 	var endTimer = new Date();
 	dump ("Start parsing RNG " + (endTimer - startTimer)/1000 + " sec\n"); 
 	if (DebugOutput) {
@@ -144,48 +112,6 @@ DocumentVDOM.prototype.dereferenceAttributes = function() {
 	
 	
 	return true;
-	/*
-	var xp = "/rng:grammar/rng:define[rng:attribute or rng:interleave/rng:optional/rng:attribute or rng:optional/rng:attribute]"
-	var defRes= this.xmldoc.documentElement.getXPathResult(xp);
-	var defNode = defRes.iterateNext();
-	if (!defNode) {
-		debug ("no more define/attribute stuff");
-		return true;
-	}
-	var defNodes = new Array();
-	while (defNode) {
-			defNodes.push(defNode);
-			defNode = defRes.iterateNext();
-	
-	
-	for (j in defNodes) {
-		debug("defNode " +  defNodes[j].getAttribute("name"));
-		xp = "/rng:grammar//rng:ref[@name = '" + defNodes[j].getAttribute("name") + "']";
-		var refRes = this.xmldoc.documentElement.getXPathResult(xp);
-		var refNodes = new Array();
-		var refNode = refRes.iterateNext();
-		while (refNode) {
-			refNodes.push(refNode);
-			refNode = refRes.iterateNext();
-		}
-		for (i in refNodes) {
-			debug(" refNode " +  refNodes[i].getAttribute("name"));
-			var newNode = defNodes[j].cloneNode(true);
-			var child = newNode.firstChild;
-			while (child) {
-				var nextSib = child.nextSibling;
-				refNodes[i].parentNode.insertBefore(child,refNodes[i]);
-				child = nextSib;
-			}
-			//refNodes[i].parentNode.replaceChild(defNodes[j].cloneNode(true),refNodes[i]);
-			refNodes[i].parentNode.removeChild(refNodes[i]);
-		}
-		
-		defNodes[j].parentNode.removeChild(defNodes[j]);
-	}
-	debug ("next run of dereferenceAttributes");
-	this.dereferenceAttributes();
-	*/
 }
 
 DocumentVDOM.prototype.parseIncludes = function() {
@@ -217,8 +143,9 @@ DocumentVDOM.prototype.parseIncludes = function() {
 				} else {
 					
 					if (td.document.documentElement.isRelaxNGElement("grammar")) {
+						
 						this.replaceIncludePaths(td.document,href);
-					
+						this.replacePrefixes(td.document);
 						// check childs of include path;
 						var includeChild = rootChild.firstChild;
 						while (includeChild) {
@@ -308,6 +235,22 @@ DocumentVDOM.prototype.parseIncludes = function() {
 	}
 
 }
+DocumentVDOM.prototype.replacePrefixes = function (doc) {
+	doc.documentElement.setAttributeNS("http://www.w3.org/2000/xmlns/","xmlns:rng","http://relaxng.org/ns/structure/1.0");
+	var _rng_nsResolver = new bxe_RelaxNG_nsResolver(doc.documentElement);
+	var res = doc.getElementsByTagNameNS(RELAXNGNS,"element");
+	var prefix;
+	for (var i = 0; i < res.length; i++) {
+		var ns = _rng_nsResolver.parseNodeNameOnElement(res[i]);
+		prefix = rng_nsResolver.lookupPrefix(ns.namespaceURI);
+		if (typeof prefix == "string" && prefix != "") {
+			
+			res[i].setAttribute("name", prefix + ":" + ns.localName); 
+		} else if (prefix == "") {
+			res[i].setAttribute("name", ns.localName);
+		}
+	}
+}
 
 DocumentVDOM.prototype.replaceIncludePaths = function(doc, currentFile) {
 	var includes = doc.documentElement.getElementsByTagNameNS(RELAXNGNS,"include");
@@ -325,7 +268,6 @@ DocumentVDOM.prototype.replaceIncludePaths = function(doc, currentFile) {
 var rng_nsResolver;
 DocumentVDOM.prototype.parseStart = function(node) {
 	var startChildren = node.childNodes;
-	rng_nsResolver = new bxe_RelaxNG_nsResolver(this.xmldoc.documentElement);
 	var startNode = null;
 	Ende:
 	for (var i = 0; i < startChildren.length; i++) {
@@ -365,11 +307,15 @@ function bxe_RelaxNG_nsResolver(node) {
 	var rootAttr = node.attributes;
 	this.defaultNamespace = null;
 	this.namespaces = new Array();
+	this.prefixes = new Array();
+
 	for(var i = 0; i < rootAttr.length; i++) {
 		if (rootAttr[i].namespaceURI == "http://www.w3.org/2000/xmlns/") {
 			this.namespaces[rootAttr[i].localName] = rootAttr[i].value;
+			this.prefixes[rootAttr[i].value] = rootAttr[i].localName;
 		} else if (rootAttr[i].localName == "ns") {
-			this.defaultNamespace= rootAttr[i].value;
+			this.defaultNamespace = rootAttr[i].value;
+			this.prefixes[rootAttr[i].value] = "";
 		}
 	}
 }
@@ -380,6 +326,13 @@ bxe_RelaxNG_nsResolver.prototype.lookupNamespaceURI = function(prefix) {
 	return null;
 }
 
+bxe_RelaxNG_nsResolver.prototype.lookupPrefix = function (namespaceURI) {
+	
+	if (this.prefixes[namespaceURI]) {
+		return this.prefixes[namespaceURI];
+	}
+	return null;
+}
 bxe_RelaxNG_nsResolver.prototype.parseNodeNameOnElement = function(node) {
 	var nodename = node.getAttribute("name");
 	if (nodename) {
