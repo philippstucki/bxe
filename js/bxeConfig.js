@@ -100,6 +100,43 @@ bxeConfig.parseConfig = function  (e) {
 		node = callbackNodes.iterateNext();
 	}
 
+	/* check for events */
+	bxe_config.events = new Array();
+	
+	/* default events */
+	bxe_config.events["toggleSourceMode"] = "bxe_toggleSourceMode";
+	bxe_config.events["toggleTagMode"] = "bxe_toggleTagMode";
+	bxe_config.events["toggleNormalMode"] = "bxe_toggleNormalMode";
+	bxe_config.events["DocumentSave"] = "__bxeSave";
+	bxe_config.events["ToggleTextClass"] = "bxe_toggleTextClass";
+	bxe_config.events["appendNode"] = "bxe_appendNode";
+	bxe_config.events["appendChildNode"] = "bxe_appendChildNode";
+	bxe_config.events["InsertLink"] = "bxe_InsertLink";
+	bxe_config.events["DeleteLink"] = "bxe_DeleteLink";
+	bxe_config.events["CleanInline"] = "bxe_CleanInline";
+	bxe_config.events["InsertTable"] = "bxe_InsertTable";
+	bxe_config.events["InsertImage"] = "bxe_InsertObject";
+	bxe_config.events["ShowAssetDrawer"] = "bxe_ShowAssetDrawer";
+	bxe_config.events["OrderedList"] = "bxe_OrderedList";
+	bxe_config.events["UnorderedList"] = "bxe_UnorderedList";
+	bxe_config.events["InsertAsset"] = "bxe_InsertAsset";
+	bxe_config.events["changeLinesContainer"] = "bxe_changeLinesContainer";
+	bxe_config.events["Exit"] = "bxe_exit";
+	bxe_config.events["Undo"] = "bxe_history_undo";
+	bxe_config.events["Redo"] = "bxe_history_redo";
+	bxe_config.events["NodeInsertedBefore"] = "bxe_NodeInsertedBefore";
+	bxe_config.events["NodeBeforeDelete"] = "bxe_NodeBeforeDelete";
+	bxe_config.events["NodePositionChanged"] = "bxe_NodePositionChanged";
+	bxe_config.events["ContextPopup"] = "bxe_ContextPopup";
+
+	var eventNodes = bxe_config.doc.evaluate("/config/events/event", bxe_config.doc, null, 0, null);
+
+	node = eventNodes.iterateNext();
+	while (node) {
+		bxe_config.events[node.getAttribute("name")] = node.firstChild.data;
+		node = eventNodes.iterateNext();
+	}
+
 	var configOptions = bxe_config.doc.evaluate("/config/options/option", bxe_config.doc, null, 0, null);
 	bxe_config.options = new Array();
 	
@@ -120,7 +157,13 @@ bxeConfig.prototype.getButtons = function() {
 		this.buttons = new Array();
 		var node;
 		var tmpArray = new Array();
+		// get location
 		
+		var result = this.doc.evaluate("/config/buttons/location", this.doc, null, 0, null);
+		node = result.iterateNext();
+		if (node) {
+			this.buttons["location"] = node.getAttribute("src");
+		}
 		// get dimensions
 		var result = this.doc.evaluate("/config/buttons/dimension", this.doc, null, 0, null);
 		node = result.iterateNext();

@@ -320,35 +320,9 @@ function xml_loaded(xmldoc) {
 		bxe_about_box.addText("RelaxNG File was not found");
 	}
 	bxe_history_snapshot();
-	document.eDOMaddEventListener("toggleSourceMode",bxe_toggleSourceMode,false);
-	document.eDOMaddEventListener("toggleTagMode",bxe_toggleTagMode,false);
-	document.eDOMaddEventListener("toggleNormalMode",bxe_toggleNormalMode,false);
-	document.eDOMaddEventListener("DocumentSave",__bxeSave,false);
-	document.eDOMaddEventListener("ToggleTextClass",bxe_toggleTextClass,false);
-	document.eDOMaddEventListener("appendNode",bxe_appendNode,false);
-	document.eDOMaddEventListener("appendChildNode",bxe_appendChildNode,false);
-	document.eDOMaddEventListener("InsertLink",bxe_InsertLink,false);
-	document.eDOMaddEventListener("DeleteLink",bxe_DeleteLink,false);
-	document.eDOMaddEventListener("CleanInline",bxe_CleanInline,false);
-	document.eDOMaddEventListener("InsertTable",bxe_InsertTable,false);
-	document.eDOMaddEventListener("InsertImage",bxe_InsertObject,false);
-	document.eDOMaddEventListener("ShowAssetDrawer",bxe_ShowAssetDrawer,false);
-	document.eDOMaddEventListener("OrderedList",bxe_OrderedList,false);
-	document.eDOMaddEventListener("UnorderedList",bxe_UnorderedList,false);
-    document.eDOMaddEventListener("InsertAsset", bxe_InsertAsset, false);
-	document.eDOMaddEventListener("changeLinesContainer",bxe_changeLinesContainer,false);
-	document.eDOMaddEventListener("Exit",bxe_exit,false);
-	
-	
-	document.eDOMaddEventListener("Undo", bxe_history_undo, false);
-	document.eDOMaddEventListener("Redo", bxe_history_redo, false);
-
-	document.eDOMaddEventListener("NodeInsertedBefore",bxe_NodeInsertedBefore,false);
-	document.eDOMaddEventListener("NodeBeforeDelete",bxe_NodeBeforeDelete,false);
-	document.eDOMaddEventListener("NodePositionChanged",bxe_NodePositionChanged,false);
-	
-	document.eDOMaddEventListener("ContextPopup",bxe_ContextPopup,false);
-	
+	for (a in bxe_config.events ) {
+		document.eDOMaddEventListener( a , eval(bxe_config.events[a] ), false);
+	}
 	
 	document.addEventListener("contextmenu",bxe_ContextMenuEvent, false);
 	bxe_context_menu = new Widget_ContextMenu();
@@ -377,6 +351,17 @@ function config_loaded(bxe_config_in) {
 	bxe_about_box.addText("& Parsed ...");
 
 	bxe_config = bxe_config_in;
+	var btn = bxe_config.getButtons();
+	
+	//set button image location and begin preloading
+	if (btn['location']) {
+		buttonImgLoc = btn['location'];
+	} else {
+		buttonImgLoc = mozile_root_dir + "/images/buttons.png";
+	}
+	var preloadthebutton = new Image();
+	preloadthebutton.src = buttonImgLoc;
+	
 	var head = document.getElementsByTagName("head")[0];
 	for (var i=0; i < bxe_config.cssfiles.length; i++) 
 	{
@@ -499,4 +484,5 @@ function bxe_getCaller( fn )
 	}
 	return undefined;
 }
+
 
