@@ -279,7 +279,7 @@ function bxe_load_plugins() {
 				var scr = document.createElementNS(XHTMLNS,"link");
 				scr.setAttribute("type","text/css");
 				scr.setAttribute("rel","stylesheet");
-				if (css[j].substring(0,1) == "/" || css[i].indexOf("://") > 0) {
+				if (css[j].substring(0,1) == "/" || css[j].indexOf("://") > 0) {
 					var src = css[j];
 				} else {
 					var src = mozile_root_dir +css[j];
