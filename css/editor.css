@@ -91,7 +91,22 @@
     border: outset 1px;
 }
 
+.AboutBox {
+   border: outset 1px black;;
+  background-color: #ff6600;
+  background-image: url("bxelogo.gif");
+  background-repeat: no-repeat;
+  background-position: 8px 5px;
+}
 
+.AboutBox div {
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    margin-left: 6px;
+    height: 18px;
+    overflow: hidden;
+}
+    
 select {
     font-size: 12px;
 }

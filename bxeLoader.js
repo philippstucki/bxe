@@ -38,18 +38,24 @@
  *   - load IE toolbar
  */
 mozile_js_files = new Array();
+mozile_js_files.push("mozWrappers.js");
 mozile_js_files.push("eDOM.js");
+mozile_js_files.push("widget.js");
+
+
 mozile_js_files.push("eDOMXHTML.js");
+mozile_js_files.push("jsdav.js");
+mozile_js_files.push("td/webdav.js");
+
 mozile_js_files.push("domlevel3.js");
 mozile_js_files.push("mozCE.js");
-mozile_js_files.push("mozWrappers.js");
 mozile_js_files.push("mozIECE.js");
 mozile_js_files.push("mozilekb.js");
 mozile_js_files.push("bxehtmltb.js");
 mozile_js_files.push("mozileModify.js");
 mozile_js_files.push("mozClipboard.js");
-mozile_js_files.push("widget.js");
 mozile_js_files.push("eDOMEvents.js");
+mozile_js_files.push("xsltTransformer.js");
 
 var mozile_root_dir = "./";
 var bxe_xmlfile = "test.xml";
@@ -60,14 +66,15 @@ function bxe_globals() {}
 
 bxe_globals.prototype.loadXML = function(xmlfile) {
 	
-	// make XMLDocument
-	this.xmldoc = document.implementation.createDocument("","",null);
-	// set onload handler (async = false doesn't work in mozilla AFAIK)
-	this.xmldoc.onload = function(e) {e.currentTarget.insertIntoHTMLDocument()};
-	//set a reference to the DocumentVDOM, so we can access it in the callback
-	this.xmldoc.filename = xmlfile;
-	// load schema file
-	this.xmldoc.load(xmlfile);
+	
+	var td = new BXE_TransportDriver_webdav();
+	function callback (e) {
+		this.td.Docu.xmldoc =  this.responseXML;
+		this.td.Docu.xmldoc.insertIntoHTMLDocument()
+	}
+	td.Docu = this;
+	td.load(xmlfile,callback);
+
 	return true;
 }
 function foobar() {
@@ -130,6 +137,10 @@ bxe_nsResolver.prototype.lookupNamespaceURI = function (prefix) {
 
 XMLDocument.prototype.insertIntoHTMLDocument = function() {
 	
+	
+	this.transformToInternalFormat();
+	
+
 	//var nsResolver = this.createNSResolver(this.documentElement);
 	var nsResolver = new bxe_nsResolver(this.documentElement);
 	
@@ -211,7 +222,7 @@ XMLDocument.prototype.insertIntoHTMLDocument = function() {
 	toolbar.draw();
 	
 	
-	
+window.setTimeout(function(e) {bxe_about_box.node.style.display = "none"}, 1000);
 	
 }
 function bxe_getAllEditableAreas() {
@@ -345,7 +356,12 @@ if((navigator.product == 'Gecko') && (navigator.userAgent.indexOf("Safari") == -
 		{
 			var scr = document.createElementNS("http://www.w3.org/1999/xhtml","script");
 			var src = mozile_root_dir + mozile_js_files[i];
+			if (mozile_js_files[i] == "widget.js") {
+				scr.onload = widget_loaded;
+			}
+			
 			scr.setAttribute("src", src);
+			
 			scr.setAttribute("language","JavaScript");
 			head.appendChild(scr);
 		}
@@ -395,23 +411,28 @@ function BX_debug(object)
     win.document.writeln(bla);
     win.document.writeln("<hr>");
 }
-
-
+function widget_loaded() {
+	bxe_about_box = new Widget_AboutBox();
+	bxe_about_box.draw();
+	bxe_about_box.setText("Loading files ...");
+}
 function mozile_loaded() {
-  document.eDOMaddEventListener("toggleSourceMode",toggleSourceMode_bxe,false);
-  document.eDOMaddEventListener("toggleTagMode",toggleTagMode_bxe,false);
-  document.eDOMaddEventListener("toggleNormalMode",toggleNormalMode_bxe,false);
-  document.eDOMaddEventListener("DocumentSave",__bxeSave,false);
-  document.eDOMaddEventListener("ToggleTextClass",toggleTextClass_bxe,false);
-  document.eDOMaddEventListener("changeLinesContainer",changeLinesContainer_bxe,false);
-  bxe_globals = new bxe_globals();
-  bxe_globals.loadXML(bxe_xmlfile);
-  document.addEventListener("click",onClick,false);
-  bla = document.createElement("div");
-  bla.setAttribute("name","bxe_AreaHolder");
-  bla.appendChild(document.createTextNode("blabla"));
-  document.getElementsByTagName("body")[0].appendChild(bla);
-  
+	bxe_about_box.addText("Scripts loaded ...");
+	document.eDOMaddEventListener("toggleSourceMode",toggleSourceMode_bxe,false);
+	document.eDOMaddEventListener("toggleTagMode",toggleTagMode_bxe,false);
+	document.eDOMaddEventListener("toggleNormalMode",toggleNormalMode_bxe,false);
+	document.eDOMaddEventListener("DocumentSave",__bxeSave,false);
+	document.eDOMaddEventListener("ToggleTextClass",toggleTextClass_bxe,false);
+	document.eDOMaddEventListener("changeLinesContainer",changeLinesContainer_bxe,false);
+	bxe_about_box.addText("Load XML ...");
+	bxe_globals = new bxe_globals();
+	bxe_globals.loadXML(bxe_xmlfile);
+	document.addEventListener("click",onClick,false);
+	bla = document.createElement("div");
+	bla.setAttribute("name","bxe_AreaHolder");
+	bla.appendChild(document.createTextNode("blabla"));
+	document.getElementsByTagName("body")[0].appendChild(bla);
+	
 }
 
 function MozEvent() {};
@@ -459,7 +480,13 @@ function __bxeSave(e) {
 	var docfrag = xmldoc.transformToDocumentFragment();
 	editableArea.xmlNode.appendChild(docfrag);
 	*/
-	alert(bxe_globals.xmldoc.saveXML(bxe_globals.xmldoc));
+	var td = new BXE_TransportDriver_webdav();
+	function callback (e) {
+		this.td.Docu.xmldoc =  this.responseXML;
+		this.td.Docu.xmldoc.insertIntoHTMLDocument()
+	}
+	td.Docu = this;
+	td.save("webdavtest.xml",null,xmldoc.ownerDocument.saveXML(xmldoc));
 }
 
 Node.prototype.transformToDocumentFragment = function () {

@@ -383,7 +383,41 @@ Widget_ToolBarButton.prototype = new Widget();
 Element.prototype.appendToBody = function() {
 	document.getElementsByTagName("body")[0].appendChild(this);
 }
+
+function Widget_AboutBox() {
+	var width = "400";
+	var height = "200";
+	this.node = this.initNode("div","AboutBox");
+	this.Display = "block";
+	this.node.appendToBody();
+	this.node.style.width = width + "px";
+	this.node.style.height = height + "px";
+	this.position((window.innerWidth- width)/2,(window.innerHeight-height)/3,"absolute");
+	this.node.onclick = function(e) { this.style.display = 'none';}
+	var textdiv = document.createElement("div");
+	this.TextNode = document.createTextNode(" ");
+	textdiv.appendChild(this.TextNode);
+	this.node.appendChild(textdiv );
+	textdiv.style.top = (height - 20) + "px";;
+	textdiv.style.position = "relative";
+	this.draw();
+	
+}
  
+
+Widget_AboutBox.prototype = new Widget();
+
+Widget_AboutBox.prototype.setText = function(text) {
+	this.TextNode.data = text;
+}
+
+Widget_AboutBox.prototype.addText = function(text) {
+	this.TextNode.data =this.TextNode.data + " " + text;
+	if ( this.TextNode.data.length  > 60) {
+		this.TextNode.data = "..." + this.TextNode.data.substr(this.TextNode.data.length - 60);
+	}
+}
+	
 // image should be in the same directory as this file. This file is in mozile_root_dir. The loader
 // sets this constant.
 /*const buttonImgLoc = mozile_root_dir + "/buttons.png";
