@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: mozCE.js,v 1.17 2004/01/09 10:03:42 chregu Exp $
+// $Id: mozCE.js,v 1.18 2004/01/12 17:21:45 chregu Exp $
 
 /* 
  * mozCE V0.5
@@ -335,7 +335,8 @@ Selection.prototype.changeLinesContainer = function(containerName, isClass)
 		// - it is top
 		// - it is a table cell
 		// - it is a list item
-		var keep = ((lines[i].lineType == CSSLine.CONTAINED_LINE) && (lines[i].containedLineType != ContainedLine.BLOCK));
+		//var keep = ((lines[i].lineType == CSSLine.CONTAINED_LINE) && (lines[i].containedLineType != ContainedLine.BLOCK));
+		var keep = false;
 		var line = lines[i].setContainer(documentCreateXHTMLElement(containerName), !keep);
 		
 		newContainer.push(line.__container)
