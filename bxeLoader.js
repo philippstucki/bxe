@@ -138,7 +138,7 @@ function bxe_checkSupportedBrowsers() {
 
 	if (mozillaRvVersionInt >= 1.4) {
 		if (bxe_bug248172_check()) {
-			alert ("You are using a Mozilla release with a broken XMLSerializer implementation.\nMozilla 1.7 and Firefox 0.9/0.9.1 are known to have this bug. Please up- or downgrade");
+			alert ("You are using a Mozilla release with a broken XMLSerializer implementation.\n SAVE (and others) WILL NOT WORK!\nMozilla 1.7 and Firefox 0.9/0.9.1 are known to have this bug.\n Please up- or downgrade.");
 		}
 		//register beforeOnload handler
         if (mozillaRvVersionInt > 1.6) {

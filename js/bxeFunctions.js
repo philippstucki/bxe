@@ -27,7 +27,11 @@ var bxe_snapshots_position = 0;
 var bxe_snapshots_last = 0;
 const BXE_SNAPSHOT_LENGTH = 5;
 function __bxeSave(e) {
-	
+    if (bxe_bug248172_check()) {
+		alert ("THIS DOCUMENT COULD NOT BE SAVED!\n You are using a Mozilla release with a broken XMLSerializer implementation.\n Mozilla 1.7 and Firefox 0.9/0.9.1 are known to have this bug.\n Please up- or downgrade.");
+		return false;
+	}
+
 	var td = new mozileTransportDriver("webdav");
 	td.Docu = this;
 	if (e.additionalInfo ) {
