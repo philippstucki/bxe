@@ -2691,16 +2691,22 @@ ContainedLine.prototype.normalizeWhitespace = function()
  */
 ContainedLine.prototype.deleteLine = function()
 {
-	var rangeToDelete = document.createRange();		
-	rangeToDelete.selectNode(this.topMostContainer);
+	var rangeToDelete = document.createRange();
+	//handle th/td differently
+	if (this.topMostContainer.localName == "td" || this.topMostContainer.localName == "th") {
+		rangeToDelete.selectNode(this.container);
+		var par = this.container.parentNode;
+		eDOMEventCall("NodeBeforeDelete",this.container);
+		rangeToDelete.deleteContents();
+		par.appendChild(document.createTextNode(STRING_NBSP));
+	} else {
+		rangeToDelete.selectNode(this.topMostContainer);
+		eDOMEventCall("NodeBeforeDelete",this.topMostContainer);
+		rangeToDelete.deleteContents();
+		
+	}
 
-	eDOMEventCall("NodeBeforeDelete",this.topMostContainer);
-	rangeToDelete.deleteContents();
-
-
-	
 }
-
 /**
  * Empty this line - it becomes an empty (token) line
  */

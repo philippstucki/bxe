@@ -536,7 +536,7 @@ function bxe_deleteEventKey(sel, backspace) {
 		// this prevents some problems with updateXMLNode and unifies the handling
 		// Bug 635 caused this
 		//BX_debug(sel.focusNode);
-		if (!sel.isCollapsed && sel.focusNode.nodeType == 3 && sel.focusOffset == 0 && sel.focusNode.compareDocumentPosition(sel.anchorNode) == 4) {
+		if (!sel.isCollapsed && sel.focusNode.nodeType == 3 && sel.focusOffset == 0 && sel.focusNode.compareDocumentPosition(sel.anchorNode) & 4) {
 			var n = sel.anchorNode;
 			var o = sel.anchorOffset;
 			sel.collapse(sel.focusNode,0)
