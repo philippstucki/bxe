@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<!-- $Id: config.xml,v 1.1 2003/08/14 07:53:45 chregu Exp $ -->
+<config>
+	<files>
+	<input>
+			<!-- The XML-document with the actual data -->
+			<file name="BX_xmlfile">test.xml</file>
+          <file name="BX_xslfile">test.xsl</file>-
+    </input>
+    </files>
+    
+</config>
