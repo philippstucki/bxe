@@ -42,8 +42,9 @@ Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 			}
 			if (node.nodeType == 1 ) {
 				var newElement = null;
-				if (node.namespaceURI ==  XHTMLNS) {
-					newElement = document.createElement(node.localName);
+				if (node.namespaceURI ==  XHTMLNS || node.namespaceURI == MATHMLNS) {
+					
+					newElement = document.createElementNS(node.namespaceURI, node.localName);
 					newElement.XMLNode.localName = node.localName;
 					// prevent open links
 					if (node.localName.toLowerCase() == "a") {
@@ -485,11 +486,16 @@ function bxe_Node_createNS(nodeType, namespaceURI, localName, attribs) {
 	var htmlelementname;
 	var _node;
 	if (nodeType == 1) {
+		
 		if (namespaceURI != XHTMLNS) {
+			if (namespaceURI == MATHMLNS) {
+				_node = document.createElementNS(MATHMLNS,localName);
+			} else {
 			htmlelementname = "span"
 			_node = document.createElement(htmlelementname);
 			_node.setAttribute("class", localName);
 			_node.setAttribute("__bxe_ns",namespaceURI);
+			}
 		}
 		else {
 			_node = documentCreateXHTMLElement(localName.toLowerCase(), attribs);
