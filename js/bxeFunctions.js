@@ -28,7 +28,7 @@ function __bxeSave(e) {
 
 /* Mode toggles */
 
-function toggleTagMode_bxe(e) {
+function bxe_toggleTagMode(e) {
 	try {
 	var editableArea = e.target;
 	if (editableArea._SourceMode) {
@@ -77,7 +77,7 @@ function toggleTagMode_bxe(e) {
 
 }
 
-function toggleNormalMode_bxe (e) {
+function bxe_toggleNormalMode (e) {
 	try {
 	var editableArea = e.target;
 	if (editableArea._SourceMode) {
@@ -139,7 +139,7 @@ function createTagNameAttributes(startNode) {
 	} while(node = walker.nextNode() )
 }
 
-function toggleSourceMode_bxe(e) {
+function bxe_toggleSourceMode(e) {
 	try {
 	var editableArea = e.target;
 
@@ -188,14 +188,14 @@ function toggleSourceMode_bxe(e) {
 
 }
 
-function toggleTextClass_bxe(e) {
+function bxe_toggleTextClass(e) {
 	var sel = window.getSelection();
 	var parent = sel.anchorNode.parentNode;
 	sel.toggleTextClass(e.additionalInfo.localName);
 	dump("is valid" +parent.isNodeValid());
 }
 
-function changeLinesContainer_bxe(e) {
+function bxe_changeLinesContainer(e) {
 	window.getSelection().changeLinesContainer(e.additionalInfo);
 }
 

@@ -255,18 +255,18 @@ function mozile_loaded() {
 function xml_loaded(e) {
 	bxe_about_box.addText("Load RelaxNG ...");
 	e.target.td.Docu.xmldoc.loadSchema(bxe_config.validationfile,validation_loaded);
-	document.eDOMaddEventListener("toggleSourceMode",toggleSourceMode_bxe,false);
-	document.eDOMaddEventListener("toggleTagMode",toggleTagMode_bxe,false);
-	document.eDOMaddEventListener("toggleNormalMode",toggleNormalMode_bxe,false);
+	document.eDOMaddEventListener("toggleSourceMode",bxe_toggleSourceMode,false);
+	document.eDOMaddEventListener("toggleTagMode",bxe_toggleTagMode,false);
+	document.eDOMaddEventListener("toggleNormalMode",bxe_toggleNormalMode,false);
 	document.eDOMaddEventListener("DocumentSave",__bxeSave,false);
-	document.eDOMaddEventListener("ToggleTextClass",toggleTextClass_bxe,false);
+	document.eDOMaddEventListener("ToggleTextClass",bxe_toggleTextClass,false);
 	document.eDOMaddEventListener("InsertLink",bxe_InsertLink,false);
 		document.eDOMaddEventListener("InsertTable",bxe_InsertTable,false);
 	document.eDOMaddEventListener("InsertImage",bxe_InsertImage,false);
 	document.eDOMaddEventListener("OrderedList",bxe_UnorderedList,false);
 	document.eDOMaddEventListener("UnorderedList",bxe_OrderedList,false);
 
-	document.eDOMaddEventListener("changeLinesContainer",changeLinesContainer_bxe,false);
+	document.eDOMaddEventListener("changeLinesContainer",bxe_changeLinesContainer,false);
 	
 	document.addEventListener("contextmenu",bxe_ContextMenuEvent, false);
 	
