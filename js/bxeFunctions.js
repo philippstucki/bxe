@@ -1197,7 +1197,8 @@ function bxe_OrderedList() {
 
 function bxe_InsertObject() {
 	var sel = window.getSelection();
-	var object = documentCreateXHTMLElement("object");
+	var object = documentCreateXHTMLElement("img");
+	
 	sel.insertNode(object);
 }
 
@@ -1658,7 +1659,6 @@ function bxe_deregisterKeyHandlers() {
 }
 
 function bxe_insertContent(content,replaceNode, options) {
-	
 	window.setTimeout(function() {bxe_insertContent_async(content,replaceNode,options);},1);
 }
 
@@ -1682,6 +1682,7 @@ function bxe_insertContent_async(node,replaceNode, options) {
 		}
 		sel.insertNodeRaw(_node);
 		_node.updateXMLNode();
+		return _node;
 	} else if (replaceNode) {
 		
 		var newNode = docfrag.firstChild.init();
@@ -1768,4 +1769,8 @@ function bxe_nodeSort(a,b) {
 	}
 }
 
+function bxe_showImageDrawer() {
+	drawertool.cssr = window.getSelection().getEditableRange();
+	drawertool.openDrawer('imagedrawer');
+}
 

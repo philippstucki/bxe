@@ -401,7 +401,7 @@ Widget_ToolBar.prototype = new Widget();
 Widget_ToolBar.prototype.addButtons = function ( buttons) {
 	for (but in buttons) {
 		if (but != "Dimension") {
-			var button = new Widget_ToolBarButton(but,buttons[but][3]);
+			var button = new Widget_ToolBarButton(but,buttons[but]['ns']);
 			this.addItem(button);	
 		}
 	}
@@ -445,8 +445,8 @@ function Widget_ToolBarButton (id,namespaceURI) {
 		this.node.setAttribute("title",id);
 		this.Display = "block";
 		var buttons = bxe_config.getButtons();
-		var col =  buttons[id][0];
-		var row =  buttons[id][1];
+		var col =  buttons[id]['col'];
+		var row =  buttons[id]['row'];
 		
 		
 	var clipoffset = 
@@ -460,9 +460,22 @@ function Widget_ToolBarButton (id,namespaceURI) {
 	this.node.addEventListener("mouseout",function(e) {this.style.border="dotted 1px #C0C0C0"}, false);
 	this.node.addEventListener("mouseover",function(e) {this.style.border="dotted 1px"}, false);
 	this.node.ElementNamespaceURI = namespaceURI;
+	if (buttons[id]['type'] == "function") {
+		this.node.addEventListener("click", function(e) { eval(buttons[id]['data']+"(e)") }, false);
+	} else if (buttons[id]['type'] == "insertElement") {
+			this.node.addEventListener("click",function(e) { var sel = window.getSelection();
+			var object = bxe_Node_createNS(1, e.target.ElementNamespaceURI, buttons[id]['data']);
+			alert(object.namespaceURI);
+			sel.insertNode(object);}, false);
+	} else if (buttons[id]['type'] == "event") {
 	this.node.addEventListener("click",function(e) { 
-	eDOMEventCall(buttons[id][2],document,{"localName":this.getAttribute("title"),"namespaceURI":e.target.ElementNamespaceURI})}, 
+	eDOMEventCall(buttons[id]['data'],document,{"localName":this.getAttribute("title"),"namespaceURI":e.target.ElementNamespaceURI})}, 
 		false);
+	} else {
+	this.node.addEventListener("click",function(e) { 
+	eDOMEventCall(buttons[id]['action'],document,{"localName":this.getAttribute("title"),"namespaceURI":e.target.ElementNamespaceURI})}, 
+		false);
+	}
 }	
 
 Widget_ToolBarButton.prototype = new Widget();
@@ -488,6 +501,8 @@ function Widget_AboutBox() {
 	htmltext += '<tr><td><a href="http://bitflux.ch">Bitflux GmbH</a> </td><td> (Main Development) </td></tr>';
 	htmltext += '<tr><td><a href="http://playsophy.com">Playsophy</a> </td><td> (<a href="http://mozile.mozdev.org">Mozile/eDOM</a> Development) </td></tr>';
 	htmltext += '<tr><td><a href="http://twingle.mozdev.org">Twingle</a>/Stephan Richter &nbsp;</td><td> (jsdav.js library) </td></tr>';
+	htmltext += '<tr><td><a href="http://kupu.oscom.org">Kupu</a> &nbsp;</td><td> (ImageDrawer) </td></tr>';
+	
 	htmltext += '<tr id="okButton" style="display: none" ><td> </td><td><p/><input type="submit" value="OK"/></td></tr>';
 
 	htmltext += '</table>';

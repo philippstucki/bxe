@@ -48,6 +48,7 @@ var mozile_root_dir = "./";
 
 // some global vars, no need to change them
 var mozile_corescript_loaded = 0;
+var bxe_plugin_script_loaded_counter  = 0;
 var mozile_script_loaded = 0;
 var bxe_config = new Object();
 var bxe_about_box = null;
@@ -101,7 +102,6 @@ function bxe_start(config_file,fromUrl, configArray) {
 					scr.onload = corescript_loaded;
 				}
 				scr.setAttribute("src", src);
-				
 				scr.setAttribute("language","JavaScript");
 				head.appendChild(scr);
 			}
@@ -167,11 +167,20 @@ function corescript_loaded(e) {
 	}
 }
 
+
+function bxe_plugin_script_loaded(e) {
+	bxe_plugin_script_loaded_counter++;
+	if ( bxe_plugin_scripts.length == bxe_plugin_script_loaded_counter ) {
+		bxe_init_plugins();
+	} else {
+		//bxe_about_box.addText(bxe_plugin_script_loaded_counter );
+	}
+}
+
 function script_loaded(e) {
 	mozile_script_loaded++;
 	debug("from config script " + mozile_script_loaded + " loaded: " + e.currentTarget.src );
 	if ( bxe_config.scriptfiles.length == mozile_script_loaded ) {
-		debug("call mozile_loaded()");
 		mozile_loaded();
 	} else {
 		bxe_about_box.addText(mozile_script_loaded );
@@ -190,10 +199,65 @@ function mozile_core_loaded() {
 
 function mozile_loaded() {
 	defaultContainerName = "p";
-
+	bxe_load_plugins();
 	bxe_about_box.addText("Load XML ...");
 	bxe_load_xml(bxe_config.xmlfile);
+	//k_init();
+}
+
+function bxe_load_plugins() {
+	var ps = bxe_config.getPlugins();
 	
+	if (ps.length > 0) {
+		bxe_about_box.addText("Load Plugins");
+		bxe_plugin_scripts = new Array();
+		var head = document.getElementsByTagName("head")[0];
+		for (var i = 0; i < ps.length; i++) {
+			var p = eval ("new Bxe" + ps[i]);
+			// load css
+			var css = p.getCss();
+			for (var i=0; i < css.length; i++) {
+				var scr = document.createElementNS(XHTMLNS,"link");
+				scr.setAttribute("type","text/css");
+				scr.setAttribute("rel","stylesheet");
+				if (css[i].substring(0,1) == "/" || css[i].indexOf("://") > 0) {
+					var src = css[i];
+				} else {
+					var src = mozile_root_dir +css[i];
+				}
+				scr.setAttribute("href",src);
+				head.appendChild(scr);
+			}
+			
+			var js = p.getScripts();
+			for (var i=0; i < js.length; i++) 
+			{
+				bxe_plugin_scripts.push(mozile_root_dir +js[i]);
+			}
+			
+		}
+		// load scripts
+		for (var i = 0; i < bxe_plugin_scripts.length; i++) {
+				var scr = document.createElementNS("http://www.w3.org/1999/xhtml","script");
+				scr.setAttribute("src", bxe_plugin_scripts[i]);
+				scr.setAttribute("language","JavaScript");
+				scr.onload = bxe_plugin_script_loaded;
+				head.appendChild(scr);
+		}
+	}
+	
+}
+
+function bxe_init_plugins () {
+	var ps = bxe_config.getPlugins();
+	
+	if (ps.length > 0) {
+		for (var i = 0; i < ps.length; i++) {
+			var p = eval ("new Bxe" + ps[i]);
+			p.init();
+		}
+	}
+	bxe_about_box.addText("Plugins initialized");
 }
 
 function xml_loaded(xmldoc) {
@@ -290,7 +354,6 @@ function config_loaded(bxe_config_in) {
 		scr.setAttribute("language","JavaScript");
 		head.appendChild(scr);
 	}
-
 }
 
 debug = function (text, options) {

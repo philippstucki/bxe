@@ -332,7 +332,6 @@ Selection.prototype.changeLinesContainer = function(containerName, namespace)
 		return;
 	var newContainer = new Array();
 	var lines = cssr.lines;
-	dump (" herer " + namespace +  " " + containerName +"\n");
 	for(var i=0; i<lines.length; i++)
 	{
 		// keep container if it is a contained line but not a block:
@@ -342,17 +341,24 @@ Selection.prototype.changeLinesContainer = function(containerName, namespace)
 		//var keep = ((lines[i].lineType == CSSLine.CONTAINED_LINE) && (lines[i].containedLineType != ContainedLine.BLOCK));
 		var keep = false;
 		if (namespace == XHTMLNS) {
+			var removeClass = false;
+			//if (lines[i].__container.getAttribute("class"));
+			if (lines[i].__container.XMLNode) {
+				if (lines[i].__container.XMLNode.nodeName == lines[i].__container.getAttribute("class")) {
+					removeClass = true;
+					
+				}
+			}
 			var line = lines[i].setContainer(documentCreateXHTMLElement(containerName), !keep);
+			if (removeClass) {
+				line.__container.removeAttribute("class");
+			}
 		} else {
-			dump (" herer " + namespace +  " " + containerName +"\n");
-			var newNode = document.createElementNS(XHTMLNS,"span");
+			var newNode = document.createElementNS(XHTMLNS,"div");
 			var line = lines[i].setContainer( newNode,true);
 			line.__container.setAttribute("class", containerName);
-			line.__container.setAttribute("__bxe_ns", namespace);
-
 		}
-	
-			
+		line.__container.setAttribute("__bxe_ns", namespace);
 	
 		
 		newContainer.push(line.__container)

@@ -34,6 +34,7 @@ function  bxeConfig (filename,fromUrl, configArray) {
 	
 }
 
+	
 bxeConfig.parseConfig = function  (e) {
 	if (e.isError) {
 		alert("Error loading config file \n"+e.statusText);
@@ -52,6 +53,13 @@ bxeConfig.parseConfig = function  (e) {
 	
 	bxe_config.cssfiles = bxe_config.getContentMultiple("/config/files/css/file");
 	bxe_config.scriptfiles = bxe_config.getContentMultiple("/config/files/scripts/file");
+	
+	var ps = bxe_config.getPlugins();
+	 
+	for (var i=0; i < ps.length; i++) {
+		bxe_config.scriptfiles.push("plugins/" + ps[i] + ".js");
+	}
+	
 	var dSIC = bxe_config.doc.evaluate("/config/context[@type='dontShow']/element", bxe_config.doc, null, 0, null); 
 	
 	bxe_config.dontShowInContext = new Array();
@@ -95,7 +103,6 @@ bxeConfig.parseConfig = function  (e) {
 		bxe_config.options[node.getAttribute("name")] = node.firstChild.data;
 		node = configOptions.iterateNext();
 	}
-	bxe_config.getButtons();
 	config_loaded(bxe_config);
 }
 
@@ -110,7 +117,7 @@ bxeConfig.prototype.getButtons = function() {
 		var result = this.doc.evaluate("/config/buttons/dimension", this.doc, null, 0, null);
 		node = result.iterateNext();
 		if (!node) {
-			alert("no button definitions found in config.xml");
+			alert("no button definitions found in config.xml\nYour config.xml looks like this:\n" + this.doc.saveXML());
 		}
 		tmpArray.push(node.getAttribute("width"));
 		tmpArray.push(node.getAttribute("height"));
@@ -126,12 +133,16 @@ bxeConfig.prototype.getButtons = function() {
 		while (node = result.iterateNext())
 		{
 			tmpArray = new Array();
-			tmpArray.push(node.getAttribute("col"));
-			tmpArray.push(node.getAttribute("row"));
-			tmpArray.push(node.getAttribute("action"));
+			tmpArray['col'] = node.getAttribute("col");
+			tmpArray['row'] = node.getAttribute("row");
+			tmpArray['action'] = node.getAttribute("action");
+			tmpArray['type'] = node.getAttribute("type");
 			ns = node.getAttribute("ns");
 			if (ns) {
-				tmpArray.push(ns);
+				tmpArray['ns'] = ns;
+			}
+			if(node.firstChild) {
+				tmpArray['data'] = node.firstChild.data;
 			}
 			this.buttons[node.getAttribute("name")] = tmpArray;
 		}
@@ -140,6 +151,19 @@ bxeConfig.prototype.getButtons = function() {
 	return this.buttons;
 	
 }
+
+bxeConfig.prototype.getPlugins = function () {
+	if (!this.plugins) {
+		this.plugins = new Array();
+		var head = document.getElementsByTagName("head")[0];
+		var result = this.doc.evaluate("/config/plugins/plugin", this.doc, null, 0, null);
+		while (node = result.iterateNext()) {
+			this.plugins.push(node.getAttribute("name")); 
+		}
+	}
+	return this.plugins;
+}
+
 bxeConfig.prototype.getContentMultiple = function (xpath)
 {
     var result = this.doc.evaluate(xpath, this.doc, null, 0, null);
