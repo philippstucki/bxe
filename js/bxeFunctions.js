@@ -286,7 +286,7 @@ function bxe_draw_widgets() {
 	//imgspan.appendChild(img);
 	img.setAttribute("align","right");
 	menubar.node.appendChild(img);
-	var submenu = new Array("Save",function() {alert("hello")},"Load","load");
+	var submenu = new Array("Save",function() {eDOMEventCall("DocumentSave",document);},"Load","load");
 	menubar.addMenu("File",submenu);
 
 	var submenu = new Array("Undo",bxe_not_yet_implemented,"Redo",bxe_not_yet_implemented);

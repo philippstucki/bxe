@@ -84,10 +84,7 @@ bxe_globals.prototype.loadXML = function(xmlfile) {
 
 	return true;
 }
-function foobar() {
-	
-	
-}
+
 
 function bxe_nsResolver (node) {
 	this.metaTagNSResolver = null;
@@ -199,7 +196,7 @@ if((navigator.product == 'Gecko') && (navigator.userAgent.indexOf("Safari") == -
 		{
 			var scr = document.createElementNS("http://www.w3.org/1999/xhtml","script");
 			var src = mozile_root_dir + mozile_js_files[i];
-			if (mozile_js_files[i] == "widget.js") {
+			if (mozile_js_files[i] == "js/widget.js") {
 				scr.onload = widget_loaded;
 			} else {
 				scr.onload = script_loaded;
