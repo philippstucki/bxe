@@ -162,9 +162,9 @@ function corescript_loaded(e) {
 
 function script_loaded(e) {
 	mozile_script_loaded++;
-	debug("from config script " + mozile_script_loaded + " loaded: " + e.currentTarget.src + "\n");
+	debug("from config script " + mozile_script_loaded + " loaded: " + e.currentTarget.src );
 	if ( bxe_config.scriptfiles.length == mozile_script_loaded ) {
-		debug("call mozile_loaded()\n");
+		debug("call mozile_loaded()");
 		mozile_loaded();
 	} else {
 		bxe_about_box.addText(mozile_script_loaded );
@@ -269,9 +269,102 @@ function config_loaded(bxe_config_in) {
 
 }
 
-debug = function (text) {
+debug = function (text, options) {
+	
 	if (DebugOutput) {
-		dump (text + "\n");
+		
+		//BX_debug(this);
+		fn =  JsUtil_getCaller(debug);
+		// Extract function name and argument list
+		;
+		dump( fn.getName() +  ": " + text + "\n");
+		if (options) {
+			
+			if (options.evalArguments) {
+				var fname= fn.getName();
+					dump("  Arguments: (");
+					for (var i = 0; i < fn.arguments.length; i++) {
+						dump("[" + typeof fn.arguments[i] + "] "); 
+						switch( typeof( fn.arguments[i] )) {
+							case "function":
+								dump (fn.arguments[i].getName());
+								break;
+							case "string":
+								dump('"' + fn.arguments[i] + '"');
+								break;
+							default: 
+								dump(fn.arguments[i]);
+						}
+						if (i < fn.arguments.length - 1 ) {
+							dump(", ");
+						}
+					}
+					dump (")\n");
+				
+			}
+			
+			if (options.callstack) {
+				var callstack =  new Array();
+				dump ("  Callstack: \n");
+				dump ("  ----------\n");
+				while (fn) {
+					
+					callstack.unshift(fn.getName() + "\n");
+					var newfn = JsUtil_getCaller(fn);
+					if (fn == newfn) {
+						callstack.unshift ("  [javascript recursion]\n");
+						break;
+					}
+					fn = newfn;
+				}
+				for (var i = 0; i < callstack.length; i++) {
+					dump("  " +i +": " +callstack[i]);
+				}
+				dump ("  ----------\n");
+				
+			}
+
+		}
+
 	}
+}
+
+Function.prototype.getName = function () {
+	var r = /function (\w*)([^\{\}]*\))/
+	var s = new String( this);
+	var m = s.match( r );
+	if (m) {
+		var f = "";
+		if (m[1]) {
+			f = m[1];
+		} else {
+			r = /var id = "(.+)"/;
+			var n = s.match(r);
+			if (n && n[1]) {
+				f = n[1];
+			} else {
+				f = "anoynmous function";
+			}
+		}
+		var args = m[2];
+		return (f+args);
+	} else {
+		return "anonymous function";
+	}
+}
+function JsUtil_getCaller( fn )
+{
+	switch( typeof( fn ))
+	{
+		case "undefined":
+			return JsUtil_getCaller( JsUtil_getCaller );
+			
+		case "function":
+			if( fn.caller )
+				return fn.caller;
+			if( fn.arguments && fn.arguments.caller )
+				return fn.arguments.caller;
+	}
+	return undefined;
 }
 
