@@ -18,6 +18,9 @@
 * ***** END LICENSE BLOCK ***** */
 
 const BXE_VERSION = "0.1alpha"
+
+var DebugOutput = true;
+
 mozile_js_files = new Array();
 
 mozile_js_files.push("mozile/mozWrappers.js");
@@ -136,17 +139,19 @@ function bxe_load_xml (xmlfile) {
 	return true;
 }
 
-function widget_loaded() {
-	mozile_corescript_loaded++;
+function widget_loaded(e) {
 	bxe_about_box = new Widget_AboutBox();
 	bxe_about_box.draw();
 	bxe_about_box.setText("Loading files ...");
+	corescript_loaded(e);
 	
 }
 
-function corescript_loaded() {
+function corescript_loaded(e) {
 	mozile_corescript_loaded++;
+	debug("from core script " + mozile_corescript_loaded + " loaded: " + e.currentTarget.src);
 	if ( mozile_js_files.length == mozile_corescript_loaded) {
+		debug("call mozile_core_loaded()");
 		mozile_core_loaded();
 	} else {
 		if (bxe_about_box) {
@@ -155,9 +160,11 @@ function corescript_loaded() {
 	}
 }
 
-function script_loaded() {
+function script_loaded(e) {
 	mozile_script_loaded++;
+	debug("from config script " + mozile_script_loaded + " loaded: " + e.currentTarget.src + "\n");
 	if ( bxe_config.scriptfiles.length == mozile_script_loaded ) {
+		debug("call mozile_loaded()\n");
 		mozile_loaded();
 	} else {
 		bxe_about_box.addText(mozile_script_loaded );
@@ -262,6 +269,9 @@ function config_loaded(bxe_config_in) {
 
 }
 
-
-
+debug = function (text) {
+	if (DebugOutput) {
+		dump (text + "\n");
+	}
+}
 
