@@ -690,8 +690,11 @@ Selection.prototype.getEditableRange = function()
 Selection.prototype.selectEditableRange = function(cssr)
 {
 	if (cssr) {
-	cssr.__restoreTextBoundaries(); // POST04: required cause of line manip that effects range but makes rest more complex
-	//var rng = document.createRange();
+	//TESTME: I'm not sure about the sideeffects of just leaving restoreTextBoundaries out for some
+	// special cases. See http://cvs.wyona.org/cgi-bin/bugzilla/show_bug.cgi?id=1185 for the actual test case
+	if (!(cssr.startContainer.nodeType == 3 && cssr.startContainer.data.length == cssr.startOffset && cssr.collapsed == true)) {
+		cssr.__restoreTextBoundaries(); // POST04: required cause of line manip that effects range but makes rest more complex
+	}
 	this.removeAllRanges();
 	this.addRange(cssr.cloneRange());
 	}	
