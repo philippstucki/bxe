@@ -1,20 +1,3 @@
-/*************************************************************************************************************
-
- *************************************************************************************************************/
-
-
-
-/*
- * validation method  method from DocumentLS
- * http://www.w3.org/TR/2003/WD-DOM-Level-3-Val-20030205/validation.html#VAL-Interfaces-ElementEditVAL
- */
- 
-Document.prototype.loadSchema = function(file ,callback) {
-	this.vdom = new DocumentVDOM();
-	this.vdom.loadSchema("./schema.xml", callback);
-}
-
- 
 function DocumentVDOM() {} 
  
 DocumentVDOM.prototype.parseSchema = function() {
@@ -34,11 +17,11 @@ DocumentVDOM.prototype.parseSchema = function() {
 		this.globalElements[node.getAttribute("name")] = new ElementVDOM(node.getAttribute("name"));
 	}
 	// do it again for all elements with a complexType
-	var xpath = "/xs:schema/xs:element[xs:complexType/xs:sequence/xs:element|xs:complexType/xs:choice/xs:element]";
+	var xpath = "/xs:schema/xs:element[xs:complexType//xs:sequence/xs:element|xs:complexType//xs:choice/xs:element]";
 	var result = this.xmldoc.evaluate(xpath, this.xmldoc, nsResolver, 0, null);
 
 	while ( node = result.iterateNext()) {
-		var xpath = "xs:complexType/xs:sequence/xs:element|xs:complexType/xs:choice/xs:element";
+		var xpath = "xs:complexType//xs:sequence/xs:element|xs:complexType//xs:choice/xs:element";
 		var childrenResult = this.xmldoc.evaluate(xpath, node, nsResolver, 0, null);
 		while (child = childrenResult.iterateNext()) {
 			if (child.getAttribute("ref")) {
@@ -74,82 +57,16 @@ DocumentVDOM.prototype.loadSchema = function(file, callback) {
 }
 
 DocumentVDOM.prototype.getAllowedChildren = function (name) {
-	//FIXME: toLowerCase is HTML specific... make switch latere
-	alert(name);
+	//FIXME: toLowerCase is HTML specific... make switch later
 	return this.globalElements[name.toLowerCase()].allowedChildren;
 }
 
-
-XMLDocument.prototype.saveXML = function(snode)
-{
-	if(!snode) {
-		snode = this;
-	}
-
-	//create a new XMLSerializer
-	var objXMLSerializer = new XMLSerializer;
+DocumentVDOM.prototype.isGlobalElement = function(name) {
 	
-	//get the XML string
-	var strXML = objXMLSerializer.serializeToString(snode);
-	
-	//return the XML string
-	return strXML;
-}
-
-function ElementVDOM(name) {
-	this.name = name;
-	this._allowedChildren = new Array();
-}
-
-
-ElementVDOM.prototype.addAllowedChild = function(node) {
-	this._allowedChildren[node.name] = node;
-}
-
-ElementVDOM.prototype.__defineGetter__(
-	"allowedChildren", function() {
-	out = "";
-	for (bla in this._allowedChildren) {
-		out += bla + " ";
+	if (this.globalElements[name.toLowerCase()]) { 
+		return true;
+	} else {
+		return false;
 	}
-	return out;
 }
-)
 
-
-
-Element.prototype.__defineGetter__(
-	"vdom", function () {
-		if (!this._vdom) {
-			
-			this._vdom = this.ownerDocument.vdom.getAllowedChildren(this.nodeName);
-		}
-		return this._vdom;
-	}
-	)
-
-
-function BX_debug(object)
-{
-	var win = window.open("","debug");
-	bla = "";
-	for (b in object)
-	{
-
-		bla += b;
-		try {
-
-			bla +=  ": "+object.eval(b) ;
-		}
-		catch(e)
-		{
-			bla += ": NOT EVALED";
-		};
-		bla += "\n";
-	}
-	win.document.innerHTML = "";
-
-	win.document.writeln("<pre>");
-	win.document.writeln(bla);
-	win.document.writeln("<hr>");
-}

@@ -1,17 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
 <meta name="generator" content="HTML Tidy, see www.w3.org" />
 <title>DomVal test</title>
 
-<script src="./dom3val.js" type="text/javascript"> </script>
+<script src="./dom3/validation.js" type="text/javascript"> </script>
+<script src="./dom3/DocumentVDOM.js" type="text/javascript"> </script>
+<script src="./dom3/ElementVDOM.js" type="text/javascript"> </script>
+<script src="./dom3/DocumentVAL.js" type="text/javascript"> </script>
+<script src="./dom3/NodeVAL.js" type="text/javascript"> </script>
+<script src="./dom3/ElementVAL.js" type="text/javascript"> </script>
 </head>
 <body>
 <script>
 document.loadSchema("./schema.xml", parsed);
 
 function parsed () {
+alert(document.validateDocument());
 }
 </script>
 
