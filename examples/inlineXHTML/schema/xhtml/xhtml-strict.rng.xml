@@ -21,7 +21,7 @@
 <!--
 <include href="modules/applet.rng.xml"/>
 <include href="modules/bdo.rng.xml"/>
-<include href="modules/image.rng.xml"/>
+
 <include href="modules/ssismap.rng.xml"/>
 <include href="modules/base.rng.xml"/>
 <include href="modules/link.rng.xml"/>

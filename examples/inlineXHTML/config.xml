@@ -117,11 +117,19 @@
         <button name="Copy" col="0" row="4" action="ClipboardCopy"/>
         <button name="Cut" col="1" row="4" action="ClipboardCut"/>
         <button name="Paste" col="2" row="4" action="ClipboardPaste"/>
-      <!-- <button name="Image" col="3" row="5" action="InsertImage"/>-->
+       <button name="Image" col="3" row="5" type="insertElement" ns="http://www.w3.org/1999/xhtml">img</button>
         <button name="Save" col="1" row="6" action="DocumentSave"/>
         <button name="Undo" col="3" row="6" action="Undo"/>
         <button name="Redo" col="4" row="6" action="Redo"/>
         
     </buttons>
-
+    <callbacks>
+    <element name="img" ns="http://www.w3.org/1999/xhtml" type="function">bxe_showImageDrawer</element>
+        
+    </callbacks>
+    <plugins>
+    <plugin name="Drawer">
+        <option name="librariesURI">libraries.xml</option>
+    </plugin>
+</plugins>
 </config>
