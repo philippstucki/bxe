@@ -10,7 +10,7 @@
     cursor: pointer;
 }
 
-.MenuItem:hover, .MenuItemChecked:hover, .MenuPopupTitle {
+div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
 	background-color: #aa3300 !important;
 	color: #FFFFFF;
 }
