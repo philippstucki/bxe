@@ -163,7 +163,11 @@ function script_loaded() {
 function mozile_core_loaded() {
 	bxe_about_box.addText("Scripts loaded ...");
 	bxe_about_box.addText("Load Config ...");
-	bxe_config = new bxeConfig(bxe_config.file, bxe_config.fromUrl, bxe_config.configArray);
+	try {
+		bxe_config = new bxeConfig(bxe_config.file, bxe_config.fromUrl, bxe_config.configArray);
+	} catch (e) {
+		bxe_catch_alert(e);
+	}
 }
 
 function mozile_loaded() {
@@ -222,7 +226,8 @@ function validation_loaded(vdom) {
 }
 
 function config_loaded(bxe_config_in) {
-	
+	bxe_about_box.addText("& Parsed ...");
+
 	bxe_config = bxe_config_in;
 	var head = document.getElementsByTagName("head")[0];
 	for (var i=0; i < bxe_config.cssfiles.length; i++) 
