@@ -2,13 +2,13 @@ function mozileTransportDriver (container) {
 	this.container = eval(" new mozileTransportDriver_"+container);
 }
 
-mozileTransportDriver.prototype.load = function (filename, callback) {
+mozileTransportDriver.prototype.load = function (filename, callback, async) {
 	var id = "mozileTransportDriver.load";
 	this.callback = this.loadCallback;
 	this.userLoadCallback = callback;
 	this.filename = filename;
 	debug ("load " + filename, { "evalArguments":true});
-	this.container.load(filename, this);
+	this.container.load(filename, this, async);
 }
 
 mozileTransportDriver.prototype.save = function (filename, content, callback) {

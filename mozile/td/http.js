@@ -21,12 +21,17 @@ function mozileTransportDriver_http () {
 * @tparam String filename the filename (can be http://... or just a relative path
 */
 
-mozileTransportDriver_http.prototype.load = function(filename, td) {
+mozileTransportDriver_http.prototype.load = function(filename, td, async) {
+	if (typeof async == "undefined") {
+		async = true;
+	}
 	var docu = document.implementation.createDocument("","",null);
 	docu.loader = this.parent;
 	docu.td = td;
 	bxe_config.td = td;
 	docu.onload = this.loadCallback;
+	
+	docu.async = async;
 	try {
 		docu.load(filename);
 	}
