@@ -1,0 +1,153 @@
+
+.MenuItem, .MenuItemDisabled, .MenuItemChecked {
+	font-family: Arial, Helvetica, sans-serif; 
+    font-size: 12px; 
+    text-decoration: none; 
+    color: #000000;
+	padding-right: 5px;
+	padding-top: 1px;
+    padding-left: 10px;
+    cursor: pointer;
+}
+
+.MenuItem:hover, .MenuItemChecked:hover, .MenuPopupTitle {
+	background-color: #aa3300 !important;
+	color: #FFFFFF;
+}
+.MenuItemDisabled {
+    cursor: default;
+    color: #992200;
+}
+
+.MenuItemChecked:after {
+    content: " \2713";
+}
+.MenuPopup img {
+    margin-top: 2px;
+}
+
+.MenuPopup {
+    position: relative;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px; 
+	margin-right:1px;
+	margin-bottom: 0px;
+    border-bottom: 0px;
+	border:1px solid  #555555;
+	background-color:     #ff6600;
+    padding: 0px 0px 0px 0px;
+    border-style: outset;
+    width: 10em;
+    z-index: 10000;
+}
+
+.Menu {
+    position: relative;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px; 
+	margin-right:0px;
+	margin-bottom: 0px;
+    border-bottom: 0px;
+	border:0px solid  #555555;
+	background-color:     #ff6600;
+    padding: 0px 10px 0px 5px;
+    //border-style: outset;
+    min-width: 10em;
+    cursor: pointer;
+}
+.MenuBar {
+    height: 16px;
+    width: 100%;
+    border-left: 5px;
+    background-color:     #ff6600;;
+}
+.MenuList {
+}
+
+.ToolBar {
+    height: 30px;
+    background-color: #ff6614;
+    position: fixed;
+    z-index: 999;
+    -moz-user-select: none;
+    -moz-user-modify: read-only;
+    -moz-user-input: enabled;
+    top: 16px;
+    left: 0px;
+    width: 100%;
+    border-left: 5px;
+}
+
+.ToolBarButton {
+  height: 20px; 
+  width: 20px; 
+  border: solid 1px #C0C0C0;
+  background-color: #C0C0C0;
+  -moz-user-modify: read-only;
+  -moz-user-input: disabled;
+  -moz-user-select: none;
+}
+.ToolBarButton:hover {
+    border: outset 1px;
+}
+
+
+select {
+    font-size: 12px;
+}
+
+
+
+.ToolBar td {
+    vertical-align: top;
+}
+
+.MenuPopupTitle {
+    padding-left: 10px;
+    padding-right: 2px;
+}
+
+[bxe_xpath] {
+	width:90%; 
+	min-height:50px; 
+	
+	margin-top:0px;
+	margin-bottom: 10px;
+	padding: 2px;
+	-moz-user-modify: read-write;
+	-moz-user-input: enabled;
+	-moz-user-select: normal;
+	-moz-outline: dotted black 1px;
+    -moz-border-radius-bottomleft: 50px;
+}
+.bold, .b {
+    font-weight: bold;
+}
+
+.nonxhtml {
+    display: block;
+}
+    
+.italic, .i {
+    font-style: italic;
+}
+
+.H2 {
+    color: red;
+}
+
+
+[name=bxe_areaHolder] {
+    background-color: yellow;
+    margin: 0px;
+    border: 0px;
+    padding: 0px;
+      
+    
+}
+
+
+body {
+    margin-top: 60px;
+    }
+
