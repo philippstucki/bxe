@@ -202,12 +202,13 @@ function xml_loaded(xmldoc) {
 	
 	document.eDOMaddEventListener("Undo",function(e) { bxe_not_yet_implemented()}, false);
 	document.eDOMaddEventListener("Redo",function(e) { bxe_not_yet_implemented()}, false);
-	document.eDOMaddEventListener("NodeInsertedParent",bxe_NodeInsertedParent, false);
-	document.eDOMaddEventListener("NodeInsertedBefore",bxe_NodeInsertedBefore,false);
+
+	document.addEventListener("contextmenu",bxe_ContextMenuEvent, false);
+
+//	document.eDOMaddEventListener("NodeInsertedParent",bxe_NodeInsertedParent, false);
+//	document.eDOMaddEventListener("NodeInsertedBefore",bxe_NodeInsertedBefore,false);
 
 	
-	
-	document.addEventListener("contextmenu",bxe_ContextMenuEvent, false);
 	
 	bxe_context_menu = new Widget_ContextMenu();
 }
