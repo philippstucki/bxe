@@ -2090,7 +2090,7 @@ function __createCSSLineFromNonBlockIP(ip, handleCollapsedWhitespace)
 	var endNode = endIPNode.topInlineAncestor;
 	var endBoundary = endNode.nextSibling;
 	// if end boundary is non null then next could just be blank text node or other clutter - skip it
-	while(endBoundary && ((endBoundary.nodeType == Node.TEXT_NODE) || (document.defaultView.getComputedStyle(endBoundary, null).getPropertyValue("display") == "inline")))
+	while(endBoundary && ((endBoundary.nodeType == Node.TEXT_NODE) || endBoundary.nodeType == Node.COMMENT_NODE || (document.defaultView.getComputedStyle(endBoundary, null).getPropertyValue("display") == "inline")))
 		endBoundary = endBoundary.nextSibling;
 
 	var endIPOffset;
