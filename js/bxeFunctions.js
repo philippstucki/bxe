@@ -1610,6 +1610,10 @@ bxe_nsResolver.prototype.lookupNamespaceURI = function (prefix) {
 		return BXENS;
 	}
 	
+	if (prefix == "xhtml") {
+		return XHTMLNS;
+	}
+	
 	//prefix not found
 	return null;
 }

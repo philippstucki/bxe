@@ -11,13 +11,29 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLDocument.js,v 1.36 2004/02/26 15:48:33 chregu Exp $
+// $Id$
 
 
 XMLDocument.prototype.init = function (startNode) {
 	if (!startNode) {
 		startNode = this.documentElement;
 	}
+	
+	var nsResolver = new bxe_nsResolver(this);
+	// Add text nodes to td elements, when not existent
+	//FIXME: Make this configurable
+	var xmlresult = this.evaluate("//xhtml:td[not(*|text())]", this.documentElement, nsResolver, 0, null);
+	var tdnode;
+	var nodes = new Array();
+	while (tdnode = xmlresult.iterateNext()) {
+		nodes.push(tdnode);
+	}
+	
+	for (var j = 0; j < nodes.length; j++) {
+		nodes[j].appendChild(this.createTextNode(String.fromCharCode(160)));
+	}
+	
+	
 	this.XMLNode = new XMLNodeDocument();
 	this.XMLNode._node = this;
 	this.XMLNode.nodeType = 9;
