@@ -174,7 +174,7 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
    border: 0px;
    margin: 0px;
    padding: 0px;
-   -x-border-x-spacing: 0px;
+/*   -x-border-x-spacing: 0px;*/
    font-family: Verdana, Arial, Helvetica, sans-serif;
    font-size: 12px;
    line-height: 14px;
@@ -206,7 +206,7 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
     padding-right: 2px;
     border: 0px;
     background-color: #aa3300;
-    width: 100%
+    width: 100%;
     height: 20px;
     color: white;
 }
@@ -261,7 +261,7 @@ table.beauty  {
     padding-right: 1px;
 	-moz-user-modify: read-write !important;
 	-moz-user-input: enabled  !important;
-	-moz-user-select: normal  !important;
+/*	-moz-user-select: normal  !important;*/
 	-moz-outline: dotted black 1px;
 }
 
@@ -283,7 +283,6 @@ table.beauty  {
 
 
 [name=bxe_areaHolder] {
-   // background-color: yellow;
     margin: 0px;
     border: 0px;
     padding: 0px;
@@ -296,7 +295,7 @@ table.beauty  {
     margin-left: 2px; 
     margin-right: 2px; 
     font: 9px Geneva, Verdana, sans-serif; 
-    padding: 0px 1px 0 px 1px; 
+    padding: 0px 1px 0px 1px; 
     border: 1px solid black; 
     background: #888;  
     color: #FFF;
@@ -307,7 +306,7 @@ table.beauty  {
  margin-left: 2px;
  margin-right: 2px;
  font: 9px Geneva, Verdana, sans-serif;
- padding: 0px 1px 0 px 1px;
+ padding: 0px 1px 0px 1px;
  border: 1px solid black;
  background: #888;
   color: #FFF;
@@ -331,7 +330,7 @@ table.beauty  {
     margin-left: 2px;
  margin-right: 2px;
  font: 9px Geneva, Verdana, sans-serif;
- padding: 0px 1px 0 px 1px;
+ padding: 0px 1px 0px 1px;
  border: 1px solid black;
  background: #888;
   color: #FFF; 
