@@ -124,15 +124,7 @@ XMLDocument.prototype.insertIntoHTMLDocument = function(htmlnode) {
 
 XMLDocument.prototype.checkParserError = function()
 {
-	if(this.documentElement && this.documentElement.nodeName=="parsererror")
-	{
-		var alerttext = "Parse Error: \n \n";
-		alerttext += this.documentElement.firstChild.data +"\n\n";
-		alerttext += "Sourcetext:\n\n";
-		alerttext += this.documentElement.childNodes[1].firstChild.data;
-		
-		return (alerttext);
-	}
+	alert("XMLDocument.prototype.checkParserError is deprecated!");
 	return true;
 }
 

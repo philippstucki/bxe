@@ -29,7 +29,8 @@ mozile_js_files.push("mozile/eDOMXHTML.js");
 mozile_js_files.push("js/bxeXMLNode.js");
 mozile_js_files.push("js/bxeNodeElements.js");
 mozile_js_files.push("js/bxeXMLDocument.js");
-mozile_js_files.push("td/http.js");
+mozile_js_files.push("mozile/mozileTransportDriver.js");
+mozile_js_files.push("mozile/td/http.js");
 mozile_js_files.push("mozile/domlevel3.js");
 mozile_js_files.push("mozile/mozCE.js");
 mozile_js_files.push("mozile/mozIECE.js");
@@ -111,22 +112,25 @@ function bxe_start(config_file,fromUrl, configArray) {
 function bxe_load_xml (xmlfile) {
 	
 	
-	var td = new BXE_TransportDriver_webdav();
+	var td = new mozileTransportDriver("webdav");
 	function callback (e) {
-		e.target.td.Docu.xmldoc =  e.target.responseXML;
-		bxe_config.xmldoc = e.target.td.Docu.xmldoc;
-		e.target.td.Docu.xmldoc.init();
+		if (e.isError) {
+			alert("Error loading xml file \n"+e.statusText);
+			return false;
+		}
+		var xmldoc =  e.document;
+		bxe_config.xmldoc = xmldoc;
+		xmldoc.init();
 		if (bxe_config.xhtmlfile) {
-			e.target.td.Docu.xmldoc.importXHTMLDocument(bxe_config.xhtmlfile)
+			xmldoc.importXHTMLDocument(bxe_config.xhtmlfile)
 		} else if (bxe_config.xslfile) {
-			e.target.td.Docu.xmldoc.transformToXPathMode(bxe_config.xslfile)
+			xmldoc.transformToXPathMode(bxe_config.xslfile)
 		} else {
-			e.target.td.Docu.xmldoc.insertIntoHTMLDocument();
-			xml_loaded(e.target.td.Docu.xmldoc);
+			xmldoc.insertIntoHTMLDocument();
+			xml_loaded(xmldoc);
 		}
 	
 	}
-	td.Docu = this;
 	td.load(xmlfile,callback);
 	
 	return true;

@@ -1,6 +1,6 @@
 function  bxeConfig (filename,fromUrl, configArray) {
 	
-	var td = new BXE_TransportDriver_http();
+	var td = new mozileTransportDriver("http");
 	//td.Docu = this;
 	this.parseUrlParams();
 	this.configParams = configArray;
@@ -16,13 +16,14 @@ function  bxeConfig (filename,fromUrl, configArray) {
 }
 
 bxeConfig.parseConfig = function  (e) {
-	bxe_about_box.addText("Config Loaded");
-	var bxe_config = e.currentTarget.td.bxeConfig;
-	bxe_config.doc = this;
-	var checkParser = this.checkParserError();
-	if (checkParser != true) {
-		alert(checkParser);
+	if (e.isError) {
+		alert("Error loading config file \n"+e.statusText);
+		return false;
 	}
+		
+	bxe_about_box.addText("Config Loaded");
+	var bxe_config = e.td.bxeConfig;
+	bxe_config.doc = e.document;
 	
 	bxe_config.xmlfile = bxe_config.getContent("/config/files/input/file[@name='BX_xmlfile']");
 	bxe_config.xslfile = bxe_config.getContent("/config/files/input/file[@name='BX_xslfile']");

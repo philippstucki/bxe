@@ -3,7 +3,7 @@ const XMLNS = "http://www.w3.org/2000/xmlns/";
 
 function __bxeSave(e) {
 	
-	var td = new BXE_TransportDriver_webdav();
+	var td = new mozileTransportDriver("webdav");
 	td.Docu = this;
 	if (e.additionalInfo ) {
 		td.Exit = e.additionalInfo.exit;
@@ -11,8 +11,17 @@ function __bxeSave(e) {
 		td.Exit = null;
 	}
 	var xmlstr = bxe_getXmlDocument()
-	
-	td.save(bxe_config.xmlfile, xmlstr);
+	function callback (e) {
+		if (e.isError) {
+			alert("Document couldn't be saved\n"+e.statusText);
+			return;
+		}
+		alert("Document Saved");
+		if (e.td.Exit) {
+			eDOMEventCall("Exit",document);
+		}
+	}
+	td.save(bxe_config.xmlfile, xmlstr, callback);
 }
 
 function bxe_getXmlDocument() {
@@ -225,7 +234,13 @@ function bxe_toggleTextClass(e) {
 	_node.parentNode.updateXMLNode();
 }
 
-function bxe_insertedBefore(e) {
+
+function bxe_NodeInsertedParent(e) {
+//	alert("document wide");
+	
+}
+
+function bxe_NodeInsertedBefore(e) {
 	try {
 	var oldNode = e.target.XMLNode;
 	var newNode = e.additionalInfo;
@@ -427,8 +442,6 @@ function MouseClickEvent(e) {
 	
 	
 	var target = e.target.parentElement;
-	
-	
 	if(target.userModifiable) {
 		return bxe_updateXPath();
 	}
@@ -509,11 +522,25 @@ function bxe_ContextMenuEvent(e) {
 }
 
 function bxe_UnorderedList() {
-	window.getSelection().toggleListLines("OL", "UL");
+	function callback(e) {
+		alert("function event");
+	}
+	document.eDOMaddEventListener("NodeInsertedParent",callback,false);
+	window.getSelection().toggleListLines("ul", "ol");
+	document.eDOMremoveEventListener("NodeInsertedParent",callback,false);
+	/*var sel = window.getSelection();
+	var cssr = sel.getEditableRange();
+	if (cssr) {
+		var lines = cssr.lines;
+		var newContainer = lines[0].container.parentNode;
+		newContainer.XMLNode.init(newContainer);
+		newContainer.updateXMLNode();
+	}*/
+	bxe_updateXPath();
 }
 
 function bxe_OrderedList() {
-	window.getSelection().toggleListLines("UL", "OL");
+	window.getSelection().toggleListLines("ol", "ul");
 }
 
 function bxe_InsertImage() {

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- $Id: config.xml,v 1.11 2003/08/28 14:20:45 chregu Exp $ -->
+<!-- $Id: config.xml,v 1.12 2003/09/09 15:25:16 chregu Exp $ -->
 <config>
     <files>
     <!-- the following file definitions are presumably the most important
@@ -85,9 +85,9 @@
         You can also add your own js-files here.
         -->
             <file>js/bxehtmltb.js</file>
-            <file>js/jsdav.js</file>
+            <file>mozile/jsdav.js</file>
             <file>js/table.js</file>
-            <file>td/webdav.js</file>
+            <file>mozile/td/webdav.js</file>
             <file>td/relaxngtest.js</file>
             <file>mozile/mozilekb.js</file>
             
@@ -127,5 +127,11 @@
         <button name="Redo" col="4" row="6" action="Redo"/>
         
     </buttons>
-
+    <namespaces>
+      <xmlns prefix="xhtml" uri="http://www.w3.org/1999/xhtml"/>
+      <xmlns prefix="lenya" uri="http://apache.org/cocoon/lenya/page-envelope/1.0"/>
+      <xmlns prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
+      <xmlns prefix="unzih" uri="http://unizh.ch/doctypes/elements/1.0"/>
+      <xmlns prefix="dcterms" uri="http://purl.org/dc/terms/"/>
+    </namespaces>
 </config>
