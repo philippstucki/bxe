@@ -17,13 +17,24 @@ Node.prototype.eDOMaddEventListener = function (eventType, func, captures) {
 }
 
 
-
+Node.prototype.eDOMremoveEventListener = function (eventType, func, captures) {
+	var funcname = func.name
+	eventType = eventType.toLowerCase();
+	if (! funcname) {
+		funcname = this._events[eventType].length;
+	}
+	if (this._events && this._events[eventType] && this._events[eventType][funcname]) {
+		this._events[eventType][funcname] = null;
+	}
+}
 Node.prototype.doEvents = function(event) {
 	event.currentTarget = this;
-	
 	if(this._events && this._events[event.eventType]) {
 		for (var i in this._events[event.eventType]) {
-			this._events[event.eventType][i](event);
+			if (this._events[event.eventType][i]) {
+				
+				this._events[event.eventType][i](event);
+			}
 		}
 	}
 	if (this.parentNode) {
