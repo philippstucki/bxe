@@ -12,11 +12,17 @@ xx xxx xxx, Version 1.1.0
     is loaded and initialized (r912)    
 - Added config.xml option for not displaying startup splass screen (r993)
 - Added mergeDifferentBlocksOnDelete option (r1026)
+- Added validation of <choice><attribute/> construct (r1031)
+- Added method attribute for using different transportDrivers (r1039)
 - Improved source editing mode (uses native textarea fields) (r855)
 - Improved speed (minimal...) (r926)
 - Changed handling of validation error during initial loading 
     (changing to source mode is possible for fixing the error) (r870)
-- Added validation of <choice><attribute/> construct (r1031)
+
+xx xxx xxx  Version 1.0.1
+
+- Fixed one more "Marking more than one block and then delete it" problem (r1025)
+- Fixed problem with too long clipboard entries showing up in popup (r1021)
 
 3 December 2004 Version 1.0.0
 

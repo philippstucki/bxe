@@ -58,6 +58,10 @@ bxeConfig.parseConfig = function  (e) {
 	bxe_config.doc = e.document;
 	
 	bxe_config.xmlfile = bxe_config.getContent("/config/files/input/file[@name='BX_xmlfile']");
+	bxe_config.xmlfile_method = bxe_config.getContent("/config/files/input/file[@name='BX_xmlfile']/@method");
+	if (!bxe_config.xmlfile_method) {
+		bxe_config.xmlfile_method = "webdav";
+	}
 	bxe_config.xslfile = bxe_config.getContent("/config/files/input/file[@name='BX_xslfile']");
 	bxe_config.xhtmlfile = bxe_config.getContent("/config/files/input/file[@name='BX_xhtmlfile']");
 	bxe_config.validationfile = bxe_config.getContent("/config/files/input/file[@name='BX_validationfile']");

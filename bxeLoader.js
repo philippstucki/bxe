@@ -185,7 +185,7 @@ function bxe_bug248172_check() {
 function bxe_load_xml (xmlfile) {
 	
 	
-	var td = new mozileTransportDriver("webdav");
+	var td = new mozileTransportDriver(bxe_config.xmlfile_method);
 	function callback (e) {
 		if (e.isError) {
 			alert("Error loading xml file \n"+e.statusText);

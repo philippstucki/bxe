@@ -37,7 +37,7 @@ function __bxeSave(e) {
 		return false;
 	}
 
-	var td = new mozileTransportDriver("webdav");
+	var td = new mozileTransportDriver(bxe_config.xmlfile_method);
 	td.Docu = this;
 	if (e.additionalInfo ) {
 		td.Exit = e.additionalInfo.exit;

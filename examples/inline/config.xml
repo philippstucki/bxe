@@ -41,13 +41,13 @@
             is currently missing) 
             <file name="BX_xmlfile" prefix="xml/">article.xml</file>
 
-            !The following is not implemented yet!
-            If you want to access your files with other methods than http-get, you can
-            use the  parameter "method". Currently there is only (besides http-get) a
-            save method for wyona implemented, but a webdav interface is on the TODO
-            list, and writing your own methods is also no problem. Just look at http.js
-            and wyona.js in the "bxe/js/td" directory (and more docu will follow about this
-            subject)
+            
+            If you want to access your files with other methods than http-get and put, you can
+            use the  parameter "method".
+            It's only implemented for BX_xmlfile currently. If you need that in more places, we could
+            certainly add it.
+            Default for BX_xmlfile is method="webdav"
+            Look at mozile/td/ for different implementation of it.
 
             -->
         <input>
