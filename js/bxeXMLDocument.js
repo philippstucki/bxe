@@ -276,6 +276,9 @@ XMLNode.prototype.buildXML = function () {
 			for (var i = 0; i< attribs.length; i++) {
 				child.setAttributeNode(attribs[i]);
 			}
+			if (node.namespaceURI == XHTMLNS && child.getAttribute("class") == node.localName) {
+				child.removeAttribute("class");
+			}
 		} else if (node.nodeType == 3) {
 			child = xmldoc.createTextNode(node.data);
 		} else {

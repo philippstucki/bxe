@@ -224,16 +224,6 @@ XMLNode.prototype.setNode = function(xmlnode) {
 	}*/
 }
 
-/*
-XMLNode.prototype.insertIntoXMLDocument = function (node) {
-	alert (node.ownerDocument.saveXML(node)	);
-
-	this._xmlnode.removeAllChildren();
-
-	var newnode = this._xmlnode.ownerDocument.importNode(node,true);
-    return this._xmlnode.appendChild(newnode);
-}*/
-
 XMLNode.prototype.setAttribute = function(name, value) {
 	this._node.setAttribute(name,value);
 }
@@ -418,17 +408,18 @@ XMLNode.prototype.createNS = function (namespaceURI, localName) {
 			htmlelementname = "span"
 			this._node = document.createElement(htmlelementname);
 			this._node.setAttribute("class", localName);
-			if (localName == "a") {
-				this._node.onclick = function(e) {e.preventDefault(); }
-				this._node.onmousedown = function(e) {e.preventDefault(); }
-				this._node.onmouseup = function(e) {e.preventDefault(); }
-			}
-			
 		}
 		else {
-			htmlelementname = this.localName;
+			if (this.localName == "a") {
+				htmlelementname = "span";
+			} else {
+				htmlelementname = this.localName;
+			}
 			try {
 				this._node = document.createElement(htmlelementname);
+				if (this.localName != htmlelementname) {
+					this._node.setAttribute("class", localName);
+				}
 			}
 			catch(e) {alert("you can't insert '" + htmlelementname + "' as an elementname");} 
 			
