@@ -434,16 +434,25 @@ function bxe_updateXPath() {
 		}
 		if (lines[0] && lines[0].container) {
 			/*		bxe_format_list.appendItem(lines[0].container.XMLNode.localName,lines[0].container.XMLNode.localName);*/
-			var ac = lines[0].container.XMLNode.parentNode.allowedChildren;
-			ac.sort(nodeSort);
-			var menuitem;
-			var thisLocalName = lines[0].container.XMLNode.localName;
-			var thisNamespaceURI = lines[0].container.XMLNode.namespaceURI
-			for (i = 0; i < ac.length; i++) {
-				
-				menuitem = bxe_format_list.appendItem(ac[i].nodeName, ac[i].localName + "=" + ac[i].namespaceURI);
-				if (ac[i].localName == thisLocalName &&  ac[i].namespaceURI == thisNamespaceURI) {
-					menuitem.selected=true;
+			var thisNode = lines[0].container.XMLNode;
+			if (thisNode.xmlBridge) {
+				var pref = "";
+				if (thisNode.prefix) {
+					pref = thisNode.prefix + ":";
+				}
+				menuitem = bxe_format_list.appendItem(pref + thisNode.nodeName, thisNode.localName + "=" + thisNode.namespaceURI);
+			} else 
+			{
+				var ac = thisNode.parentNode.allowedChildren;
+				ac.sort(nodeSort);
+				var menuitem;
+				var thisLocalName = thisNode.localName;
+				var thisNamespaceURI = thisNode.namespaceURI
+				for (i = 0; i < ac.length; i++) {
+					menuitem = bxe_format_list.appendItem(ac[i].nodeName, ac[i].localName + "=" + ac[i].namespaceURI);
+					if (ac[i].localName == thisLocalName &&  ac[i].namespaceURI == thisNamespaceURI) {
+						menuitem.selected=true;
+					}
 				}
 			}
 		} else {
