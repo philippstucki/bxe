@@ -112,12 +112,13 @@ bxe_globals.prototype.loadXML = function(xmlfile) {
 	var td = new BXE_TransportDriver_webdav();
 	function callback (e) {
 		e.target.td.Docu.xmldoc =  e.target.responseXML;
+		bxe_config.xmldoc = e.target.td.Docu.xmldoc;
 		if (bxe_config.xslfile) {
 			e.target.td.Docu.xmldoc.transformToXPathMode(bxe_config.xslfile)
 		} else {
 			e.target.td.Docu.xmldoc.insertIntoHTMLDocument();
 		}
-		xml_loaded();
+		xml_loaded(e);
 	}
 	td.Docu = this;
 	td.load(xmlfile,callback);
@@ -250,7 +251,9 @@ function mozile_loaded() {
 	
 }
 
-function xml_loaded() {
+function xml_loaded(e) {
+	e.target.td.Docu.xmldoc.loadSchema(bxe_config.validationfile,validation_loaded);
+	//document.loadSchema("./relaxng.xml", parsed);
 	document.eDOMaddEventListener("toggleSourceMode",toggleSourceMode_bxe,false);
 	document.eDOMaddEventListener("toggleTagMode",toggleTagMode_bxe,false);
 	document.eDOMaddEventListener("toggleNormalMode",toggleNormalMode_bxe,false);
@@ -258,6 +261,12 @@ function xml_loaded() {
 	document.eDOMaddEventListener("ToggleTextClass",toggleTextClass_bxe,false);
 	document.eDOMaddEventListener("InsertLink",bxe_InsertLink,false);
 	document.eDOMaddEventListener("changeLinesContainer",changeLinesContainer_bxe,false);
+}
+
+function validation_loaded(vdom) {
+
+	dump(bxe_config.xmldoc.vdom.getStructure());
+	dump("validation resulted in " +bxe_config.xmldoc.validateDocument());
 }
 
 function config_loaded(bxe_config_in) {

@@ -29,7 +29,7 @@ NodeVDOM.prototype.appendChild = function(newElement) {
 	}
 }
 NodeVDOM.prototype.isValid = function(node) {
-	return false;
+	return true;
 }
 	
 NodeVDOM.prototype.addAttributeNode = function(attribute) {

@@ -36,6 +36,9 @@ Node.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 		if (ctxt.node.nodeType == "3" && ctxt.node.isWhitespaceOnly) {
 			continue;
 		}
+		if (ctxt.node.nodeType == Node.COMMENT_NODE) {
+			continue;
+		}
 		if (ctxt.isValid()) {
 			if(ctxt.node.hasChildNodes()) {
 				var retctxt = ctxt.node._isNodeValid(deep,  wFValidityCheckLevel )
@@ -136,6 +139,7 @@ Node.prototype.__defineGetter__(
 					
 					this._vdom = this.ownerDocument.vdom.firstChild;
 				} else {
+					alert(" Document has root node named " + this.localName + "\n RelaxNG expects  " +this.ownerDocument.vdom.firstChild.nodeName);
 					this._vdom = null;
 				}
 			} else {

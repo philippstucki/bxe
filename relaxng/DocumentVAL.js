@@ -34,20 +34,3 @@ Document.prototype.__defineSetter__(
 	}
 	)
 
-XMLDocument.prototype.saveXML = function(snode)
-{
-	if(!snode) {
-		snode = this;
-	}
-
-	//create a new XMLSerializer
-	var objXMLSerializer = new XMLSerializer;
-	
-	//get the XML string
-	var strXML = objXMLSerializer.serializeToString(snode);
-	
-	//return the XML string
-	return strXML;
-}
-
-

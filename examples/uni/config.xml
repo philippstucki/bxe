@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- $Id: config.xml,v 1.7 2003/08/16 12:41:11 chregu Exp $ -->
+<!-- $Id: config.xml,v 1.1 2003/08/16 12:41:11 chregu Exp $ -->
 <config>
     <files>
     <!-- the following file definitions are presumably the most important
@@ -54,6 +54,8 @@
             <file name="BX_xslfile" isParam="true">xslt</file>
 -->
             <file name="BX_xslfile">test.xsl</file>
+            
+            <file name="BX_validationfile">relaxng.xml</file>
         </input>
         
         <!-- You can't provide a different "method" than http.get for the following files -->

@@ -1,7 +1,7 @@
 function DocumentVDOM() {} 
  
  
-DocumentVDOM.prototype = NodeVDOM;
+DocumentVDOM.prototype = new NodeVDOM();
 
 DocumentVDOM.prototype.parseSchema = function() {
 	//if it's an XMLSchema File
@@ -13,8 +13,7 @@ DocumentVDOM.prototype.parseSchema = function() {
 		this.xmldoc.documentElement.namespaceURI == "http://relaxng.org/ns/structure/1.0" ) {
 		this.parseRelaxNG();
 	}
-
-	this.onparse();
+	this.onparse(this);
 } 
 /* 
 *   Starts the loading of the schema with a simple http-get
