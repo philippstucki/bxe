@@ -8,7 +8,9 @@ XMLNode.prototype.isNodeValid = function(deep, wFValidityCheckLevel ) {
 		c.dumpErrorMessages();
 		
 		for (i in c.errormsg) {
-			c.errormsg[i]["node"]._node.setAttribute("__bxe_invalid","true");
+			if (c.errormsg[i]["node"]._node.nodeType == 1) {
+				c.errormsg[i]["node"]._node.setAttribute("__bxe_invalid","true");
+			} 
 		}
 		alert(c.getErrorMessagesAsText());
 		return false;
