@@ -481,7 +481,11 @@ Element.prototype.getXHTMLAttribute = function(attributeName)
  * now, certain sequences will leave the span around if style is built up to incrementally cover a
  * larger block.
  */
-Range.prototype.styleText = function(styleName, styleValue)
+if (typeof eDOM_bxe_mode == "undefined") {
+	var eDOM_bxe_mode = false;
+}
+ 
+Range.prototype.styleText = function(styleName, styleValue, isClass)
 {
 	// if collapsed then return - works for inline style or block: make editor do work
 	if(this.collapsed)
@@ -501,7 +505,7 @@ Range.prototype.styleText = function(styleName, styleValue)
 		var textContainer = textNodes[i].parentNode; // if setting restore context?
 
 		// only apply to containers that don't have property already
-		if(document.defaultView.getComputedStyle(textContainer, null).getPropertyValue(styleName) != styleValue)
+		if(!styleValue || document.defaultView.getComputedStyle(textContainer, null).getPropertyValue(styleName) != styleValue)
 		{	
 			// if text doesn't have exclusive parent then will need to give it one!
 			if(textContainer.childNodes.length > 1)
@@ -511,13 +515,14 @@ Range.prototype.styleText = function(styleName, styleValue)
 				// spans are special: we don't embed spans in a span - we put spans around all 
 				// the text nodes in the span
 				// note: assume not span within a span so we only have a series of text nodes
-				if(textContainer.nodeNamed("span"))
+				if(textContainer.nodeNamed("span") && !eDOM_bxe_mode)
 				{ 
 					if(textNodes[i].previousSibling)
 					{
 						var siblingStyleHolder = textContainer.cloneNode(false);
 						textContainer.parentNode.insertBefore(siblingStyleHolder, textContainer);
 						siblingStyleHolder.appendChild(textNodes[i].previousSibling);	
+						eDOMEventCall("NodeInserted",siblingStyleHolder);
 					}
 
 					if(textNodes[i].nextSibling)
@@ -528,6 +533,8 @@ Range.prototype.styleText = function(styleName, styleValue)
 						else 
 							textContainer.parentNode.appendChild(siblingStyleHolder);
 						siblingStyleHolder.appendChild(textNodes[i].nextSibling);	
+						eDOMEventCall("NodeInserted",siblingStyleHolder);
+
 					}									
 				}
 				// one text node within a non span element - put this text node within a span
@@ -536,15 +543,24 @@ Range.prototype.styleText = function(styleName, styleValue)
 					var styleHolder = documentCreateXHTMLElement('span');
 					textContainer.insertBefore(styleHolder, textNodes[i]);
 					styleHolder.appendChild(textNodes[i]);
+					eDOMEventCall("NodeInserted",styleHolder);
+
 					textNodes[i] = styleHolder.firstChild;
 					textContainer = styleHolder;
 				}
 			}
-
-			textContainer.style.setProperty(styleName, styleValue, "");
+			if (isClass) {
+				if (styleValue) {
+					textContainer.addClass(styleName);
+				} else {
+					textContainer.removeClass(styleName);
+				}
+			} else {
+				textContainer.style.setProperty(styleName, styleValue, "");
+			}
 		}
 	}
-
+					
 	this.__restoreTextBoundaries(); // restore boundaries after styles are applied: CAN NIX IF GET CONTAINER AT START?
 
 	var treeTop = this.commonAncestorContainer.parentElement;

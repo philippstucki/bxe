@@ -3759,6 +3759,29 @@ Range.prototype.hasStyle = function(styleName, styleValue)
 }
 
 /**
+ * Does a Range have a style?
+ */
+Range.prototype.hasClass = function(className)
+{
+	// note that this can split text nodes
+	var textNodes = this.textNodes;
+	keepTxtNodes = textNodes;
+ 
+	for(var i=0; i<textNodes.length; i++)
+	{
+		var textContainer = textNodes[i].parentNode;
+ 
+		// if any node doesn't have the style then the Range doesn't have it!
+		if(!textContainer.hasClass(className))
+		{
+			//this.normalizeText();
+			return false;	
+		}
+	}
+	return true;
+}
+
+/**
  * @returns all the elements with a particular display value
  *
  * POST04:
