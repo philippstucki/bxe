@@ -1477,7 +1477,8 @@ function bxe_DeleteLink(e) {
 
 
 function bxe_InsertLink(e) {
-    var sel = window.getSelection();
+	
+	var sel = window.getSelection();
 	if (bxe_checkForSourceMode(sel)) {
 		return false;
 	}
@@ -1521,9 +1522,9 @@ function bxe_InsertLink(e) {
 }
 
 function bxe_insertLibraryLink() {
-    drawertool.cssr = window.getSelection().getEditableRange();
+	drawertool.cssr = window.getSelection().getEditableRange();
 	drawertool.openDrawer( 'liblinkdrawer' );
-    return;
+	return;
 
 }
 
@@ -1851,7 +1852,7 @@ function bxe_nodeSort(a,b) {
 }
 
 function bxe_showImageDrawer() {
-    drawertool.cssr = window.getSelection().getEditableRange();
+	drawertool.cssr = window.getSelection().getEditableRange();
 	drawertool.openDrawer('imagedrawer');
 }
 
