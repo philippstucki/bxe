@@ -174,7 +174,7 @@ XMLDocument.prototype.importXHTMLDocument = function(xhtmlfile) {
 		}
 		var new_body = document.importNode(bodyInXhtml[0],true);
 		bxe_about_box.node = new_body.appendChild(bxe_about_box.node);
-		if (bxe_config.options['ExternalXhtmlReplaceBodyChildren'] == 'false') {
+		if (bxe_config.options['ExternalXhtmlReplaceBodyChildren'] != 'false') {
 		  	bxe_area.removeAllChildren();
 		}
 		bxe_area.appendAllChildren(new_body);
