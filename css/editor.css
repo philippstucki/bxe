@@ -165,6 +165,18 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
   -moz-opacity: 1;
 }
 
+.AboutBox a {
+   color: black;
+}
+.AboutBox table, .AboutBox tr, .AboutBox td {
+   border: 0px;
+   margin: 0px;
+   padding: 0px;
+   -x-border-x-spacing: 0px;
+}
+
+
+
 .AboutBox div {
   
     height: 30px;

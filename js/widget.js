@@ -432,14 +432,20 @@ function Widget_AboutBox() {
 	this.position((window.innerWidth- width)/2,(window.innerHeight-height)/3,"fixed");
 	this.node.onclick = function(e) { this.style.display = 'none';}
 	var htmltext = "<a href='http://bitfluxeditor.org' target='_new'>http://bitfluxeditor.org</a> <br/> Version: " + BXE_VERSION + "/" + BXE_BUILD;
-	htmltext += "<br/><br/> Based on <a href='http://mozile.mozdev.org' target='_new'>Mozile</a>";
+	htmltext += '<br/><br/>';
+	htmltext += "<table>";
+	htmltext += "<tr><td>Credits:</td></tr>";
+	htmltext += '<tr><td><a href="http://bitflux.ch">Bitflux GmbH</a> </td><td> (Main Development) </td></tr>';
+	htmltext += '<tr><td><a href="http://playsophy.com">Playsophy</a> </td><td> (<a href="http://mozile.mozdev.org">Mozile/eDOM</a> Development) </td></tr>';
+	htmltext += '<tr><td><a href="http://twingle.mozdev.org">Twingle</a>/Stephan Richter &nbsp;</td><td> (jsdav.js library) </td></tr>';
+	htmltext += '</table>';
 	
 	var abouttext = this.node.innerHTML = htmltext;
 	var textdiv = document.createElement("div");
 	this.TextNode = document.createTextNode(" ");
 	textdiv.appendChild(this.TextNode);
 	this.node.appendChild(textdiv );
-	textdiv.style.top = (height - 95 ) + "px";;
+	textdiv.style.top = (height - 150 ) + "px";;
 	textdiv.style.position = "relative";
 	this.show();
 	

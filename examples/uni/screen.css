@@ -63,3 +63,5 @@ table.basic th	 { vertical-align: top }
 table.basic td	 { vertical-align: top }
 
 #breadcrumb {background-color: white; font-size: 12px;}
+
+.asset, .object { display: block;}

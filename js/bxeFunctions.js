@@ -71,9 +71,6 @@ function bxe_toggleTagMode(e) {
 	
 	if (!editableArea._TagMode) {
 		createTagNameAttributes(editableArea);
-		/*editableArea.addEventListener("DOMNodeInserted",addTagnames_bxe,false);
-		editableArea.addEventListener("DOMNodeRemoved",addTagnames_bxe,false);
-		editableArea.addEventListener("DOMAttrModified",addTagnames_bxe,false);*/
 		editableArea._TagMode = true;
 		editableArea.AreaInfo.TagModeMenu.Checked = true;
 		editableArea.AreaInfo.NormalModeMenu.Checked = false;
@@ -83,9 +80,6 @@ function bxe_toggleTagMode(e) {
 			null, 
 			true);
 		var node = editableArea;
-		/*editableArea.removeEventListener("DOMNodeInserted",addTagnames_bxe,false);
-		editableArea.removeEventListener("DOMAttrModified",addTagnames_bxe,false);
-		editableArea.removeEventListener("DOMNodeRemoved",addTagnames_bxe,false);*/
 		
 		do {
 			if (node.hasChildNodes()) {
@@ -235,13 +229,6 @@ function bxe_toggleTextClass(e) {
 	sel.toggleTextClass(e.additionalInfo.localName);
 	sel = window.getSelection();
 	var _node = sel.anchorNode.parentNode;
-	/*_node.XMLNode.namespaceURI = e.additionalInfo.namespaceURI;
-	_node.XMLNode = new XMLNode(  e.additionalInfo.namespaceURI,   e.additionalInfo.localName, 1);
-	*/
-	//alert(_node.parentNode.XMLNode.nodeName);
-	dump("----\n");
-	dump (_node.parentNode);
-	dump (_node.parentNode.parentNode.XMLNode.nodeName);
 	_node.updateXMLNode();
 }
 
@@ -443,7 +430,8 @@ function bxe_NodeInsertedBefore(e) {
 	try {
 	var oldNode = e.target.XMLNode;
 	var newNode = e.additionalInfo;
-
+	debug ("foo " + oldNode._node + oldNode._node.saveXML(oldNode._node));
+	debug("foo " + oldNode + oldNode.localName + newNode); 
 	newNode.XMLNode =  new XMLNode(newNode);
 	oldNode.parentNode.insertBeforeIntern(newNode.XMLNode, oldNode);
 	if (newNode.firstChild ) {
@@ -591,22 +579,25 @@ function bxe_draw_widgets() {
 	
 	
 	var submenu4 = new Array();
-	submenu4.push("Help",function (e) { 
-		bla = window.open("http://wiki.bitfluxeditor.org","help","width=800,height=600,left=0,top=0");
-		bla.focus();
 	
-	});
-	submenu4.push("Website",function (e) { 
-		bla = window.open("http://www.bitfluxeditor.org","help","width=800,height=600,left=0,top=0");
-		bla.focus();
-	
-	});
 	submenu4.push("About Bitflux Editor",function(e) { 
 		bxe_about_box.setText("");
 		bxe_about_box.show();
 		
 	});
 	
+	submenu4.push("Help",function (e) { 
+		bla = window.open("http://wiki.bitfluxeditor.org","help","width=800,height=600,left=0,top=0");
+		bla.focus();
+	
+	});
+
+	submenu4.push("BXE Website",function (e) { 
+		bla = window.open("http://www.bitfluxeditor.org","help","width=800,height=600,left=0,top=0");
+		bla.focus();
+	
+	});
+
 	submenu4.push("Show System Info", function(e) {
 		var modal = new Widget_ModalBox();
 		modal.node = modal.initNode("div","ModalBox");
@@ -630,6 +621,13 @@ function bxe_draw_widgets() {
 		modal.PaneNode.appendChild(subm);
 		
 	});
+
+	submenu4.push("Report Bug",function(e) { 
+		bla = window.open("http://bugs.bitfluxeditor.org/enter_bug.cgi?product=Editor&version="+BXE_VERSION+"&priority=P3&bug_severity=normal&bug_status=NEW&assigned_to=&cc=&bug_file_loc=http%3A%2F%2F&short_desc=&comment=***%0DVersion: "+BXE_VERSION + "%0DBuild: " + BXE_BUILD +"%0DUser Agent: "+navigator.userAgent + "%0D***&maketemplate=Remember+values+as+bookmarkable+template&form_name=enter_bug","help","");
+		bla.focus();
+		
+	});
+	
 	
 	menubar.addMenu("Help",submenu4);
 	
@@ -927,36 +925,18 @@ documentCreateXHTMLElement = function (elementName,attribs) {
 			htmlelementname = "span";
 			break;
 		case "object":
-			htmlelementname = "span";
-			childNode = document.createElementNS(XHTMLNS,"img");
-			
-			if (attribs) {
-				
-				for (var i = 0; i < attribs.length ;  i++) {
-					switch (attribs[i].localName ) {
-						case "data":
-							childNode.setAttribute("src",attribs[i].value);
-							break;
-						case "width":
-							childNode.setAttribute("width",attribs[i].value);
-							break;
-						case "height":
-							childNode.setAttribute("height",attribs[i].value);
-							break;
-					}
-				}
-			}
-			break;
 		case "img":
 			htmlelementname = "span";
-			childNode = document.createElementNS(XHTMLNS,"img");
+			childNode = document.createElementNS(XHTMLNS,elementName);
+			
 			if (attribs) {
 				
 				for (var i = 0; i < attribs.length ;  i++) {
 					childNode.setAttributeNode(attribs[i].cloneNode(true));
 				}
 			}
-			break;	
+			childNode.setAttribute("_edom_internal_node","true");
+			break;
 		default:
 			htmlelementname = elementName;
 	}
