@@ -6,6 +6,7 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 	
 	this.xmldoc.documentElement.setAttributeNS("http://www.w3.org/2000/xmlns/","xmlns:rng","http://relaxng.org/ns/structure/1.0");
 
+	bxe_config.DocumentVDOM = this;
 	
 	//do includes
 	var endTimer = new Date();
@@ -51,9 +52,8 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 	if (DebugOutput) {
 		debug(this.xmldoc.saveXML(this.xmldoc));
 	}	
-	
 	var rootChildren = this.xmldoc.documentElement.childNodes;
-
+	
 	for (var i = 0; i < rootChildren.length; i++) {
 		if (rootChildren[i].isRelaxNGElement("start")) {
 			this.parseStart(rootChildren[i]);

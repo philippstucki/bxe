@@ -3,7 +3,6 @@ const BXE_VALID_NOMESSAGE = 1;
 XMLNode.prototype.isNodeValid = function(deep, wFValidityCheckLevel ) {
 	
 	var c  = this._isNodeValid(deep,wFValidityCheckLevel);
-	
 	if (c.isError) {
 		c.dumpErrorMessages();
 		
