@@ -828,14 +828,14 @@ function bxe_changeLinesContainer(e) {
 	if (nodeParts.length < 2 ) {
 		nodeParts[1] = null;
 	}
-	var newContainer = window.getSelection().changeLinesContainer(nodeParts[0]);
+	var newContainer = window.getSelection().changeLinesContainer(nodeParts[0],  nodeParts[1]);
 	for(var i=0; i<newContainer.length; i++)
 	{ 
 		newContainer[i].XMLNode = new XMLNodeElement( nodeParts[1], nodeParts[0], newContainer[i].nodeType);
 		try {
 			newContainer[i].updateXMLNode();
 			
-		} catch(e) { alert(newContainer[i] + " can't be updateXMLNode()'ed");
+		} catch(e) {alert(newContainer[i] + " can't be updateXMLNode()'ed\n" + e);
 		}
 	}
 	bxe_delayedUpdateXPath();
