@@ -193,6 +193,7 @@ function xml_loaded(xmldoc) {
 	if (!(bxe_config.validationfile && xmldoc.XMLNode.loadSchema(bxe_config.validationfile,validation_loaded))) {
 		bxe_about_box.addText("RelaxNG File was not found");
 	}
+	bxe_history_snapshot();
 	document.eDOMaddEventListener("toggleSourceMode",bxe_toggleSourceMode,false);
 	document.eDOMaddEventListener("toggleTagMode",bxe_toggleTagMode,false);
 	document.eDOMaddEventListener("toggleNormalMode",bxe_toggleNormalMode,false);
@@ -212,8 +213,8 @@ function xml_loaded(xmldoc) {
 	document.eDOMaddEventListener("ClipboardPaste",function(e) { window.getSelection().paste()},false);
 	document.eDOMaddEventListener("ClipboardCut",function(e) { window.getSelection().cut()},false);
 	
-	document.eDOMaddEventListener("Undo",function(e) { bxe_not_yet_implemented()}, false);
-	document.eDOMaddEventListener("Redo",function(e) { bxe_not_yet_implemented()}, false);
+	document.eDOMaddEventListener("Undo",function(e) { bxe_history_undo()}, false);
+	document.eDOMaddEventListener("Redo",function(e) { bxe_history_redo()}, false);
 
 	document.addEventListener("contextmenu",bxe_ContextMenuEvent, false);
 

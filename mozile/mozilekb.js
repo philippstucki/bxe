@@ -251,6 +251,7 @@ function ctrlKeyUpHandler(event,cssr) {
  */
 function nonctrlKeyPressHandler(event)
 {
+
 	var sel = window.getSelection();
 	var ip;
 	var cssr;
@@ -259,6 +260,7 @@ function nonctrlKeyPressHandler(event)
 	if((event.keyCode == 8) || (event.keyCode == 46)) {
 		var backspace = (event.keyCode == 46);
 		if (!sel.isCollapsed && sel.anchorNode.nodeType == 3 && sel.anchorOffset == 0) {
+			bxe_history_snapshot();
 			var n = sel.focusNode;
 			var o = sel.focusOffset;
 			sel.collapse(sel.anchorNode,1)
@@ -267,11 +269,14 @@ function nonctrlKeyPressHandler(event)
 			sel = window.getSelection();
 			sel.deleteSelection(false);
 			sel.anchorNode.updateXMLNode();
+			
 		} else if (sel.isCollapsed) {
 			sel.deleteSelection(backspace);
 		} else {
+			bxe_history_snapshot();
 			sel.deleteSelection(backspace);
 			sel.anchorNode.updateXMLNode();
+			
 		}
 		return true;
 	}

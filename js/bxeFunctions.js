@@ -1,6 +1,7 @@
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
 
+var snapshots = new Array();
 function __bxeSave(e) {
 	
 	var td = new mozileTransportDriver("webdav");
@@ -28,6 +29,24 @@ function __bxeSave(e) {
 		url += "?exit=false";
 	}
 	td.save(url, xmlstr, callback);
+}
+
+function bxe_history_snapshot() {
+	
+	snapshots.push(bxe_getXmlDocument());
+	debug("history length: "  + snapshots.length);
+}
+
+function bxe_history_undo() {
+	var xmlstr = snapshots.pop();
+	var BX_parser = new DOMParser();
+	var xmldoc = BX_parser.parseFromString(xmlstr,"text/xml");
+	var vdom = bxe_config.xmldoc.XMLNode.vdom;
+	bxe_config.xmldoc = xmldoc;
+	xmldoc.init();
+	xmldoc.insertIntoHTMLDocument();
+	bxe_config.xmldoc.XMLNode.vdom = vdom;
+	bxe_config.xmldoc.XMLNode.validateDocument();
 }
 
 function bxe_getXmlDocument() {
@@ -448,7 +467,7 @@ function bxe_NodeInsertedBefore(e) {
 
 function bxe_appendNode(e) {
 	var aNode = e.additionalInfo.appendToNode;
-				
+	bxe_history_snapshot();
 	if (e.additionalInfo.node) {
 		var newNode = e.additionalInfo.node.init();
 		aNode.parentNode.insertBeforeIntern(newNode,aNode.nextSibling);
@@ -478,7 +497,7 @@ function bxe_appendNode(e) {
 		sel.extend(lastip.ipNode, lastip.ipOffset);
 		
 	}
-	
+		
 }
 
 function bxe_changeLinesContainer(e) {
