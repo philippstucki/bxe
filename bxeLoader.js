@@ -211,7 +211,7 @@ function xml_loaded(xmldoc) {
 	document.eDOMaddEventListener("appendChildNode",bxe_appendChildNode,false);
 	document.eDOMaddEventListener("InsertLink",bxe_InsertLink,false);
 	document.eDOMaddEventListener("InsertTable",bxe_InsertTable,false);
-	document.eDOMaddEventListener("InsertImage",bxe_InsertImage,false);
+	document.eDOMaddEventListener("InsertImage",bxe_InsertObject,false);
 	document.eDOMaddEventListener("OrderedList",bxe_OrderedList,false);
 	document.eDOMaddEventListener("UnorderedList",bxe_UnorderedList,false);
 
