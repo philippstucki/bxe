@@ -28,7 +28,11 @@ mozileTransportDriver_webdav.prototype.loadCallback = function (e) {
 	
 	var reqObj = new Object();
 	// if there's no element called parsererror...
-	if (p.responseXML.getElementsByTagNameNS("http://www.mozilla.org/newlayout/xml/parsererror.xml","parsererror").length == 0) {
+	
+	if (!p.responseXML) {
+		reqObj = td.container.parseResponseText(p.responseText);
+	}
+	else if (p.responseXML.getElementsByTagNameNS("http://www.mozilla.org/newlayout/xml/parsererror.xml","parsererror").length == 0) {
 		reqObj.document = p.responseXML;
 		reqObj.isError = false;
 		reqObj.status = 200;
