@@ -212,13 +212,13 @@ NodeVDOM.prototype.parseChildren = function(node) {
 			var xp = "/rng:grammar/rng:define[@name = '" + childNodes[i].getAttribute("name") + "']"
 			var defineChild = this.node.ownerDocument.documentElement.getXPathFirst(xp);
 			if (defineChild) {
-			debug ("isParsed " + defineChild.getAttribute("name") + " = " + defineChild.isParsed);
-			//FIXME:...
-			//if (!defineChild.isParsed) {
-				defineChild.isParsed = true;
-				this.parseChildren(defineChild);
-				
-			//} 
+				debug ("isParsed " + defineChild.getAttribute("name") + " = " + defineChild.isParsed);
+				//FIXME:...
+				if (!defineChild.isParsed) {
+					defineChild.isParsed = true;
+					this.parseChildren(defineChild);
+					
+				} 
 			}
 		} 
 
