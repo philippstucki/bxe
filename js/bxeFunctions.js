@@ -325,9 +325,20 @@ function bxe_ContextPopup(e) {
 		var menui = popup.addMenuItem("Split right", function(e) {
 			var widget = e.currentTarget.Widget;
 			var _par = widget.MenuPopup.MainNode._node.parentNode;
-			widget.MenuPopup.MainNode._node.TableCellSplit();
+			widget.MenuPopup.MainNode._node.TableCellSplitRight();
 			_par.updateXMLNode();
 		});
+		
+		if (node._node.getAttribute("rowspan") > 1) {
+			
+			var menui = popup.addMenuItem("Split down", function(e) {
+				var widget = e.currentTarget.Widget;
+				var _par = widget.MenuPopup.MainNode._node.parentNode;
+				widget.MenuPopup.MainNode._node.TableCellSplitDown();
+				_par.updateXMLNode();
+			});
+		}
+		
 		
 		var nextSibling = node.nextSibling;
 		while (nextSibling && nextSibling.nodeType != 1) {

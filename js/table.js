@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: table.js,v 1.6 2003/09/15 09:05:42 chregu Exp $
+// $Id: table.js,v 1.7 2003/09/15 09:48:11 chregu Exp $
 
 
 HTMLTableCellElement.prototype.TableRemoveRow = function() {
@@ -28,22 +28,9 @@ HTMLTableCellElement.prototype.TableRemoveCol = function() {
 		if (row.nodeType == 1) {
 			
 			if ( row.localName.toLowerCase() == "tr") {
-				var cell = row.firstChild;
-				var nextpos = 1;
-				while (cell) {
-					if (cell.nodeType == 1 && cell.localName.toLowerCase() == "td") {
-						debug (nextpos + " " + pos);
-						if (nextpos >= pos) {
-							row.removeChild(cell);
-							break;
-						}
-						if (cell.hasAttribute("colspan")) {
-							nextpos += parseInt( cell.getAttribute("colspan"));
-						} else {
-							nextpos++;
-						}
-					}
-					cell = cell.nextSibling;
+				var cell = row.findCellPosition(pos);
+				if (cell) {
+					row.removeChild(cell);
 				}
 			} else if ( row.localName.toLowerCase() == "col") {
 				if (colpos == pos) {
@@ -73,24 +60,11 @@ HTMLTableCellElement.prototype.TableAppendCol = function () {
 	while (row) {
 		if (row.nodeType == 1) {
 			if ( row.localName.toLowerCase() == "tr") {
-				var cell = row.firstChild;
-				var nextpos = 1;
-				
-				while (cell) {
-					if (cell.nodeType == 1 && cell.localName.toLowerCase() == "td") {
-						if (nextpos >= pos) {
-							var newtd = document.createElementNS(XHTMLNS,"td");
-							newtd.appendChild(document.createTextNode(STRING_NBSP));
-							row.insertBefore(newtd,cell.nextSibling);
-							break;
-						}
-						if (cell.hasAttribute("colspan")) {
-							nextpos += parseInt( cell.getAttribute("colspan"));
-						} else {
-							nextpos++;
-						}
-					}
-					cell = cell.nextSibling;
+				var cell = row.findCellPosition(pos);
+				if (cell) {
+					var newtd = document.createElementNS(XHTMLNS,"td");
+					newtd.appendChild(document.createTextNode(STRING_NBSP));
+					row.insertBefore(newtd,cell.nextSibling);
 				}
 			} else if ( row.localName.toLowerCase() == "col") {
 				dump (colpos + " ==  " + pos + "\n");
@@ -198,7 +172,7 @@ HTMLTableCellElement.prototype.TableCellMergeDown = function () {
 	tr.removeChild(nextSibling);
 }
 
-HTMLTableCellElement.prototype.TableCellSplit = function () {
+HTMLTableCellElement.prototype.TableCellSplitRight = function () {
 	
 	var cssr = window.getSelection().getEditableRange();
 	var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
@@ -215,10 +189,65 @@ HTMLTableCellElement.prototype.TableCellSplit = function () {
 		nextSibling = nextSibling.nextSibling;
 	}
 	if (nextSibling) {
-		nextSibling.reomveAttribute("colspan");
+		nextSibling.removeAttribute("colspan");
 	}
 	
 }
 
 
+HTMLTableCellElement.prototype.TableCellSplitDown = function() {
+	var pos = this.findPosition();
+	var tr = this.parentNode;
+	var cssr = window.getSelection().getEditableRange();
+	var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
+	ip.splitContainedLine();
+
+	var rowspan = this.getAttribute("rowspan");
+	if (rowspan > 2) {
+		this.setAttribute("rowspan", rowspan-1);
+	} else {
+		this.removeAttribute("rowspan");
+	}
+	var nextSibling = this.nextSibling;
+	while (nextSibling && nextSibling.nodeType != 1) {
+		nextSibling = nextSibling.nextSibling;
+	}
+	if (nextSibling) {
+		nextSibling.removeAttribute("rowspan");
+	}
+	
+	
+	var nexttr = tr.nextSibling;
+	while (nexttr) {
+		if (nexttr.nodeType == 1 && nexttr.localName.toLowerCase() == "tr") {
+			var cell = nexttr.findCellPosition(pos-1);
+			if (cell) {
+				nexttr.insertBefore(nextSibling,cell.nextSibling);
+			}
+			break;
+		}
+		nexttr = nexttr.nextSibling;
+	}
+	
+	
+}
+HTMLTableRowElement.prototype.findCellPosition = function(pos) {
+	var cell = this.firstChild;
+	var nextpos = 1;
+	
+	while (cell) {
+		if (cell.nodeType == 1 && cell.localName.toLowerCase() == "td") {
+			if (nextpos >= pos) {
+				return cell;
+			}
+			if (cell.hasAttribute("colspan")) {
+				nextpos += parseInt( cell.getAttribute("colspan"));
+			} else {
+				nextpos++;
+			}
+		}
+		cell = cell.nextSibling;
+	}
+	
+}
 
