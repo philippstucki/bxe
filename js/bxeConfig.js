@@ -7,12 +7,13 @@ function  bxeConfig (filename,fromUrl, configArray) {
 	if (fromUrl) {
 		filename = this.urlParams[filename];
 	}
-	td.load(filename,bxeConfig.parseConfig);
 	td.bxeConfig = this;
+	td.load(filename,bxeConfig.parseConfig);
 	return true;
 }
 
 bxeConfig.parseConfig = function  (e) {
+	bxe_about_box.addText("Config Loaded");
 	var bxe_config = e.currentTarget.td.bxeConfig;
 	bxe_config.doc = this;
 	var checkParser = this.checkParserError();
