@@ -48,6 +48,7 @@ var bxe_about_box = null;
 var bxe_format_list = null;
 var bxe_context_menu = null;
 var bxe_delayedUpdate = false;
+var eDOM_bxe_mode = true; 
 
 function bxe_start(config_file,fromUrl, configArray) {
 
@@ -185,8 +186,8 @@ function xml_loaded(xmldoc) {
 	document.eDOMaddEventListener("InsertLink",bxe_InsertLink,false);
 	document.eDOMaddEventListener("InsertTable",bxe_InsertTable,false);
 	document.eDOMaddEventListener("InsertImage",bxe_InsertImage,false);
-	document.eDOMaddEventListener("OrderedList",bxe_UnorderedList,false);
-	document.eDOMaddEventListener("UnorderedList",bxe_OrderedList,false);
+	document.eDOMaddEventListener("OrderedList",bxe_OrderedList,false);
+	document.eDOMaddEventListener("UnorderedList",bxe_UnorderedList,false);
 	document.eDOMaddEventListener("insertedBefore",bxe_insertedBefore,false);
 
 	document.eDOMaddEventListener("changeLinesContainer",bxe_changeLinesContainer,false);
