@@ -11,10 +11,10 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeLoader.js,v 1.131 2003/11/21 02:30:07 chregu Exp $
+// $Id: bxeLoader.js,v 1.132 2003/11/22 02:30:07 chregu Exp $
 
 const BXE_VERSION = "0.1alpha";
-const BXE_BUILD = "200311210330"
+const BXE_BUILD = "200311220330"
 
 const E_FATAL = 1;
 
