@@ -49,7 +49,7 @@ var bxe_format_list = null;
 var bxe_context_menu = null;
 var bxe_delayedUpdate = false;
 
-function bxe_start(config_file,fromUrl) {
+function bxe_start(config_file,fromUrl, configArray) {
 
 	/*if (! (BX_checkUnsupportedBrowsers())) {
 		return false;
@@ -63,6 +63,7 @@ function bxe_start(config_file,fromUrl) {
 		var head = document.getElementsByTagName("head")[0];
 		bxe_config.file = config_file;
 		bxe_config.fromUrl = fromUrl;
+		bxe_config.configArray = configArray;
 		if(head)
 		{
 			// get the location of this script and reuse it for the others
@@ -246,7 +247,7 @@ function script_loaded() {
 function mozile_core_loaded() {
 	bxe_about_box.addText("Scripts loaded ...");
 	bxe_about_box.addText("Load Config ...");
-	bxe_config = new bxeConfig(bxe_config.file, bxe_config.fromUrl);
+	bxe_config = new bxeConfig(bxe_config.file, bxe_config.fromUrl, bxe_config.configArray);
 }
 
 function mozile_loaded() {

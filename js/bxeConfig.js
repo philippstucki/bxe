@@ -1,8 +1,9 @@
-function  bxeConfig (filename,fromUrl) {
+function  bxeConfig (filename,fromUrl, configArray) {
 	
 	var td = new BXE_TransportDriver_http();
 	td.Docu = this;
 	this.parseUrlParams();
+	this.configParams = configArray;
 	if (fromUrl) {
 		filename = this.urlParams[filename];
 	}
@@ -58,8 +59,10 @@ bxeConfig.prototype.translateUrl = function (node)
 		return "";
 	}
 	
-
-    if (node.getAttribute("isParam") == "true")
+	if (node.getAttribute("isConfigParam") == "true") {
+		 url = this.configParams[node.firstChild.data];
+	}
+    else if (node.getAttribute("isParam") == "true")
     {
         url = this.urlParams[node.firstChild.data];
     }
