@@ -59,6 +59,7 @@ Node.prototype.transformToDocumentFragment = function () {
 	var docfrag = this.ownerDocument.createDocumentFragment();
 	var child = this.firstChild;
 	var oldchild = null;
+	alert(this);
 	do {
 		oldchild = child;
 		child = child.nextSibling
@@ -84,8 +85,8 @@ Node.prototype.convertToXMLDocFrag = function () {
 	do {
 	dump("node : " + node.nodeName + "\n");
 			var parentN = null;
-			if (node.parentNode.xmlNodeNew) {
-				parentN = node.parentNode.xmlNodeNew;
+			if (node.parentNode.xmlNode) {
+				parentN = node.parentNode.xmlNode;
 			} else {
 				parentN = this.xmlNode;
 			}
@@ -96,7 +97,7 @@ Node.prototype.convertToXMLDocFrag = function () {
 			while ( lastChild = newNode.firstChild) {
 				newNode = lastChild;
 			}
-			node.xmlNodeNew = newNode;
+			node.xmlNode = newNode;
 	
 	} while(node = walker.nextNode() )
 	return this.xmlNode;

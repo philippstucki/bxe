@@ -6,13 +6,21 @@ function __bxeSave(e) {
 		alert("*mozileModify.js:mozileSave: this default implementation only works if the current selection is in an editable area");
 		return;
 	}
-	var editableArea = cssr.top;
+	/*var editableArea = cssr.top;
 	var xmldoc = editableArea.convertToXMLDocFrag();
-	/*editableArea.xmlNode.removeAllChildren();
+	editableArea.xmlNode.removeAllChildren();
 	var docfrag = xmldoc.transformToDocumentFragment();
 	editableArea.xmlNode.appendChild(docfrag);
 	*/
+	var areaNodes = bxe_getAllEditableAreas();
+	for (var i = 0; i < areaNodes.length; i++) {
+		
+		var xmldoc = areaNodes[i].convertToXMLDocFrag();
+	}
 
+	alert(xmldoc.ownerDocument.saveXML(xmldoc.ownerDocument));
+
+	return ;
 	var td = new BXE_TransportDriver_webdav();
 	function callback (e) {
 		this.td.Docu.xmldoc =  this.responseXML;
@@ -242,7 +250,6 @@ function BX_debug(object)
 function bxe_about_box_fade_out (e) {
 	
 	var mozO = bxe_about_box.node.getCStyle("-moz-opacity");
-	dump("m:"+mozO+"\n")
 	if (mozO > 0.1) {
 		bxe_about_box.node.style.MozOpacity = mozO - 0.1;
 		window.setTimeout(bxe_about_box_fade_out, 100);
