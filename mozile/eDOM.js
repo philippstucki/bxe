@@ -1418,7 +1418,6 @@ InsertionPoint.prototype.insertNode = function(node)
  */
 InsertionPoint.prototype.__insertOneNode = function(node)
 {
-	dump("here" + node.nodeType + node.nodeName +"\n");
 	// POST04: what if covering nbsp at end of line or pasting whitespace only (ala insertCharacter!)
 	if(node.nodeType == Node.TEXT_NODE)
 	{

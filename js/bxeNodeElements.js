@@ -10,13 +10,15 @@ Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 	}
 	, true);
 	var node;
+	
 	if(onlyChildren) {
 		node = walker.nextNode();
 	} else {
 		node = this;
 	}
+	var firstChild = false;
 	do  {
-		var newNode;
+			var newNode;
 			if (node.parentNode && node.parentNode.nodeType == 1 && node.parentNode.htmlNode) {
 				parentN = node.parentNode.htmlNode;
 			} else {
@@ -52,10 +54,11 @@ Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 						}
 					}
 				}
-					
+				if (!firstChild) {
+					firstChild = newElement;
+				}
 				newElement.XMLNode.namespaceURI = node.namespaceURI;
 				newNode = parentN.appendChild(newElement);
-				newNode.setAttribute("__bxe_ns",node.namespaceURI);
 			} else {
 				newNode = parentN.appendChild(document.importNode(node,true));
 			}
@@ -66,6 +69,7 @@ Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 			}
 			node = walker.nextNode()
 	}  while(node );
+	return firstChild;
 }
 
 
@@ -85,8 +89,10 @@ Node.prototype.transformToDocumentFragment = function () {
 }
 
 Node.prototype.convertToXMLDocFrag = function () {
+	return  this.XMLNode.buildXML();
+	//alert(node.ownerDocument.saveXML(node));	
 	
-	this.XMLNode._xmlnode.removeAllChildren();
+	/*this.XMLNode._xmlnode.removeAllChildren();
 	var walker = document.createTreeWalker(
 	this,
 	NodeFilter.SHOW_ALL,
@@ -119,6 +125,7 @@ Node.prototype.convertToXMLDocFrag = function () {
 		node = walker.nextNode()
 	} while(node )
 	return this.XMLNode._xmlnode;
+	*/
 }
 
 Node.prototype.convertToXMLNode = function(xmldoc) {
@@ -164,49 +171,24 @@ Node.prototype.convertToXMLNode = function(xmldoc) {
 
 
 
-//XMLNode.prototype = new Node();
 
-Node.prototype.getXMLComponents = function () {
-	var localName = "";
-	var namespaceURI = null;
-	var prefix = null;
-	
-	if (this.nodeType == 1 ) {
-		if (this.localName.toLowerCase() != "span" && (this.namespaceURI == XHTMLNS )) {
-			localName = this.localName.toLowerCase();
-			namespaceURI = XHTMLNS;
-		} else {
-			var classes = this.getClasses();
-			if (classes.length > 0) {
-				for (var i = classes.length - 1; i >= 0; i--) {
-					if (newElement != null) {
-						newElement.appendChild(xmldoc.createElementNS(this.XMLNode.namespaceURI,classes[i]));
-					} else {
-						newElement = xmldoc.createElementNS(this.XMLNode.namespaceURI,classes[i]);
-					}
-				}
-			} else {
-				namespaceURI = "null";
-				localName = this.localName;
-			}
-		}
-	}
-	
-	return ({"localName": localName, "namespaceURI": namespaceURI});
-	
-}
 
 
 
 Node.prototype.__defineGetter__(
-	"XMLNode",
-	function()
-	{
-		if (!this._XMLNode) {
+"XMLNode",
+function()
+{
+	if (!this._XMLNode ) {
+		if ( this.nodeType == 1) {
+			this._XMLNode = new XMLNodeElement(this);
+		} else {
 			this._XMLNode = new XMLNode(this);
 		}
-		return this._XMLNode;
 	}
+	
+	return this._XMLNode;
+}	
 );
 
 Node.prototype.__defineSetter__(
@@ -300,3 +282,50 @@ Element.prototype.getBeforeAndAfterString = function (hasChildNodes, noParent) {
 	
 }
 
+Node.prototype.initXMLNode = function () {
+	if (this.nodeType == 1 ) {
+		this.XMLNode = new XMLNodeElement(this) ;
+	} else {
+		this.XMLNode = new XMLNode(this);
+	}
+	return this.XMLNode;
+	
+}
+
+
+Node.prototype.updateXMLNode = function () {
+	if (this.previousSibling && this.previousSibling.XMLNode) {
+		this.XMLNode.previousSibling = this.previousSibling.XMLNode;
+		this.previousSibling.XMLNode.nextSibling = this.XMLNode;
+	} else {
+		this.XMLNode.previousSibling = null;
+	}
+	if (this.nextSibling && this.nextSibling.XMLNode) {
+		this.XMLNode.nextSibling = this.nextSibling.XMLNode;
+		this.nextSibling.XMLNode.previousSibling = this.XMLNode;
+	} else {
+		this.XMLNode.nextSibling = null;
+	}
+	if (this.parentNode  && this.parentNode.XMLNode) {
+		this.XMLNode.parentNode = this.parentNode.XMLNode;
+	}
+	if (!this.XMLNode.nextSibling) {
+		this.XMLNode.parentNode.lastChild = this.XMLNode;
+	}
+	if (!this.XMLNode.previousSibling) {
+		this.XMLNode.parentNode.firstChild = this.XMLNode;
+	}
+
+
+	this.XMLNode._node = this
+/*	dump (this.XMLNode.nodeType);
+	dump ("\n**********\n");*/
+	if (this.firstChild) {
+		var node = this.firstChild;
+		while (node) {
+			node.updateXMLNode();
+			node = node.nextSibling;
+		}
+	}
+
+}

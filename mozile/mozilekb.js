@@ -285,7 +285,7 @@ function nonctrlKeyPressHandler(event)
 
 		sel.removeAllRanges();
 		sel.addRange(cssr);
-		bxe_delayedUpdateXPath();
+		//bxe_delayedUpdateXPath();
 		return true;
 	}
 

@@ -1,6 +1,6 @@
 
 
-Node.prototype.isNodeValid = function(deep, wFValidityCheckLevel ) {
+XMLNode.prototype.isNodeValid = function(deep, wFValidityCheckLevel ) {
 	
 	if (this._isNodeValid(deep,wFValidityCheckLevel).isError) {
 		return false; 
@@ -14,8 +14,9 @@ Attr.prototype._isNodeValid = function(wFValidityCheckLevel ) {
 	//dump("Attr Check: " + this.name + "\n");
 }
 
-Node.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
+XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 	// if it's a root node.
+//	dump ("Node._isNodeValid");
 	if(this.parentNode && this.parentNode.nodeType == 9) {
 		if (!this.vdom.canBeRoot) {
 			alert("root element is not allowed to be root");
@@ -33,7 +34,7 @@ Node.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 		//dump( ctxt.vdom.nodeName + "\n");
 		if (ctxt.node.nodeType == "3" && ctxt.node.isWhitespaceOnly) {
 			continue;
-		}
+		} 	
 		if (ctxt.node.nodeType == Node.COMMENT_NODE) {
 			continue;
 		}
@@ -69,11 +70,11 @@ Node.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 
 function ContextVDOM (node,vdom) {
 	this.node = node.firstChild;
-    if (typeof vdom.firstChild != "undefined") {
-    	this.vdom = vdom.firstChild;
-    } else {
-        this.vdom = null;
-    }
+	if (typeof vdom.firstChild != "undefined") {
+		this.vdom = vdom.firstChild;
+	} else {
+		this.vdom = null;
+	}
 	this.isError = false;
 	this.errormsg = new Array();
 	
@@ -117,6 +118,7 @@ ContextVDOM.prototype.dumpErrorMessages = function() {
 ContextVDOM.prototype.nextVDOM = function() {
 	
 	if (this.vdom.nextSibling) {
+		
 		this.vdom = this.vdom.nextSibling;
 		return this.vdom;
 	} else {
@@ -125,12 +127,14 @@ ContextVDOM.prototype.nextVDOM = function() {
 }
 
 ContextVDOM.prototype.isValid = function() {
+	dump ("Ctxt.isValid");
 	if (this.vdom) {
+//		dump("this.vdom " +this.vdom  +"\n");
 		return this.vdom.isValid(this);
 	} else {
 		if (this.node.hasChildNodes()) {
 			//dump(this.node.nodeName + " is not allowed to have children \n");
-			ctxt.setErrorMessage(this.node.nodeName + " is not allowed to have children")
+			this.setErrorMessage(this.node.nodeName + " is not allowed to have children")
 			return false;
 		} else {
 			this.node.vdom = this.vdom;
@@ -139,12 +143,12 @@ ContextVDOM.prototype.isValid = function() {
 	}
 }
 
-Node.prototype.__defineGetter__(
+XMLNode.prototype.__defineGetter__(
 	"vdom", function () {
 		if (typeof this._vdom == "undefined" || !this._vdom) {
 			// if documentElement
 			if (this.parentNode.nodeType == 9) {
-				if (this.nodeName == this.ownerDocument.vdom.firstChild.nodeName) {
+				if (this.localName == this.ownerDocument.vdom.firstChild.localName) {
 					
 					this._vdom = this.ownerDocument.vdom.firstChild;
 				} else {
@@ -160,7 +164,7 @@ Node.prototype.__defineGetter__(
 	)
 
 
-Node.prototype.__defineSetter__(
+XMLNode.prototype.__defineSetter__(
 	"vdom", function (value) {
 		this._vdom = value;
 	}

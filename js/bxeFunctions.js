@@ -4,21 +4,31 @@ function __bxeSave(e) {
 	
 	var td = new BXE_TransportDriver_webdav();
 	td.Docu = this;
-	td.Exit = e.additionalInfo.exit;
-	td.save(bxe_config.xmlfile,null,bxe_getXmlDocument());
+	if (e.additionalInfo ) {
+		td.Exit = e.additionalInfo.exit;
+	} else {
+		td.Exit = null;
+	}
+	var xmlstr = bxe_getXmlDocument()
+	alert(xmlstr);
+	
+	//td.save(bxe_config.xmlfile,null,xmlstr);
 }
 
 function bxe_getXmlDocument() {
+	
 	var areaNodes = bxe_getAllEditableAreas();
 	for (var i = 0; i < areaNodes.length; i++) {
 		if ((areaNodes[i]._SourceMode)) {
 			alert("Editable areas must not be in SourceMode while saving. Please switch it");
 			return false;
 		}
-		var xmldoc = areaNodes[i].convertToXMLDocFrag();
 		//xmldoc = areaNodes[i].XMLNode.insertIntoXMLDocument(xmldoc);
 	}
-	return xmldoc.ownerDocument.saveXML(xmldoc.ownerDocument);
+	var xml = areaNodes[0].XMLNode.ownerDocument.buildXML();
+	return xml.saveXML(xml);
+
+//	return areaNodes[0].XMLNode.ownerDocument.buildXML();
 }
 
 /* Mode toggles */
@@ -172,16 +182,24 @@ function bxe_toggleSourceMode(e) {
 		
 		var innerhtmlValue = documentLoadXML( innerHTML);
 		if (innerhtmlValue) {
-			editableArea.XMLNode._xmlnode.removeAllChildren();
-			editableArea.XMLNode._xmlnode.appendAllChildren(innerhtmlValue.firstChild);
+			editableArea.XMLNode._node = editableArea.XMLNode.xmlBridge;
+			
+			editableArea.XMLNode.removeAllChildren();
+			editableArea.XMLNode._node.removeAllChildren();
+			
+			editableArea.XMLNode._node.appendAllChildren(innerhtmlValue.firstChild);
+			
+			editableArea.XMLNode = editableArea.XMLNode._node.ownerDocument.init(editableArea.XMLNode._node);
 			editableArea.removeAllChildren();
 			/*
 			
 			innerhtmlValue.documentElement.insertIntoHTMLDocument(editableArea,true);
 			*/
-			editableArea.XMLNode._xmlnode.insertIntoHTMLDocument(editableArea,true);
 			editableArea.setStyle("white-space",null);
-			editableArea.XMLNode._xmlnode.parentNode.isNodeValid(true);
+			var xmlnode = editableArea.XMLNode._node;
+			editableArea.XMLNode.insertIntoHTMLDocument(editableArea,true);
+			editableArea.XMLNode.xmlBridge = xmlnode;
+			//editableArea.XMLNode._node.parentNode.isNodeValid(true);
 			editableArea._SourceMode = false;
 			editableArea.AreaInfo.SourceModeMenu.Checked = false;
 			editableArea.AreaInfo.NormalModeMenu.Checked = true;
@@ -200,30 +218,23 @@ function bxe_toggleTextClass(e) {
 	sel = window.getSelection();
 	var _node = sel.anchorNode.parentNode;
 	_node.XMLNode.namespaceURI = e.additionalInfo.namespaceURI;
-	
-	while (!(_node.XMLNode && _node.XMLNode._xmlnode)) {
-		_node = _node.parentNode;
-	}
-	//_node.XMLNode._htmlnode.convertToXMLDocFrag();
-	
-	//dump("is valid" +_node.XMLNode._xmlnode.isNodeValid(true));
+	_node.XMLNode = new XMLNode(  e.additionalInfo.namespaceURI,   e.additionalInfo.localName, 1);
+	dump(_node.parentNode);
+	_node.parentNode.updateXMLNode();
 }
 
 function bxe_appendNode(e) {
 	var aNode = e.additionalInfo.appendToNode;
-	
-	var newNode = new XMLNode() ;
-	
-	newNode.createNS(e.additionalInfo.namespaceURI, e.additionalInfo.localName);
+	var newNode = new XMLNode(e.additionalInfo.namespaceURI,e.additionalInfo.localName, 1 ) ;
 	
 	aNode.parentNode.insertAfter(newNode,aNode);
-	
 	newNode.setContent("#" + e.additionalInfo.localName + " ");
+
 	var sel = window.getSelection();
 	sel.removeAllRanges();
 	var rng = document.createRange();
-	rng.setStart(newNode._htmlnode.firstChild,1);
-	rng.setEnd(newNode._htmlnode.firstChild,newNode._htmlnode.firstChild.data.length-1);
+	rng.setStart(newNode._node.firstChild,1);
+	rng.setEnd(newNode._node.firstChild,newNode._node.firstChild.data.length-1);
 	//dump(e.additionalInfo.localName + " is valid " +_node.XMLNode._xmlnode.isNodeValid(true));
 	sel.addRange(rng);
 	
@@ -237,8 +248,8 @@ function bxe_changeLinesContainer(e) {
 	var newContainer = window.getSelection().changeLinesContainer(nodeParts[0]);
 	for(var i=0; i<newContainer.length; i++)
 	{ 
-		newContainer[i].XMLNode = new XMLNode(newContainer[i]);
-		newContainer[i].XMLNode.namespaceURI = nodeParts[1];
+		newContainer[i].XMLNode = new XMLNode( nodeParts[1], nodeParts[0], newContainer[i].nodeType);
+		newContainer[i].updateXMLNode();
 	}
 	bxe_updateXPath();
 }
@@ -323,7 +334,6 @@ function bxe_draw_widgets() {
 	var img = document.createElement("img");
 	img.setAttribute("src",mozile_root_dir + "images/bxe.png");
 	
-	//imgspan.appendChild(img);
 	img.setAttribute("align","right");
 	menubar.node.appendChild(img);
 	var submenu = new Array("Save",function() {eDOMEventCall("DocumentSave",document);});
@@ -401,34 +411,34 @@ function bxe_updateXPath() {
 	var sel = window.getSelection();
 	var cssr = sel.getEditableRange();
 	if (cssr) {
-	bxe_status_bar.buildXPath(sel.anchorNode);
-	var lines = cssr.lines();
-	bxe_format_list.removeAllItems();
-	
-	function nodeSort(a,b) {
-		if (a.nodeName > b.nodeName) {
-			return 1;
-		} else {
-			return -1;
-		}
-	}
-	if (lines[0] && lines[0].container) {
-/*		bxe_format_list.appendItem(lines[0].container.XMLNode.localName,lines[0].container.XMLNode.localName);*/
-		var ac = lines[0].container.XMLNode.parentNode._xmlnode.allowedChildren;
-		ac.sort(nodeSort);
-		var menuitem;
-		var thisLocalName = lines[0].container.XMLNode.localName;
-		var thisNamespaceURI = lines[0].container.XMLNode.namespaceURI
-		for (i = 0; i < ac.length; i++) {
-				
-			menuitem = bxe_format_list.appendItem(ac[i].nodeName, ac[i].localName + "=" + ac[i].namespaceURI);
-			if (ac[i].localName == thisLocalName &&  ac[i].namespaceURI == thisNamespaceURI) {
-				menuitem.selected=true;
+		bxe_status_bar.buildXPath(sel.anchorNode);
+		var lines = cssr.lines();
+		bxe_format_list.removeAllItems();
+		
+		function nodeSort(a,b) {
+			if (a.nodeName > b.nodeName) {
+				return 1;
+			} else {
+				return -1;
 			}
 		}
-	} else {
-		bxe_format_list.appendItem("no block found","");
-	}
+		if (lines[0] && lines[0].container) {
+			/*		bxe_format_list.appendItem(lines[0].container.XMLNode.localName,lines[0].container.XMLNode.localName);*/
+			var ac = lines[0].container.XMLNode.parentNode.allowedChildren;
+			ac.sort(nodeSort);
+			var menuitem;
+			var thisLocalName = lines[0].container.XMLNode.localName;
+			var thisNamespaceURI = lines[0].container.XMLNode.namespaceURI
+			for (i = 0; i < ac.length; i++) {
+				
+				menuitem = bxe_format_list.appendItem(ac[i].nodeName, ac[i].localName + "=" + ac[i].namespaceURI);
+				if (ac[i].localName == thisLocalName &&  ac[i].namespaceURI == thisNamespaceURI) {
+					menuitem.selected=true;
+				}
+			}
+		} else {
+			bxe_format_list.appendItem("no block found","");
+		}
 	}
 }
 

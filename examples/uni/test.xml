@@ -1,78 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<unizh:content-document xmlns="http://www.w3.org/1999/xhtml" xmlns:lenya="http://apache.org/cocoon/lenya/document/1.0" xmlns:dc="http://dc.org/2003/" xmlns:unizh="http://unizh.ch/2003/">
-        <!-- the root element indicates the doctype -->
-        <lenya:meta>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:lenya="http://apache.org/cocoon/lenya/page-envelope/1.0"
+      xmlns:dc="http://purl.org/dc/elements/1.1/"
+      xmlns:dcterms="http://purl.org/dc/terms/"
+      xmlns:unizh="http://unizh.ch/doctypes/elements/1.0"
+      unizh:columns="3"
+>
+	<lenya:meta>
                 <dc:title>Dokument- bzw. Seitentitel</dc:title>
                 <dc:description>Abstract</dc:description>
-                <dc:creator>Autor der Dokuments</dc:creator>
-                <dc:subject>Keywords</dc:subject>
-                <dc:publisher>Universität Zürich</dc:publisher>
-                <dc:date>
-                        <dc:created>Creation date</dc:created>
-                        <dc:issued>First published date</dc:issued>
-                </dc:date>
-                <dc:language>de</dc:language>
-                <dc:rights>Universität Zürich</dc:rights>
-        </lenya:meta>
-        <unizh:highlights>
-                <unizh:highlight>
+		<dc:creator>Autor der Dokuments</dc:creator>
+		<dc:subject>Keywords</dc:subject>
+		<dc:publisher>Universität Zürich</dc:publisher>
+                <dcterms:created>date of creation</dcterms:created>
+                <dcterms:issued>date of publication</dcterms:issued>
+		<dc:language>de</dc:language>
+		<dc:rights>Universität Zürich</dc:rights>
+	</lenya:meta>
+	<unizh:highlights>
+		<unizh:highlight>
                         <unizh:highlight-title>Title of the highlight (link allowed)</unizh:highlight-title>
                         <p>The text of the highlight.</p>
                         <p>Styles and links are allowed.</p>
                 </unizh:highlight>
-        </unizh:highlights>
-        <body>
+		<unizh:highlight>
+                        <unizh:highlight-title><a href="http://www.wyona.com">Title</a></unizh:highlight-title>
+		        <object data="sample.gif" type="image/gif" width="20" height="30"/>
+                </unizh:highlight>
+                <object data="one.gif" type="image/gif" width="20" height="30">
+                An image outside the box
+                </object>
+	</unizh:highlights>
+	<body>
                 <unizh:parenttitle/>
- <!--           <h1>Headline 1</h1> wird durch dc:title eingefuellt -->
-                <anchor/>
-                <h2>Example of University of Zurich</h2>
-                <p> Paragraph</p> 
-          <h2>Styles (headline 2)</h2>
-                <p>Different <b>text style</b>s can be used: <b>bold</b> or <i>italic</i> or
+                <unizh:anchor/>
+		<p>Paragraph</p>
+		<h2>Styles (headline 2)</h2>
+		<p>Different text styles can be used: <b>bold</b> or <i>italic</i> or
                 <small>small</small></p>
-                <p>There is also an element <attention>attdddention"</attention>.</p>
-                <p>Links can be set to <a href="http://www.unizh.ch/">external resources</a>
+                <p>There is <sub>subcript</sub> and <sup>superscript</sup>.</p>
+		<p>Links can be set to <a href="http://www.unizh.ch/">external resources</a>
                 as well as to <a href="/studium/mobilitaet/sokrates.html">internal
                 pages</a>.</p>
-                <p>There are also markups: <attention>warning</attention> and cite</p>
-                 <lala src="http://www.unizh.ch/img_uni/unilogo.gif" alt="Logo der Universität Zürich">
-                        <lenya:caption>Caption</lenya:caption>
-                        <lenya:producer>Author</lenya:producer>
-                </lala>
-                <lenya:asset src="anmeldeformular.pdf" mime-type="application/pdf">
-                        <lenya:asset-title>Anmeldeformular für den Sommerkurs</lenya:asset-title>
+                <p>There are also markups: <unizh:attention>warning</unizh:attention> and <cite>cite</cite></p>
+		<object data="uni-logo.gif" type="image/gif" width="152" height="160">
+                Caption of the image (a special caption element is not necessary)
+		</object>
+		<lenya:asset src="anmeldeformular.pdf" type="application/pdf">Anmeldeformular für den Sommerkurs</lenya:asset>
+		<lenya:asset src="briefvorlage.doc" type="application/msword">Briefvorlage
                 </lenya:asset>
-                <lenya:asset src="briefvorlage.doc" mime-type="application/msword">
-                        <lenya:asset-title>Briefvorlage</lenya:asset-title>
-                </lenya:asset>
-                <h2>Tablessss</h2>
-                <table class="basic">
-                        <caption>Table Title</caption>
-                        <col/>
-                        <col align="center"/>
-                        <col align="right"/>
-                        <tr align="right">
-                                <td>x</td>
-                                <td>y</td>
-                                <td>z</td>
-                        </tr>
-                        <tr align="center">
-                                <td>xx</td>
-                                <td>yy</td>
-                                <td>zz</td>
-                        </tr>
-                </table>
-                <h2>Lists</h2>
-                <h3>Unordered List</h3>
-                <ul class="simple">
-                        <li>This is an unordered list</li>
-                        <li>The xml follows the xhtml standard</li>
-                </ul>
-                <h3>Unordered List</h3>
-                <ol>
-                        <li>This is an ordered list</li>
-                        <li>The xml follows the xhtml standard</li>
-                </ol>
-                <index abstracts="true"/> 
-        </body>
-</unizh:content-document>
+		<h2>Tables</h2>
+		<table class="ornate">
+			<caption>Table Title</caption>
+			<col/>
+			<col align="center"/>
+			<col align="right"/>
+			<tr align="right">
+				<td>x</td>
+				<td>y</td>
+				<td>z</td>
+			</tr>
+			<tr align="center">
+				<td>xx</td>
+				<td>yy</td>
+				<td>zz</td>
+			</tr>
+		</table>
+		<table class="basic">
+			<tr>
+				<td>x</td>
+				<td>y</td>
+			</tr>
+		</table>
+		<h2>Lists</h2>
+		<h3>Unordered Lists Type 1-3</h3>
+		<ul class="type1">
+			<li>This is an unordered list type 1</li>
+			<li>The xml follows the xhtml standard</li>
+		</ul>
+		<ul class="type2">
+			<li>This is an unordered list type 2</li>
+			<li>The xml follows the xhtml standard</li>
+		</ul>
+		<h3>Ordered Lists Type 1-3</h3>
+		<ol class="type3">
+			<li>This is an ordered list type 3</li>
+			<li>The xml follows the xhtml standard</li>
+		</ol>
+		<unizh:index abstracts="true"/>
+	</body>
+</html>

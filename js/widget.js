@@ -53,7 +53,7 @@ function Widget_AreaInfo (areaNode) {
 	this.node.style.width = "0px";
 	this.node.style.height = "0px";
 	areaNode.parentNode.insertBefore(this.node,areaNode);
-	this.MenuPopup = new Widget_MenuPopup(areaNode.XMLNode._xmlnode.getXPathString());
+	this.MenuPopup = new Widget_MenuPopup(areaNode.XMLNode.getXPathString());
 	var doo = this.MenuPopup.addMenuItem("View",null);
 	var submenu = new Widget_MenuPopup();
 	this.NormalModeMenu = submenu.addMenuItem("Normal",function(e) {eDOMEventCall("toggleNormalMode",e.target.Widget.AreaNode )});
@@ -513,6 +513,7 @@ Widget_StatusBar.prototype.buildXPath = function (node) {
 			this.Widget.buildPopup(this);
 		}, false );
 		rootNode.XMLNode = node;
+		
 		node = node.parentNode;
 	}
 
@@ -525,8 +526,8 @@ Widget_StatusBar.prototype.buildPopup = function (node) {
 			var menui = this.Popup.addMenuItem("Edit Attributes..", this.EditAttributes.show);
 			menui.Modal = this.EditAttributes;
 		}
-		if (node.XMLNode._htmlnode) {
-		this.Popup.appendAllowedSiblings(node);
+		if (node.XMLNode.isInHTMLDocument()) {
+			this.Popup.appendAllowedSiblings(node);
 		}
 		this.Popup.draw();
 		this.Popup.position(node.offsetParent.offsetLeft +node.offsetLeft + window.scrollX, window.scrollY + node.offsetParent.offsetTop + node.offsetTop -this.Popup.node.offsetHeight ,"absolute");
@@ -558,7 +559,7 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 	var cssr = sel.getEditableRange();
 	//var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
 	if (!(sel.isCollapsed)) {
-			var ac = node.XMLNode._xmlnode.allowedChildren;
+			var ac = node.XMLNode.allowedChildren;
 			for (i = 0; i < ac.length; i++) {
 				var menui =this.Popup.addMenuItem( ac[i].nodeName, function(e) { 
 					var widget = e.currentTarget.Widget;
@@ -587,12 +588,12 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 	while(node && node.nodeType == 1) {
 		var ele = this.Popup.addMenuItem(node.nodeName);
 		ele.AppendToNode = node;
-		if (node._htmlnode && node._htmlnode != cssr.top) {
+		if (node.isInHTMLDocument() && node._node != cssr.top) {
 			ele.SubPopup = this.subPopup;
 			ele.addMenu(this.subPopup,function(e){
 				var sub = e.currentTarget.Widget.SubPopup;
 				sub.removeAllMenuItems();
-				sub.appendAllowedSiblings(e.currentTarget.Widget.AppendToNode._htmlnode)
+				sub.appendAllowedSiblings(e.currentTarget.Widget.AppendToNode._node)
 			});
 		} else {
 			ele.Disabled = true;
@@ -614,7 +615,7 @@ function Widget_ModalBox () {
 }
 
 Widget_MenuPopup.prototype.appendAllowedSiblings = function( node) {
-	var ac = node.XMLNode._xmlnode.parentNode.allowedChildren;
+	var ac = node.XMLNode.parentNode.allowedChildren;
 	function nodeSort(a,b) {
 		if (a.nodeName > b.nodeName) {
 			return 1;

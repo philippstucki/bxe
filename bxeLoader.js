@@ -117,6 +117,7 @@ bxe_globals.prototype.loadXML = function(xmlfile) {
 	function callback (e) {
 		e.target.td.Docu.xmldoc =  e.target.responseXML;
 		bxe_config.xmldoc = e.target.td.Docu.xmldoc;
+		e.target.td.Docu.xmldoc.init();
 		if (bxe_config.xslfile) {
 			e.target.td.Docu.xmldoc.transformToXPathMode(bxe_config.xslfile)
 		} else {
@@ -252,13 +253,12 @@ function mozile_loaded() {
 	bxe_about_box.addText("Load XML ...");
 	bxe_globals = new bxe_globals();
 	bxe_globals.loadXML(bxe_config.xmlfile);
-
 	
 }
 
 function xml_loaded(xmldoc) {
 	bxe_about_box.addText("Load RelaxNG ...");
-	if (!(bxe_config.validationfile && xmldoc.loadSchema(bxe_config.validationfile,validation_loaded))) {
+	if (!(bxe_config.validationfile && xmldoc.XMLNode.loadSchema(bxe_config.validationfile,validation_loaded))) {
 		bxe_about_box.addText("RelaxNG File was not found");
 	}
 	document.eDOMaddEventListener("toggleSourceMode",bxe_toggleSourceMode,false);
@@ -283,8 +283,8 @@ function xml_loaded(xmldoc) {
 
 function validation_loaded(vdom) {
 	bxe_about_box.addText("Validation Loaded ...");
-	//dump(bxe_config.xmldoc.vdom.getStructure());
-	var vali = bxe_config.xmldoc.validateDocument();
+
+	var vali = bxe_config.xmldoc.XMLNode.validateDocument();
 	if (vali.isError) {
 		bxe_about_box.addText("Document is *not* valid.");
 		//alert(vali.getErrorMessagesAsText());

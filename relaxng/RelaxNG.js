@@ -3,9 +3,7 @@
 DocumentVDOM.prototype.parseRelaxNG = function () {
 	//check if it's a schema file
 	//parse all global elements and create an ElementVDOM object
-	
 	var rootChildren = this.xmldoc.documentElement.childNodes;
-
 	for (var i = 0; i < rootChildren.length; i++) {
 		if (rootChildren[i].isRelaxNGElement("start")) {
 			this.parseStart(rootChildren[i]);
@@ -37,6 +35,7 @@ DocumentVDOM.prototype.parseStart = function(node) {
 	}
 	
 	startElement.parseChildren();
+	dump("RelaxNG is parsed\n");
 
 }
 
@@ -78,7 +77,6 @@ bxe_RelaxNG_nsResolver.prototype.parseNodeName = function(nodename) {
 	
 }
 	
-	
 Node.prototype.__defineGetter__ ("hasRelaxNGNamespace", function() {
 	
 	if (this.namespaceURI == "http://relaxng.org/ns/structure/1.0") {
@@ -90,6 +88,7 @@ Node.prototype.__defineGetter__ ("hasRelaxNGNamespace", function() {
 )
 Node.prototype.isRelaxNGElement = function(nodename) {
 	
+//	dump ("isRelaxNGElement" + this.nodeType  +  " " + this.nodeName + " " + this.hasRelaxNGNamespace + "\n");
 	if (this.nodeType == 1 && this.nodeName == nodename && this.hasRelaxNGNamespace) {
 		return true;
 	} else {
@@ -100,6 +99,7 @@ Node.prototype.isRelaxNGElement = function(nodename) {
 
 NodeVDOM.prototype.parseChildren = function(node) {
 	var childNodes;
+	
 	if (node) {
 		childNodes = node.childNodes;
 	} else {
@@ -107,6 +107,8 @@ NodeVDOM.prototype.parseChildren = function(node) {
 	}
 	var newChoice;
 	var newOneOrMore;
+	
+	
 	for (var i = 0; i < childNodes.length; i++) {
 		if (childNodes[i].isRelaxNGElement("element")) {
 			var newElement = new ElementVDOM(childNodes[i]);
@@ -121,8 +123,10 @@ NodeVDOM.prototype.parseChildren = function(node) {
 		} else if (childNodes[i].isRelaxNGElement("ref")) {
 			//FIXME this can be done smarter... cache the defines.
 			var grammarChild = this.node.ownerDocument.documentElement.childNodes;
+			dump ("ref: " + childNodes[i].getAttribute("name") +"\n");
 			for (var j = 0; j < grammarChild.length; j++) {
 				if (grammarChild[j].isRelaxNGElement("define") && grammarChild[j].getAttribute("name") == childNodes[i].getAttribute("name")) {
+					dump ("define" + grammarChild[j].getAttribute("name") +"\n"); 
 					this.parseChildren(grammarChild[j]);
 				}
 			}
@@ -336,14 +340,18 @@ NodeVDOM.prototype.getStructure = function(level) {
 }
 
 
-Text.prototype.__defineGetter__(
-	"isWhitespaceOnly",
-	function()
-	{
-		if(/\S+/.test(this.nodeValue)) // any non white space visible characters
+XMLNode.prototype.__defineGetter__(
+"isWhitespaceOnly",
+function()
+{
+	if (this.nodeType == 3) {
+		if(/\S+/.test(this._node.nodeValue)) // any non white space visible characters
 			return false;
-
+		
 		return true;
+	} else {
+		return false;
 	}
+}
 );
 
