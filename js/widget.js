@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: widget.js,v 1.64 2003/12/01 08:34:29 chregu Exp $
+// $Id: widget.js,v 1.65 2003/12/03 18:13:33 chregu Exp $
 
 function Widget () {}
 
@@ -488,6 +488,8 @@ function Widget_AboutBox() {
 	htmltext += '<tr><td><a href="http://bitflux.ch">Bitflux GmbH</a> </td><td> (Main Development) </td></tr>';
 	htmltext += '<tr><td><a href="http://playsophy.com">Playsophy</a> </td><td> (<a href="http://mozile.mozdev.org">Mozile/eDOM</a> Development) </td></tr>';
 	htmltext += '<tr><td><a href="http://twingle.mozdev.org">Twingle</a>/Stephan Richter &nbsp;</td><td> (jsdav.js library) </td></tr>';
+	htmltext += '<tr id="okButton" style="display: none" ><td> </td><td><p/><input type="submit" value="OK"/></td></tr>';
+
 	htmltext += '</table>';
 	
 	var abouttext = this.node.innerHTML = htmltext;
@@ -501,12 +503,15 @@ function Widget_AboutBox() {
 	
 }
 Widget_AboutBox.prototype = new Widget();
-Widget_AboutBox.prototype.show = function () {
+Widget_AboutBox.prototype.show = function (okButton) {
 
 	if (navigator.platform == "MacPPC") {
 		this.node.style.MozOpacity = 0.99;
 	} else {
 		this.node.style.MozOpacity = 1;
+	}
+	if (okButton) { 
+		document.getElementById('okButton').style.display = "table-row";
 	}
 	this.draw();
 }

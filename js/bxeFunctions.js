@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.122 2003/12/01 22:47:28 chregu Exp $
+// $Id: bxeFunctions.js,v 1.123 2003/12/03 18:13:33 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -875,7 +875,7 @@ function bxe_draw_widgets() {
 	
 	submenu4.push("About Bitflux Editor",function(e) { 
 		bxe_about_box.setText("");
-		bxe_about_box.show();
+		bxe_about_box.show(true);
 		
 	});
 	

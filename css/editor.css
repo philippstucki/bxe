@@ -216,7 +216,7 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
     width: 300px;
 }
 
-.ModalBox .ModalBoxPane input[type="submit"] , .ModalBoxPane input[type="reset"]{
+.ModalBox .ModalBoxPane input[type="submit"] , .ModalBoxPane input[type="reset"], .AboutBox input[type="submit"] {
     border: dotted black 1px;
     width: 50px;
     margin-right: 10px;
