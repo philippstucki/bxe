@@ -121,8 +121,9 @@ bxe_globals.prototype.loadXML = function(xmlfile) {
 			e.target.td.Docu.xmldoc.transformToXPathMode(bxe_config.xslfile)
 		} else {
 			e.target.td.Docu.xmldoc.insertIntoHTMLDocument();
+			xml_loaded(e.target.td.Docu.xmldoc);
 		}
-		xml_loaded(e);
+	
 	}
 	td.Docu = this;
 	td.load(xmlfile,callback);
@@ -255,9 +256,9 @@ function mozile_loaded() {
 	
 }
 
-function xml_loaded(e) {
+function xml_loaded(xmldoc) {
 	bxe_about_box.addText("Load RelaxNG ...");
-	if (!(bxe_config.validationfile && e.target.td.Docu.xmldoc.loadSchema(bxe_config.validationfile,validation_loaded))) {
+	if (!(bxe_config.validationfile && xmldoc.loadSchema(bxe_config.validationfile,validation_loaded))) {
 		bxe_about_box.addText("RelaxNG File was not found");
 	}
 	document.eDOMaddEventListener("toggleSourceMode",bxe_toggleSourceMode,false);

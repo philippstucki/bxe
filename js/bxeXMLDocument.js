@@ -98,7 +98,7 @@ XMLDocument.prototype.transformToXPathMode = function(xslfile) {
 		var bxe_area = document.getElementById("bxe_area");
 		bxe_area.parentNode.replaceChild(xmldoc,bxe_area);
 		xsltransformdoc.xsldoc.xmldoc.insertIntoHTMLDocument();
-		
+		xml_loaded(xsltransformdoc.xsldoc.xmldoc);
 	}
 	
 }
