@@ -23,7 +23,7 @@ title:first-child {
     margin-top: 0.5em;
 }
 
-.titel, .subtitle, .titel2 {
+.titel, .title, .subtitle, .titel2 {
    font-family: Verdana, Arial, Helvetica, sans-serif;
    font-style: normal;
    color: #333333;
@@ -32,7 +32,7 @@ title:first-child {
    line-height: 20px;
 }
 
-.titel {
+.titel, .title {
    letter-spacing: 1px;
    font-size: 18px;
    line-height: 20px;
