@@ -182,7 +182,11 @@ function AssetToolBxe() {
         
         var sel = window.getSelection();
         sel.selectEditableRange(drawertool.cssr);
-       
+        
+        if (sel != "") {
+            title = sel;
+        }
+         
         var xml = "<asset xmlns=\"http://bitflux.org/doctypes/bx\" src=\""+src+"\" lang=\""+lang+"\" type=\""+type+"\" ";
         xml = xml + "target=\""+target+"\" cssclass=\""+cssClass+"\" >"+title+"</asset>";
         
