@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: NodeVAL.js,v 1.29 2003/12/17 18:23:40 chregu Exp $
+// $Id: NodeVAL.js,v 1.30 2004/01/13 05:04:06 chregu Exp $
 
 const BXE_VALID_NOMESSAGE = 1;
 
@@ -103,12 +103,20 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 				}
 			}
 		} else {
+				var _msg = "";
+				if (ctxt.node.nodeType == 3) {
+						_msg = "#text ";
+					} else { 
+						_msg = ctxt.node.localName +"("+ctxt.node.namespaceURI+ ") ";
+					}
 				if (ctxt.node.parentNode.isAllowedChild(ctxt.node)) {
-					ctxt.setErrorMessage(ctxt.node.localName +"("+ctxt.node.namespaceURI+ ") is not allowed at this position as child of  " + this.localName );
+					
+					_msg += "is not allowed at this position as child of  " + this.localName ;
 				}
 				else {
-					ctxt.setErrorMessage(ctxt.node.localName +"("+ctxt.node.namespaceURI+ ")"+ " is not allowed as child of  " + this.localName +"("+this.namespaceURI+ ")");
+					_msg += " is not allowed as child of  " + this.localName +"("+this.namespaceURI+ ")";
 				}
+				ctxt.setErrorMessage(_msg);
 		}
 		//debug ("---------");
 	} while (ctxt.next())

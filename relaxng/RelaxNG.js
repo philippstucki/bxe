@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: RelaxNG.js,v 1.37 2003/11/18 21:41:10 chregu Exp $
+// $Id: RelaxNG.js,v 1.38 2004/01/13 05:04:06 chregu Exp $
 
 
 const RELAXNGNS= "http://relaxng.org/ns/structure/1.0";
@@ -811,6 +811,7 @@ function TextVDOM(node ) {
 	this.node = node;
 	this.type = "RELAXNG_TEXT";
 	this.nodeName = "RELAXNG_TEXT";
+	this.localName = "#text";
 }
 
 TextVDOM.prototype.isValid = function(ctxt) {
