@@ -131,10 +131,15 @@ Widget_MenuPopup.prototype.draw = function() {
 Widget_MenuPopup.prototype.addSeparator = function () {
 	//don't do a separator, if there are no elements in the popup
 	if (this.MenuItems.length > 0) {
-		var sep  = document.createElement("div");
-		sep.setAttribute("class","MenuItemSeparator");
-		sep.appendChild(document.createTextNode("------"));
-		this.node.appendChild(sep);
+		// don't add a menusitemseparator if "preVsibling" is already one
+		if (this.node.lastChild.getAttribute("class")!= "MenuItemSeparator") {
+		
+			var sep  = document.createElement("div");
+			sep.setAttribute("class","MenuItemSeparator");
+			sep.appendChild(document.createTextNode("------"));
+		
+			this.node.appendChild(sep);
+		}
 	}
 }
 
@@ -630,7 +635,7 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 		menui.Modal = this.Popup.EditAttributes;
 		menui.MenuPopup._node = node;
 	}*/
-	
+	eDOMEventCall("ContextPopup",node, this.Popup);
 	var sel  = window.getSelection();
 	var cssr = sel.getEditableRange();
 	//var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
@@ -655,7 +660,7 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 			}
 	} 
 	//this.Popup.insertAllowedChildren(node);
-	eDOMEventCall("ContextPopup",node, this.Popup);
+	
 	this.Popup._node = node;
 	this.Popup.addSeparator();
 	node = node.XMLNode;

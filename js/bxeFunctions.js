@@ -453,6 +453,20 @@ function bxe_ContextPopup(e) {
 		var delNode = widget.MenuPopup.MainNode;
 		delNode.copy();
 	});
+	var clip = mozilla.getClipboard();
+	if (clip._clipboard) {
+		if (node.parentNode.isAllowedChild(clip._clipboard.firstChild.namespaceURI, clip._clipboard.firstChild.localName)) {
+		popup.addMenuItem("Append Clipboard Node", function (e) {
+			var widget = e.currentTarget.Widget;
+			var appNode = widget.MenuPopup.MainNode;
+			var clip = mozilla.getClipboard();
+			var clipNode = clip.getData(MozClipboard.TEXT_FLAVOR);
+		
+			eDOMEventCall("appendNode",document,{"appendToNode":appNode, "node": clipNode.firstChild})
+		});
+		}
+
+	}
 	
 	popup.addMenuItem("Delete Node", function (e) {
 		var widget = e.currentTarget.Widget;
@@ -464,11 +478,11 @@ function bxe_ContextPopup(e) {
 		_upNode.updateXMLNode();
 		
 	});
-	
+	popup.addSeparator();
 	if (node.localName == "td") {
 		
 		// merge right
-		popup.addSeparator();
+	//	popup.addSeparator();
 		
 		
 		//split
@@ -537,7 +551,7 @@ function bxe_ContextPopup(e) {
 		});
 		
 		
-		
+		popup.addSeparator();
 	}
 	popup.MainNode = node;
 	} catch (e) { bxe_catch_alert(e);}
@@ -1002,14 +1016,8 @@ function bxe_InsertObject() {
 	if (!bxe_checkIsAllowedChild(XHTMLNS,"object",sel)) {
 		return false;
 	}
-	var cssr = sel.getEditableRange();
-	var lines = cssr.lines;
-	var nextSib = lines[0].container;
-	if (nextSib) { 
-		eDOMEventCall("appendNode",document,{"appendToNode":nextSib.XMLNode, "localName": "p", "namespaceURI": XHTMLNS, "noPlaceholderText" : true})
-		eDOMEventCall("appendChildNode",document,{"appendToNode":nextSib.nextSibling.XMLNode, "localName": "object", "namespaceURI": XHTMLNS})
-		
-	}
+	var object = documentCreateXHTMLElement("object");
+	sel.insertNode(object);
 }
 
 function bxe_InsertImage() {
@@ -1047,7 +1055,7 @@ function bxe_checkForSourceMode(sel) {
 	return false;
 }
 
-function bxe_checkIsAllowedChild (namespaceURI, localName, sel) {
+function bxe_checkIsAllowedChild (namespaceURI, localName, sel, noAlert) {
 	if (!sel) {
 		sel = window.getSelection();
 	}
@@ -1061,7 +1069,9 @@ function bxe_checkIsAllowedChild (namespaceURI, localName, sel) {
 	if (parentnode.XMLNode.isAllowedChild(namespaceURI, localName)) {
 		return true;
 	} else {
-		alert (localName + " is not allowed as child of " + parentnode.XMLNode.localName);
+		if (!noAlert) {
+			alert (localName + " is not allowed as child of " + parentnode.XMLNode.localName);
+		}
 		return false;
 	}
 }
