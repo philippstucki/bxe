@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeLoader.js,v 1.141 2003/12/01 02:30:06 chregu Exp $
+// $Id: bxeLoader.js,v 1.142 2003/12/01 09:02:14 chregu Exp $
 
 const BXE_VERSION = "0.1alpha";
 const BXE_BUILD = "200312010330"
@@ -56,6 +56,7 @@ var bxe_format_list = null;
 var bxe_context_menu = null;
 var bxe_delayedUpdate = false;
 var eDOM_bxe_mode = true; 
+var bxe_editable_page = true;
 
 var startTimer = new Date();
 
@@ -223,8 +224,6 @@ function xml_loaded(xmldoc) {
 	document.eDOMaddEventListener("Undo",function(e) { bxe_history_undo()}, false);
 	document.eDOMaddEventListener("Redo",function(e) { bxe_history_redo()}, false);
 
-	document.addEventListener("contextmenu",bxe_ContextMenuEvent, false);
-
 	//document.eDOMaddEventListener("NodeInsertedParent",bxe_NodeInsertedParent, false);
 	document.eDOMaddEventListener("NodeInsertedBefore",bxe_NodeInsertedBefore,false);
 	document.eDOMaddEventListener("NodeBeforeDelete",bxe_NodeBeforeDelete,false);
@@ -236,6 +235,8 @@ function xml_loaded(xmldoc) {
 	document.eDOMaddEventListener("NodePositionChanged",bxe_NodePositionChanged,false);
 	
 	document.eDOMaddEventListener("ContextPopup",bxe_ContextPopup,false);
+	document.addEventListener("contextmenu",bxe_ContextMenuEvent, false);
+	
 	bxe_context_menu = new Widget_ContextMenu();
 }
 
@@ -246,6 +247,7 @@ function validation_loaded(vdom) {
 	if (!vali) {
 		bxe_about_box.addText("Document is *not* valid.");
 		//alert(vali.getErrorMessagesAsText());
+		bxe_disableEditablePage();
 	}
 	else {
 		bxe_about_box.addText("<br/>Document is valid.");

@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.115 2003/12/01 08:08:16 chregu Exp $
+// $Id: bxeFunctions.js,v 1.116 2003/12/01 09:02:14 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -960,7 +960,7 @@ function MouseClickEvent(e) {
 	
 	var target = e.target.parentElement;
 
-	if(target.userModifiable) {
+	if(target.userModifiable && bxe_editable_page) {
 		return bxe_updateXPath(e.target);
 	}
 	return true;
@@ -1379,12 +1379,21 @@ function bxe_InternalChildNodesAttrChanged(e) {
 }
 
 function bxe_registerKeyHandlers() {
-	
-	document.addEventListener("keypress", keyPressHandler, true);
+	if (bxe_editable_page) {
+		document.addEventListener("keypress", keyPressHandler, true);
 //key up and down handlers are needed for interapplication copy/paste without having native-methods access
 //if you're sure you have native-methods access you can turn them off
-	document.addEventListener("keydown", keyDownHandler, true);
-	document.addEventListener("keyup", keyUpHandler, true);
+		document.addEventListener("keydown", keyDownHandler, true);
+		document.addEventListener("keyup", keyUpHandler, true);
+	}
+}
+
+function bxe_disableEditablePage() {
+	
+	bxe_deregisterKeyHandlers();
+	bxe_editable_page = false;
+	document.removeEventListener("contextmenu",bxe_ContextMenuEvent, false);
+	
 }
 
 function bxe_deregisterKeyHandlers() {
