@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: NodeVAL.js,v 1.28 2003/12/01 22:24:21 chregu Exp $
+// $Id: NodeVAL.js,v 1.29 2003/12/17 18:23:40 chregu Exp $
 
 const BXE_VALID_NOMESSAGE = 1;
 
@@ -232,18 +232,23 @@ XMLNode.prototype.__defineGetter__(
 	"vdom", function () {
 		if (typeof this._vdom == "undefined" || !this._vdom) {
 			// if documentElement
-			if (this.parentNode.nodeType == 9) {
-				if (this.localName == this.ownerDocument.vdom.firstChild.localName) {
-					this._vdom = this.ownerDocument.vdom.firstChild;
+			if (this.parentNode ) {
+				if (this.parentNode.nodeType == 9) {
+					if (this.localName == this.ownerDocument.vdom.firstChild.localName) {
+						this._vdom = this.ownerDocument.vdom.firstChild;
+					} else {
+						alert(" Document has root node named " + this.localName + "\n RelaxNG expects  " +this.ownerDocument.vdom.firstChild.nodeName);
+						this._vdom = null;
+					}
+				} else if (this.parentNode.vdom) {
+					this._vdom = this.parentNode.vdom.getVdomForChild(this);
 				} else {
-					alert(" Document has root node named " + this.localName + "\n RelaxNG expects  " +this.ownerDocument.vdom.firstChild.nodeName);
-					this._vdom = null;
+					return null;
 				}
-			} else if (this.parentNode.vdom) {
-				this._vdom = this.parentNode.vdom.getVdomForChild(this);
 			} else {
 				return null;
 			}
+			
 		}
 		return this._vdom;
 	}
