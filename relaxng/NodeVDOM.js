@@ -7,18 +7,8 @@ function NodeVDOM (node) {
 
 
 NodeVDOM.prototype.getVdomForChild = function (child ) {
-	var ctxt = new ContextVDOM(child.parentNode,this);
-	ctxt.node = child;
-	var vdom = this.firstChild;
-	while (vdom) {
-		//dump (child.nodeName + " = " + vdom.nodeName + "\n");
-		if (vdom.isValid(ctxt)) {
-			return vdom;
-		}
-		vdom = vdom.nextSibling;
-	}
-
-	return null;
+	var ctxt = child.parentNode._isNodeValid(false);
+	return child._vdom;
 }
 
 NodeVDOM.prototype.allowedElements = function() {

@@ -16,7 +16,6 @@ Attr.prototype._isNodeValid = function(wFValidityCheckLevel ) {
 
 XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 	// if it's a root node.
-//	dump ("Node._isNodeValid");
 	if(this.parentNode && this.parentNode.nodeType == 9) {
 		if (!this.vdom.canBeRoot) {
 			alert("root element is not allowed to be root");
@@ -27,7 +26,6 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 		// TODO: test if this node is valid, we do only check childrens for the moment..	
 		}
 	}
-	
 	var ctxt = new ContextVDOM(this,this.vdom);
 	if (ctxt.node) {
 	do {
@@ -44,7 +42,7 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 		}
 		
 		if (  ctxt.isValid()) {
-			if(ctxt.node.hasChildNodes()) {
+			if(ctxt.node.hasChildNodes() && deep) {
 				var retctxt = ctxt.node._isNodeValid(deep,  wFValidityCheckLevel )
 				if (retctxt.isError) {
 					ctxt.addErrorMessages(retctxt.errormsg);
@@ -153,7 +151,6 @@ XMLNode.prototype.__defineGetter__(
 			// if documentElement
 			if (this.parentNode.nodeType == 9) {
 				if (this.localName == this.ownerDocument.vdom.firstChild.localName) {
-					
 					this._vdom = this.ownerDocument.vdom.firstChild;
 				} else {
 					alert(" Document has root node named " + this.localName + "\n RelaxNG expects  " +this.ownerDocument.vdom.firstChild.nodeName);
@@ -161,6 +158,7 @@ XMLNode.prototype.__defineGetter__(
 				}
 			} else {
 				this._vdom = this.parentNode.vdom.getVdomForChild(this);
+				 
 			}
 		}
 		return this._vdom;
