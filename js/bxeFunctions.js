@@ -614,7 +614,6 @@ function bxe_ContextPopup(e) {
 				eDOMEventCall("appendNode",document,{"appendToNode":appNode, "node": clipNode.firstChild})
 			});
 		}
-		
 	}
 	
 	popup.addMenuItem("Delete "  + e.target.XMLNode.nodeName  + " Element", function (e) {
@@ -634,6 +633,38 @@ function bxe_ContextPopup(e) {
 //		_upNode.updateXMLNode();
 		
 	});
+
+	if (node.previousSibling) {
+		popup.addMenuItem("Move up", function (e) {
+			var widget = e.currentTarget.Widget;
+			var appNode = widget.MenuPopup.MainNode;
+			var prevSibling = appNode.previousSibling;
+			while (prevSibling && prevSibling._node.nodeType != 1) {
+				prevSibling = prevSibling.previousSibling;
+			}
+			if (prevSibling) {
+				appNode.parentNode.insertBefore(appNode, prevSibling);
+			}
+		});
+	}
+	
+	if (node.nextSibling) {
+		popup.addMenuItem("Move down", function (e) {
+			var widget = e.currentTarget.Widget;
+			var appNode = widget.MenuPopup.MainNode;
+			var nextSibling = appNode.nextSibling;
+			while (nextSibling && nextSibling._node.nodeType != 1) {
+				nextSibling = nextSibling.nextSibling;
+			}
+			if (nextSibling) {
+				appNode.parentNode.insertAfter(appNode, nextSibling);
+			}
+		});
+	}
+	
+
+
+
 	popup.addSeparator();
 	if (node.localName == "td" || node.localName == "th") {
 		
@@ -829,9 +860,7 @@ function bxe_appendChildNode(e) {
 				}
 			} else {
 				var ac = newNode.allowedChildren;
-				dump("..."+ac.length);
 				if (ac.length == 1)  {
-					debug("automatically append new Node " + ac[0].nodeName);
 					eDOMEventCall("appendChildNode",document,{"appendToNode": newNode, "localName":ac[0].nodeName,"namespaceURI":ac[0].namespaceURI});
 				} else if (ac.length > 1) {
 					bxe_context_menu.buildElementChooserPopup(newNode,ac);
@@ -842,7 +871,6 @@ function bxe_appendChildNode(e) {
 				}
 			}
 		}
-	
 }
 
 

@@ -618,9 +618,14 @@ Widget_StatusBar.prototype.buildPopup = function (node) {
 		this.Popup.initTitle(node.XMLNode.localName);
 
 		
-		if (node.XMLNode.isInHTMLDocument() && !node.XMLNode.xmlBridge) {
-			eDOMEventCall("ContextPopup",node,this.Popup);
-			this.Popup.appendAllowedSiblings(node);
+		if (node.XMLNode.isInHTMLDocument()) {
+			if (!node.XMLNode.xmlBridge) {
+				eDOMEventCall("ContextPopup",node,this.Popup);
+				this.Popup.appendAllowedSiblings(node);
+			} else {
+				eDOMEventCall("ContextPopup",node,this.Popup);
+				this.Popup.appendAllowedChildren(node);
+			}
 		}
 		this.Popup.draw();
 		this.Popup.position(node.offsetParent.offsetLeft +node.offsetLeft,  node.offsetParent.offsetTop + node.offsetTop -this.Popup.node.offsetHeight ,"fixed");
@@ -700,7 +705,6 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 				}
 			}
 	} 
-	//this.Popup.insertAllowedChildren(node);
 	
 	this.Popup._node = node;
 	this.Popup.addSeparator();
@@ -766,6 +770,35 @@ Widget_MenuPopup.prototype.appendAllowedSiblings = function( node) {
 		}
 		}
 }
+
+
+Widget_MenuPopup.prototype.appendAllowedChildren = function( node) {
+	var ac = node.XMLNode.allowedChildren;
+
+	function nodeSort(a,b) {
+		if (a.nodeName > b.nodeName) {
+			return 1;
+		} else {
+			return -1;
+		}
+	}
+	
+	ac.sort(nodeSort);
+	
+	for (i = 0; i < ac.length; i++) {
+		if (!bxe_config.dontShowInContext[ac[i].namespaceURI + ":" +ac[i].localName] && ac[i].nodeType != 3 ) {
+				var menui = this.addMenuItem("Insert " + ac[i].nodeName, function(e) { 
+					var widget = e.currentTarget.Widget;
+					eDOMEventCall("appendChildNode",document,{"appendToNode": widget.AppendToNode, "localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI})
+				
+				});
+				menui.InsertLocalName = ac[i].localName;
+				menui.InsertNamespaceURI = ac[i].namespaceURI;
+				menui.AppendToNode = node.XMLNode;
+		}
+		}
+}
+
 
 Widget_ModalBox.prototype = new Widget();
 
