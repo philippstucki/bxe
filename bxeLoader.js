@@ -18,7 +18,7 @@
 * ***** END LICENSE BLOCK ***** */
 
 const BXE_VERSION = "0.1alpha";
-const BXE_BUILD = "200311150330"
+const BXE_BUILD = "200311160330"
 
 const E_FATAL = 1;
 
