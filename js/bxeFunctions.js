@@ -1331,6 +1331,9 @@ function bxe_checkIsAllowedChild(namespaceURI, localName, sel, noAlert) {
 }
 
 function bxe_checkIsAllowedChildOfNode(namespaceURI,localName, node, noAlert) {
+	if (localName == "#text") {
+		localName = null;
+	}
 	if (localName == null || node.XMLNode.isAllowedChild(namespaceURI, localName) ) {
 		return true;
 	} else {
