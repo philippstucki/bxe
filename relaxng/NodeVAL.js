@@ -69,7 +69,11 @@ Node.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 
 function ContextVDOM (node,vdom) {
 	this.node = node.firstChild;
-	this.vdom = vdom.firstChild;
+    if (vdom && vdom.firstChild) {
+    	this.vdom = vdom.firstChild;
+    } else {
+        this.vdom = null;
+    }
 	this.isError = false;
 	this.errormsg = new Array();
 	

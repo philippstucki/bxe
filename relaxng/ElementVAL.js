@@ -7,7 +7,7 @@ Element.prototype.__defineGetter__(
 	if (ctxt.node) {
 		do {
 			subac = ctxt.vdom.allowedElements()
-			if (subac.nodeName) {
+			if (subac && subac.nodeName) {
 				ac.push(subac);
 			} else if (subac) {
 				for (var i = 0; i < subac.length; i++) {

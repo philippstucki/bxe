@@ -65,7 +65,7 @@ bxe_RelaxNG_nsResolver.prototype.parseNodeName = function(nodename) {
 	var ret = new Object;
 	ret.nodeName = nodename;
 	
-	if (spli[1]) {
+	if (spli.length > 1) {
 		ret.localName = spli[1];
 		ret.namespaceURI = this.lookupNamespaceURI(spli[0]);
 		ret.prefix = spli[0];

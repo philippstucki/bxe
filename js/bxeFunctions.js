@@ -315,32 +315,32 @@ function bxe_draw_widgets() {
 	submenu.push("Exit",function() {eDOMEventCall("Exit",document);});
 	menubar.addMenu("File",submenu);
 
-	var submenu = new Array("Undo",bxe_not_yet_implemented,"Redo",bxe_not_yet_implemented);
-	menubar.addMenu("Edit",submenu);
+	var submenu2 = new Array("Undo",bxe_not_yet_implemented,"Redo",bxe_not_yet_implemented);
+	menubar.addMenu("Edit",submenu2);
 	
-	var submenu = new Array("Count Div", function(e) { alert(document.getElementsByTagName("div").length);})
-	submenu.push("Show XML Document",function(e) {alert(bxe_getXmlDocument());})
-	menubar.addMenu("Debug",submenu);
+	var submenu3 = new Array("Count Div", function(e) { alert(document.getElementsByTagName("div").length);})
+	submenu3.push("Show XML Document",function(e) {alert(bxe_getXmlDocument());})
+	menubar.addMenu("Debug",submenu3);
 	
 	
-	var submenu = new Array();
-	submenu.push("Help",function (e) { 
+	var submenu4 = new Array();
+	submenu4.push("Help",function (e) { 
 		bla = window.open("http://wiki.bitfluxeditor.org","help","width=800,height=600,left=0,top=0");
 		bla.focus();
 	
 	});
-	submenu.push("Website",function (e) { 
+	submenu4.push("Website",function (e) { 
 		bla = window.open("http://www.bitfluxeditor.org","help","width=800,height=600,left=0,top=0");
 		bla.focus();
 	
 	});
-	submenu.push("About Bitflux Editor",function(e) { 
+	submenu4.push("About Bitflux Editor",function(e) { 
 		bxe_about_box.setText("");
 		bxe_about_box.show();
 		
 	});
 	
-	menubar.addMenu("Help",submenu);
+	menubar.addMenu("Help",submenu4);
 	
 	menubar.draw();
 	
@@ -416,11 +416,11 @@ function bxe_ContextMenuEvent(e) {
 	{
 		return;
 	}
-	
+	var no ;
 	if (cssr.startContainer.nodeType == Node.TEXT_NODE) {
-		var no = cssr.startContainer.parentNode;
+		no = cssr.startContainer.parentNode;
 	} else {
-		var no = cssr.startContainer;
+		no = cssr.startContainer;
 	}
 	bxe_context_menu.show(e,no);
 	e.stopPropagation();

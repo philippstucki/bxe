@@ -34,7 +34,7 @@ XMLNode.prototype.setContent = function (text) {
 }
 
 XMLNode.prototype.createNS = function (namespaceURI, localName) {
-
+    var htmlelementname;
 	if (namespaceURI != XHTMLNS) {
 		htmlelementname = "span"
 		this._htmlnode = document.createElement(htmlelementname);
@@ -83,7 +83,7 @@ XMLNode.prototype.__defineGetter__(
 	"parentNode",
 	function()
 	{
-		if (this._htmlnode.AreaInfo ) {
+		if (this._htmlnode && this._htmlnode.AreaInfo ) {
 			return this._xmlnode.parentNode;
 		} else { 
 			return this._htmlnode.parentNode.XMLNode;
