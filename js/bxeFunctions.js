@@ -41,9 +41,9 @@ function toggleTagMode_bxe(e) {
 	
 	if (!editableArea._TagMode) {
 		createTagNameAttributes(editableArea);
-		var x = document.styleSheets[0];
-		x.insertRule('#' + editableArea.id + ' *:before {content: attr(_edom_tagnameopen); margin-left: 2px; margin-right: 2px; font: 9px Geneva, Verdana, sans-serif; padding: 0px 1px 0 px 1px; border: 1px solid black; background: #888;  color: #FFF;}',x.cssRules.length);
-		x.insertRule('#' + editableArea.id + ' *:after {content:  attr(_edom_tagnameclose) ; margin-left: 2px; margin-right: 2px; font: 9px Geneva, Verdana, sans-serif; padding: 0px 1px 0 px 1px; border: 1px solid black; background: #888;  color: #FFF;}',x.cssRules.length);
+		//var x = document.styleSheets[0];
+		//x.insertRule('#' + editableArea.id + ' *:before {content: attr(_edom_tagnameopen); margin-left: 2px; margin-right: 2px; font: 9px Geneva, Verdana, sans-serif; padding: 0px 1px 0 px 1px; border: 1px solid black; background: #888;  color: #FFF;}',x.cssRules.length);
+		//x.insertRule('#' + editableArea.id + ' *:after {content:  attr(_edom_tagnameclose) ; margin-left: 2px; margin-right: 2px; font: 9px Geneva, Verdana, sans-serif; padding: 0px 1px 0 px 1px; border: 1px solid black; background: #888;  color: #FFF;}',x.cssRules.length);
 		editableArea.addEventListener("DOMNodeInserted",addTagnames_bxe,false);
 		editableArea.addEventListener("DOMNodeRemoved",addTagnames_bxe,false);
 		editableArea.addEventListener("DOMAttrModified",addTagnames_bxe,false);
@@ -61,12 +61,14 @@ function toggleTagMode_bxe(e) {
 		editableArea.removeEventListener("DOMNodeRemoved",addTagnames_bxe,false);
 		
 		do {
-			node.removeAttribute("_edom_tagnameopen");
+			if (node.hasChildNodes()) {
+				node.removeAttribute("_edom_tagnameopen");
+			}
 			node.removeAttribute("_edom_tagnameclose");
-		}while(node =   walker.nextNode() )
-		var x = document.styleSheets[0];
-		x.deleteRule(x.cssRules.length-1);
-		x.deleteRule(x.cssRules.length-1);
+		} while(node =   walker.nextNode() )
+		//var x = document.styleSheets[0];
+		//x.deleteRule(x.cssRules.length-1);
+		//x.deleteRule(x.cssRules.length-1);
 		editableArea._TagMode = false;
 		editableArea.AreaInfo.TagModeMenu.Checked = false;
 		editableArea.AreaInfo.NormalModeMenu.Checked = true;
@@ -129,23 +131,12 @@ function createTagNameAttributes(startNode) {
 			var newNode = node.convertToXMLNode(document);
 			parentN.removeAllChildren();
 			parentN.appendChild(newNode);
-			
-			var lastChild = newNode;
-			while ( lastChild.firstChild) {
-				lastChild = lastChild.firstChild;
-			}
-			//node.xmlNodeNew = lastChild;
-			try {
-				lastChild.appendChild(xmldoc.createTextNode("::"));
-				var xmlstring = xmldoc.saveChildrenXML(parentN,true).str.split("::");
-				node.setAttribute("_edom_tagnameopen", xmlstring[0]);
+			var xmlstring =  parentN.getBeforeAndAfterString(node.hasChildNodes());
+			node.setAttribute("_edom_tagnameopen", xmlstring[0]);
+			if (xmlstring[1]) {
 				node.setAttribute("_edom_tagnameclose", xmlstring[1]);
-			} catch(e) {
-			    var xmlstring = xmldoc.saveChildrenXML(parentN,true).str;
-				node.setAttribute("_edom_tagnameopen", xmlstring);
 			}
-			
-			node.XMLNode.setNode(lastChild);
+			node.XMLNode.setNode(xmlstring[2]);
 	} while(node = walker.nextNode() )
 }
 

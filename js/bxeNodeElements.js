@@ -35,6 +35,11 @@ Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 					var newElement = document.createElement("span");
 					newElement.setAttribute("class",node.localName);
 					newElement.XMLNode.localName = node.localName;
+					
+				}
+				if (! node.hasChildNodes() ) {
+						var xmlstring = node.getBeforeAndAfterString(false,true);
+						newElement.setAttribute("_edom_tagnameopen",xmlstring[0]);
 				}
 				if (node.hasAttributes()) {
 					var attribs = node.attributes;
@@ -327,6 +332,36 @@ Element.prototype.SplitClasses = function() {
 			this.parentNode.replaceChild(newElement,this);
 		}
 	}
+	
+}
+
+Element.prototype.getBeforeAndAfterString = function (hasChildNodes, noParent) {
+	
+	var lastChild = this;
+	while ( lastChild.firstChild) {
+			lastChild = lastChild.firstChild;
+	}
+	try {
+		if (hasChildNodes == false) {
+			var xmlstring = new Array();
+			if (noParent) {
+				xmlstring[0] = this.ownerDocument.saveXML(this);
+			} else {
+				xmlstring[0] = this.ownerDocument.saveChildrenXML(this,true).str;
+			}
+			xmlstring[1] = null;
+		} else {
+			lastChild.appendChild(this.ownerDocument.createTextNode("::"));
+			var xmlstring = this.ownerDocument.saveChildrenXML(this,true).str.split("::");
+		}
+	} catch(e) {
+		var xmlstring = new Array();
+		xmlstring[0] = this.ownerDocument.saveChildrenXML(this,true).str;
+		xmlstring[1] = null;
+	}
+	xmlstring[2] = lastChild;
+
+	return xmlstring;
 	
 }
 

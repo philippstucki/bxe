@@ -49,7 +49,7 @@ function documentSaveXML(snode)
 	//create a new XMLSerializer
 	var objXMLSerializer = new XMLSerializer();
 	//get the XML string
-	//snode.fixNamespaces();
+	snode.fixNamespaces();
 	var strXML = objXMLSerializer.serializeToString(snode);
     //strXML= strXML.replace(/(<\/*)xhtml:/g,"$1");
 	//strXML= strXML.replace(/xmlns:xhtml/g,"xmlns");

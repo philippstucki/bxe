@@ -259,7 +259,28 @@ table.beauty  {
     
 }
 
+[_edom_tagnameopen]:before {
+    content: attr(_edom_tagnameopen); 
+    margin-left: 2px; 
+    margin-right: 2px; 
+    font: 9px Geneva, Verdana, sans-serif; 
+    padding: 0px 1px 0 px 1px; 
+    border: 1px solid black; 
+    background: #888;  
+    color: #FFF;
+}
 
+[_edom_tagnameclose]:after {
+ content:  attr(_edom_tagnameclose) ;
+ margin-left: 2px;
+ margin-right: 2px;
+ font: 9px Geneva, Verdana, sans-serif;
+ padding: 0px 1px 0 px 1px;
+ border: 1px solid black;
+ background: #888;
+  color: #FFF;
+}
+		
 body {
     margin-top: 60px;
     }

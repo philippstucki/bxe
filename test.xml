@@ -24,20 +24,20 @@
         <body>
                 <unizh:parenttitle/>
  <!--           <h1>Headline 1</h1> wird durch dc:title eingefuellt -->
-                <unizh:anchor/>
+                <anchor/>
                 <p> Paragraph</p>
                 <h2>Styles (headline 2)</h2>
-                <p>Different text styles can be used: <b>bold</b> or <i>italic</i> or
+                <p>Different <b>text style</b>s can be used: <b>bold</b> or <i>italic</i> or
                 <small>small</small></p>
-                <p>There is also an element <unizh:attention>attention"</unizh:attention>.</p>
+                <p>There is also an element <attention>attdddention"</attention>.</p>
                 <p>Links can be set to <a href="http://www.unizh.ch/">external resources</a>
                 as well as to <a href="/studium/mobilitaet/sokrates.html">internal
                 pages</a>.</p>
-                <p>There are also markups: <unizh:attention>warning</unizh:attention> and cite</p>
-                 <object src="http://www.unizh.ch/img_uni/unilogo.gif" alt="Logo der Universität Zürich">
+                <p>There are also markups: <attention>warning</attention> and cite</p>
+                 <lala src="http://www.unizh.ch/img_uni/unilogo.gif" alt="Logo der Universität Zürich">
                         <lenya:caption>Caption</lenya:caption>
                         <lenya:producer>Author</lenya:producer>
-                </object>
+                </lala>
                 <lenya:asset src="anmeldeformular.pdf" mime-type="application/pdf">
                         <lenya:asset-title>Anmeldeformular für den Sommerkurs</lenya:asset-title>
                 </lenya:asset>
@@ -72,6 +72,6 @@
                         <li>This is an ordered list</li>
                         <li>The xml follows the xhtml standard</li>
                 </ol>
-                <unizh:index abstracts="true"/>
+                <index abstracts="true"/>
         </body>
 </unizh:content-document>
