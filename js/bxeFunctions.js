@@ -560,8 +560,24 @@ function bxe_appendNode(e) {
 		if (cb ) {
 			bxe_doCallback(cb, newNode);
 		} else {
-			newNode.setContent("#" + e.additionalInfo.localName + " ");
-
+			debug ("check can Have Text");
+			var cHT  =  newNode.canHaveText;
+			debug("can Have Text? " + cHT);
+			if (cHT) {
+				newNode.setContent("#" + e.additionalInfo.localName + " ");
+			} else {
+				var ac = newNode.allowedChildren;
+				if (ac.length == 1)  {
+					debug("automatically append new Node " + ac[0].nodeName);
+					eDOMEventCall("appendChildNode",document,{"appendToNode": newNode, "localName":ac[0].nodeName,"namespaceURI":ac[0].namespaceURI});
+				} else if (ac.length > 1) {
+					bxe_context_menu.buildElementChooserPopup(newNode,ac);
+				}
+				else {
+					var xmlstring = newNode.getBeforeAndAfterString(false,true);
+					newNode.setAttribute("_edom_tagnameopen",xmlstring[0]);
+				}
+			}
 		}
 		
 	}
@@ -577,6 +593,40 @@ function bxe_appendNode(e) {
 	}
 		
 }
+
+
+function bxe_appendChildNode(e) {
+		var aNode = e.additionalInfo.appendToNode;
+		var newNode = new XMLNodeElement(e.additionalInfo.namespaceURI,e.additionalInfo.localName, 1 ) ;
+		aNode.appendChild(newNode);
+		debug("valid? : " + newNode.isNodeValid());
+		var cb = bxe_getCallback(e.additionalInfo.localName, e.additionalInfo.namespaceURI);
+		if (cb ) {
+			bxe_doCallback(cb, newNode);
+		} else {
+			debug ("check can Have Text");
+			var cHT  =  newNode.canHaveText;
+			if (cHT) {
+				newNode.setContent("#" + e.additionalInfo.localName + " ");
+			} else {
+				var ac = newNode.allowedChildren;
+				dump("..."+ac.length);
+				if (ac.length == 1)  {
+					debug("automatically append new Node " + ac[0].nodeName);
+					eDOMEventCall("appendChildNode",document,{"appendToNode": newNode, "localName":ac[0].nodeName,"namespaceURI":ac[0].namespaceURI});
+				} else if (ac.length > 1) {
+					bxe_context_menu.buildElementChooserPopup(newNode,ac);
+				}
+				else {
+					var xmlstring = newNode.getBeforeAndAfterString(false,true);
+					newNode.setAttribute("_edom_tagnameopen",xmlstring[0]);
+				}
+			}
+		}
+	
+}
+
+
 
 function bxe_changeLinesContainer(e) {
 	var nodeParts = e.additionalInfo.split("=");
@@ -1225,5 +1275,13 @@ function bxe_validationAlert(messages) {
 function bxe_getDirPart(path) {
 	
 	return path.substring(0,path.lastIndexOf("/") + 1);
+}
+
+function bxe_nodeSort(a,b) {
+	if (a.nodeName > b.nodeName) {
+		return 1;
+	} else {
+		return -1;
+	}
 }
 

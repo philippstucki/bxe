@@ -84,12 +84,12 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 				}
 			}
 		} else {
-				/*if (ctxt.node.parentNode.isAllowedChild(ctxt.node)) {
+				if (ctxt.node.parentNode.isAllowedChild(ctxt.node)) {
 					ctxt.setErrorMessage(ctxt.node.localName +"("+ctxt.node.namespaceURI+ ") is not allowed at this position as child of  " + this.localName );
 				}
-				else {*/
+				else {
 					ctxt.setErrorMessage(ctxt.node.localName +"("+ctxt.node.namespaceURI+ ")"+ " is not allowed as child of  " + this.localName +"("+this.namespaceURI+ ")");
-				//}
+				}
 		}
 		//debug ("---------");
 	} while (ctxt.next())
@@ -168,20 +168,13 @@ ContextVDOM.prototype.nextVDOM = function() {
 	var startVdom =this.vdom;
 	var nextSib = this.vdom.getNextSibling(this);
 	if (nextSib) {
-		debug("nextVDOM " + nextSib.nodeName);
-		
-		debug("... " +  nextSib.name);
-		debug("=> " + this.node.nodeName);
 		this.vdom = nextSib;
 	} /*else if (this.vdom.parentNode && this.vdom.parentNode.nodeName == "RELAXNG_DEFINE") {
 		debug ("nextVDOM parent DEFINE " + this.vdom.nodeName + this.vdom.parentNode.name);
 		return null;
 	} */else {
-		debug("nextVDOM == null");
-		return null;
+			return null;
 	}
-
-
 	return this.vdom;
 }
 

@@ -326,6 +326,7 @@ NodeVDOM.prototype.parseChildren = function(node) {
 	
 	
 	for (var i = 0; i < childNodes.length; i++) {
+		if (childNodes[i].nodeType != 1) { continue;}
 		if (childNodes[i].isRelaxNGElement("element")) {
 			var newElement = new ElementVDOM(childNodes[i]);
 			var nsParts = rng_nsResolver.parseNodeNameOnElement(childNodes[i]);
@@ -364,11 +365,8 @@ NodeVDOM.prototype.parseChildren = function(node) {
 			newOneOrMore = new OneOrMoreVDOM(childNodes[i]);
 			this.appendChild(newOneOrMore)
 			newOneOrMore.parseChildren(childNodes[i]);
-			
-
 		} else if (childNodes[i].isRelaxNGElement("text")) {
 			this.appendChild(new TextVDOM(childNodes[i]));
-
 		} else if (childNodes[i].isRelaxNGElement("zeroOrMore")) {
 			newOneOrMore = new OneOrMoreVDOM(childNodes[i]);
 			this.appendChild(newOneOrMore);
@@ -703,6 +701,11 @@ TextVDOM.prototype.isValid = function(ctxt) {
 	
 }
 
+TextVDOM.prototype.allowedElements = function (ctxt){
+	debug("TTTTTTTTTTTTTTEEEEEEEEEEEXXXXXXXXXXXTTTTTTTTTTTT");
+	return {"nodeName": "#text", "namespaceURI": null, "localName": "#text", "nodeType": 3};
+}
+
 
 
 OneOrMoreVDOM.prototype = new NodeVDOM();
@@ -779,8 +782,9 @@ ElementVDOM.prototype.allowedElements = function(ctxt) {
 	if (this.prefix) {
 		nodeName = this.prefix +":";
 	}
-	return {"nodeName":nodeName + this.localName, "namespaceURI": this.namespaceURI, "localName": this.localName};
+	return {"nodeName":nodeName + this.localName, "namespaceURI": this.namespaceURI, "localName": this.localName, "vdom": this};
 }
+
 
 ElementVDOM.prototype.__defineSetter__("nodeName", function(name) {
 	var html = true;
@@ -795,6 +799,16 @@ ElementVDOM.prototype.__defineGetter__("nodeName", function(name) {
 }
 )
 
+ElementVDOM.prototype.__defineGetter__("canHaveChildren", 
+	function() {
+		if (this.firstChild) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+)
+	
 
 
 DocumentVDOM.prototype.getStructure = function() {
@@ -802,36 +816,6 @@ DocumentVDOM.prototype.getStructure = function() {
 	
 	 return "\n"+ this.getFirstChild(ctxt).getStructure();
 }
-
-
-/*
-NodeVDOM.prototype.getStructure = function(level) {
-	var out = this.nodeName + " " + this.minOccurs + " " + this.maxOccurs + "\n";
-	var child = this.getFirstChild(ctxt);
-	if (!level ) {
-		level = 0;
-	}
-	var indent = "";
-	for (var i = 0; i <= level; i++) {
-		indent += "  ";
-	}
-	for ( i in this.attributes) {
-		out += indent + "@" + i + " " + this.attributes[i].dataType + "\n";
-		
-	}
-	if ( typeof child != "undefined") {
-		while ( child != null && child != "undefined") {
-			
-			//out += indent + child.nodeName + "\n";
-			
-			out += indent + child.getStructure(level + 1);
-			child = child.nextSibling;
-		} 
-		
-	}
-	return out;
-}*/
-
 
 XMLNode.prototype.__defineGetter__(
 "isWhitespaceOnly",

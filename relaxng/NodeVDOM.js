@@ -18,6 +18,7 @@ NodeVDOM.prototype.allowedElements = function(ctxt) {
 NodeVDOM.prototype.parseChildren = function() {};
 
 
+
 NodeVDOM.prototype.appendChild = function(newElement) {
 	
 	newElement.parentNode = this;

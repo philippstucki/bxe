@@ -590,15 +590,29 @@ Widget_ContextMenu.prototype.show = function(e,node) {
 	this.buildPopup(e,node);
 }
 
+Widget_ContextMenu.prototype.buildElementChooserPopup = function (node, ac ) {
+	this.Popup.removeAllMenuItems();
+	this.Popup.initTitle("Choose Subelement of " + node.localName);
+	ac.sort(bxe_nodeSort);
+	for (i = 0; i < ac.length; i++) {
+				if (!bxe_config.dontShowInContext[ac[i].namespaceURI + ":" +ac[i].localName] && ac[i].nodeType != 3 && ac[i].vdom.canHaveChildren ) {
+					var menui =this.Popup.addMenuItem( ac[i].nodeName, function(e) { 
+						var widget = e.currentTarget.Widget;
+						eDOMEventCall("appendChildNode",document,{"appendToNode": widget.AppendToNode, "localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI});
+					});
+					menui.InsertLocalName = ac[i].localName;
+					menui.InsertNamespaceURI = ac[i].namespaceURI;
+					menui.AppendToNode = node;
+				}
+			}
+	this.Popup.draw();
+	this.Popup._node = node;
+
+}
+
 Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 		
-	function nodeSort(a,b) {
-		if (a.nodeName > b.nodeName) {
-			return 1;
-		} else {
-			return -1;
-		}
-	}
+
 	this.Popup.removeAllMenuItems();
 	this.Popup.initTitle(node.XMLNode.localName);
 	if (node.XMLNode.vdom.hasAttributes && this.EditAttributes) {
@@ -611,9 +625,9 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 	//var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
 	if (!(sel.isCollapsed)) {
 			var ac = node.XMLNode.allowedChildren;
-			ac.sort(nodeSort);
+			ac.sort(bxe_nodeSort);
 			for (i = 0; i < ac.length; i++) {
-				if (!bxe_config.dontShowInContext[ac[i].namespaceURI + ":" +ac[i].localName]) {
+				if (!bxe_config.dontShowInContext[ac[i].namespaceURI + ":" +ac[i].localName] && ac[i].nodeType != 3 && ac[i].vdom.canHaveChildren ) {
 					var menui =this.Popup.addMenuItem( ac[i].nodeName, function(e) { 
 						var widget = e.currentTarget.Widget;
 						var sel = window.getSelection();
@@ -682,7 +696,7 @@ Widget_MenuPopup.prototype.appendAllowedSiblings = function( node) {
 	ac.sort(nodeSort);
 	
 	for (i = 0; i < ac.length; i++) {
-		if (!bxe_config.dontShowInContext[ac[i].namespaceURI + ":" +ac[i].localName]) {
+		if (!bxe_config.dontShowInContext[ac[i].namespaceURI + ":" +ac[i].localName] && ac[i].nodeType != 3 ) {
 				var menui = this.addMenuItem("Append " + ac[i].nodeName, function(e) { 
 					var widget = e.currentTarget.Widget;
 					eDOMEventCall("appendNode",document,{"appendToNode": widget.AppendToNode, "localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI})

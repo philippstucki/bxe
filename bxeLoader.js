@@ -208,6 +208,7 @@ function xml_loaded(xmldoc) {
 	document.eDOMaddEventListener("DocumentSave",__bxeSave,false);
 	document.eDOMaddEventListener("ToggleTextClass",bxe_toggleTextClass,false);
 	document.eDOMaddEventListener("appendNode",bxe_appendNode,false);
+	document.eDOMaddEventListener("appendChildNode",bxe_appendChildNode,false);
 	document.eDOMaddEventListener("InsertLink",bxe_InsertLink,false);
 	document.eDOMaddEventListener("InsertTable",bxe_InsertTable,false);
 	document.eDOMaddEventListener("InsertImage",bxe_InsertImage,false);
@@ -249,7 +250,7 @@ function validation_loaded(vdom) {
 		//alert(vali.getErrorMessagesAsText());
 	}
 	else {
-		bxe_about_box.addText("Document is valid.");
+		bxe_about_box.addText("<br/>Document is valid.");
 		
 	}
 	var endTimer = new Date();

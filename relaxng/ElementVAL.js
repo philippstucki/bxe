@@ -5,34 +5,61 @@ XMLNodeElement.prototype.__defineGetter__(
 "allowedChildren", function() {
 	
 	// everything which isn't an Element, can't have children
-	debug("get allowed children for " + this.nodeName);
-	var ctxt = new ContextVDOM(this,this.vdom);
-	var ac = new Array();
-	var subac = null;
-	try{
-		if (ctxt.node ) {
-			do {
-				subac = ctxt.vdom.allowedElements(ctxt);
-				
-				if (subac && subac.nodeName) {
-					ac.push(subac);
-				} else if (subac) {
-					for (var i = 0; i < subac.length; i++) {
-						ac.push(subac[i]);
+	if (typeof this._allowedChildren == "undefined") {
+		var ctxt = new ContextVDOM(this,this.vdom);
+		var ac = new Array();
+		var subac = null;
+		try{
+			if (ctxt.vdom ) {
+				do {
+					subac = ctxt.vdom.allowedElements(ctxt);
+					
+					if (subac && subac.nodeName) {
+						ac.push(subac);
+					} else if (subac) {
+						for (var i = 0; i < subac.length; i++) {
+							ac.push(subac[i]);
+						}
 					}
-				}
-			} while (ctxt.nextVDOM())
-		}
-		debug("end get allowed Children for " + this.nodeName);
-		return ac;
-	} catch(e){
-		/*bxe_catch_alert(e);
-		alert(ctxt.vdom.nodeName);*/
-		debug("end with catch get allowed Children for " + this.nodeName);
-		return new Array()
+				} while (ctxt.nextVDOM())
+			}
+			ac.sort(bxe_nodeSort);
+
+			this._allowedChildren = ac;
+			return ac;
+		} catch(e){
+			debug("end with catch get allowed Children for " + this.nodeName);
+			bxe_catch_alert(e);
+			return ac;
+		} 
+	} else { 
+		return this._allowedChildren;
 	}
 }
 )
+
+XMLNodeElement.prototype.__defineGetter__ ("canHaveText",
+	function() {
+		if (typeof this.vdom._canHaveText == "undefined") {
+			debug ("not cached...");
+			var ac = this.allowedChildren;
+			if (ac) {
+				for (var i = 0; i < ac.length; i++) {
+					if (ac[i].nodeType == 3) {
+						this.vdom._canHaveText = true;
+						return true;
+					}
+				}
+			}
+			this.vdom._canHaveText = false;
+			return false;
+		} else {
+			debug("CCCAAACCCHHHHEEEEEDDDD");
+			return this.vdom._canHaveText;
+		}
+	}
+	)
+	
 
 //Element.prototype.isAllowedChild = function(node) {
 XMLNodeElement.prototype.isAllowedChild = function(node) {
