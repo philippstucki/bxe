@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLDocument.js,v 1.32 2003/12/05 00:51:53 chregu Exp $
+// $Id: bxeXMLDocument.js,v 1.33 2004/01/18 17:25:23 chregu Exp $
 
 
 XMLDocument.prototype.init = function (startNode) {
@@ -231,7 +231,7 @@ XMLNode.prototype.buildXML = function () {
 			}
 			attribs = node.attributes;
 			for (var i = 0; i< attribs.length; i++) {
-				child.setAttributeNode(attribs[i]);
+				child.setAttributeNS(attribs[i].namespaceURI,attribs[i].localName,attribs[i].value);
 			}
 			if (node.namespaceURI == XHTMLNS && child.getAttribute("class") == node.localName) {
 				child.removeAttribute("class");
