@@ -70,8 +70,7 @@ Element.prototype.__defineGetter__(
 	"mozUserModify",
 	function()
 	{
-		var mozUserModify = document.defaultView.getComputedStyle(this, null).MozUserModify;
-		return mozUserModify;
+		return document.defaultView.getComputedStyle(this, null).MozUserModify;
 	}
 );
 
@@ -83,13 +82,17 @@ Element.prototype.__defineGetter__(
 		function()
 		{
 			// first check user modify!
-			var mozUserModify = this.mozUserModify;
-			if(mozUserModify == "read-write")
-			{
-				return true;
+			if (!this._mozUserModify) {
+				var mozUserModify = this.mozUserModify;
+				if(mozUserModify == "read-write")
+				{	
+					this._mozUserModify = true;
+					return true;
+				}
+				
+				return false;
 			}
-
-			return false;
+			return true;
 		}
 );
 
@@ -100,11 +103,15 @@ Element.prototype.__defineGetter__(
 	"userModify",
 	function()
 	{
-		var mozUserModify = this.mozUserModify;
+		if (!this._userModify) {
 		// special case: allow MS attribute to set modify level
-		if(this.isContentEditable)
-			return("read-write");
-		return mozUserModify;
+			if(this.isContentEditable)
+				return("read-write");
+			var mozUserModify = this.mozUserModify;
+			this._userModify = mozUserModify;
+			return mozUserModify;
+		}
+		return this._userModify;
 	}
 );
 
@@ -121,12 +128,15 @@ Element.prototype.__defineGetter__(
 		function()
 		{
 			// first check user modify!
-			var userModify = this.userModify;
-			if(userModify == "read-write")
-			{
+			if (this._userModify) {
 				return true;
+			} else {
+				if(this.userModify == "read-write")
+				{
+					this._userModify = true;
+					return true;
+				}
 			}
-
 			return false;
 		}
 );
