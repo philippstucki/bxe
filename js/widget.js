@@ -433,7 +433,7 @@ function Widget_AboutBox() {
 	this.TextNode = document.createTextNode(" ");
 	textdiv.appendChild(this.TextNode);
 	this.node.appendChild(textdiv );
-	textdiv.style.top = (height - 84 ) + "px";;
+	textdiv.style.top = (height - 95 ) + "px";;
 	textdiv.style.position = "relative";
 	this.show();
 	
@@ -457,8 +457,8 @@ Widget_AboutBox.prototype.setText = function(text) {
 
 Widget_AboutBox.prototype.addText = function(text) {
 	this.TextNode.data =this.TextNode.data + " " + text;
-	if ( this.TextNode.data.length  > 60) {
-		this.TextNode.data = "..." + this.TextNode.data.substr(this.TextNode.data.length - 60);
+	if ( this.TextNode.data.length  > 120) {
+		this.TextNode.data = "..." + this.TextNode.data.substr(this.TextNode.data.length - 120);
 	}
 }
 

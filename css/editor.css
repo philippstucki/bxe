@@ -168,9 +168,10 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
 
 .AboutBox div {
   
-    height: 18px;
+    height: 30px;
     overflow: hidden;
     padding-top: 0px;
+    padding-right: 10px;
 }
 
 .ModalBox {
