@@ -58,7 +58,7 @@ HTMLTableCellElement.prototype.TableAppendRow = function () {
 	
 	var _children = newRow.childNodes;
 	for (var i in _children) {
-		if (_children[i].nodeType == 1) {
+		if (_children[i].nodeType == 1) {
 			_children[i].removeAllChildren();
 			_children[i].appendChild(document.createTextNode(STRING_NBSP));
 		} 
