@@ -387,10 +387,13 @@ Selection.prototype.toggleListLines = function(requestedList, alternateList)
 
 	if(!cssr)
 		return;
-
 	listLinesToggle(cssr, requestedList, alternateList);
 
 	this.selectEditableRange(cssr);
+	var lines = cssr.lines;
+	for(var i =0; i <lines.length; i++) {
+		lines[i].container.updateXMLNode();
+	}
 }
 
 Selection.prototype.insertNode = function(node)

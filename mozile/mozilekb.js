@@ -345,7 +345,7 @@ function nonctrlKeyPressHandler(event)
 		sel.removeAllRanges();
 		ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
 		// POST04: support concept of not splitting line if mozUserModify indicates writeText ...
-		ip.splitLine(); // add logic to split off say a "P" after a Heading element: if at end line
+		ip.splitXHTMLLine(); // add logic to split off say a "P" after a Heading element: if at end line
 		cssr.selectInsertionPoint(ip);
 		sel.removeAllRanges();
 		sel.addRange(cssr);

@@ -379,10 +379,10 @@ function ptbbuttonclick()
 			window.getSelection().toggleTextStyle('text-decoration', 'underline', 'none');			
 			break;
 		case 'Ordered_List':
-			window.getSelection().toggleListLines("OL", "UL");
+			window.getSelection().toggleListLines("ol", "ul");
 			break;
 		case 'Unordered_List':
-			window.getSelection().toggleListLines("UL", "OL");
+			window.getSelection().toggleListLines("ul", "ol");
 			break;
 		case 'Indent':
 			window.getSelection().indentLines();

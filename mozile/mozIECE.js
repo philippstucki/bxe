@@ -86,10 +86,10 @@ Document.prototype.execCommand = function(command, userInterface, vValue)
 			window.getSelection().toggleTextStyle('text-decoration', 'underline', 'none');			
 			break;
 		case 'InsertOrderedList':
-			window.getSelection().toggleListLines("OL", "UL");
+			window.getSelection().toggleListLines("ol", "ul");
 			break;
 		case 'InsertUnorderedList':
-			window.getSelection().toggleListLines("UL", "OL");
+			window.getSelection().toggleListLines("ul", "ol");
 			break;
 		case 'Indent':
 			window.getSelection().indentLines();

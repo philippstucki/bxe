@@ -96,7 +96,6 @@ function listLinesToggle(cssr, listContainerName, listContainerToChange)
 			lastListElement = listElement;
 		}
 	}
-
 	// if have a new list element then merge appropriate adjacent lists
 	if(newListElement)
 	{
@@ -164,8 +163,8 @@ function indentLines(cssr)
 	
 		var range = document.createRange();
 		range.selectNodeContents(topToNormalize);
-		range.normalizeElements("UL"); 
-		range.normalizeElements("OL");	
+		range.normalizeElements("ul"); 
+		range.normalizeElements("ol");	
 	}
 	// a/c for one non list line and it is the top line: insert intermediate container
 	else if((nonListLines.length == 1) && nonListLines[0].topLine)
@@ -258,8 +257,10 @@ __outdentListItem = function(listItem)
 	var container = listItem.parentNode;
 	var nextSibling = listItem.__editableNextSibling;
 	var listItem = container.parentNode.insertBefore(listItem, container);
-	if(!nextSibling) // if container has no more children then nix it!
+	if(!nextSibling) { // if container has no more children then nix it!
+		var _par = container.parentNode;
 		container.parentNode.removeChild(container);
+	}
 	// should we keep listItem? Only if it is not now in a list
 	if(!(listItem.parentNode.nodeNamed("ul") || listItem.parentNode.nodeNamed("ol")))
 	{
@@ -285,8 +286,9 @@ __outdentListItem = function(listItem)
 			if((linesInList[lastNo].lineType == CSSLine.BOUNDED_LINE) && !linesInList[lastNo].endBoundary && !linesInList[lastNo].emptyLine)
 				linesInList[lastNo] = linesInList[lastNo].setContainer(documentCreateXHTMLElement(defaultContainerName), true);
 		}
-
+		var _par = listItem.parentNode;
 		listItem.parentNode.removeChildOnly(listItem); // nix the list-item
+
 	}
 }
 

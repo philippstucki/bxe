@@ -191,7 +191,6 @@ Node.prototype.insertParent = function(newParent)
 	var currentParent = this.parentNode;
 	newParent = currentParent.insertBefore(newParent, this);
 	newParent.appendChild(this);
-	eDOMEventCall("NodeInsertedParent", this, newParent);
 	return newParent;
 }
 
@@ -365,6 +364,7 @@ Element.prototype.replaceChildOnly = function(child, newChildName)
 	newElement.appendChild(childContents.extractContents());
 	childContents.detach();
 	this.replaceChild(newElement, child);
+
 	return newElement;
 }
 
@@ -1402,6 +1402,7 @@ InsertionPoint.prototype.splitContainedLine = function()
 		var emptyLineToken = document.createTextNode(STRING_NBSP);
 		newLineContainer.appendChild(emptyLineToken);
 		line.container.parentNode.insertAfter(newLineContainer, line.container);
+		eDOMEventCall("NodeInsertedBefore", line.container, newLineContainer);
 		var newIP = this.clone();
 		newIP.forwardOne();
 		this.set(newIP);
@@ -1413,6 +1414,9 @@ InsertionPoint.prototype.splitContainedLine = function()
 	{
 		newLineContainer.appendChild(document.createTextNode(STRING_NBSP));
 		line.container.parentNode.insertBefore(newLineContainer, line.container);
+		
+		eDOMEventCall("NodeInsertedBefore", line.container, newLineContainer);
+
 		return;
 	}
 
@@ -1425,7 +1429,10 @@ InsertionPoint.prototype.splitContainedLine = function()
 	line = documentCreateCSSLine(line.firstInsertionPoint);
 	line.normalizeWhitespace(); // takes care of rubbish at start or end ie/ part of invalid styled text
 	newLineContainer.appendChild(newLineContents);
+	
 	line.container.parentNode.insertAfter(newLineContainer, line.container);
+	eDOMEventCall("NodeInsertedBefore", line.container, newLineContainer);
+	
 	var newLine = documentCreateCSSLine(newLineContainer.firstInsertionPoint(line.top));
 	newLine.normalizeWhitespace(); // takes care of rubbish at start or end ie/ part of invalid styled text
 	newLine.forceLineBreaksBeforeAfter();
@@ -2533,17 +2540,17 @@ ContainedLine.prototype.setContainer = function(newContainer, replace)
 		replace = false;
 
 	// replace current container
-	if(replace)
+	if(replace) {
 		newContainer = this.__container.parentNode.replaceChildOnly(this.__container, newContainer.nodeName);
+	}
 	else // usually for table-cell, at top etc
 	{
 		this.__container.appendChild(newContainer);
-
 		newContainer.appendChild(this.__lineRange.extractContents());
 	}
 
 	var linenow = documentCreateCSSLine(newContainer.firstInsertionPoint(this.top));
-
+	
 	linenow.forceLineBreaksBeforeAfter();
 
 	return linenow;
@@ -2876,12 +2883,13 @@ BoundedLine.prototype.setContainer = function(lineContainer, replace)
 	else // always one or other!
 		this.__endBoundary.parentNode.insertBefore(lineContainer, this.__endBoundary);
 
+	
+	
 	lineContainer.appendChild(lineContents);
 
 	var newLine = documentCreateCSSLine(lineContainer.firstInsertionPoint(this.top));
 
 	newLine.forceLineBreaksBeforeAfter();
-
 	return newLine;
 }
 
