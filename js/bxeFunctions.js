@@ -586,6 +586,30 @@ function bxe_draw_widgets() {
 		
 	});
 	
+	submenu4.push("Show System Info", function(e) {
+		var modal = new Widget_ModalBox();
+		modal.node = modal.initNode("div","ModalBox");
+		modal.Display = "block";
+		modal.node.appendToBody();
+		modal.position(100,100,"absolute");
+		modal.initTitle("System Info");
+		modal.initPane();
+		var innerhtml =  "<br/>BXE Version: " + BXE_VERSION  + "<br />";
+		innerhtml += "BXE Build Date: " + BXE_BUILD + "<br/><br/>";
+		innerhtml += "User Agent: " + navigator.userAgent + "<br/><br/>";
+		modal.PaneNode.innerHTML = innerhtml;
+		modal.draw();
+		var subm = document.createElement("input");
+		subm.setAttribute("type","submit");
+		subm.setAttribute("value","OK");
+		subm.onclick = function(e) {
+			var Widget = e.target.parentNode.parentNode.Widget;
+			e.target.parentNode.parentNode.style.display = "none";
+		}
+		modal.PaneNode.appendChild(subm);
+		
+	});
+	
 	menubar.addMenu("Help",submenu4);
 	
 	menubar.draw();

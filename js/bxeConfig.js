@@ -10,6 +10,7 @@ function  bxeConfig (filename,fromUrl, configArray) {
 	bxe_about_box.addText(" (" + filename + ") ...");
 	td.bxeConfig = this;
 	try {
+		debug("td.load " + filename);
 		td.load(filename, bxeConfig.parseConfig);
 	} catch(e) { bxe_catch_alert(e);}
 	return true;
