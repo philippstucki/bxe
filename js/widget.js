@@ -13,7 +13,7 @@ Widget.prototype.position = function (left, top, position) {
 
 Widget.prototype.initNode = function (elementName,className, id) {
 	
-	var node = document.createElementNS(XHTMLNS,elementName);
+	var node = document.createElement(elementName);
 	node.setAttribute("class",className);
 	if (id) {
 		node.setAttribute("id",id);
@@ -317,9 +317,9 @@ Moz.prototype.getWidgetGlobals = function () {
 
 function Widget_ToolBar () {
  this.node = this.initNode("div","ToolBar");
- var table = document.createElementNS(XHTMLNS,"table");
+ var table = document.createElement("table");
 
- this.TableRow =table.appendChild(document.createElementNS(XHTMLNS,"tr"));
+ this.TableRow =table.appendChild(document.createElement("tr"));
  this.node.appendChild(table);
  this.Display = "block";
  this.node.appendToBody();
@@ -340,9 +340,7 @@ Widget_ToolBar.prototype.addButtons = function ( buttons) {
 	
 }
 Widget_ToolBar.prototype.addItem = function(item) {
-	var td = document.createElementNS(XHTMLNS,"td");
-	//td.appendChild(document.createTextNode("blabl jkfaslj jklfjsad klöj kljsdfa aöla"));
-
+	var td = document.createElement("td");
 	td.appendChild(item.node);
 	this.TableRow.appendChild(td);
 	item.draw();
@@ -351,7 +349,7 @@ Widget_ToolBar.prototype.addItem = function(item) {
 	
 
 function Widget_MenuList(id, event) {
-	this.node= document.createElementNS(XHTMLNS,"select");
+	this.node= document.createElement("select");
 	if (event) {
 		this.node.addEventListener("change", event, false);
 	}
@@ -361,7 +359,7 @@ function Widget_MenuList(id, event) {
 Widget_MenuList.prototype = new Widget();
 
 Widget_MenuList.prototype.appendItem = function(label, value) {
-	var option = document.createElementNS(XHTMLNS,"option");
+	var option = document.createElement("option");
 	option.text = label;
 	option.value = value
 	this.node.appendChild(option);

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- $Id: config.xml,v 1.4 2003/08/14 15:46:51 chregu Exp $ -->
+<!-- $Id: config.xml,v 1.5 2003/08/14 16:13:53 chregu Exp $ -->
 <config>
     <files>
     <!-- the following file definitions are presumably the most important
@@ -60,7 +60,11 @@
         </css>
         
         <scripts>
-           
+        <!-- These are the to be included js files 
+            the important .js files are included by bxeLoader.js, but you should
+            not have to worry about them. 
+            You can also add your own js-files here.
+            -->
            <file>js/bxehtmltb.js</file>
            <file>js/jsdav.js</file>
            <file>td/webdav.js</file>

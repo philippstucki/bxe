@@ -17,29 +17,6 @@
 *
 * ***** END LICENSE BLOCK ***** */
 
-/*
-* mozileLoader V0.46
-*
-* Loads mozile for a page if in a Geiko browser. This is the only javascript
-* file that a user needs to explicitly include in a page. This shields Mozile
-* from IE. Ultimately it would only load Mozile if it wasn't already loaded
-* locally - though perhaps it would always load "mozileModify" or "per page"
-* customization mechanism.
-*
-* Method: http://devedge.netscape.com/viewsource/2002/browser-detection/
-*
-* POST04:
-* - if mozile installed => only load mozileModify.js?
-* - make work for more than XHTML (document.documentElement insert?)/ use name spaces?
-* - distinguish old Geiko browsers (once tested to see which have 
-* problems)
-* - if IE:
-*   - put up msg to upgrade to Geiko based browser
-*   - load IE toolbar
-*/
-
-
-const XHTMLNS = "http://www.w3.org/1999/xhtml";
 const BXE_VERSION = "0.1alpha"
 mozile_js_files = new Array();
 
@@ -57,50 +34,14 @@ mozile_js_files.push("mozile/mozCE.js");
 mozile_js_files.push("mozile/mozIECE.js");
 mozile_js_files.push("mozile/mozileModify.js");
 mozile_js_files.push("js/eDOMEvents.js");
-
-
-//mozile_js_files.push("xsltTransformer.js");
-
-
 mozile_js_files.push("js/bxeFunctions.js");
-/*
-mozile_js_files.push("mozile/mozWrappers.js");
-mozile_js_files.push("js/widget.js");
-mozile_js_files.push("mozile/eDOM.js");
-mozile_js_files.push("mozile/eDOMXHTML.js");
-mozile_js_files.push("mozile/mozileModify.js");
-mozile_js_files.push("mozile/domlevel3.js");
-mozile_js_files.push("mozile/mozCE.js");
-mozile_js_files.push("mozile/mozIECE.js");
-mozile_js_files.push("js/bxeConfig.js");
-mozile_js_files.push("td/http.js");
-mozile_js_files.push("js/bxeXMLDocument.js");
-
-*/
-/*
-mozile_js_files.push("mozile/eDOMXHTML.js");
-mozile_js_files.push("js/bxeNodeElements.js");
-
-mozile_js_files.push("mozile/domlevel3.js");
-mozile_js_files.push("mozile/mozCE.js");
-mozile_js_files.push("mozile/mozIECE.js");
-mozile_js_files.push("mozile/mozilekb.js");
-mozile_js_files.push("js/bxehtmltb.js");
-mozile_js_files.push("mozile/mozileModify.js");
-mozile_js_files.push("js/eDOMEvents.js");
-mozile_js_files.push("js/jsdav.js");
-mozile_js_files.push("td/webdav.js");
-*/
-//mozile_js_files.push("xsltTransformer.js");
-
-
 
 
 var mozile_root_dir = "./";
+
+// some global vars, no need to change them
 var mozile_corescript_loaded = 0;
 var mozile_script_loaded = 0;
-// some global vars, no need to change them
-
 var bxe_config = new Object();
 var bxe_about_box = null;
 

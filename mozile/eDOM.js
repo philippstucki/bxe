@@ -78,7 +78,7 @@ Document.prototype.supportsEDOM = function(version)
 
 /********************************* XHTML namespace ********************************/
 
-//const XHTMLNS = "http://www.w3.org/1999/xhtml"; // XHTML name space
+const XHTMLNS = "http://www.w3.org/1999/xhtml"; // XHTML name space
 
 /**
  * Ensure that element creation uses the XHTML name space only if necessary
