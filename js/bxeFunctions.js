@@ -1960,7 +1960,7 @@ function bxe_doCallback(cb, node ) {
 		
 function bxe_checkIfNotALink (node) {
 	var sel = window.getSelection();
-	if (sel.anchorNode.parentNode.XMLNode.localName == "a") {
+	if (sel.anchorNode.parentNode.XMLNode.localName == "a" || sel.focusNode.parentNode.XMLNode.localName == "a) {
 		alert("There is already a link here, please use the \"Edit Attributes\" function, to edit the link.");
 		return false;
 	}
