@@ -262,14 +262,15 @@ Selection.prototype.changeLinesContainer = function(containerName, isClass)
 
 	if(!cssr)
 		return;
-
+	var newContainer = new Array();
 	var lines = cssr.lines();
 	for(var i=0; i<lines.length; i++)
 	{ // replace container unless it is top
-		lines[i].changeContainer(containerName, (lines[i].container == cssr.top), isClass);
+		newContainer.push(lines[i].changeContainer(containerName, (lines[i].container == cssr.top), isClass));
 	}
 
 	this.selectEditableRange(cssr);
+	return newContainer;
 }
 
 Selection.prototype.removeLinesContainer = function()

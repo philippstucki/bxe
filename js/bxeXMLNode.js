@@ -3,24 +3,24 @@ function XMLNode  (htmlnode) {
 	this.namespaceURI = null;
 	this.prefix = null;
 	if (htmlnode) {
-	this.nodeType = htmlnode.nodeType;
-	this._htmlnode = htmlnode;
-	if (htmlnode) {
-		if (htmlnode.namespaceURI == null) {
-			if (htmlnode.nodeName.toLowerCase() =="span") {
-				this.localName = htmlnode.getClasses();
-			} else  {
-				this.localName = htmlnode.nodeName.toLowerCase();
-				this.namespaceURI = XHTMLNS;
+		this.nodeType = htmlnode.nodeType;
+		this._htmlnode = htmlnode;
+		if (htmlnode) {
+			if (htmlnode.namespaceURI == null) {
+				if (htmlnode.nodeName.toLowerCase() =="span") {
+					this.localName = htmlnode.getClasses();
+				} else  {
+					this.localName = htmlnode.nodeName.toLowerCase();
+					this.namespaceURI = XHTMLNS;
+				}
 			}
+			
+			else {
+				this.localName = htmlnode.nodeName;
+			}
+			
+			//this.namespaceURI = htmlnode.XMLNode.namespaceURI;
 		}
-		
-		else {
-			this.localName = htmlnode.nodeName;
-		}
-		
-		//this.namespaceURI = htmlnode.XMLNode.namespaceURI;
-	}
 	}
 }
 

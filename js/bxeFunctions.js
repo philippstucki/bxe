@@ -230,7 +230,16 @@ function bxe_appendNode(e) {
 }
 
 function bxe_changeLinesContainer(e) {
-	window.getSelection().changeLinesContainer(e.additionalInfo);
+	var nodeParts = e.additionalInfo.split("=");
+	if (nodeParts.length < 2 ) {
+		nodeParts[1] = null;
+	}
+	var newContainer = window.getSelection().changeLinesContainer(nodeParts[0]);
+	for(var i=0; i<newContainer.length; i++)
+	{ 
+		newContainer[i].XMLNode = new XMLNode(newContainer[i]);
+		newContainer[i].XMLNode.namespaceURI = nodeParts[1];
+	}
 	bxe_updateXPath();
 }
 
@@ -401,7 +410,7 @@ function bxe_updateXPath() {
 		var ac = lines[0].container.XMLNode.parentNode._xmlnode.allowedChildren;
 		ac.sort();
 		for (i = 0; i < ac.length; i++) {
-			bxe_format_list.appendItem(ac[i], ac[i]);
+			bxe_format_list.appendItem(ac[i].nodeName, ac[i].localName + "=" + ac[i].namespaceURI);
 		}
 	} else {
 		bxe_format_list.appendItem("no block found","");
