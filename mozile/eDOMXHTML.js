@@ -666,7 +666,7 @@ Range.prototype.clearTextLinks = function()
 		// try text nodes returning one node ie/ node itself! could cut down on normalize calls ...
 		var textContainer = textNodes[i].parentNode;
 
-		if(textContainer.nodeNamed("a"))
+		if(textContainer.nodeNamed("span") && textContainer.getAttribute("class") == "a" )
 		{
 			if(textContainer.childNodes.length > 1)
 			{
@@ -695,7 +695,7 @@ Range.prototype.clearTextLinks = function()
 			if(textContainer.attributes.length > 1)
 			{
 				textContainer = textContainer.parentNode.replaceChildOnly(textContainer, "span");
-				textContainer.removeAttribute("HREF");
+				textContainer.removeAttribute("href");
 			}
 			// else remove the A!
 			else
