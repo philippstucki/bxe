@@ -199,6 +199,7 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
   font-size: 12px;
   width: 500px;
   min-height: 200px;
+  z-index:1000;
 }
 .ModalBox .ModalBoxTitle {
     padding-left: 10px;
