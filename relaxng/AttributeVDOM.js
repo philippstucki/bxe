@@ -15,9 +15,10 @@ function AttributeVDOM(node, option) {
 			this.dataType = "choice";
 			this.choices = new Array();
 			var choice = node.childNodes[i].childNodes;
+			this.choices.push("");
 			for (var j = 0; j < choice.length; j++) {
 				if (choice[j].localName == "value" && choice[j].firstChild) {
-				this.choices.push(choice[j].firstChild.data);
+					this.choices.push(choice[j].firstChild.data);
 				}
 			}
 		} 

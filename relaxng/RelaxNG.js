@@ -821,15 +821,31 @@ function OneOrMoreVDOM(node) {
 OneOrMoreVDOM.prototype.isValid = function(ctxt) {
 	var refsPosition = ctxt.refs.length;
 	var child = this.getFirstChild(ctxt);
+	var empty = false;
 	while (child) {
 		if (child.isValid(ctxt)) {
 			this.hit = true;
 			ctxt.setVDOM(this, refsPosition);
 			return true;
 		} 
+		if (child.nodeName == "RELAXNG_EMPTY") {
+			empty = true;
+		}
 		child = child.getNextSibling(ctxt);
 	}
 	ctxt.setVDOM(this, refsPosition);
+	if (this.hit) {
+		var vdom = ctxt.nextVDOM();
+		if (vdom) {
+			return vdom.isValid(ctxt);
+		} else { 
+			return false;
+		}
+	}
+	if (empty) {
+		this.hit = true;
+		return true;
+	}
 	return false;
 }
 
