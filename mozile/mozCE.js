@@ -510,7 +510,7 @@ Selection.prototype.paste = function()
 			if (elementNamespace) {
 				elementName_start += " xmlns='"+elementNamespace +"'";
 			}
-			content = "<"+elementName_start + ">"+ content.replace(/\n/g,"</"+elementName+"><"+elementName_start+" >")+"</"+elementName+">";
+			content = "<"+elementName_start + ">"+ content.replace(/[\n\r]+/g,"</"+elementName+"><"+elementName_start+" >")+"</"+elementName+">";
 			bxe_insertContent_async(content,BXE_SELECTION,BXE_SPLIT_IF_INLINE);
 		} else {
 			window.getSelection().insertNode(content);
