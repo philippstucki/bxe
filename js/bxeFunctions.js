@@ -1801,7 +1801,10 @@ documentCreateXHTMLElement = function (elementName,attribs) {
 	if (elementName != htmlelementname) {
 		newNode.setAttribute("class", elementName);
 	}
-			
+	
+	if (elementName == "span") {
+		newNode.setAttribute("__bxe_keep_span","true");
+	}
 	if (childNode) {
 		if (attribs) {
 			for (var i = 0; i < attribs.length ;  i++) {
