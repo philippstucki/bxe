@@ -49,13 +49,16 @@ function documentSaveXML(snode)
 	//create a new XMLSerializer
 	var objXMLSerializer = new XMLSerializer();
 	//get the XML string
-	if (snode.nodeType != Node.DOCUMENT_NODE) {
-		snode.fixNamespaces();
+	var ns = snode.getNamespaceDefinitions();
+	for(var i in ns ) {
+		if (i == "xmlns") {
+			snode.setAttributeNS(XMLNS,"xmlns",ns[i]);
+		} else {
+			snode.setAttribute("xmlns:" + i , ns[i]);
+		}
 	}
 	var strXML = objXMLSerializer.serializeToString(snode);
-    //strXML= strXML.replace(/(<\/*)xhtml:/g,"$1");
-	//strXML= strXML.replace(/xmlns:xhtml/g,"xmlns");
-	//return the XML string
+
 	return strXML;
 }
 
