@@ -80,6 +80,9 @@ function listLinesToggle(cssr, listContainerName, listContainerToChange)
 			// fix for http://cvs.wyona.org/cgi-bin/bugzilla/show_bug.cgi?id=2562 ( liste in tabelle funktioniert nicht richtig)
 			if (lines[i].container.getCStyle("display") == "table-cell") {
 				lines[i] = lines[i].setContainer(documentCreateXHTMLElement(defaultContainerName),false);
+				if (lines[i].container.childNodes[0].data.replace(/ /g,"") == "") {
+					lines[i].container.childNodes[0].data = STRING_NBSP;
+				}
 			}
 				
 			lines[i] = lines[i].setContainer(documentCreateXHTMLElement("li"), true); // ok - this a/cs for top
