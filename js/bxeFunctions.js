@@ -354,12 +354,28 @@ function bxe_toggleSourceMode(e) {
 	}
 	if (!editableArea._SourceMode) {
 		var xmldoc = editableArea.convertToXMLDocFrag();
-
+		
+		var form = document.createElement("textarea");
+		//some stuff could go into a css file
+		form.setAttribute("name","sourceArea");
+		form.setAttribute("wrap","soft");
+		form.style.backgroundColor = "rgb(255,255,200)";
+		form.style.border = "0px";
+		form.style.height = editableArea.getCStyle("height");
+		form.style.width = editableArea.getCStyle("width");
+		form.style.fontFamily = editableArea.getCStyle("font-family");
+		form.style.fontSize = editableArea.getCStyle("font-size");
+		
+		
 		editableArea.removeAllChildren();
-		editableArea.setStyle("white-space","-moz-pre-wrap");
+//		editableArea.setStyle("white-space","-moz-pre-wrap");
 		
 		var xmlstr = document.saveChildrenXML(xmldoc,true);
-		editableArea.appendChild(document.createTextNode(xmlstr.str));
+		form.value = xmlstr.str;
+	
+		editableArea.appendChild(form)
+		form.focus();
+		//editableArea.appendChild(document.createTextNode(xmlstr.str));
 		editableArea.XMLNode.prefix = xmlstr.rootPrefix;
 		editableArea._SourceMode = true;
 		editableArea.AreaInfo.SourceModeMenu.Checked = true;
@@ -380,7 +396,8 @@ function bxe_toggleSourceMode(e) {
 				innerHTML += ' xmlns:' + i + '="' + ns[i] +'"';
 			}
 		}
-		innerHTML += '>'+editableArea.getContent()+'</'+rootNodeName +'>';
+		
+		innerHTML += '>'+editableArea.firstChild.value +'</'+rootNodeName +'>';
 		
 		var innerhtmlValue = documentLoadXML( innerHTML);
 		if (innerhtmlValue) {
@@ -1335,6 +1352,7 @@ function bxe_InsertImage() {
 
 function bxe_checkForSourceMode(sel) {
 	var cssr = sel.getEditableRange();
+
 	if (cssr && cssr.top._SourceMode) {
 		alert("You're in Source Mode. Not possible to use this button");
 		return true;

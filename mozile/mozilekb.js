@@ -123,6 +123,10 @@ function ctrlKeyPressHandler(event)
 
 	if(String.fromCharCode(event.charCode).toLowerCase() == "v")
 	{
+		//don't handle it, if we're in a textarea
+		if (event.target.localName == "TEXTAREA") {
+			return false;
+		}
 		if (mozilla.__allowedNativeCalls) {
 			return window.getSelection().paste();
 		} else {
@@ -136,6 +140,10 @@ function ctrlKeyPressHandler(event)
 	}
 	else if(String.fromCharCode(event.charCode).toLowerCase() == "x")
 	{
+		//don't handle it, if we're in a textarea
+		if (event.target.localName == "TEXTAREA") {
+			return false;
+		}
 		if (mozilla.__allowedNativeCalls) {
 			return window.getSelection().cut();
 		} else {
@@ -144,6 +152,10 @@ function ctrlKeyPressHandler(event)
 	}
 	else if(String.fromCharCode(event.charCode).toLowerCase() == "c")
 	{
+		//don't handle it, if we're in a textarea
+		if (event.target.localName == "TEXTAREA") {
+			return false;
+		}
 		if (mozilla.__allowedNativeCalls) {
 			return window.getSelection().copy();
 		} else {
@@ -174,7 +186,11 @@ function ctrlKeyPressHandler(event)
 			alert("You have to select an edit area first");
 			return false;
 		}
-		eDOMEventCall("toggleSourceMode",cssr.top);
+		if (event.target.localName == "TEXTAREA") {
+			eDOMEventCall("toggleSourceMode",event.target.parentNode);
+		} else {
+			eDOMEventCall("toggleSourceMode",cssr.top);
+		}
 
 		return true;
 	}
@@ -188,6 +204,10 @@ function ctrlKeyDownHandler(event,cssr) {
 	
 	if(String.fromCharCode(event.keyCode).toLowerCase() == "v")
 	{
+		//don't handle it, if we're in a textarea
+		if (event.target.localName == "TEXTAREA") {
+			return false;
+		}		
 		if (!mozilla.__allowedNativeCalls) {
 			window.getSelection().pasteKeyDown();
 			return true;
@@ -196,6 +216,10 @@ function ctrlKeyDownHandler(event,cssr) {
 	}
 	if(String.fromCharCode(event.keyCode).toLowerCase() == "c")
 	{
+		//don't handle it, if we're in a textarea
+		if (event.target.localName == "TEXTAREA") {
+			return false;
+		}
 		if (!mozilla.__allowedNativeCalls) {
 			window.getSelection().copyKeyDown();
 			return true;
@@ -223,6 +247,10 @@ function ctrlKeyUpHandler(event,cssr) {
 	
 	if(String.fromCharCode(event.keyCode).toLowerCase() == "v")
 	{
+		//don't handle it, if we're in a textarea
+		if (event.target.localName == "TEXTAREA") {
+			return false;
+		}
 		if (!mozilla.__allowedNativeCalls) {
 			window.getSelection().pasteKeyUp();
 			return true;
@@ -231,6 +259,10 @@ function ctrlKeyUpHandler(event,cssr) {
 	}
 	if(String.fromCharCode(event.keyCode).toLowerCase() == "c")
 	{
+		//don't handle it, if we're in a textarea
+		if (event.target.localName == "TEXTAREA") {
+			return false;
+		}
 		if (!mozilla.__allowedNativeCalls) {
 			window.getSelection().copyKeyUp();
 			return true;
@@ -263,6 +295,11 @@ function nonctrlKeyPressHandler(event)
 	var ip;
 	var cssr;
 	var rng;
+	
+	//don't handle it, if we're in a textarea
+	if (event.target.localName == "TEXTAREA") {
+		return false;
+	}
 	// BACKSPACE AND DELETE (DOM_VK_BACK_SPACE, DOM_VK_DELETE)
 	if((event.keyCode == 8) || (event.keyCode == 46)) {
 		return bxe_deleteEventKey(sel,(event.keyCode == 46));
