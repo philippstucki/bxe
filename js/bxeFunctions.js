@@ -349,7 +349,12 @@ function bxe_ContextPopup(e) {
 				widget.MenuPopup.MainNode._node.TableAppendRow();
 				_par.updateXMLNode();
 			});
-		
+			var menui = popup.addMenuItem("Append Col", function(e) {
+				var widget = e.currentTarget.Widget;
+				var _par = widget.MenuPopup.MainNode._node.parentNode.parentNode;
+				widget.MenuPopup.MainNode._node.TableAppendCol();
+				_par.updateXMLNode();
+			});
 		
 		popup.MainNode = node;
 	}
@@ -357,6 +362,68 @@ function bxe_ContextPopup(e) {
 HTMLTableCellElement.prototype.TableAppendRow = function () {
 	var newRow = this.parentNode.cloneNode(true);
 	this.parentNode.parentNode.insertAfter(newRow,this.parentNode);
+}
+
+HTMLTableCellElement.prototype.TableAppendCol = function () {
+	var pos = this.findPosition();
+	var table = this.parentNode.parentNode;
+	var row = table.firstChild;
+	var colpos = 1;
+	while (row) {
+		if (row.nodeType == 1) {
+			if ( row.localName.toLowerCase() == "tr") {
+				var cell = row.firstChild;
+				var nextpos = 1;
+				
+				while (cell) {
+					if (cell.nodeType == 1 && cell.localName.toLowerCase() == "td") {
+						if (nextpos >= pos) {
+							var newtd = document.createElementNS(XHTMLNS,"td");
+							newtd.appendChild(document.createTextNode(pos));
+							row.insertBefore(newtd,cell.nextSibling);
+							break;
+						}
+						if (cell.hasAttribute("colspan")) {
+							nextpos += parseInt( cell.getAttribute("colspan"));
+						} else {
+							nextpos++;
+						}
+						
+						
+					}
+					cell = cell.nextSibling;
+				}
+				
+			} else if ( row.localName.toLowerCase() == "col") {
+				dump (colpos + " ==  " + pos + "\n");
+				if (colpos == pos) {
+					
+					table.insertBefore(document.createElementNS(XHTMLNS, "col"),row.nextSibling);
+				}
+				colpos++;
+			}
+		}
+		
+		row = row.nextSibling;
+	}
+	
+}
+
+HTMLTableCellElement.prototype.findPosition = function () {
+	// find position
+	var prevSibling = this.previousSibling;
+	var pos = 1;
+	while(prevSibling) {
+		if (prevSibling.nodeType == 1 && prevSibling.localName.toLowerCase() == "td") {
+			if (prevSibling.hasAttribute("colspan")) {
+				pos += parseInt( prevSibling.getAttribute("colspan"));
+			} else {
+				pos++;
+			}
+		}
+		prevSibling = prevSibling.previousSibling;
+	}
+	return pos;
 }
 
 HTMLTableCellElement.prototype.TableCellMergeRight = function () {
@@ -382,19 +449,7 @@ HTMLTableCellElement.prototype.TableCellMergeRight = function () {
 
 HTMLTableCellElement.prototype.TableCellMergeDown = function () {
 	
-	// find position
-	var prevSibling = this.previousSibling;
-	var pos = 1;
-	while(prevSibling) {
-		if (prevSibling.nodeType == 1 && prevSibling.localName.toLowerCase() == "td") {
-			if (prevSibling.hasAttribute("colspan")) {
-				pos += parseInt( prevSibling.getAttribute("colspan"));
-			} else {
-				pos++;
-			}
-		}
-		prevSibling = prevSibling.previousSibling;
-	}
+	var pos = this.findPosition();
 	var thisRowspan = 1;
 	if (this.hasAttribute("rowspan")) {
 		thisRowspan = this.getAttribute("rowspan");
@@ -466,6 +521,7 @@ HTMLTableCellElement.prototype.TableCellSplit = function () {
 	}
 	
 }
+
 
 
 
