@@ -129,7 +129,7 @@
     </callbacks>
     <plugins>
     <plugin name="Drawer">
-        <option name="librariesURI">libraries.xml</option>
+        <option name="imageLibrariesURI">libraries.xml</option>
     </plugin>
 </plugins>
 </config>

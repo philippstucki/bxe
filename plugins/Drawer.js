@@ -14,7 +14,9 @@ function BxeDrawer() {
 	    var imageLibrariesURI = mozile_root_dir + "kupu/kupudrawers/demolibraries.xml"; 
 	    var linkLibrariesURI = mozile_root_dir + "kupu/kupudrawers/demolibraries.xml"; 
 	    var assetLibrariesURI = mozile_root_dir + "kupu/kupudrawers/demolibraries.xml"; 
-        
+        if (options["librariesURI"]) {
+			imageLibrariesURI = options["librariesURI"];
+		}
         if (options["imageLibrariesURI"]) {
 			imageLibrariesURI = options["imageLibrariesURI"];
 		}
