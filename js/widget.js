@@ -1055,7 +1055,7 @@ Widget_ModalAttributeBox.prototype.drawAttributes = function(xmlnode) {
 Widget_ModalAttributeBox.prototype.addAttributeItem = function (attr, value,choice) {
 	var text = attr.name;
 	if (choice) {
-		text = text + " +";
+		text = text + "";
 	}
 	else if (!attr.optional) {
 		text = text + " *";

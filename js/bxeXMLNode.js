@@ -86,6 +86,7 @@ XMLNode.prototype.init = function ( nodein, localName, nodeType, autocreate) {
 			}
 			attribs = this._node.attributes;
 			for (var i = 0; i < attribs.length; i++) {
+				dump(attribs[i].localName + "\n");
 				this.setAttributeNS(attribs[i].namespaceURI,attribs[i].localName,attribs[i].value);
 			}
 			
@@ -666,7 +667,11 @@ XMLNodeElement.prototype.__defineGetter__(
 );
 
 XMLNodeElement.prototype.setAttribute = function(name,value) {
+	try {
 	return this._node.setAttribute(name, value);
+	} catch(e) {
+		alert(e + "\n" + name + " = " + value + " could not be inserted");
+	}
 }
 
 XMLNodeElement.prototype.setAttributeNode = function(node) {
