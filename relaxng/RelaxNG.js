@@ -21,7 +21,7 @@ DocumentVDOM.prototype.parseStart = function(node) {
 			var startElement = new ElementVDOM(startChildren[i]);
 			this.firstChild = startElement;
 			startElement.parentNode = this;
-			var nsParts = rng_nsResolver.parseNodeName(startChildren[i].getAttribute("name"));
+			var nsParts = rng_nsResolver.parseNodeNameOnElement(startChildren[i]);
 			startElement.nodeName = nsParts.nodeName;
 			startElement.localName = nsParts.localName;
 			startElement.namespaceURI = nsParts.namespaceURI;
@@ -57,6 +57,27 @@ bxe_RelaxNG_nsResolver.prototype.lookupNamespaceURI = function(prefix) {
 		return this.namespaces[prefix];
 	}
 	return null;
+}
+
+bxe_RelaxNG_nsResolver.prototype.parseNodeNameOnElement = function(node) {
+	var nodename = node.getAttribute("name");
+	if (nodename) {
+		return this.parseNodeName(nodename);
+	}
+	// no attribute name, search for childnode with name attribute
+	var child = node.firstChild;
+	var ret = new Object();
+	while (child) {
+		if (child.nodeType == 1 && child.localName == "name") {
+			child.getAttribute("ns");
+			ret.namespaceURI = child.getAttribute("ns");
+			ret.localName = child.firstChild.data;
+			ret.prefix = "";
+			return ret;
+		}
+		child = child.nextSibling;
+	}
+	
 }
 
 bxe_RelaxNG_nsResolver.prototype.parseNodeName = function(nodename) {
@@ -112,7 +133,7 @@ NodeVDOM.prototype.parseChildren = function(node) {
 	for (var i = 0; i < childNodes.length; i++) {
 		if (childNodes[i].isRelaxNGElement("element")) {
 			var newElement = new ElementVDOM(childNodes[i]);
-			var nsParts = rng_nsResolver.parseNodeName(childNodes[i].getAttribute("name"));
+			var nsParts = rng_nsResolver.parseNodeNameOnElement(childNodes[i]);
 			newElement.nodeName = nsParts.nodeName;
 			newElement.localName = nsParts.localName;
 			newElement.namespaceURI = nsParts.namespaceURI;

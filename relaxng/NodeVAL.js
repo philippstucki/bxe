@@ -38,7 +38,12 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 		if (ctxt.node.nodeType == Node.COMMENT_NODE) {
 			continue;
 		}
-		if (ctxt.isValid()) {
+		//FIXME: check CDATA_SECTIONS AS WELL
+		if (ctxt.node.nodeType == Node.CDATA_SECTION_NODE) {
+			continue;
+		}
+		
+		if (  ctxt.isValid()) {
 			if(ctxt.node.hasChildNodes()) {
 				var retctxt = ctxt.node._isNodeValid(deep,  wFValidityCheckLevel )
 				if (retctxt.isError) {
@@ -56,7 +61,7 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 				
 				}
 				else {
-					ctxt.setErrorMessage(ctxt.node.localName + " is not allowed as child of  " + this.localName );
+					ctxt.setErrorMessage(ctxt.node.localName +"("+ctxt.node.namespaceURI+ ")"+ " is not allowed as child of  " + this.localName +"("+this.namespaceURI+ ")");
 				}
 		}
 	} while (ctxt.next())

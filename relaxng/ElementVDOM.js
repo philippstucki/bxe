@@ -19,7 +19,7 @@ ElementVDOM.prototype.addAllowedChild = function(node) {
 }
 
 ElementVDOM.prototype.isValid = function(ctxt) {
-	
+//dump(ctxt.node.nodeType + " " + ctxt.node.localName+" == "+this.localName+" && "+ctxt.node.namespaceURI+" == "+this.namespaceURI+"\n");
 	if (ctxt.node.localName == this.localName && ctxt.node.namespaceURI == this.namespaceURI) {
 		ctxt.node.vdom = this;
 		ctxt.nextVDOM();
