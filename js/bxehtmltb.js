@@ -18,7 +18,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: bxehtmltb.js,v 1.9 2003/11/18 21:41:10 chregu Exp $
+// $Id$
 
 /*******************************************************************************************************
  * Simple, html-based editing toolbar for mozile: it appears once an editable area is 
@@ -41,9 +41,7 @@
 
 // image should be in the same directory as this file. This file is in mozile_root_dir. The loader
 // sets this constant.
-const buttonImgLoc = mozile_root_dir + "/images/buttons.png";
-var preloadthebutton = new Image();
-preloadthebutton.src = buttonImgLoc;
+
 
 var ptbStyles = new Array(
 			"height", "30px",
