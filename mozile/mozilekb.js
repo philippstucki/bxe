@@ -266,6 +266,16 @@ function nonctrlKeyPressHandler(event)
 	// BACKSPACE AND DELETE (DOM_VK_BACK_SPACE, DOM_VK_DELETE)
 	if((event.keyCode == 8) || (event.keyCode == 46)) {
 		var backspace = (event.keyCode == 46);
+		//switch focus and anchor, if focus is before anchor
+		// this prevents some problems with updateXMLNode and unifies the handling
+		// Bug 635 caused this
+		//BX_debug(sel.focusNode);
+		if (!sel.isCollapsed && sel.focusNode.nodeType == 3 && sel.focusOffset == 0 && sel.focusNode.compareDocumentPosition(sel.anchorNode) == 4) {
+			var n = sel.anchorNode;
+			var o = sel.anchorOffset;
+			sel.collapse(sel.focusNode,0)
+			sel.extend(n,o);
+		}
 		if (sel.isCollapsed) {
 			sel.deleteSelection(backspace);
 		}
@@ -277,7 +287,7 @@ function nonctrlKeyPressHandler(event)
 			sel.extend(n,o);
 			sel.deleteSelection(backspace);
 			sel = window.getSelection();
-			//sel.deleteSelection(false);
+			sel.deleteSelection(false);
 			sel.anchorNode.parentNode.updateXMLNode();
 			
 		} else {
