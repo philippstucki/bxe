@@ -11,8 +11,12 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: table.js,v 1.4 2003/09/14 10:33:17 chregu Exp $
+// $Id: table.js,v 1.5 2003/09/15 08:10:36 chregu Exp $
 
+
+HTMLTableCellElement.prototype.TableRemoveRow = function() {
+	this.parentNode.parentNode.removeChild(this.parentNode);
+}
 
 HTMLTableCellElement.prototype.TableAppendRow = function () {
 	var newRow = this.parentNode.cloneNode(true);

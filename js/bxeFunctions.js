@@ -321,13 +321,13 @@ function bxe_ContextPopup(e) {
 		popup.addSeparator();
 		
 		
-				//split
+		//split
 		var menui = popup.addMenuItem("Split right", function(e) {
-				var widget = e.currentTarget.Widget;
-				var _par = widget.MenuPopup.MainNode._node.parentNode;
-				widget.MenuPopup.MainNode._node.TableCellSplit();
-				_par.updateXMLNode();
-			});
+			var widget = e.currentTarget.Widget;
+			var _par = widget.MenuPopup.MainNode._node.parentNode;
+			widget.MenuPopup.MainNode._node.TableCellSplit();
+			_par.updateXMLNode();
+		});
 		
 		var nextSibling = node.nextSibling;
 		while (nextSibling && nextSibling.nodeType != 1) {
@@ -342,25 +342,32 @@ function bxe_ContextPopup(e) {
 			});
 		}
 		//TODO fix for last row
-			var menui = popup.addMenuItem("Merge down", function(e) {
-				var widget = e.currentTarget.Widget;
-				var _par = widget.MenuPopup.MainNode._node.parentNode;
-				widget.MenuPopup.MainNode._node.TableCellMergeDown();
-				_par.updateXMLNode();
-			});
+		var menui = popup.addMenuItem("Merge down", function(e) {
+			var widget = e.currentTarget.Widget;
+			var _par = widget.MenuPopup.MainNode._node.parentNode;
+			widget.MenuPopup.MainNode._node.TableCellMergeDown();
+			_par.updateXMLNode();
+		});
 		
 		var menui = popup.addMenuItem("Append Row", function(e) {
-				var widget = e.currentTarget.Widget;
-				var _par = widget.MenuPopup.MainNode._node.parentNode;
-				widget.MenuPopup.MainNode._node.TableAppendRow();
-				_par.updateXMLNode();
-			});
-			var menui = popup.addMenuItem("Append Col", function(e) {
-				var widget = e.currentTarget.Widget;
-				var _par = widget.MenuPopup.MainNode._node.parentNode.parentNode;
-				widget.MenuPopup.MainNode._node.TableAppendCol();
-				_par.updateXMLNode();
-			});
+			var widget = e.currentTarget.Widget;
+			var _par = widget.MenuPopup.MainNode._node.parentNode;
+			widget.MenuPopup.MainNode._node.TableAppendRow();
+			_par.updateXMLNode();
+		});
+		var menui = popup.addMenuItem("Append Col", function(e) {
+			var widget = e.currentTarget.Widget;
+			var _par = widget.MenuPopup.MainNode._node.parentNode.parentNode;
+			widget.MenuPopup.MainNode._node.TableAppendCol();
+			_par.updateXMLNode();
+		});
+		var menui = popup.addMenuItem("Remove Row", function(e) {
+			var widget = e.currentTarget.Widget;
+			var _par = widget.MenuPopup.MainNode._node.parentNode.parentNode;
+			widget.MenuPopup.MainNode._node.TableRemoveRow();
+			_par.updateXMLNode();
+		});
+		
 		
 		popup.MainNode = node;
 	}
