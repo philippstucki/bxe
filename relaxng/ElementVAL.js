@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: ElementVAL.js,v 1.15 2004/01/15 08:24:48 chregu Exp $
+// $Id: ElementVAL.js,v 1.16 2004/01/15 10:19:40 chregu Exp $
 
 
 XMLNodeElement.prototype.__defineGetter__(
@@ -51,6 +51,44 @@ XMLNodeElement.prototype.__defineGetter__(
 }
 )
 
+XMLNodeElement.prototype.isValidNextSibling = function(ctxt) {
+	if (!ctxt) {
+		try {
+			if (this.parentNode.vdom) {
+				ctxt = new ContextVDOM(this.parentNode, this.parentNode.vdom);
+			} else {
+				dump(this.previousSibling.nodeName +" jjj \n");
+				return false;
+			}
+	} catch (e) { bxe_catch_alert(e); debug ("couldn't make new context..");}
+	}
+	
+	
+	do {
+		if (ctxt.node.nodeType == "3" && ctxt.node.isWhitespaceOnly) {
+			continue;
+		} 	
+		if (ctxt.node.nodeType == Node.COMMENT_NODE) {
+			continue;
+		}
+		//FIXME: check CDATA_SECTIONS AS WELL
+		if (ctxt.node.nodeType == Node.CDATA_SECTION_NODE) {
+			continue;
+		}
+		var _vdom = ctxt.vdom;
+		if (  ctxt.isValid()) {
+		} else {
+			ctxt.isError = true;
+		}
+		if (ctxt.node == this) {
+			break;
+		}
+	} while (ctxt.next() );
+	
+	return (!ctxt.isError);
+	
+}
+
 XMLNodeElement.prototype.__defineGetter__(
 "allowedNextSiblings", function() {
 		// everything which isn't an Element, can't have children
@@ -62,16 +100,15 @@ XMLNodeElement.prototype.__defineGetter__(
 		
 		try{
 			if (ctxt.vdom ) {
-			
 				do {
 					
 					subac = ctxt.vdom.allowedElements(ctxt);
-					
 					if (subac && subac.nodeName) {
 						if (subac[i].localName != "#text") {
 							var bla =  new XMLNodeElement(subac.namespaceURI, subac.localName, 1);
 							this.parentNode.insertBeforeIntern(bla,this.nextSibling);
-							if( bla.parentNode.isNodeValid(false,2,true)) {
+							
+							if(bla.isValidNextSibling() ) {
 								ac.push(subac);
 							}
 							bla.unlink();
@@ -82,8 +119,10 @@ XMLNodeElement.prototype.__defineGetter__(
 						for (var i = 0; i < subac.length; i++) {
 							if (subac[i].localName != "#text") {
 								var bla =  new XMLNodeElement(subac[i].namespaceURI, subac[i].localName, 1);
+								
 								this.parentNode.insertBeforeIntern(bla,this.nextSibling);
-								if( bla.parentNode.isNodeValid(false,2,true)) {
+								
+								if(bla.isValidNextSibling()  ) {
 									ac.push(subac[i]);
 								}
 								bla.unlink();
