@@ -43,11 +43,6 @@ Node.prototype.convertToXMLDocFrag = function () {
 	return  this.XMLNode.buildXML();
 }
 
-Node.prototype.convertToXMLNode = function(xmldoc) {
-	alert("Node.convertToXMLNode is deprecated? please report to chregu@bitflux.ch that this method is stilll used somewhere");
-	return false;
-}
-
 Node.prototype.getNamespaceDefinitions = function () {
 	
 	var node = this;
@@ -96,34 +91,6 @@ Node.prototype.__defineSetter__(
 
 Element.prototype.getCStyle = function(style) {
 	return document.defaultView.getComputedStyle(this, null).getPropertyValue(style);
-}
-
-Element.prototype.SplitClasses = function() {
-	var newElement = null;
-	alert ("Element.prototype.SplitClasses is deprecated. And this method should not be called anymore \n Please report to chregu@bitflux.ch about that.");
-
-	if (this.hasAttribute("class") ) {
-		var classes = this.getClasses();
-		if (classes.length > 1) {
-			for (var i = classes.length - 1; i >= 0; i--) {
-				
-				if (newElement != null) {
-					var newSpan = document.createElement("span");
-					newSpan.setAttribute("class",classes[i]);
-					newElement.appendChild(newSpan);
-					
-				} else {
-					newElement = document.createElement("span");
-					newElement.setAttribute("class",classes[i]);
-				}
-				newElement.XMLNode.namespaceURI = this.XMLNode.namespaceURI;
-				
-			}
-			newSpan.appendAllChildren(this);
-			this.parentNode.replaceChild(newElement,this);
-		}
-	}
-	
 }
 
 Element.prototype.getBeforeAndAfterString = function (hasChildNodes, noParent) {
