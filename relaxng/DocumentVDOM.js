@@ -18,7 +18,7 @@ DocumentVDOM.prototype.parseSchema = function() {
 		this.xmldoc.documentElement.namespaceURI == "http://relaxng.org/ns/structure/1.0" ) {
 		this.parseRelaxNG();
 	} else {
-		alert ("Validation-file is not valid :\n" + this.xmldoc.saveXML(this.xmldoc));
+		bxe_alert ("Validation-file is not valid :\n" + this.xmldoc.saveXML(this.xmldoc));
 		return false;
 	}
 	this.onparse(this);

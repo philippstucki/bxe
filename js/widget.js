@@ -675,6 +675,8 @@ function Widget_ModalBox (title, callback) {
 }
 
 Widget_ModalBox.prototype.setup = function (title, callback ) {
+	this.doCancel = false;
+
 	this.node = this.initNode("div","ModalBox");
 	this.Display = "block";
 	this.node.appendToBody();
@@ -686,6 +688,7 @@ Widget_ModalBox.prototype.setup = function (title, callback ) {
 }
 
 Widget_ModalBox.prototype.reset = function (title, callback) {
+	this.doCancel = false;
 	if (this.PaneNode.hasChildNodes()) {
 		this.PaneNode.removeAllChildren();
 	}
@@ -698,6 +701,7 @@ Widget_ModalBox.prototype.reset = function (title, callback) {
 }
 
 Widget_ModalBox.prototype.addItem = function (name, value, type, description, options) {
+	this.doCancel = true;
 	switch (type) {
 		case "textfield":
 			var td = this.addFormEntry(name, description);
@@ -756,6 +760,16 @@ Widget_ModalBox.prototype.addFormEntry = function(title, descr) {
 	return tdt;
 }
 
+Widget_ModalBox.prototype.addText = function(text) {
+	var table = this.createTable();
+	var tr = document.createElement("tr");
+	table.appendChild(tr);
+	var td = document.createElement("td");
+	td.setAttribute("colspan",2);
+	td.appendChild(document.createTextNode(text));
+	tr.appendChild(td);
+}
+
 Widget_ModalBox.prototype.show = function(x,y, position) {
 	if (this.hasTable) {
 		var subm = document.createElement("input");
@@ -780,16 +794,18 @@ Widget_ModalBox.prototype.show = function(x,y, position) {
 			e.preventDefault();
 			e.stopPropagation();
 		}, false);
-		var cancel = document.createElement("input");
-		cancel.setAttribute("type","reset");
-		cancel.setAttribute("value","Cancel");
-		cancel.name="__cancel";
-		this.hasTable.parentNode.addEventListener("reset", function(e) { 
-			bxe_registerKeyHandlers(); 
-			e.target.Widget.hide();
-		}, false);
+		if (this.doCancel) {
+			var cancel = document.createElement("input");
+			cancel.setAttribute("type","reset");
+			cancel.setAttribute("value","Cancel");
+			cancel.name="__cancel";
+			this.hasTable.parentNode.addEventListener("reset", function(e) { 
+				bxe_registerKeyHandlers(); 
+				e.target.Widget.hide();
+			}, false);
+			this.hasTable.parentNode.appendChild(cancel);
+		}
 		this.hasTable.parentNode.appendChild(subm);
-		this.hasTable.parentNode.appendChild(cancel);
 	}
 	if (!position) { position = "absolute";};
 	this.position(x,y, position);
@@ -815,6 +831,8 @@ Widget_ModalBox.prototype.setTitle = function(text) {
 	this.TitleNode.firstChild.data = text;
 	
 }
+
+
 function Widget_ModalAttributeBox() {
 	this.setup("Edit Attributes");
 }
@@ -868,6 +886,7 @@ function Widget_XPathMouseOver (e) {
 function Widget_XPathMouseOut (e) {
 	e.currentTarget._node.removeAttribute("__bxe_highlight");
 }
+
 
 
 	

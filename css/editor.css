@@ -193,7 +193,7 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
   font-family: Verdana,Arial,Helvetica,sans-serif;
   font-size: 12px;
   width: 500px;
-  height: 200px;
+  min-height: 200px;
 }
 .ModalBox .ModalBoxTitle {
     padding-left: 10px;

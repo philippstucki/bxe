@@ -12,7 +12,7 @@ XMLNode.prototype.isNodeValid = function(deep, wFValidityCheckLevel ) {
 				c.errormsg[i]["node"]._node.setAttribute("__bxe_invalid","true");
 			} 
 		}
-		alert(c.getErrorMessagesAsText());
+		bxe_validationAlert(c.errormsg);
 		return false;
 	} else {
 		return true;
@@ -65,7 +65,7 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 			}
 		} else {
 				if (ctxt.node.parentNode.isAllowedChild(ctxt.node)) {
-					ctxt.setErrorMessage(ctxt.node.localName + " is not allowed at this position as child of  " + this.localName );
+					ctxt.setErrorMessage(ctxt.node.localName +"("+ctxt.node.namespaceURI+ ") is not allowed at this position as child of  " + this.localName );
 				
 				}
 				else {

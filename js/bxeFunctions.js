@@ -1187,4 +1187,18 @@ function bxe_doCallback(cb, node ) {
 }
 		
 
+function bxe_alert(text) {
+	var widg = mozilla.getWidgetModalBox("Alert");
+	widg.addText(text);
+	widg.show(100,50, "fixed");
+}
+
+function bxe_validationAlert(messages) {
+	var widg = mozilla.getWidgetModalBox("Validation Alert");
+	for (i in messages) {
+		widg.addText( messages[i]["text"] );
+	}
+	widg.show((window.innerWidth- 500)/2,50, "fixed");
+	
+}
 
