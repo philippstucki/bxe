@@ -387,7 +387,18 @@ function nonctrlKeyPressHandler(event)
 		sel.collapse(ip.ipNode, ip.ipOffset);
 		return true;
 	}
-
+	if(event.keyCode == event.DOM_VK_HOME){
+		var obj_sel = window.getSelection();   
+		obj_sel.collapse(obj_sel.focusNode, 0);
+		return true;
+	}
+	if (event.keyCode == event.DOM_VK_END) {
+		var obj_sel = window.getSelection();
+		var str = obj_sel.anchorNode.nodeValue;
+		obj_sel.collapse(obj_sel.focusNode, str.length);
+		return true;
+	}
+	
 	// ALPHANUM
 	if(event.charCode)
 	{
