@@ -80,7 +80,8 @@ XMLDocument.prototype.transformToXPathMode = function(xslfile) {
 		var processor = new XSLTProcessor();
 		processor.importStylesheet(newDocument);
 		var xmldoc = processor.transformToFragment(xsltransformdoc.xsldoc.xmldoc,document);
-		document.getElementsByTagName("body")[0].appendChild(xmldoc);
+		var bxe_area = document.getElementById("bxe_area");
+		bxe_area.parentNode.replaceChild(xmldoc,bxe_area);
 		xsltransformdoc.xsldoc.xmldoc.insertIntoHTMLDocument();
 		
 	}
