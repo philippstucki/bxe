@@ -44,18 +44,18 @@ const BXE_VERSION = "0.1alpha"
 mozile_js_files = new Array();
 mozile_js_files.push("mozile/mozWrappers.js");
 mozile_js_files.push("mozile/eDOM.js");
-mozile_js_files.push("widget.js");
+mozile_js_files.push("js/widget.js");
 mozile_js_files.push("mozile/eDOMXHTML.js");
-mozile_js_files.push("bxeNodeElements.js");
-mozile_js_files.push("bxeXMLDocument.js");
+mozile_js_files.push("js/bxeNodeElements.js");
+mozile_js_files.push("js/bxeXMLDocument.js");
 mozile_js_files.push("mozile/domlevel3.js");
 mozile_js_files.push("mozile/mozCE.js");
 mozile_js_files.push("mozile/mozIECE.js");
 mozile_js_files.push("mozile/mozilekb.js");
-mozile_js_files.push("bxehtmltb.js");
+mozile_js_files.push("js/bxehtmltb.js");
 mozile_js_files.push("mozile/mozileModify.js");
-mozile_js_files.push("eDOMEvents.js");
-mozile_js_files.push("jsdav.js");
+mozile_js_files.push("js/eDOMEvents.js");
+mozile_js_files.push("js/jsdav.js");
 mozile_js_files.push("td/webdav.js");
 
 //mozile_js_files.push("xsltTransformer.js");
