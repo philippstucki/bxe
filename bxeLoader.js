@@ -42,12 +42,13 @@
 mozile_js_files = new Array();
 mozile_js_files.push("mozWrappers.js");
 mozile_js_files.push("eDOM.js");
+mozile_js_files.push("jsdav.js");
+mozile_js_files.push("td/webdav.js");
 mozile_js_files.push("widget.js");
 
 
 mozile_js_files.push("eDOMXHTML.js");
-mozile_js_files.push("jsdav.js");
-mozile_js_files.push("td/webdav.js");
+
 
 mozile_js_files.push("domlevel3.js");
 mozile_js_files.push("mozCE.js");
