@@ -424,19 +424,23 @@ Selection.prototype.toggleListLines = function(requestedList, alternateList)
 }
 
 Selection.prototype.insertNodeRaw = function (node) {
+	debug("insertNodeRaw\n");
 	var cssr = this.getEditableRange();
 	if(!cssr)
 		return;
 	// if there's a selection then delete it
 	if(!cssr.collapsed)
 	{
-		cssr.extractContentsByCSS();
+		cssr.extractContents();
 	}
-	var ip = cssr.firstInsertionPoint;
-	ip.insertNode(node);
-	//cssr.lines[0].container.updateXMLNode();
-	var _upNode = ip.ipNode;
 	
+	//var ip = cssr.firstInsertionPoint;
+	
+	cssr.insertNode(node);
+	
+	var _upNode = this.getEditableRange().startContainer;
+	
+		
 	if (_upNode.nodeType == 3) {
 		_upNode = _upNode.parentNode;
 	}
@@ -448,10 +452,10 @@ Selection.prototype.insertNodeRaw = function (node) {
 	_upNode.updateXMLNode();
 
 	
-	cssr.selectInsertionPoint(ip);
+	/*cssr.selectInsertionPoint(ip);
 
 	cssr.__clearTextBoundaries(); // POST05: don't want to have to use this
-
+	*/
 	this.selectEditableRange(cssr);
 	return node;
 }
@@ -488,7 +492,9 @@ Selection.prototype.paste = function()
 	var node = window.getSelection().anchorNode;
 	if( node.nodeType == 3) {
 		node.normalize();
+		
 	}
+	return node;
 	
 }
 // creates a hidden form field for interapp copy/paste support without native-method support

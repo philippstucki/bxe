@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeNodeElements.js,v 1.40 2004/02/20 16:30:42 chregu Exp $
+// $Id$
 
 Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 	alert("Node.prototype.insertIntoHTMLDocument is deprecated");
