@@ -49,16 +49,8 @@
  * mixed mode, then select objects too.
  * - each editable area gets a CP? If valid (add method that checks TextNode validity?)
  */
-document.addEventListener("keypress", keyPressHandler, true);
-//key up and down handlers are needed for interapplication copy/paste without having native-methods access
-//if you're sure you have native-methods access you can turn them off
-document.addEventListener("keydown", keyDownHandler, true);
-document.addEventListener("keyup", keyUpHandler, true);
-
-//key up and down handlers are needed for interapplication copy/paste without having native-methods access   
-//if you're sure you have native-methods access you can turn them off   
-document.addEventListener("keydown", keyDownHandler, true);   
-document.addEventListener("keyup", keyUpHandler, true);   
+bxe_registerKeyHandlers();
+   
 function keyPressHandler(event)
 {	
 	var handled = false;

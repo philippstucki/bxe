@@ -967,5 +967,22 @@ function bxe_InternalChildNodesAttrChanged(e) {
 	
 }
 
+function bxe_registerKeyHandlers() {
+	
+	document.addEventListener("keypress", keyPressHandler, true);
+//key up and down handlers are needed for interapplication copy/paste without having native-methods access
+//if you're sure you have native-methods access you can turn them off
+	document.addEventListener("keydown", keyDownHandler, true);
+	document.addEventListener("keyup", keyUpHandler, true);
+}
+
+function bxe_deregisterKeyHandlers() {
+	document.removeEventListener("keypress", keyPressHandler, true);
+//key up and down handlers are needed for interapplication copy/paste without having native-methods access
+//if you're sure you have native-methods access you can turn them off
+	document.removeEventListener("keydown", keyDownHandler, true);
+	document.removeEventListener("keyup", keyUpHandler, true);
+}
+
 
 

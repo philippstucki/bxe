@@ -7,12 +7,13 @@ Widget.prototype.position = function (left, top, position) {
 	this.node.style.left = left + "px";
 	this.node.style.top = top + "px";
 	
+
 }
 
 
 
 Widget.prototype.initNode = function (elementName,className, id) {
-	
+	 
 	var node = document.createElement(elementName);
 	node.setAttribute("class",className);
 	if (id) {
@@ -24,13 +25,24 @@ Widget.prototype.initNode = function (elementName,className, id) {
 	return node;
 }
 Widget.prototype.draw = function (display) {
+	debug("here");
 	if (display) {
 		this.node.style.display = display;
 	} else {
 		this.node.style.display = this.Display;
 	}
+	this.fixOffscreenPosition();
+	
 }
 
+
+Widget.prototype.fixOffscreenPosition = function() {
+	var bottom = (this.node.offsetTop + this.node.offsetHeight);
+	if (bottom > (window.innerHeight  + window.scrollY)) {
+			this.node.style.top = (this.node.offsetTop - (bottom - (window.innerHeight + window.scrollY))) + "px";
+	}
+	
+}
 Widget.prototype.hide = function () {
 
 	this.node.style.display = 'none';
@@ -107,6 +119,8 @@ Widget_MenuPopup.prototype.draw = function() {
 	var glob = mozilla.getWidgetGlobals();
 	glob.addHideOnClick(this);
 	this.node.style.display = this.Display;
+	this.fixOffscreenPosition()
+
 
 }
 
@@ -689,13 +703,13 @@ Widget_ModalAttributeBox.prototype.show = function(e) {
 	
 	var box = e.target.Widget.Modal; 
 	var xmlnode = e.target.Widget.MenuPopup._node.XMLNode;
-	box.position(e.pageX,e.pageY,"absolute");
+//	box.position(e.pageX,e.pageY,"absolute");
 	box.drawAttributes(xmlnode);
 
 	box.setTitle("Edit Attributes of " + xmlnode.localName );
-	box.draw();
 	box.position(e.pageX ,e.pageY ,"absolute");
 	box.draw();
+	
 	//target.position(e.target.offsetParent.offsetLeft +e.target.offsetLeft , e.target.offsetParent.offsetTop + e.target.offsetTop - e.target.offsetHeight  + 5,"absolute");
 }
 
