@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: NodeVAL.js,v 1.31 2004/01/15 08:24:48 chregu Exp $
+// $Id: NodeVAL.js,v 1.32 2004/01/19 01:38:48 chregu Exp $
 
 const BXE_VALID_NOMESSAGE = 1;
 
@@ -83,6 +83,8 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 		}
 		
 		if (  ctxt.isValid()) {
+			/*dump(ctxt.node.parentNode.nodeName +  " -> " +ctxt.node.nodeName + " is valid and has ");
+			dump(ctxt.node.hasChildNodes() + " childNodes \n");*/
 			if(ctxt.node.hasChildNodes() && deep) {
 				var refsPosition = ctxt.refs.length;
 				//var oldVdom = ctxt.node.vdom;
@@ -92,14 +94,6 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 					ctxt.addErrorMessages(retctxt.errormsg);
 				} 
 			}
-			if(ctxt.node.hasAttributes()) {
-				for( var i = 0; i < ctxt.node.attributes.length; i++) {
-					if (ctxt.node.attributes[i]._isNodeValid) {
-					 ctxt.node.attributes[i]._isNodeValid( wFValidityCheckLevel);
-					}
-				}
-			}
-
 		} else {
 				var _msg = "";
 				if (ctxt.node.nodeType == 3) {
@@ -203,7 +197,6 @@ ContextVDOM.prototype.nextVDOM = function() {
 
 ContextVDOM.prototype.isValid = function() {
 	if (this.vdom) {
-//		dump("this.vdom " +this.vdom  +"\n");
 		return this.vdom.isValid(this);
 	} else {
 		if (this.node.hasChildNodes()) {

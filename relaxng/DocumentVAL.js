@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: DocumentVAL.js,v 1.10 2003/11/18 21:41:10 chregu Exp $
+// $Id: DocumentVAL.js,v 1.11 2004/01/19 01:38:48 chregu Exp $
 
 XMLNodeDocument.prototype.loadSchema = function(file ,callback) {
 	this._vdom = new DocumentVDOM();
@@ -19,6 +19,7 @@ XMLNodeDocument.prototype.loadSchema = function(file ,callback) {
 }
 
 XMLNodeDocument.prototype.validateDocument = function() {
+	dump("her");
 	if (!this.vdom) {
 		//if vdom was not attached to the document, try to find the global one...
 		this.vdom = bxe_config.DocumentVDOM;
@@ -28,13 +29,25 @@ XMLNodeDocument.prototype.validateDocument = function() {
 		return false;
 	}
 	
-	//check root element
-	//var vdomCurrentChild = this.documentElement.vdom.firstChild;
-	//alert(this._node.documentElement);
+
 	if (!this.documentElement) {
 		this.documentElement = this._node.documentElement.XMLNode;
 	}
 	var c =  this.documentElement.isNodeValid(true);
+	/*FIXME: HACK... Sometimes the above statement does not check
+	   deep enough, do another check here for all editable Areas
+	   
+	*/
+	   
+	var areaNodes = bxe_getAllEditableAreas();
+
+	for (var i = 0; i < areaNodes.length; i++) {
+		if ((areaNodes[i]._SourceMode)) {
+			return false;
+		}
+		c = c & areaNodes[i].XMLNode.isNodeValid(true)
+	}
+	
 	
 	return c;
 }

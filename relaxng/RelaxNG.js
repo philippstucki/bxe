@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: RelaxNG.js,v 1.39 2004/01/15 13:52:15 chregu Exp $
+// $Id: RelaxNG.js,v 1.40 2004/01/19 01:38:48 chregu Exp $
 
 
 const RELAXNGNS= "http://relaxng.org/ns/structure/1.0";
@@ -639,29 +639,14 @@ DefineVDOM.prototype.allowedElements = function(ctxt) {
 
 DefineVDOM.prototype.getNextSibling = function(ctxt) {
 
-	/*
-	for (var i = 0; i < ctxt.refs.length; i++) {
-		dump (".");
-	}
-	dump ("NodeName: " + this.nodeName + " " + this.name + " Node: " + ctxt.node.nodeName);
-	dump ("\n");*/
+
 	if (ctxt.refs.length == 0) {
 		debug ("	: " + ctxt.nr + "... 0");
 		return null;
 		
-	} /*else {
-		var ref = ctxt.refs.pop();
-		debug ("<<< " + this.name + " " + ref.name);
-		while (this && ref && this.name && ref.name && this.name != ref.name) {
-			var ref = ctxt.refs.pop();
-			debug ("<<< " + this.name + " " + ref.name);
-		}
-
-		debug ("nextsibling refs pop: " + ctxt.nr + " " + ref.name + " "+ (ctxt.refs.length + 1));
-	}*/
+	} 
 	var ref = ctxt.refs.pop();
-	debug ("getNextSibling " + ref.name);
-	/*debug("getNextSibling2 " + ref.getNextSibling(ctxt));*/
+
 	return ref.getNextSibling(ctxt);
 }
 
