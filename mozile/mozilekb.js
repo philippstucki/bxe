@@ -271,6 +271,7 @@ function nonctrlKeyPressHandler(event)
 		// Bug 635 caused this
 		//BX_debug(sel.focusNode);
 		if (!sel.isCollapsed && sel.focusNode.nodeType == 3 && sel.focusOffset == 0 && sel.focusNode.compareDocumentPosition(sel.anchorNode) == 4) {
+			
 			var n = sel.anchorNode;
 			var o = sel.anchorOffset;
 			sel.collapse(sel.focusNode,0)
@@ -280,12 +281,8 @@ function nonctrlKeyPressHandler(event)
 			sel.deleteSelection(backspace);
 		}
 		else if (!sel.isCollapsed && sel.anchorNode.nodeType == 3 && sel.anchorOffset == 0) {
-			bxe_history_snapshot();
-			var n = sel.focusNode;
-			var o = sel.focusOffset;
-			sel.collapse(sel.anchorNode,1)
-			sel.extend(n,o);
-			sel.deleteSelection(backspace);
+			
+			bxe_deleteWholeSelection(sel,backspace);
 			sel = window.getSelection();
 			sel.deleteSelection(false);
 			sel.anchorNode.parentNode.updateXMLNode();
@@ -390,7 +387,7 @@ function nonctrlKeyPressHandler(event)
 
 		if(!cssr.collapsed)
 		{ // POST04: delete text when write over it!	
-			cssr.collapse(true);
+			bxe_deleteWholeSelection(sel,false);
 		}
 		sel.removeAllRanges();
 		ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
@@ -499,11 +496,10 @@ function nonctrlKeyPressHandler(event)
 		{
 			var backspace = false;
 			if (!sel.isCollapsed && sel.anchorNode.nodeType == 3 && sel.anchorOffset == 0) {
-				var n = sel.focusNode;
-				var o = sel.focusOffset;
-				sel.collapse(sel.anchorNode,1)
-				sel.extend(n,o);
-				sel.deleteSelection(backspace);
+				
+				
+				bxe_deleteWholeSelection(sel,backspace);
+				sel.anchorNode.parentNode.updateXMLNode();
 				sel = window.getSelection();
 				
 				ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
@@ -533,4 +529,14 @@ function nonctrlKeyPressHandler(event)
 	}
 
 	return false;
+}
+
+function bxe_deleteWholeSelection(sel,backspace) {
+	bxe_history_snapshot();
+	var n = sel.focusNode;
+	var o = sel.focusOffset;
+	sel.collapse(sel.anchorNode,1)
+	sel.extend(n,o);
+	sel.deleteSelection(backspace);
+	sel.anchorNode.parentNode.updateXMLNode();
 }
