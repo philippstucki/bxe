@@ -343,6 +343,10 @@ function bxe_toggleTextClass(e) {
 	var _node = sel.anchorNode.parentNode;
 	_node.updateXMLNode();
 	debug("isValid?" + _node.parentNode.XMLNode.isNodeValid());
+	var cb = bxe_getCallback(e.additionalInfo.localName, e.additionalInfo.namespaceURI);
+	if (cb ) {
+		bxe_doCallback(cb, _node);
+	}
 }
 
 
@@ -858,15 +862,15 @@ function bxe_draw_widgets() {
 
 function MouseClickEvent(e) {
 	
-	
 	var target = e.target.parentElement;
+
 	if(target.userModifiable) {
-		return bxe_updateXPath();
+		return bxe_updateXPath(e.target);
 	}
 	return true;
 }
 
-function bxe_updateXPath() {
+function bxe_updateXPath(e) {
 	var sel = window.getSelection();
 	var cssr = sel.getEditableRange();
 	if (cssr) {
@@ -877,7 +881,11 @@ function bxe_updateXPath() {
 			bxe_status_bar.buildXPath(cssr.top);
 
 		} else {
-			bxe_status_bar.buildXPath(sel.anchorNode);
+			if (e) {
+				bxe_status_bar.buildXPath(e);
+			} else {
+				bxe_status_bar.buildXPath(sel.anchorNode);
+			}
 			var lines = cssr.lines;
 			bxe_format_list.removeAllItems();
 	
