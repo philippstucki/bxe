@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: RelaxNG.js,v 1.41 2004/02/24 21:14:43 chregu Exp $
+// $Id$
 
 
 const RELAXNGNS= "http://relaxng.org/ns/structure/1.0";
@@ -417,6 +417,7 @@ NodeVDOM.prototype.parseChildren = function(node) {
 				newElement.prefix = nsParts.prefix;
 				this.appendChild(newElement);
 				newElement.parseChildren();
+				this._hasEmpty = false;
 				break;
 			
 		//} else if (childNodes[i].isRelaxNGElement("ref")  && !childNodes[i].getAttribute("name").match(/\.attlist/)) {
@@ -446,17 +447,20 @@ NodeVDOM.prototype.parseChildren = function(node) {
 				break;
 			case "oneOrMore":
 				newOneOrMore = new OneOrMoreVDOM(childNodes[i]);
-				this.appendChild(newOneOrMore)
+				this.appendChild(newOneOrMore);
+				this._hasEmpty = false;
 				newOneOrMore.parseChildren(childNodes[i]);
 				break;
 			case "text":
 				this.appendChild(new TextVDOM(childNodes[i]));
+				this._hasEmpty = false;
 				break;
 			case "zeroOrMore":
 				newOneOrMore = new OneOrMoreVDOM(childNodes[i]);
 				this.appendChild(newOneOrMore);
 				newOneOrMore.appendChild(new EmptyVDOM());
 				newOneOrMore.parseChildren(childNodes[i]);
+				this._hasEmpty = false;
 				break;
 			case "attribute":
 				this.addAttributeNode( new AttributeVDOM(childNodes[i]), "optional");
@@ -465,18 +469,26 @@ NodeVDOM.prototype.parseChildren = function(node) {
 				newChoice = new ChoiceVDOM(childNodes[i]);
 				this.appendChild(newChoice);
 				newChoice.appendChild(new EmptyVDOM());
+				this._hasEmpty = false;
 				newChoice.parseChildren();
 				break;
 			case "choice":
 				newChoice = new ChoiceVDOM(childNodes[i]);
 				this.appendChild(newChoice);
 				newChoice.parseChildren();
+				this._hasEmpty = false;
 				break;
 			case "interleave":
 				var newInterleave = new InterleaveVDOM(childNodes[i]);
 				this.appendChild(newInterleave);
 				newInterleave.parseChildren();
+				this._hasEmpty = false;
 				break;
+			case "empty":
+				this.appendChild(new EmptyVDOM());
+				this._hasEmpty = true;
+				break;
+			
 		}
 	}
 }
@@ -874,17 +886,16 @@ ElementVDOM.prototype.__defineGetter__("nodeName", function(name) {
 	return this._xmlnodeName;
 }
 )
-
+	
 ElementVDOM.prototype.__defineGetter__("canHaveChildren", 
 	function() {
-		if (this.firstChild) {
-			return true;
-		} else {
-			return false;
+		if (this._hasEmpty) {
+		return !(this._hasEmpty);
 		}
+		return true;
 	}
 )
-	
+		
 
 
 DocumentVDOM.prototype.getStructure = function() {
