@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: widget.js,v 1.67 2004/01/19 00:19:34 chregu Exp $
+// $Id: widget.js,v 1.68 2004/02/11 14:51:50 chregu Exp $
 
 function Widget () {}
 
@@ -863,7 +863,7 @@ Widget_ModalBox.prototype.show = function(x,y, position) {
 			var returnValues = new Array();
 			for (var i =0; i < elem.length; i++ in elem) {
 				if (elem[i].name.substr(0,2) != "__") {
-					returnValues[elem[i].name] = elem[i].value;
+					returnValues[elem[i].name.replace(/ +\*/,"")] = elem[i].value;
 				}
 			}
 			var sel = window.getSelection();
