@@ -1550,7 +1550,7 @@ function bxe_CleanInlineIntern(localName, namespaceUri) {
 	sel.selectEditableRange(cssr);
 	
 	
-	if (doitagain > 1) {
+	if (doitagain > 1 || (!localName && cssr.startContainer.parentNode.getCStyle("display") == "inline")) {
 		bxe_CleanInlineIntern(localName,namespaceUri);
 	}
 	
