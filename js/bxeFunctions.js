@@ -1105,7 +1105,8 @@ function bxe_draw_widgets() {
 	});
 
 	submenu4.push("Report Bug",function(e) { 
-		bla = window.open("http://bugs.bitfluxeditor.org/enter_bug.cgi?product=Editor&version="+BXE_VERSION+"&priority=P3&bug_severity=normal&bug_status=NEW&assigned_to=&cc=&bug_file_loc=http%3A%2F%2F&short_desc=&comment=***%0DVersion: "+BXE_VERSION + "%0DBuild: " + BXE_BUILD +"%0DUser Agent: "+navigator.userAgent + "%0D***&maketemplate=Remember+values+as+bookmarkable+template&form_name=enter_bug","help","");
+		bla = window.open("http://bugs.bitfluxeditor.org/enter_bug.cgi?product=Editor&version="+BXE_VERSION+"&priority=P3&bug_severity=normal&bug_status=NEW&assigned_to=&cc=&bug_file_loc=http%3A%2F%2F&short_desc=&comment=***%0DVersion: "+BXE_VERSION + "%0DBuild
+: " + BXE_BUILD +"%0DUser Agent: "+navigator.userAgent + "%0D***&maketemplate=Remember+values+as+bookmarkable+template&form_name=enter_bug","help","");
 		bla.focus();
 		
 	});
@@ -1960,7 +1961,7 @@ function bxe_doCallback(cb, node ) {
 		
 function bxe_checkIfNotALink (node) {
 	var sel = window.getSelection();
-	if (sel.anchorNode.parentNode.XMLNode.localName == "a" || sel.focusNode.parentNode.XMLNode.localName == "a) {
+	if (sel.anchorNode.parentNode.XMLNode.localName == "a" || sel.focusNode.parentNode.XMLNode.localName == "a") {
 		alert("There is already a link here, please use the \"Edit Attributes\" function, to edit the link.");
 		return false;
 	}
