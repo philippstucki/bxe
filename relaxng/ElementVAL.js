@@ -62,12 +62,12 @@ XMLNodeElement.prototype.__defineGetter__ ("canHaveText",
 	
 
 //Element.prototype.isAllowedChild = function(node) {
-XMLNodeElement.prototype.isAllowedChild = function(node) {
+XMLNodeElement.prototype.isAllowedChild = function(namespaceURI, localName) {
 	
 	var ac = this.allowedChildren;
 	if (ac) {
 	for (var i = 0; i < ac.length; i++) {
-		if (ac[i].localName == node.localName && ac[i].namespaceURI == node.namespaceURI) {
+		if (ac[i].localName == localName && ac[i].namespaceURI == namespaceURI) {
 			return true;
 		}
 	}

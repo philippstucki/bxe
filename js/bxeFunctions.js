@@ -964,6 +964,9 @@ function bxe_OrderedList() {
 
 function bxe_InsertObject() {
 	var sel = window.getSelection();
+	if (!bxe_checkIsAllowedChild(XHTMLNS,"object",sel)) {
+		return false;
+	}
 	var cssr = sel.getEditableRange();
 	var lines = cssr.lines;
 	var nextSib = lines[0].container;
@@ -1009,9 +1012,32 @@ function bxe_checkForSourceMode(sel) {
 	return false;
 }
 
+function bxe_checkIsAllowedChild (namespaceURI, localName, sel) {
+	if (!sel) {
+		sel = window.getSelection();
+	}
+	var cssr = sel.getEditableRange();
+	var parentnode = null;
+	if (cssr.startContainer.nodeType != 1) {
+		parentnode = cssr.startContainer.parentNode;
+	} else {
+		parentnode = cssr.startContainer;
+	}
+	if (parentnode.XMLNode.isAllowedChild(namespaceURI, localName)) {
+		return true;
+	} else {
+		alert (localName + " is not allowed as child of " + parentnode.XMLNode.localName);
+		return false;
+	}
+}
+
 function bxe_InsertTable() {
 	
 	var sel = window.getSelection();
+	if (!bxe_checkIsAllowedChild(XHTMLNS,"table",sel)) {
+		return false;
+	}
+
 	if (bxe_checkForSourceMode(sel)) {
 		return false;
 	}
@@ -1034,8 +1060,11 @@ function bxe_InsertTable() {
 }
 
 function bxe_InsertLink(e) {
-
+	
 	var sel = window.getSelection();
+	if (!bxe_checkIsAllowedChild(XHTMLNS,"a",sel)) {
+		return false;
+	}
 	if (bxe_checkForSourceMode(sel)) {
 		return false;
 	}
