@@ -195,7 +195,6 @@ function indentLines(cssr)
 function outdentLines(cssr)
 {
 	var lines = cssr.lines;
-
 	// first off, split list lines from non-list lines
 	var listElements = new Array();
 	var nonListLines = new Array();
@@ -233,7 +232,7 @@ function outdentLines(cssr)
 			// special case: empty bounded line - don't try to indent this!
 			if(nonListLines[i].emptyLine)
 				continue;
-			nonListLines[i] = nonListLines[i].setContainer(documentCreateXHTMLElement(defaultContainerName), true);
+			nonListLines[i] = nonListLines[i].setContainer(documentCreateXHTMLElement("p"), true);
 		}
 		// don't indent table cells!
 		else if(nonListLines[i].containedLineType == ContainedLine.TABLE_CELL)
@@ -275,7 +274,7 @@ __outdentListItem = function(listItem)
 		{
 			// only change name 
 			if(linesInList[0].container == listItem)
-				linesInList[0].setContainer(documentCreateXHTMLElement(defaultContainerName), false);
+				linesInList[0].setContainer(documentCreateXHTMLElement("p"), false);
 		}
 		else // first or last lines bounded - make into contained if necessary
 		{
