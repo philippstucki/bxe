@@ -37,11 +37,14 @@ license.
 <hr><h1>bxeConfig Class Reference</h1><a href="classbxeConfig-members.html">List of all members.</a><table border=0 cellpadding=0 cellspacing=0>
 <tr><td></td></tr>
 <tr><td colspan=2><br><h2>Public Member Functions</h2></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classbxeConfig.html#a0">bxeConfig</a> (void filename, void fromUrl)</td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classbxeConfig.html#a1">getContentMultiple</a> (void xpath)</td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classbxeConfig.html#a2">parseUrlParams</a> ()</td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classbxeConfig.html#a3">getContent</a> (void xpath)</td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classbxeConfig.html#a4">translateUrl</a> (void node)</td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classbxeConfig.html#a0">bxeConfig</a> (void filename, void fromUrl, void configArray)</td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classbxeConfig.html#a1">getButtons</a> ()</td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classbxeConfig.html#a2">getContentMultiple</a> (void xpath)</td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classbxeConfig.html#a3">parseUrlParams</a> ()</td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classbxeConfig.html#a4">getContent</a> (void xpath)</td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classbxeConfig.html#a5">translateUrl</a> (void node)</td></tr>
+<tr><td colspan=2><br><h2>Public Attributes</h2></td></tr>
+<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="classbxeConfig.html#m0">configParams</a></td></tr>
 </table>
 <hr><h2>Constructor &amp; Destructor Documentation</h2>
 <a name="a0" doxytag="bxeConfig::bxeConfig"></a><p>
@@ -59,7 +62,13 @@ license.
           <td></td>
           <td></td>
           <td class="md" nowrap>void&nbsp;</td>
-          <td class="mdname" nowrap> <em>fromUrl</em></td>
+          <td class="mdname" nowrap> <em>fromUrl</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>void&nbsp;</td>
+          <td class="mdname" nowrap> <em>configArray</em></td>
         </tr>
         <tr>
           <td></td>
@@ -83,7 +92,35 @@ license.
   </tr>
 </table>
 <hr><h2>Member Function Documentation</h2>
-<a name="a3" doxytag="bxeConfig::getContent"></a><p>
+<a name="a1" doxytag="bxeConfig::getButtons"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> void bxeConfig::getButtons </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<a name="a4" doxytag="bxeConfig::getContent"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -112,7 +149,7 @@ license.
     </td>
   </tr>
 </table>
-<a name="a1" doxytag="bxeConfig::getContentMultiple"></a><p>
+<a name="a2" doxytag="bxeConfig::getContentMultiple"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -141,7 +178,7 @@ license.
     </td>
   </tr>
 </table>
-<a name="a2" doxytag="bxeConfig::parseUrlParams"></a><p>
+<a name="a3" doxytag="bxeConfig::parseUrlParams"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -169,7 +206,7 @@ license.
     </td>
   </tr>
 </table>
-<a name="a4" doxytag="bxeConfig::translateUrl"></a><p>
+<a name="a5" doxytag="bxeConfig::translateUrl"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -183,6 +220,29 @@ license.
           <td class="md" nowrap></td>
         </tr>
 
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+    </td>
+  </tr>
+</table>
+<hr><h2>Member Data Documentation</h2>
+<a name="m0" doxytag="bxeConfig::configParams"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> int bxeConfig::configParams
       </table>
     </td>
   </tr>
