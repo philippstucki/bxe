@@ -19,7 +19,7 @@ function BxeXMLSnippets() {
 		tmpArray['type'] = "action";
 		tmpArray['ns'] = "";
 		tmpArray['data'] = "foobar";
-		b["test"] = tmpArray;
+		b["XMLSnippets"] = tmpArray;
 		
 		//register event
 		
