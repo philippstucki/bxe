@@ -1,0 +1,21 @@
+27 Mai 2004, Version 0.9.4
+
+- Added support for Kupudrawers
+- Added Plugin support (see plugins/Drawer.js for an example)
+- Switched to Subversion (repository at http://svn.bitflux.ch/repos/bxe/)
+- Added configurable button "events" (See http://wiki.bitfluxeditor.org/index.php/ButtonDefinitions)
+- Added browsercheck on startup
+- Added configure option for OPTION_DEFAULTTABLECLASS (by Christian Egli)
+- Added more error reporting 
+- Added more validation checks
+- Added possibility to load XML documents not declared as "Content-Type: text/xml"
+- Added removing of not allowed attributes on element name change.
+- Added support for soft-breaks (<br/> in XHTML speak)
+- Fixed broken About Screen
+- Fixed format menu, when switching from source to normal view
+- Fixed insertContent issues with new tables
+- Fixed namespace handling on element name change.
+- Fixed problems with absolute path-resolution in config.xml
+- Fixed selection, insertion and copy/paste issues
+- Made popupwindows resizable
+- Updated inlineXHTML config.xml (by Michael Rolli)
