@@ -145,8 +145,10 @@ function bxe_toggleSourceMode(e) {
 	}
 	if (!editableArea._SourceMode) {
 		var xmldoc = editableArea.convertToXMLDocFrag();
+
 		editableArea.removeAllChildren();
 		editableArea.setStyle("white-space","-moz-pre-wrap");
+		
 		var xmlstr = document.saveChildrenXML(xmldoc,true);
 		editableArea.appendChild(document.createTextNode(xmlstr.str));
 		editableArea.XMLNode.prefix = xmlstr.rootPrefix;
@@ -178,7 +180,10 @@ function bxe_toggleSourceMode(e) {
 			
 			editableArea.XMLNode._node.appendAllChildren(innerhtmlValue.firstChild);
 			
+			//preserve vdom...
+			var eaVDOM = editableArea.XMLNode._vdom;
 			editableArea.XMLNode = editableArea.XMLNode._node.ownerDocument.init(editableArea.XMLNode._node);
+			editableArea.XMLNode.vdom = eaVDOM;
 			editableArea.removeAllChildren();
 			/*
 			
@@ -186,9 +191,10 @@ function bxe_toggleSourceMode(e) {
 			*/
 			editableArea.setStyle("white-space",null);
 			var xmlnode = editableArea.XMLNode._node;
+			
 			editableArea.XMLNode.insertIntoHTMLDocument(editableArea,true);
 			editableArea.XMLNode.xmlBridge = xmlnode;
-			//editableArea.XMLNode._node.parentNode.isNodeValid(true);
+			dump("valid? " +editableArea.XMLNode.isNodeValid() + "\n");
 			editableArea._SourceMode = false;
 			editableArea.AreaInfo.SourceModeMenu.Checked = false;
 			editableArea.AreaInfo.NormalModeMenu.Checked = true;
@@ -197,11 +203,7 @@ function bxe_toggleSourceMode(e) {
 				nsparent = editableArea.XMLNode.xmlBridge.parentNode.getNamespaceDefinitions();
 				for (var prefix in nsparent) {
 					if (nsparent[prefix] == ns[prefix]) {
-						if (prefix == "xmlns") {
-							xmlnode.removeAttributeNS(XMLNS,"xmlns");
-						} else {
-							xmlnode.removeAttributeNS(XMLNS,prefix);
-						}
+						xmlnode.removeAttributeNS(XMLNS,prefix);
 					}
 				}
 			}
