@@ -11,10 +11,10 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeLoader.js,v 1.252 2004/03/20 02:30:04 chregu Exp $
+// $Id: bxeLoader.js,v 1.253 2004/03/23 02:30:04 chregu Exp $
 
 var BXE_VERSION = "0.9.4-dev";
-var BXE_BUILD = "200403200330"
+var BXE_BUILD = "200403230330"
 
 
 if (window.location.protocol == "file:" || window.location.host.match(/localhost.*/)) {
