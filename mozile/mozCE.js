@@ -597,7 +597,7 @@ Selection.prototype.pasteKeyUp = function () {
 	//put the data of the placeholder span in the internal clipboard, if it's different
 	// than the content in the internal clipboard (then we assume, it's newer..)
 	var clipboard = mozilla.getClipboard();
-	if (rng.toString() != clipboard._clipboardText) {
+	if (rng.toString().replace(/\n/," ") != clipboard._clipboardText.replace(/\n/," ")) {
 		var promptText = "Internal and System-Clipboard are differing: \n\n";
 		promptText += "Internal : '" + clipboard._clipboardText + "'\n\n";
 		promptText += "System   : '" + rng.toString() +"'\n\n";
