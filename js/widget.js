@@ -566,11 +566,14 @@ Widget_StatusBar.prototype.buildXPath = function (node) {
 Widget_StatusBar.prototype.buildPopup = function (node) {
 		this.Popup.removeAllMenuItems();
 		this.Popup.initTitle(node.XMLNode.localName);
-		if (node.XMLNode.vdom.hasAttributes ) {
-			var menui = this.Popup.addMenuItem("Edit Attributes..", this.EditAttributes.popup);
-			menui.Modal = this.EditAttributes;
-		}
-		if (node.XMLNode.isInHTMLDocument()) {
+
+		
+		if (node.XMLNode.isInHTMLDocument() && !node.XMLNode.xmlBridge) {
+			if (node.XMLNode.vdom.hasAttributes ) {
+				var menui = this.Popup.addMenuItem("Edit Attributes..", this.EditAttributes.popup);
+				menui.Modal = this.EditAttributes;
+			}
+			eDOMEventCall("ContextPopup",node,this.Popup);
 			this.Popup.appendAllowedSiblings(node);
 		}
 		this.Popup.draw();
@@ -620,12 +623,13 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 
 	this.Popup.removeAllMenuItems();
 	this.Popup.initTitle(node.XMLNode.localName);
-	/* currently not working
+	/* currently not working */
 	if (node.XMLNode.vdom.hasAttributes && this.Popup.EditAttributes) {
 		var menui = this.Popup.addMenuItem("Edit Attributes..", this.Popup.EditAttributes.popup);
 		menui.Modal = this.Popup.EditAttributes;
 		menui.MenuPopup._node = node;
-	}*/
+	}
+	
 	var sel  = window.getSelection();
 	var cssr = sel.getEditableRange();
 	//var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
@@ -670,9 +674,8 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 						menui.Modal = e.currentTarget.Widget.EditAttributes;
 						menui.MenuPopup._node = newNode;
 				}
-
-				sub.appendAllowedSiblings(e.currentTarget.Widget.AppendToNode._node);
 				eDOMEventCall("ContextPopup",e.currentTarget.Widget.AppendToNode._node,sub);
+				sub.appendAllowedSiblings(e.currentTarget.Widget.AppendToNode._node);
 			});
 		} else {
 			ele.Disabled = true;

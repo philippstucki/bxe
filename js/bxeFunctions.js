@@ -440,6 +440,18 @@ function bxe_NodeRemovedChildOnly (e) {
 function bxe_ContextPopup(e) {
 	var node = e.target.XMLNode;
 	var popup = e.additionalInfo;
+	
+
+	popup.addMenuItem("Delete Node", function (e) {
+		var widget = e.currentTarget.Widget;
+		var delNode = widget.MenuPopup.MainNode._node;
+		var _par = delNode.parentNode;
+		_upNode = delNode.previousSibling;
+		_par.removeChild(delNode);
+		_upNode.updateXMLNode();
+		
+	});
+	
 	if (node.localName == "td") {
 		
 		// merge right
@@ -512,8 +524,9 @@ function bxe_ContextPopup(e) {
 		});
 		
 		
-		popup.MainNode = node;
+		
 	}
+	popup.MainNode = node;
 }
 
 function bxe_NodeChanged(e) {
