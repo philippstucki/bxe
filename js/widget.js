@@ -503,8 +503,8 @@ Widget_StatusBar.prototype.buildXPath = function (node) {
 		var rootNode = document.createElement("span");
 		rootNode.appendChild(document.createTextNode(node.nodeName));
 		this.node.insertBefore(rootNode,this.node.firstChild);
-		if (node._htmlnode) {
-			rootNode._htmlnode = node._htmlnode;
+		if (node._node) {
+			rootNode._node = node._node;
 			rootNode.addEventListener("mouseover",Widget_XPathMouseOver,false);
 			rootNode.addEventListener("mouseout",Widget_XPathMouseOut,false);
 		}
@@ -733,10 +733,10 @@ Widget_ModalAttributeBox.prototype.setAttributes = function(xmlnode) {
 }
 function Widget_XPathMouseOver (e) {
 	//dump (e.currentTarget._htmlnode + "\n");
-	e.currentTarget._htmlnode.setAttribute("__bxe_highlight","true");
+	e.currentTarget._node.setAttribute("__bxe_highlight","true");
 }
 function Widget_XPathMouseOut (e) {
-	e.currentTarget._htmlnode.removeAttribute("__bxe_highlight");
+	e.currentTarget._node.removeAttribute("__bxe_highlight");
 }
 
 
