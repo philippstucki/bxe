@@ -515,9 +515,8 @@ Widget_StatusBar.prototype.buildPopup = function (node) {
 			var menui = this.Popup.addMenuItem("Edit Attributes..", this.EditAttributes.show);
 			menui.Modal = this.EditAttributes;
 		}
-		var ac = node.XMLNode._xmlnode.allowedChildren;
-		for (i = 0; i < ac.length; i++) {
-			this.Popup.addMenuItem("Add " + ac[i], null);
+		if (node.XMLNode._htmlnode) {
+		this.Popup.appendAllowedSiblings(node);
 		}
 		this.Popup.draw();
 		this.Popup.position(node.offsetParent.offsetLeft +node.offsetLeft + window.scrollX, window.scrollY + node.offsetParent.offsetTop + node.offsetTop -this.Popup.node.offsetHeight ,"absolute");

@@ -327,7 +327,8 @@ function bxe_draw_widgets() {
 	var submenu = new Array("Undo",bxe_not_yet_implemented,"Redo",bxe_not_yet_implemented);
 	menubar.addMenu("Edit",submenu);
 	
-
+	var submenu = new Array("Count Div", function(e) { alert(document.getElementsByTagName("div").length);})
+	menubar.addMenu("Debug",submenu);
 	menubar.draw();
 	
 	//make toolbar
