@@ -848,14 +848,16 @@ function bxe_ContextMenuEvent(e) {
 	{
 		return true;
 	}
-	
-	var no ;
+	var node ;
 	if (cssr.startContainer.nodeType == Node.TEXT_NODE) {
-		no = cssr.startContainer.parentNode;
+		node = cssr.startContainer.parentNode;
 	} else {
-		no = cssr.startContainer;
+		node = cssr.startContainer;
 	}
-	bxe_context_menu.show(e,no);
+	if (node != e.target) {
+		node = e.target;
+	}
+	bxe_context_menu.show(e,node);
 	e.stopPropagation();
 	e.returnValue = false;
 	e.preventDefault();
