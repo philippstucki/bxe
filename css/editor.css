@@ -232,7 +232,6 @@ table.beauty  {
 	-moz-user-input: enabled;
 	-moz-user-select: normal;
 	-moz-outline: dotted black 1px;
-    -moz-border-radius-bottomleft: 50px;
 }
 .bold, .b {
     font-weight: bold;
