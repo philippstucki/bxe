@@ -267,8 +267,6 @@ function nonctrlKeyPressHandler(event)
 			sel = window.getSelection();
 			sel.deleteSelection(false);
 			sel.anchorNode.updateXMLNode();
-			
-			
 		} else if (sel.isCollapsed) {
 			sel.deleteSelection(backspace);
 		} else {
@@ -389,7 +387,6 @@ function nonctrlKeyPressHandler(event)
 	}
 	if(event.keyCode == event.DOM_VK_HOME) {
 		var cssr = sel.getEditableRange();
-		
 		if(!cssr )
 		{
 			return false;
@@ -421,7 +418,22 @@ function nonctrlKeyPressHandler(event)
 		// if there's a selection then delete it
 		if(!cssr.collapsed)
 		{
-			cssr.extractContentsByCSS();
+			var backspace = false;
+			if (!sel.isCollapsed && sel.anchorNode.nodeType == 3 && sel.anchorOffset == 0) {
+			var n = sel.focusNode;
+			var o = sel.focusOffset;
+			sel.collapse(sel.anchorNode,1)
+			sel.extend(n,o);
+			sel.deleteSelection(backspace);
+			sel = window.getSelection();
+			sel.deleteSelection(false);
+			sel.anchorNode.updateXMLNode();
+		} else if (sel.isCollapsed) {
+			sel.deleteSelection(backspace);
+		} else {
+			sel.deleteSelection(backspace);
+			sel.anchorNode.updateXMLNode();
+		}
 			
 		}
 
