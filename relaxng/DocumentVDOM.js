@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: DocumentVDOM.js,v 1.13 2003/11/18 21:41:10 chregu Exp $
+// $Id$
 
 
 function DocumentVDOM() {} 
@@ -27,7 +27,7 @@ DocumentVDOM.prototype.parseSchema = function() {
 	}
 	if (this.xmldoc.documentElement.localName == "schema" &&
 		this.xmldoc.documentElement.namespaceURI == "http://www.w3.org/2001/XMLSchema" ) {
-		alert("XML Schema validation is not supported at the moment");
+		alert("XML Schema validation is not supported. You have to use Relax NG");
 		//this.parseXMLSchema();
 	}
 	else if (this.xmldoc.documentElement.localName == "grammar" &&
