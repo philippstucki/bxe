@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- $Id: config.xml,v 1.2 2004/04/08 12:14:24 chregu Exp $ -->
+<!-- $Id$ -->
 <config>
     <files>
     <!-- the following file definitions are presumably the most important
@@ -52,8 +52,8 @@
             -->
         <input>
             <!-- The XML-document with the actual data -->
-            <file name="BX_xmlfile">inline.xml</file>
-            <file name="BX_validationfile">relaxng.xml</file> 
+            <file name="BX_xmlfile">http://bxcmsng:4000/admin/content/products/index.de.xhtml</file>
+            <file name="BX_validationfile">http://bxcmsng:4000/webinc/bxe/examples/inlineXHTML/relaxng.xml</file> 
         </input>
 
         <output>
@@ -64,8 +64,8 @@
             <!-- Document specific css
                 This is the one, which you should adjust.
              -->
-             <file>../../css/editor.css</file>
-             <file>inline.css</file>
+             <file>http://bxcmsng:4000/webinc/bxe/css/editor.css</file>
+             <file>http://bxcmsng:4000/webinc/bxe/examples/inlineXHTML/inline.css</file>
             
           
         </css>
