@@ -52,8 +52,8 @@
             -->
         <input>
             <!-- The XML-document with the actual data -->
-            <file name="BX_xmlfile">http://bxcmsng:4000/admin/content/products/index.de.xhtml</file>
-            <file name="BX_validationfile">http://bxcmsng:4000/webinc/bxe/examples/inlineXHTML/relaxng.xml</file> 
+            <file name="BX_xmlfile">inline.xml</file>
+            <file name="BX_validationfile">relaxng.xml</file> 
         </input>
 
         <output>
@@ -64,8 +64,8 @@
             <!-- Document specific css
                 This is the one, which you should adjust.
              -->
-             <file>http://bxcmsng:4000/webinc/bxe/css/editor.css</file>
-             <file>http://bxcmsng:4000/webinc/bxe/examples/inlineXHTML/inline.css</file>
+             <file>../../css/editor.css</file>
+             <file>inline.css</file>
             
           
         </css>
