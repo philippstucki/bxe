@@ -1212,6 +1212,8 @@ function LinkLibraryDrawer(tool, xsluri, libsuri, searchuri) {
        // var name = document.getElementById('link_name').value;
        // var target = document.getElementById('link_target').value;
         this.tool.createLink(uri, type, name, target);
+        
+        this.drawertool.closeDrawer();
     };
 };
 
