@@ -141,6 +141,7 @@ function bxe_history_redo() {
 	
 	if (bxe_snapshots_position >= 0 && bxe_snapshots[( bxe_snapshots_position + 1)]) {
 		var currXmlStr = bxe_getXmlDocument();
+		if (!currXmlStr) { alert("You're in Source Mode. Not possible to use this button"); return false;} 
 		bxe_snapshots_position++;
 		var xmlstr = bxe_snapshots[bxe_snapshots_position];
 		if (currXmlStr == xmlstr && bxe_snapshots[bxe_snapshots_position + 1]) {
