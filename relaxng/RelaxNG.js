@@ -221,9 +221,14 @@ NodeVDOM.prototype.parseChildren = function(node) {
 				debug ("isParsed " + defineChild.getAttribute("name") + " = " + defineChild.isParsed);
 				//FIXME:...
 				if (!defineChild.isParsed) {
+					var newDefine = new DefineVDOM(defineChild);
 					defineChild.isParsed = true;
+					defineChild.vdom = newDefine;
 					this.parseChildren(defineChild);
 				} 
+				var newRef = new RefVDOM(childNodes[i]);
+				newRef.DefineVDOM = defineChild.vdom;
+				this.appendChild(newRef);
 			}
 		} 
 
@@ -260,6 +265,42 @@ NodeVDOM.prototype.parseChildren = function(node) {
 			newChoice.parseChildren();
 		}
 	}
+}
+
+
+RefVDOM.prototype = new NodeVDOM();
+
+function RefVDOM(node) {
+	this.node = node;
+	this.type = "RELAXNG_REF";
+	this.nodeName = "RELAXNG_REF";
+	this.attributes = new Array();
+}
+
+RefVDOM.prototype.isValid = function(ctxt) {
+	
+	return this.DefineVDOM.isValid(ctxt);
+}
+DefineVDOM.prototype = new NodeVDOM();
+
+
+function DefineVDOM(node) {
+	this.node = node;
+	this.type = "RELAXNG_DEFINE";
+	this.nodeName = "RELAXNG_DEFINE";
+	this.attributes = new Array();
+}
+
+DefineVDOM.prototype.isValid = function(ctxt) {
+	var child = this.firstChild;
+	while (child) {
+		if (child.isValid(ctxt)) {
+			ctxt.vdom = this;
+			return true;
+		}
+		child= child.nextSibling;
+	}
+	
 }
 
 ChoiceVDOM.prototype = new NodeVDOM();
@@ -322,6 +363,8 @@ TextVDOM.prototype.isValid = function(ctxt) {
 	}
 	
 }
+
+
 
 OneOrMoreVDOM.prototype = new NodeVDOM();
 
