@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: NodeVAL.js,v 1.32 2004/01/19 01:38:48 chregu Exp $
+// $Id$
 
 const BXE_VALID_NOMESSAGE = 1;
 
@@ -61,10 +61,9 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 	debug ("_isNodeValid " + this.nodeName );
 	try {
 		if (this.vdom) {
-			debug ("just before new ContextVDOM (NodeVAL.js line 43)");
 			var ctxt = new ContextVDOM(this, this.vdom);
+			ctxt.wFValidityCheckLevel = wFValidityCheckLevel;
 		} else {
-			dump ("no vdom for " + this.localName +"\n");
 			return false;
 		}
 	
