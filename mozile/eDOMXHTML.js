@@ -74,9 +74,9 @@ function listLinesToggle(cssr, listContainerName, listContainerToChange)
 		var listElement = lines[i].listItemAncestor;
 		if(!listElement)
 		{
-			if((lines[i].lineType == CSSLine.CONTAINED_LINE) && 
-			   (lines[i].container == topToNormalize))
+			if((lines[i].lineType == CSSLine.CONTAINED_LINE) && (lines[i].container == topToNormalize)) {
 				topToNormalize = topToNormalize.parentNode;
+			}
 			lines[i] = lines[i].setContainer(documentCreateXHTMLElement("li"), true); // ok - this a/cs for top
 			// line may be bounded and empty => don't make into list-item!
 			if(lines[i].lineType == CSSLine.CONTAINED_LINE)
@@ -113,15 +113,17 @@ function listLinesToggle(cssr, listContainerName, listContainerToChange)
 		var lastListContainer = __topListContainer(lastListElement);
 		var range = document.createRange();
 		range.selectNode(__topListContainer(firstListElement));
-		if(firstListContainer != lastListContainer)
-			range.setEnd(lastListContainer.parentNode, lastListContainer.offset+1);	
+		if(firstListContainer != lastListContainer) {
+			range.setEnd(lastListContainer.parentNode, lastListContainer.offset+1);
+		}
 		range = documentCreateCSSTextRange(range, cssr.top);		
 		var anyRenamed = range.renameElements(listContainerToChange, listContainerName);
-		if(!anyRenamed)
+		if(!anyRenamed) {
 			outdentLines(range); // range is still valid as wasn't used and all are list items!
-		else 
+		} else { 
 			// must normalize [range might be old and gone now?
 			range.normalizeElements(listContainerName);
+		}
 	}
 }
 
