@@ -8,7 +8,7 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 	//do includes
 	this.parseIncludes();
 
-	
+	debug(this.xmldoc.saveXML(this.xmldoc));
 	for (var i = 0; i < rootChildren.length; i++) {
 		if (rootChildren[i].isRelaxNGElement("start")) {
 			this.parseStart(rootChildren[i]);
@@ -18,21 +18,30 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 }
 
 DocumentVDOM.prototype.parseIncludes = function() {
-	var rootChildren = this.xmldoc.documentElement.childNodes;
-	
-	for (var i = 0; i < rootChildren.length; i++) {
-		if (rootChildren[i].isRelaxNGElement("include")) {
+	rootChild = this.xmldoc.documentElement.firstChild;
+	var alreadyNext;
+	while (rootChild) {
+		alreadyNext = false;
+		if (rootChild.isRelaxNGElement("include")) {
 			var td = new mozileTransportDriver("http");
-			debug (rootChildren[i].getAttribute("href"));
-			td.load(rootChildren[i].getAttribute("href"),null, false);
+			debug (rootChild.getAttribute("href"));
+			td.load(rootChild.getAttribute("href"),null, false);
 			if (td.document.documentElement.isRelaxNGElement("grammar")) {
 				var child = td.document.documentElement.firstChild;
+				var insertionNode = rootChild.nextSibling;
 				while (child) {
 					var newChild = this.xmldoc.importNode(child,true);
-					this.xmldoc.documentElement.appendChild(newChild);
+					rootChild.parentNode.insertBefore(newChild,insertionNode);
 					child = child.nextSibling;
 				}
+				var rootChildOld = rootChild;
+				var rootChild = rootChild.nextSibling;
+				alreadyNext = true;
+				rootChildOld.parentNode.removeChild(rootChildOld);
 			}
+		}
+		if (!alreadyNext) {
+			rootChild = rootChild.nextSibling;
 		}
 	}
 
