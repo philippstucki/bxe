@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: ElementVDOM.js,v 1.15 2004/01/19 01:38:48 chregu Exp $
+// $Id$
 
 function ElementVDOM(node) {
 	this.node = node;
@@ -28,7 +28,11 @@ function ElementVDOM(node) {
 ElementVDOM.prototype = new NodeVDOM();
 
 NodeVDOM.prototype.addAttributeNode = function(attribute) {
+/* FIXME: This try/catch had to be inserted for making it work for MIT
+should look into it, what really was the issue.. */
+try {
 	this._attributes[attribute.name] = attribute;
+} catch(e) {};
 }
 
 ElementVDOM.prototype.__defineGetter__ ( 
