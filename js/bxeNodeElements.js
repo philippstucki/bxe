@@ -346,4 +346,17 @@ Node.prototype.updateXMLNode = function (force) {
 
 }
 
+Node.prototype.getXPathResult = function(xpath) {
+	
+	var nsRes = this.ownerDocument.createNSResolver(this.ownerDocument.documentElement);
+	return this.ownerDocument.evaluate(xpath, this,nsRes, 0, null);
+}
+
+
+Node.prototype.getXPathFirst = function(xpath) {
+	
+	var res = this.getXPathResult(xpath);
+	return res.iterateNext();
+}
+
 
