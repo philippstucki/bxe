@@ -25,7 +25,6 @@ Widget.prototype.initNode = function (elementName,className, id) {
 	return node;
 }
 Widget.prototype.draw = function (display) {
-	debug("here");
 	if (display) {
 		this.node.style.display = display;
 	} else {
@@ -43,8 +42,8 @@ Widget.prototype.fixOffscreenPosition = function() {
 	}
 	
 }
-Widget.prototype.hide = function () {
 
+Widget.prototype.hide = function () {
 	this.node.style.display = 'none';
 }
 
@@ -709,7 +708,7 @@ Widget_ModalAttributeBox.prototype.show = function(e) {
 	box.setTitle("Edit Attributes of " + xmlnode.localName );
 	box.position(e.pageX ,e.pageY ,"absolute");
 	box.draw();
-	
+	bxe_deregisterKeyHandlers();
 	//target.position(e.target.offsetParent.offsetLeft +e.target.offsetLeft , e.target.offsetParent.offsetTop + e.target.offsetTop - e.target.offsetHeight  + 5,"absolute");
 }
 
@@ -753,11 +752,12 @@ Widget_ModalAttributeBox.prototype.drawAttributes = function(xmlnode) {
 		var Widget = e.target.parentNode.parentNode.Widget;
 		Widget.setAttributes(xmlnode);
 		e.target.parentNode.parentNode.style.display = "none";
+		bxe_registerKeyHandlers();
 	}
 	var cancel = document.createElement("input");
 	cancel.setAttribute("type","submit");
 	cancel.setAttribute("value","Cancel");
-	cancel.onclick = function(e) { e.target.parentNode.parentNode.style.display = "none";}
+	cancel.onclick = function(e) { bxe_registerKeyHandlers(); e.target.parentNode.parentNode.style.display = "none";}
 	this.PaneNode.appendChild(subm);
 	this.PaneNode.appendChild(cancel);
 	//alert(text);
