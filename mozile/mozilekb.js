@@ -389,11 +389,13 @@ function nonctrlKeyPressHandler(event)
 	}
 	if(event.keyCode == event.DOM_VK_HOME) {
 		var cssr = sel.getEditableRange();
+		
 		if(!cssr )
 		{
 			return false;
 		}
-		sel.collapse( cssr.lines[0].container, 0);
+		var startip = cssr.lines[0].firstInsertionPoint;
+		sel.collapse(startip.ipNode, startip.ipOffset); 	
 		return true;
 	}
 	if (event.keyCode == event.DOM_VK_END) {
@@ -402,7 +404,8 @@ function nonctrlKeyPressHandler(event)
 		{
 			return false;
 		}
-		sel.collapse(cssr.lines[0].container, cssr.lines[0].container.childNodes.length);
+		var endip = cssr.lines[0].lastInsertionPoint; 
+		sel.collapse(endip.ipNode, endip.ipOffset); 	
 		return true;
 	}
 	
