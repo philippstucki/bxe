@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLNode.js,v 1.44 2004/02/06 11:02:37 chregu Exp $
+// $Id: bxeXMLNode.js,v 1.45 2004/02/12 11:36:48 chregu Exp $
 
 function bxe_XMLNodeInit (nodein, localName, nodeType, autocreate) {
 	if (nodein.nodeType == 1 || typeof nodein == "string") {
@@ -565,6 +565,20 @@ XMLNodeWalker.prototype.nextNode = function() {
 //anonymous: 504-506, 573 call(s), 62.68ms total, 0.05ms min, 9.81ms max, 0.11ms avg
 XMLNode.prototype.isInHTMLDocument= function() {
 	return (this._node.ownerDocument == document)
+}
+
+XMLNode.prototype.isAllowedNextSibling = function (namespaceURI, localName) {
+	dump("localName " + localName);
+	dump("vdom"  + this.vdom);
+	var aNS = this.allowedNextSiblings;
+	
+	for (i = 0; i < aNS.length; i++) {
+		if (aNS[i].namespaceURI == namespaceURI && aNS[i].localName == localName) {
+			return true;
+		}
+	}
+	return false;
+	
 }
 
 XMLNode.prototype.makeHTMLNode = function () {
