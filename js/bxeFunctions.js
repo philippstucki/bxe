@@ -1763,7 +1763,8 @@ function bxe_insertContent_async(node,replaceNode, options) {
 	var oldStyleInsertion = false;
 	if (replaceNode == BXE_SELECTION) {
 		var sel = window.getSelection();
-		var _node = docfrag.firstChild.prepareForInsert();
+		var  _currentNode = docfrag.firstChild;
+		var _node = _currentNode.prepareForInsert();
 		if (options & BXE_SPLIT_IF_INLINE) {
 			if (!bxe_checkIsAllowedChild(_node.XMLNode.namespaceURI,_node.XMLNode.localName,sel, true)) {
 				var cssr = sel.getEditableRange();
@@ -1773,8 +1774,17 @@ function bxe_insertContent_async(node,replaceNode, options) {
 				oldStyleInsertion = true;
 			}
 		}
-		sel.insertNodeRaw(_node,oldStyleInsertion);
-		_node.updateXMLNode();
+		
+		while (_currentNode) {
+			
+			sel.insertNodeRaw(_node,oldStyleInsertion);
+			_node.updateXMLNode();
+			
+			_currentNode = _currentNode.nextSibling;
+			if (_currentNode) {
+				_node = _currentNode.prepareForInsert();
+			}
+		}
 		return _node;
 	} else if (replaceNode) {
 		
