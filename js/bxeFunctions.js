@@ -440,7 +440,7 @@ function bxe_updateXPath() {
 	var cssr = sel.getEditableRange();
 	if (cssr) {
 		bxe_status_bar.buildXPath(sel.anchorNode);
-		var lines = cssr.lines();
+		var lines = cssr.lines;
 		bxe_format_list.removeAllItems();
 		
 		function nodeSort(a,b) {
