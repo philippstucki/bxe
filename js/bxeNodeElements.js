@@ -309,6 +309,7 @@ Node.prototype.initXMLNode = function () {
 
 
 Node.prototype.updateXMLNode = function () {
+	debug("updateXMLNode: " + this);
 	if (!this.xmlBridge) {
 		if ( !this.parentNode._XMLNode  ) {
 			return this.parentNode.updateXMLNode();
@@ -316,7 +317,10 @@ Node.prototype.updateXMLNode = function () {
 	} else {
 		return;
 	}
-
+	if (this.nodeType == 3) {
+		this.normalize();
+	}
+	
 	if (this.previousSibling ) {
 		if (!this.previousSibling._XMLNode) {
 			this.previousSibling.updateXMLNode();

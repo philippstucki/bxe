@@ -145,8 +145,15 @@ XMLNode.prototype.appendChild = function(newNode) {
 
 XMLNode.prototype.appendChildIntern = function (newNode) {
 	
-	// unlink from old Place
-	dump (newNode.localName + " " + newNode.parentNode + "\n");
+	if (newNode._node.nodeType == 11) {
+		debug (newNode._node.firstChild);
+		var child = newNode._node.firstChild;
+		while (child) {
+			this.appendChildIntern(child.XMLNode);
+			child = child.nextSibling;
+			
+		}
+	}
 	if (newNode.parentNode) {
 		if (newNode.parentNode.firstChild == newNode) {
 			newNode.parentNode.firstChild = newNode.nextSibling;

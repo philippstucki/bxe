@@ -275,10 +275,31 @@ function bxe_NodeRemovedChild (e) {
 	oldNode.unlink();
 }
 
+function bxe_NodeBeforeDelete (e) {
+	var node = e.target.XMLNode;
+	node.unlink();
+}
+
+function bxe_NodePositionChanged(e) {
+	var node = e.target;
+	node.updateXMLNode();
+}
+	
+
 function bxe_NodeAppendedChild(e) {
 	var parent = e.target.XMLNode;
-	var newNode  = e.additionalInfo.XMLNode;
-	parent.appendChildIntern(newNode);
+	var newNode  = e.additionalInfo;
+	if (newNode.nodeType == 11) {
+		var child = newNode.firstChild;
+		while (child) {
+			this.appendChildIntern(child.XMLNode);
+			child = child.nextSibling;
+			
+		}
+	} else {
+		newNode  = newNode.XMLNode;
+		parent.appendChildIntern(newNode);
+	}
 	
 }
 
