@@ -146,9 +146,12 @@ bxeConfig.prototype.getButtons = function() {
 			tmpArray['action'] = node.getAttribute("action");
 			tmpArray['type'] = node.getAttribute("type");
 			ns = node.getAttribute("ns");
-			if (ns) {
+			if (ns !== null) {
 				tmpArray['ns'] = ns;
 			}
+			else {
+				tmpArray['ns'] = "";
+			} 
 			if(node.firstChild) {
 				tmpArray['data'] = node.firstChild.data;
 			}
