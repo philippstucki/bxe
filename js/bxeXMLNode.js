@@ -550,7 +550,12 @@ XMLNodeElement.prototype.__defineGetter__(
 	"attributes",
 	function()
 	{
-		var attribs = this._node.attributes;
+		var attribs;
+		if (this.xmlBridge) {
+			attribs = this.xmlBridge.attributes;
+		} else {
+			attribs = this._node.attributes;
+		}
 		var attributes = new Array();
 		for (var i = 0; i < attribs.length; i++) {
 			if (attribs[i].localName.substr(0,5) != "_edom" && attribs[i].localName.substr(0,5) != "__bxe" && attribs[i].namespaceURI != "http://www.w3.org/2000/xmlns/" && !(this.namespaceURI != XHTMLNS && attribs[i].localName == "class"))  {
