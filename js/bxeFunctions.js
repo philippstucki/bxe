@@ -37,7 +37,7 @@ function __bxeSave(e) {
 	}
 	var xml = bxe_getXmlDomDocument();
 	if (!xml) {
-		alert("Editable areas must not be in SourceMode while saving. Please switch it");
+		alert("You're in Source Mode. Not possible to use this button");
 	}
 	if (!(xml.XMLNode.validateDocument())) 
 	{
@@ -168,7 +168,7 @@ function bxe_history_undo() {
 			var currXmlStr = bxe_getXmlDocument();
 		}
 		
-		if (!currXmlStr) {alert ("Undo/Redo does not work in source edit mode"); return false;} 
+		if (!currXmlStr) { alert("You're in Source Mode. Not possible to use this button"); return false;} 
 		var xmlstr = bxe_snapshots[bxe_snapshots_position];
 		bxe_snapshots_position--;
 		while(currXmlStr == xmlstr && bxe_snapshots[bxe_snapshots_position ] ) {
@@ -1197,6 +1197,9 @@ function bxe_OrderedList() {
 
 function bxe_InsertObject() {
 	var sel = window.getSelection();
+	if (bxe_checkForSourceMode(sel)) {
+		return false;
+	}
 	var object = documentCreateXHTMLElement("object");
 	
 	sel.insertNode(object);
@@ -1205,6 +1208,9 @@ function bxe_InsertObject() {
 function bxe_InsertAsset() {
 	
 	var sel = window.getSelection();
+	if (bxe_checkForSourceMode(sel)) {
+		return false;
+	}
 	var object = document.createElementNS("http://apache.org/cocoon/lenya/page-envelope/1.0","assset");
 	var cb = bxe_getCallback("asset","http://apache.org/cocoon/lenya/page-envelope/1.0");
 	if (cb ) {
