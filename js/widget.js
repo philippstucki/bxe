@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: widget.js,v 1.72 2004/03/22 11:17:35 chregu Exp $
+// $Id: widget.js,v 1.73 2004/03/22 11:18:42 chregu Exp $
 
 function Widget () {}
 
@@ -863,19 +863,12 @@ Widget_ModalBox.prototype.show = function(x,y, position) {
 				}
 			}
 			var sel = window.getSelection();
-			// THATS WRONG!!!!!!!!!!
 			sel.selectEditableRange(Widget.cssr);
-			
-			/*cssr = sel.getEditableRange();
-			alert(cssr.startContainer.parentNode.nodeName);
-			*/
 			if (Widget.callback) {
 				Widget.callback(returnValues);
 			}
 			e.preventDefault();
 			e.stopPropagation();
-			
-			
 		}, false);
 		if (this.doCancel) {
 			var cancel = document.createElement("input");
