@@ -528,6 +528,7 @@ Range.prototype.styleText = function(styleName, foo, bar, namespaceURI)
 		textNodes = keepTxtNodes;
 
 	// POST04: replace with walker - work like normalizeElements
+	forLoop:
 	for(i=0; i<textNodes.length; i++)
 	{
 		var textContainer = textNodes[i].parentNode;
@@ -535,7 +536,7 @@ Range.prototype.styleText = function(styleName, foo, bar, namespaceURI)
 		//check if that inline style already was applied somewhere within this block element
 		while (textContainer && textContainer.getCStyle("display") == "inline") {
 			if (textContainer.XMLNode.namespaceURI == namespaceURI && textContainer.XMLNode.localName == styleName) {
-				continue;
+				continue forLoop;;
 			}
 			textContainer = textContainer.parentNode;
 		}
