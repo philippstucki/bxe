@@ -90,7 +90,9 @@ function bxe_history_snapshot() {
 	
 	
 }
-
+function bxe_history_redo() {
+	bxe_not_yet_implemented();
+}
 function bxe_history_undo() {
 	if (bxe_snapshots_position >= 0) {
 		var currXmlStr = bxe_getXmlDocument();
@@ -329,6 +331,11 @@ function bxe_toggleSourceMode(e) {
 
 function bxe_toggleTextClass(e) {
 	var sel = window.getSelection();
+	var cssr = sel.getEditableRange();
+	if (cssr.top._SourceMode) {
+		alert("You're in Source Mode. Not possible to use this button");
+		return false;
+	}
 	sel.toggleTextClass(e.additionalInfo.localName);
 	sel = window.getSelection();
 	var _node = sel.anchorNode.parentNode;
@@ -918,19 +925,33 @@ function bxe_ContextMenuEvent(e) {
 }
 
 function bxe_UnorderedList() {
-
+	var sel = window.getSelection();
+	if (bxe_checkForSourceMode(sel)) {
+		return false;
+	}
 	var lines = window.getSelection().toggleListLines("ul", "ol");
 	lines[0].container.updateXMLNode();
 	bxe_updateXPath();
 }
 
 function bxe_OrderedList() {
+	var sel = window.getSelection();
+	if (bxe_checkForSourceMode(sel)) {
+		return false;
+	}
+	
 	var lines = window.getSelection().toggleListLines("ol", "ul");
 	lines[0].container.updateXMLNode();
 	bxe_updateXPath();
 }
 
 function bxe_InsertImage() {
+	
+	var sel = window.getSelection();
+	if (bxe_checkForSourceMode(sel)) {
+		return false;
+	}
+	
 	var mod = mozilla.getWidgetModalBox("Enter the image url or file name:", function(values) {
 		if(values.imgref == null) // null href means prompt canceled
 			return;
@@ -940,7 +961,7 @@ function bxe_InsertImage() {
 		
 		var img = documentCreateXHTMLElement("img");
 		img.firstChild.setAttribute("src",values.imgref);
-		window.getSelection().insertNode(img);
+		sel.insertNode(img);
 		img.updateXMLNode();
 		img.setAttribute("src",values.imgref);
 	});
@@ -950,7 +971,21 @@ function bxe_InsertImage() {
 	
 }
 
+function bxe_checkForSourceMode(sel) {
+	var cssr = sel.getEditableRange();
+	if (cssr.top._SourceMode) {
+		alert("You're in Source Mode. Not possible to use this button");
+		return true;
+	}
+	return false;
+}
+
 function bxe_InsertTable() {
+	
+	var sel = window.getSelection();
+	if (bxe_checkForSourceMode(sel)) {
+		return false;
+	}
 	
 	var mod = mozilla.getWidgetModalBox("Create Table", function(values) {
 		var te = documentCreateTable(values.rows, values.cols);
@@ -970,19 +1005,25 @@ function bxe_InsertTable() {
 
 function bxe_InsertLink(e) {
 
-	if(window.getSelection().isCollapsed) // must have a selection or don't prompt
+	var sel = window.getSelection();
+	if (bxe_checkForSourceMode(sel)) {
+		return false;
+	}
+	
+	if(sel.isCollapsed) // must have a selection or don't prompt
 		return;
 	
+	
+
 	var mod = mozilla.getWidgetModalBox("Enter a URL:", function(values) {
 		var href = values["href"];
 		if(href == null) // null href means prompt canceled - BUG FIX FROM Karl Guertin
 			return;
 		if(href != "") 
-			window.getSelection().linkText(href);
+			sel.linkText(href);
 		else
-			window.getSelection().clearTextLinks();
+			sel.clearTextLinks();
 		
-		var sel = window.getSelection();
 		sel.anchorNode.parentNode.updateXMLNode();
 	}
 	);
