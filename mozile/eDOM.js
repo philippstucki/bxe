@@ -2844,10 +2844,18 @@ ContainedLine.prototype.deleteStructure = function()
 	}	
 
 	// Case 8: merge contents into previous line and delete this line	
-	var ip = pline.appendContent(this.lineContents);
-
-	// remove line from its topmost container downwards
-	this.deleteLine();
+	
+	if (bxe_config.options['mergeDifferentBlocksOnDelete'] != 'false') {
+		var ip = pline.appendContent(this.lineContents);
+		this.deleteLine();
+	} else if (pline.container.XMLNode.localName == this.container.XMLNode.localName && 
+		pline.container.XMLNode.namespaceUri == this.container.XMLNode.namespaceUri) {
+		var ip = pline.appendContent(this.lineContents);
+		this.deleteLine();
+	} else {
+		ip = this.firstInsertionPoint.clone();
+		ip.__needBackspace = true;
+	}
 	return ip;
 }
 

@@ -208,6 +208,10 @@ Selection.prototype.deleteSelection = function(backspace)
 		{
 			var line = ip.line;
 			ip = line.deleteStructure();
+			if (ip.__needBackspace) {
+				ip.backOne();
+				ip.__needBackspace = false;
+			}
 		}
 
 		cssr.selectInsertionPoint(ip);

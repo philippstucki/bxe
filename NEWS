@@ -1,16 +1,17 @@
 xx xxx xxx, Version 1.1.0
 
 - Added paragraph insertion on copy&paste (r846)
-- Added config.xml option for not displaying startup splass screen (r993)
 - Added config.xml options for registering eDOM events (r876)
 - Added config.xml option for changing the button image location (r877)
-- Added automatic poping up of dialog, if required attributes 
+- Added automatic popping up of dialog, if required attributes 
     are missing (on insertion or changing of elements) (r881)
 - Added possibility to clean inline styles with the corresponding 
     button (r889)
 - Added XMLSnippet Plugin for inserting XML fragments from a dialog (r904)
 - Added new method to plugin interface: start(). It's called when everything
     is loaded and initialized (r912)    
+- Added config.xml option for not displaying startup splass screen (r993)
+- Added mergeDifferentBlocksOnDelete option (r1026)
 - Improved source editing mode (uses native textarea fields) (r855)
 - Improved speed (minimal...) (r926)
 - Changed handling of validation error during initial loading 
