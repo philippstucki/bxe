@@ -474,7 +474,6 @@ Selection.prototype.insertNodeRaw = function (node, oldStyleInsertion) {
 
 Selection.prototype.insertNode = function(node)
 {
-	
 	var checkNode = node;
 	if (node.nodeType == 11 ) {
 		checkNode = node.firstChild;
@@ -505,27 +504,29 @@ Selection.prototype.paste = function()
 		content.data = content.firstChild.data;
 	}
 	if (content && content.data) {
-		
-		if (clipboard._system && content.data.search(/\n.+/) > -1) {
+		var elementName = bxe_config.options['autoParaElementName'];
+		if (elementName && clipboard._system && content.data.search(/\n.+/) > -1) {
 			content = content.data;
 			content.replace(/&/g,"&amp;").replace(/</g,"&lt;");
-			var elementName = bxe_config.options['autoParaElementName'];
 			var elementNamespace = bxe_config.options['autoParaElementNamespace']
-			var elementName_start = "p";
+			var elementName_start = elementName;
 			if (elementNamespace) {
-				elementName_start += " xmlns='http://www.w3.org/1999/xhtml'";
+				elementName_start += " xmlns='"+elementNamespace +"'";
 			}
 			content = "<"+elementName_start + ">"+ content.replace(/\n/g,"</"+elementName+"><"+elementName_start+" >")+"</"+elementName+">";
 			bxe_insertContent_async(content,BXE_SELECTION,BXE_SPLIT_IF_INLINE);
 		} else {
 			window.getSelection().insertNode(content);
 		}
-		var node = window.getSelection().anchorNode;
-		if( node.nodeType == 3) {
-			node.normalize();
-		}
-		bxe_history_snapshot_async();
+	} else {
+		window.getSelection().insertNode(content);
+	} 
+	
+	var node = window.getSelection().anchorNode;
+	if( node.nodeType == 3) {
+		node.normalize();
 	}
+	bxe_history_snapshot_async();
 	return node;
 	
 }
