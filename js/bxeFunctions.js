@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.145 2004/01/19 09:48:32 chregu Exp $
+// $Id: bxeFunctions.js,v 1.146 2004/01/19 16:05:56 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -1134,6 +1134,14 @@ function bxe_UnorderedList() {
 	}
 	var lines = window.getSelection().toggleListLines("ul", "ol");
 	lines[0].container.updateXMLNode();
+	var li = lines[0].container;
+	while (li ) {
+		if (li.nodeName == "li") {
+			li.XMLNode.namespaceURI = XHTMLNS;
+		}
+		li = li.nextSibling;
+	}
+	lines[0].container.parentNode.setAttribute("class","type1");
 	bxe_updateXPath();
 }
 
@@ -1144,7 +1152,19 @@ function bxe_OrderedList() {
 	}
 	
 	var lines = window.getSelection().toggleListLines("ol", "ul");
+
 	lines[0].container.updateXMLNode();
+	
+	var li = lines[0].container;
+	while (li ) {
+		if (li.nodeName == "li") {
+			li.XMLNode.namespaceURI = XHTMLNS;
+		}
+		li = li.nextSibling;
+	}
+	
+	// needed by unizh
+	lines[0].container.parentNode.setAttribute("class","type1");
 	bxe_updateXPath();
 }
 
