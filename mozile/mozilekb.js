@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: mozilekb.js,v 1.30 2004/02/12 11:36:48 chregu Exp $
+// $Id: mozilekb.js,v 1.31 2004/02/26 17:27:11 chregu Exp $
 
 /* 
  * mozilekb V0.46
@@ -294,8 +294,8 @@ function nonctrlKeyPressHandler(event)
 			}
 			var i = 0;
 			if (!cssr.top._SourceMode) {
-				if (_conode ) {
-					while (n && n != _conode && !n.xmlBridge && i < 10) {
+				if (_conode && _conode.nodeType != 3 ) {
+					while (n && n != _conode && !n.XMLNode.xmlBridge && i < 10) {
 						i++;
 						n.updateXMLNode();
 						n = n.parentNode;
@@ -305,10 +305,6 @@ function nonctrlKeyPressHandler(event)
 					n.updateXMLNode();
 				}
 			}
-			//_node.updateXMLNode();
-			
-			
-			
 		}
 		return true;
 	}
