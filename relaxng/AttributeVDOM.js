@@ -43,18 +43,24 @@ function AttributeVDOM(node, option) {
 }
 
 AttributeVDOM.prototype.isValid = function(ctxt) {
-	if (ctxt.node._node && !this.optional && !(ctxt.node._node.hasAttribute(this.name) ||  (ctxt.node.xmlBridge && ctxt.node.xmlBridge.hasAttribute(this.name)))) {
+	var o = null;
+	if (ctxt.node.xmlBridge) {
+		o = ctxt.node.xmlBridge;
+	} else if (ctxt.node._node) {
+		o = ctxt.node._node;
+	} 
+	if (o != null && !this.optional && !(o.hasAttribute(this.name))) {
 		if (ctxt.wFValidityCheckLevel & 2) {
 			var newValue = prompt(ctxt.node.nodeName + " does not have the required attribute " + this.name + "\nPlease provide one");
 			if (newValue) {
-				ctxt.node._node.setAttribute(this.name, newValue);
+				o.setAttribute(this.name, newValue);
 				return this.isValid(ctxt);
 			}
 		} 
 		ctxt.setErrorMessage(ctxt.node.nodeName + " does not have the required attribute " + this.name);
 		return false;
-	} else if (ctxt.node._node && this.choices) {
-		var value = ctxt.node._node.getAttribute(this.name);
+	} else if (o && this.choices) {
+		var value = o.getAttribute(this.name);
 		if (value) {
 			for (var i = 0; i < this.choices.length; i++) {
 				if (this.choices[i] == value) {
