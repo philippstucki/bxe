@@ -387,7 +387,8 @@ function nonctrlKeyPressHandler(event)
 		}
 		else {
 			td = false;
-			if (ip.line.container == ip.line.tableCellAncestor) {
+			var _con = ip.line.container;
+			if (_con == ip.line.tableCellAncestor) {
 				td = true
 			}  
 			var _par = ip.ipNode.parentNode;
@@ -407,12 +408,11 @@ function nonctrlKeyPressHandler(event)
 				_par.parentNode.updateXMLNode();
 			} else {
 				
-				if (_par.XMLNode.isAllowedNextSibling(_par.XMLNode.namespaceURI,_par.XMLNode.localName)) {
-					
-				ip.splitXHTMLLine(); // add logic to split off say a "P" after a Heading element: if at end line
-				if (td) {
-					ip.line.tableCellAncestor.updateXMLNode();
-				}
+				if (_con.XMLNode.isAllowedNextSibling(_con.XMLNode.namespaceURI,_con.XMLNode.localName)) {
+					ip.splitXHTMLLine(); // add logic to split off say a "P" after a Heading element: if at end line
+					if (td) {
+						ip.line.tableCellAncestor.updateXMLNode();
+					}
 				}
 			}
 			bxe_history_snapshot_async();
