@@ -5,13 +5,17 @@ DocumentVDOM.prototype = new NodeVDOM();
 
 DocumentVDOM.prototype.parseSchema = function() {
 	//if it's an XMLSchema File
-	if (this.xmldoc.documentElement.localName == "schema" ||
+	if (this.xmldoc.documentElement.localName == "schema" &&
 		this.xmldoc.documentElement.namespaceURI == "http://www.w3.org/2001/XMLSchema" ) {
-		this.parseXMLSchema();
+		alert("XML Schema validation is not supported at the moment");
+		//this.parseXMLSchema();
 	}
-	else if (this.xmldoc.documentElement.localName == "grammar" ||
+	else if (this.xmldoc.documentElement.localName == "grammar" &&
 		this.xmldoc.documentElement.namespaceURI == "http://relaxng.org/ns/structure/1.0" ) {
 		this.parseRelaxNG();
+	} else {
+		alert ("Validation-file is not valid :\n" + this.xmldoc.saveXML(this.xmldoc));
+		return false;
 	}
 	this.onparse(this);
 } 
