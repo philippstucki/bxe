@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.140 2004/01/14 12:06:12 chregu Exp $
+// $Id: bxeFunctions.js,v 1.141 2004/01/15 11:18:57 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -125,8 +125,31 @@ function bxe_history_snapshot() {
 	
 	
 }
+
 function bxe_history_redo() {
-	bxe_not_yet_implemented();
+	if (bxe_snapshots_position >= 0 && bxe_snapshots[bxe_snapshots_position]) {
+		var currXmlStr = bxe_getXmlDocument();
+		var xmlstr = bxe_snapshots[bxe_snapshots_position];
+		
+		while(currXmlStr == xmlstr && bxe_snapshots[bxe_snapshots_position + 1]) {
+			bxe_snapshots_position++;
+			xmlstr = bxe_snapshots[bxe_snapshots_position];
+		}
+		var BX_parser = new DOMParser();
+		var xmldoc = BX_parser.parseFromString(xmlstr,"text/xml");
+		var vdom = bxe_config.xmldoc.XMLNode.vdom;
+		bxe_config.xmldoc = xmldoc;
+		xmldoc.init();
+		xmldoc.insertIntoHTMLDocument();
+		bxe_config.xmldoc.XMLNode.vdom = vdom;
+		try {
+			bxe_config.xmldoc.XMLNode.validateDocument();
+			bxe_snapshots_position++;
+		} catch(e) {bxe_catch_alert(e);
+		}
+		
+	}
+	
 }
 function bxe_history_undo() {
 	if (bxe_snapshots_position >= 0) {
@@ -894,7 +917,7 @@ function bxe_draw_widgets() {
 	submenu.push("Exit",function() {eDOMEventCall("Exit",document);});
 	menubar.addMenu("File",submenu);
 
-	var submenu2 = new Array("Undo",bxe_not_yet_implemented,"Redo",bxe_not_yet_implemented);
+	var submenu2 = new Array("Undo",function() {eDOMEventCall("Undo",document);},"Redo",function () {eDOMEventCall("Redo",document)});
 	menubar.addMenu("Edit",submenu2);
 	
 	var submenu3 = new Array();//"Count Div", function(e) { alert(document.getElementsByTagName("div").length);})
