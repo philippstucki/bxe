@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <grammar ns="" 
 xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
- xmlns:xhtml="http://www.w3.org/1999/xhtml"
- xmlns:bx="http://bx"
- >
+ xmlns:xhtml="http://www.w3.org/1999/xhtml">
 <include href="schema/xhtml/xhtml-strict.rng.xml">  
   <start>
         <element name="iba">
