@@ -485,7 +485,9 @@ Widget_StatusBar.prototype.buildXPath = function (node) {
 	
 	this.Popup.position(0,0,"absolute");
 	this.Popup.StatusBar = this;
-	
+	if (node.nodeType = Node.TEXT_NODE) {
+		node = node.parentNode;
+	}
 	while(node && node.nodeType == 1) {
 		
 		var rootNode = document.createElement("span");

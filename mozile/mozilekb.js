@@ -278,7 +278,7 @@ function nonctrlKeyPressHandler(event)
 
 		sel.removeAllRanges();
 		sel.addRange(cssr);
-
+		bxe_delayedUpdateXPath();
 		return true;
 	}
 
@@ -300,7 +300,9 @@ function nonctrlKeyPressHandler(event)
 		sel.removeAllRanges();
 		var rng = cssr.cloneRange();
 		sel.addRange(rng);
+		bxe_delayedUpdateXPath();
 		return true;
+		
 	}
 
 	// NEXT (event.DOM_VK_RIGHT) Required as Moz left/right doesn't handle white space properly
@@ -327,9 +329,17 @@ function nonctrlKeyPressHandler(event)
 		sel.removeAllRanges();
 		var rng = cssr.cloneRange();
 		sel.addRange(rng);
+
+		bxe_delayedUpdateXPath();
 		return true;
 	}
 
+	// UP/DOWN (event.DOM_VK_UP/DOWN)
+
+	if (event.keyCode == 38 || event.keyCode == 40) {
+		bxe_delayedUpdateXPath();
+		return false;
+	}
 	// RETURN OR ENTER (event.DOM_VK_ENTER DOM_VK_RETURN)
 	if(event.keyCode == 13)
 	{
@@ -350,7 +360,7 @@ function nonctrlKeyPressHandler(event)
 		cssr.selectInsertionPoint(ip);
 		sel.removeAllRanges();
 		sel.addRange(cssr);
-		
+		bxe_delayedUpdateXPath();
 		return true;
 	}
 

@@ -47,6 +47,7 @@ var bxe_config = new Object();
 var bxe_about_box = null;
 var bxe_format_list = null;
 var bxe_context_menu = null;
+var bxe_delayedUpdate = false;
 
 function bxe_start(config_file,fromUrl) {
 
