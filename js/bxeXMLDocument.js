@@ -83,7 +83,11 @@ XMLDocument.prototype.transformToXPathMode = function(xslfile) {
 			alert ( e + "\n\n xsltransformdoc.xsldoc is : " + xsltransformdoc.xsldoc);
 		}
 		var processor = new XSLTProcessor();
-		processor.importStylesheet(newDocument);
+		try {
+			processor.importStylesheet(newDocument);
+		} catch(e) {
+			alert("Something went wrong during importing the XSLT document.\n" + newDocument.saveXML(newDocument));
+		}
 		var xmldoc = processor.transformToFragment(xsltransformdoc.xsldoc.xmldoc,document);
 		var bxe_area = document.getElementById("bxe_area");
 		bxe_area.parentNode.replaceChild(xmldoc,bxe_area);
