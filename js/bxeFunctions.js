@@ -1126,8 +1126,14 @@ function MouseClickEvent(e) {
 function bxe_updateXPath(e) {
 	var sel = window.getSelection();
 	var cssr = sel.getEditableRange();
-	if (cssr) {
-		if (cssr.top._SourceMode) {
+	if (e && e.localName == "TEXTAREA") {
+		bxe_format_list.removeAllItems();
+		bxe_format_list.appendItem("-Source Mode-","");
+		bxe_status_bar.buildXPath(e.parentNode);
+		
+	}
+	else if (cssr) {
+		if ( cssr.top._SourceMode) {
 			//clear list
 			bxe_format_list.removeAllItems();
 			bxe_format_list.appendItem("-Source Mode-","");
@@ -1351,8 +1357,14 @@ function bxe_InsertImage() {
 }
 
 function bxe_checkForSourceMode(sel) {
+	if (bxe_format_list.node.options.length == 1 && bxe_format_list.node.options.selectedIndex == 0) {
+		if ( bxe_format_list.node.options[0].text == "-Source Mode-") {
+			alert("You're in Source Mode. Not possible to use this button");
+			return true;
+		}
+	}
+	// the following is legacy code. actually not needed anymore, AFAIK..
 	var cssr = sel.getEditableRange();
-
 	if (cssr && cssr.top._SourceMode) {
 		alert("You're in Source Mode. Not possible to use this button");
 		return true;
