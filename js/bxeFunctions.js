@@ -232,8 +232,11 @@ function bxe_toggleTextClass(e) {
 	/*_node.XMLNode.namespaceURI = e.additionalInfo.namespaceURI;
 	_node.XMLNode = new XMLNode(  e.additionalInfo.namespaceURI,   e.additionalInfo.localName, 1);
 	*/
-	
-	_node.parentNode.updateXMLNode();
+	//alert(_node.parentNode.XMLNode.nodeName);
+	dump("----\n");
+	dump (_node.parentNode);
+	dump (_node.parentNode.parentNode.XMLNode.nodeName);
+	_node.updateXMLNode();
 }
 
 

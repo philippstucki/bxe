@@ -309,10 +309,11 @@ Node.prototype.initXMLNode = function () {
 
 
 Node.prototype.updateXMLNode = function () {
-	if (!this.parentNode._XMLNode) {
+	if (!this.parentNode._XMLNode && !this.parentNode.xmlBridge) {
+		dump (this.parentNode.nodeName + "...\n");
 		return this.parentNode.updateXMLNode();
 	}
-	
+
 	if (this.previousSibling ) {
 		if (!this.previousSibling._XMLNode) {
 			this.previousSibling.updateXMLNode();
