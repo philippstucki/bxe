@@ -335,11 +335,21 @@ function bxe_ContextPopup(e) {
 				_par.updateXMLNode();
 			});
 		}
-
+		
+		var menui = popup.addMenuItem("Append Row", function(e) {
+				var widget = e.currentTarget.Widget;
+				var _par = widget.MenuPopup.MainNode._node.parentNode;
+				widget.MenuPopup.MainNode._node.TableAppendRow();
+				_par.updateXMLNode();
+			});
 		
 		
 		popup.MainNode = node;
 	}
+}
+Element.prototype.TableAppendRow = function () {
+	var newRow = this.parentNode.cloneNode(true);
+	this.parentNode.parentNode.insertAfter(newRow,this.parentNode);
 }
 
 Element.prototype.TableCellMergeRight = function () {
