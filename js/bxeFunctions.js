@@ -1812,6 +1812,12 @@ function bxe_getCallback (nodeName, namespaceURI) {
 
 function bxe_doCallback(cb, node ) {
 	window.bxe_ContextNode = node;
+	//this is for prechecking, if an eventual popup should be called at all
+	if (cb["precheck"]) {
+		if (!(eval(cb["precheck"] +"(node)"))) {
+			return false;
+		} 
+	}
 	if (cb["type"] == "popup") {
 		
 		
@@ -1823,6 +1829,14 @@ function bxe_doCallback(cb, node ) {
 	}
 }
 		
+function bxe_checkIfNotALink (node) {
+	var sel = window.getSelection();
+	if (sel.anchorNode.parentNode.XMLNode.localName == "a") {
+		alert("There is already a link here, please use the \"Edit Attributes\" function, to edit the link.");
+		return false;
+	}
+	return true;
+}
 
 function bxe_alert(text) {
 	var widg = mozilla.getWidgetModalBox("Alert");
@@ -1855,4 +1869,5 @@ function bxe_showImageDrawer() {
 	drawertool.cssr = window.getSelection().getEditableRange();
 	drawertool.openDrawer('imagedrawer');
 }
+
 
