@@ -465,11 +465,10 @@ function Widget_ToolBarButton (id,namespaceURI) {
 	} else if (buttons[id]['type'] == "insertElement") {
 			this.node.addEventListener("click",function(e) { var sel = window.getSelection();
 			var object = bxe_Node_createNS(1, e.target.ElementNamespaceURI, buttons[id]['data']);
-			alert(object.namespaceURI);
 			sel.insertNode(object);}, false);
 	} else if (buttons[id]['type'] == "event") {
-	this.node.addEventListener("click",function(e) { 
-	eDOMEventCall(buttons[id]['data'],document,{"localName":this.getAttribute("title"),"namespaceURI":e.target.ElementNamespaceURI})}, 
+		this.node.addEventListener("click",function(e) { 
+			eDOMEventCall(buttons[id]['data'],document,{"localName":this.getAttribute("title"),"namespaceURI":e.target.ElementNamespaceURI})}, 
 		false);
 	} else {
 	this.node.addEventListener("click",function(e) { 
