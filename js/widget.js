@@ -755,7 +755,7 @@ Widget_ModalBox.prototype.addFormEntry = function(title, descr) {
 	return tdt;
 }
 
-Widget_ModalBox.prototype.show = function(x,y) {
+Widget_ModalBox.prototype.show = function(x,y, position) {
 	if (this.hasTable) {
 		var subm = document.createElement("input");
 		subm.setAttribute("type","submit");
@@ -790,7 +790,8 @@ Widget_ModalBox.prototype.show = function(x,y) {
 		this.hasTable.parentNode.appendChild(subm);
 		this.hasTable.parentNode.appendChild(cancel);
 	}
-	this.position(x,y ,"absolute");
+	if (!position) { position = "absolute";};
+	this.position(x,y, position);
 	this.draw();
 	bxe_deregisterKeyHandlers();
 }
@@ -818,10 +819,6 @@ function Widget_ModalAttributeBox() {
 }
 
 Widget_ModalAttributeBox.prototype = new Widget_ModalBox();
-
-Widget_ModalAttributeBox.prototype.setNode = function() {
-	this.htmlnode = node;
-}
 
 Widget_ModalAttributeBox.prototype.popup = function(e) {
 	

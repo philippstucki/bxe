@@ -757,32 +757,45 @@ function bxe_OrderedList() {
 }
 
 function bxe_InsertImage() {
-	var imgref = prompt("Enter the image url or file name:", "");
-	if(imgref == null) // null href means prompt canceled
-		return;
-	if(imgref == "") 
-		return; // ok with no name filled in
-	var img = documentCreateXHTMLElement("img");
-	img.src = imgref; // any way to tell if it is valid?
-	window.getSelection().insertNode(img);
+	var mod = mozilla.getWidgetModalBox("Enter the image url or file name:", function(values) {
+		if(values.imgref == null) // null href means prompt canceled
+			return;
+		if(values.imgref == "") 
+			return; // ok with no name filled in
+
+		
+		var img = documentCreateXHTMLElement("img");
+		img.firstChild.setAttribute("src",values.imgref);
+		window.getSelection().insertNode(img);
+		img.updateXMLNode();
+		img.setAttribute("src",values.imgref);
+	});
+	
+	mod.addItem("imgref", "", "textfield","Image URL:");
+	mod.show(100,50,"fixed");
 	
 }
 
 function bxe_InsertTable() {
-	var rowno = prompt("number of rows");
-	var colno = prompt("number of columns");
-	var te = documentCreateTable(rowno, colno);
-	if(!te)
-		alert("Can't create table: invalid data");
-	else
-		window.getSelection().insertNode(te);
 	
-	te.setAttribute("class","ornate");
-	te.updateXMLNode();
+	var mod = mozilla.getWidgetModalBox("Create Table", function(values) {
+		var te = documentCreateTable(values.rows, values.cols);
+		if(!te)
+			alert("Can't create table: invalid data");
+		else
+			window.getSelection().insertNode(te);
+		
+		te.setAttribute("class","ornate");
+		te.updateXMLNode();
+	});
+	mod.addItem("rows",2,"textfield","number of rows");
+	mod.addItem("cols",2,"textfield","number of cols");
+	mod.show(100,50, "fixed");
+	
 }
 
-function bxe_InsertLink() {
-	
+function bxe_InsertLink(e) {
+
 	if(window.getSelection().isCollapsed) // must have a selection or don't prompt
 		return;
 	
@@ -798,12 +811,10 @@ function bxe_InsertLink() {
 		var sel = window.getSelection();
 		sel.anchorNode.parentNode.updateXMLNode();
 	}
-		
-		
-		);
+	);
 		
 	mod.addItem("href","","textfield","Enter a URL:");
-	mod.show(100,100);
+	mod.show(100,50, "fixed");
 	
 	
 	return;
