@@ -367,13 +367,13 @@ Widget_MenuList.prototype.appendItem = function(label, value) {
 	
 
 function Widget_ToolBarButton (id,namespaceURI) {
- this.node = this.initNode("div","ToolBarButton",id);
- this.node.setAttribute("title",id);
- this.Display = "block";
- var col =  buttons[id][0];
- var row =  buttons[id][1];
-
- 
+		this.node = this.initNode("div","ToolBarButton",id);
+		this.node.setAttribute("title",id);
+		this.Display = "block";
+		var col =  buttons[id][0];
+		var row =  buttons[id][1];
+		
+		
 	var clipoffset = 
 	    [buttons['Dimension'][2]*col, // left
 	     buttons['Dimension'][3]*row]; //top
@@ -499,11 +499,58 @@ Widget_StatusBar.prototype.buildPopup = function (node) {
 			var menui = this.Popup.addMenuItem("Edit Attributes..", this.EditAttributes.show);
 			menui.Modal = this.EditAttributes;
 		}
+		var ac = node.XMLNode._xmlnode.allowedChildren;
+		for (i = 0; i < ac.length; i++) {
+			this.Popup.addMenuItem("Add " + ac[i], null);
+		}
 		this.Popup.draw();
 		this.Popup.position(node.offsetParent.offsetLeft +node.offsetLeft + window.scrollX, window.scrollY + node.offsetParent.offsetTop + node.offsetTop -this.Popup.node.offsetHeight ,"absolute");
 		this.Popup.draw();
 		this.Popup._node = node;
 }
+
+function Widget_ContextMenu () {
+	this.Popup = new Widget_MenuPopup();
+	this.Popup.position(0,0,"absolute");
+	this.Popup.ContextMenu = this;
+}
+
+Widget_ContextMenu.prototype = new Widget();
+
+Widget_ContextMenu.prototype.show = function(e,node) {
+	this.buildPopup(e,node);
+}
+
+Widget_ContextMenu.prototype.buildPopup = function (e,node) {
+	this.Popup.removeAllMenuItems();
+	this.Popup.initTitle(node.XMLNode.localName);
+	if (node.XMLNode.attributes.length > 0 ) {
+		var menui = this.Popup.addMenuItem("Edit Attributes..", this.EditAttributes.show);
+		menui.Modal = this.EditAttributes;
+	}
+	var sel  = window.getSelection();
+	var cssr = sel.getEditableRange();
+	var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
+	var ac = node.XMLNode._xmlnode.allowedChildren;
+	for (i = 0; i < ac.length; i++) {
+			var menui = this.Popup.addMenuItem("Add " + ac[i], function(e) { 
+				var widget = e.currentTarget.Widget;
+				var sel = window.getSelection();
+				sel.removeAllRanges();
+				var rng = widget.Cssr.cloneRange();
+				sel.addRange(rng);
+				eDOMEventCall("toggleTextClass",document,{"localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI})
+		});
+		menui.Cssr = cssr;
+		menui.InsertLocalName = ac[i];
+		menui.InsertNamespaceURI;
+			
+	}
+	this.Popup.position(e.pageX, e.pageY, "absolute");
+	this.Popup.draw();
+	this.Popup._node = node;
+}
+
 
 function Widget_ModalBox () {
 	this.node = this.initNode("div","ModalBox");
@@ -613,6 +660,7 @@ function Widget_XPathMouseOver (e) {
 function Widget_XPathMouseOut (e) {
 	e.currentTarget._htmlnode.removeAttribute("__bxe_highlight");
 }
+
 
 	
 // image should be in the same directory as this file. This file is in mozile_root_dir. The loader

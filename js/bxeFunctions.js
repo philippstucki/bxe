@@ -189,12 +189,16 @@ function toggleSourceMode_bxe(e) {
 }
 
 function toggleTextClass_bxe(e) {
-	window.getSelection().toggleTextClass(e.additionalInfo.localName);
+	var sel = window.getSelection();
+	var parent = sel.anchorNode.parentNode;
+	sel.toggleTextClass(e.additionalInfo.localName);
+	dump("is valid" +parent.isNodeValid());
 }
 
 function changeLinesContainer_bxe(e) {
 	window.getSelection().changeLinesContainer(e.additionalInfo);
 }
+
 
 
 /* end mode toggles */
@@ -322,6 +326,49 @@ function MouseClickEvent(e) {
 	
 }
 
+function bxe_ContextMenuEvent(e) {
+
+	var sel = window.getSelection();
+	var cssr = sel.getEditableRange();
+	if(!cssr)
+	{
+		return;
+	}
+	
+	if (cssr.startContainer.nodeType == Node.TEXT_NODE) {
+		var no = cssr.startContainer.parentNode;
+	} else {
+		var no = cssr.startContainer;
+	}
+	bxe_context_menu.show(e,no);
+	e.stopPropagation();
+	e.returnValue = false;
+  	e.preventDefault();
+  	return false;
+}
+
+function bxe_UnorderedList() {
+	window.getSelection().toggleListLines("UL", "OL");
+}
+
+function bxe_OrderedList() {
+	window.getSelection().toggleListLines("OL", "UL");
+}
+
+function bxe_InsertImage() {
+	var imgref = prompt("Enter the image url or file name:", "");
+	if(imgref == null) // null href means prompt canceled
+		return;
+	if(imgref == "") 
+		return; // ok with no name filled in
+	var img = documentCreateXHTMLElement("img");
+	img.src = imgref; // any way to tell if it is valid?
+	window.getSelection().insertNode(img);
+}
+
+function bxe_InsertTable() {
+	bxe_table_insert();
+}
 
 function bxe_InsertLink() {
 	

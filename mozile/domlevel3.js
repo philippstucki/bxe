@@ -175,6 +175,7 @@ Element.prototype.__defineGetter__(
  *
  * POST04: change to return list of allowed children ie/ return empty list of string names
  */
+ /*
 Element.prototype.__defineGetter__(
 	"allowedChildren",
 	function()
@@ -194,7 +195,7 @@ Element.prototype.__defineGetter__(
 
 		return true;
 	}
-);
+);*/
 
 /*
  * contentType from ElementEditVAL

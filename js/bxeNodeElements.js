@@ -116,7 +116,7 @@ Node.prototype.convertToXMLDocFrag = function () {
 Node.prototype.convertToXMLNode = function(xmldoc) {
 	var newElement = null;
 	if (this.nodeType == 1 ) {
-		if (!this.XMLNode.namespaceURI) { this.XMLNode.namespaceURI = null;}
+		if (!this.XMLNode.namespaceURI) { this.XMLNode.namespaceURI = XHTMLNS;}
 		if (this.localName.toLowerCase() != "span" && (this.XMLNode.namespaceURI == XHTMLNS )) {
 			newElement = xmldoc.createElementNS(this.XMLNode.namespaceURI,this.localName.toLowerCase());
 		} else {

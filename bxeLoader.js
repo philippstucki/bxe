@@ -44,6 +44,7 @@ var mozile_corescript_loaded = 0;
 var mozile_script_loaded = 0;
 var bxe_config = new Object();
 var bxe_about_box = null;
+var bxe_context_menu = null;
 
 function bxe_start(config_file,fromUrl) {
 	
@@ -252,21 +253,35 @@ function mozile_loaded() {
 }
 
 function xml_loaded(e) {
+	bxe_about_box.addText("Load RelaxNG ...");
 	e.target.td.Docu.xmldoc.loadSchema(bxe_config.validationfile,validation_loaded);
-	//document.loadSchema("./relaxng.xml", parsed);
 	document.eDOMaddEventListener("toggleSourceMode",toggleSourceMode_bxe,false);
 	document.eDOMaddEventListener("toggleTagMode",toggleTagMode_bxe,false);
 	document.eDOMaddEventListener("toggleNormalMode",toggleNormalMode_bxe,false);
 	document.eDOMaddEventListener("DocumentSave",__bxeSave,false);
 	document.eDOMaddEventListener("ToggleTextClass",toggleTextClass_bxe,false);
 	document.eDOMaddEventListener("InsertLink",bxe_InsertLink,false);
+		document.eDOMaddEventListener("InsertTable",bxe_InsertTable,false);
+	document.eDOMaddEventListener("InsertImage",bxe_InsertImage,false);
+	document.eDOMaddEventListener("OrderedList",bxe_UnorderedList,false);
+	document.eDOMaddEventListener("UnorderedList",bxe_OrderedList,false);
+
 	document.eDOMaddEventListener("changeLinesContainer",changeLinesContainer_bxe,false);
+	
+	document.addEventListener("contextmenu",bxe_ContextMenuEvent, false);
+	
+	bxe_context_menu = new Widget_ContextMenu();
 }
 
 function validation_loaded(vdom) {
-
-	dump(bxe_config.xmldoc.vdom.getStructure());
-	dump("validation resulted in " +bxe_config.xmldoc.validateDocument());
+	bxe_about_box.addText("Validation Loaded ...");
+	//dump(bxe_config.xmldoc.vdom.getStructure());
+	if (bxe_config.xmldoc.validateDocument()) {
+		bxe_about_box.addText("Document is valid.");
+	}
+	else {
+		bxe_about_box.addText("Document is *not* valid.");
+	}
 }
 
 function config_loaded(bxe_config_in) {

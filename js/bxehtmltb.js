@@ -70,12 +70,12 @@ buttons=
     "subscript":[4,1,"ToggleTextClass"],
     "superscript":[5,1,"ToggleTextClass"],
     "link":[0,5,"InsertLink"],
-    "unlink":[1,5,true],
+  //  "unlink":[1,5,true],
     "create_table":[2,5,"InsertTable"],
     /*"Outdent":[1,2,true],
     "Indent":[0,2,true],*/
-    "Unordered_List":[3,2,true],
-    "Ordered_List":[2,2,true],
+    "Unordered_List":[3,2,"UnorderedList"],
+    "Ordered_List":[2,2,"OrderedList"],
   /*  "Left":[0,3,true],
     "Center":[1,3,true],
     "Right":[2,3,true],
@@ -86,10 +86,10 @@ buttons=
     "Paste":[2,4,"ClipboardPaste"],
     "Image":[3,5,"InsertImage"],
     //"HR":[4,5,],
-    "Save":[1,6,"DocumentSave"],
-    "Raw_HTML":[2,6,false],
+    "Save":[1,6,"DocumentSave"]
+  /*  "Raw_HTML":[2,6,false],
     "Undo":[3,6,"Undo"],
-    "Redo":[4,6,"Redo"]
+    "Redo":[4,6,"Redo"]*/
 	};
 
 var buttonStyles = new Array(

@@ -10,6 +10,10 @@ NodeVDOM.prototype.getVdomForChild = function (child ) {
 
 }
 
+NodeVDOM.prototype.allowedElements = function() {
+	return this.localName;
+}
+
 NodeVDOM.prototype.parseChildren = function() {};
 
 

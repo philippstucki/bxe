@@ -76,7 +76,12 @@ XMLDocument.prototype.transformToXPathMode = function(xslfile) {
 		var processor = new XSLTProcessor();
 		xsltransformdoc = e.currentTarget;
 		processor.importStylesheet(xsltransformdoc);
-		var newDocument = processor.transformToDocument(xsltransformdoc.xsldoc);
+		try {
+			var newDocument = processor.transformToDocument(xsltransformdoc.xsldoc);
+		}
+		catch (e) {
+			alert ( e + "\n\n xsltransformdoc.xsldoc is : " + xsltransformdoc.xsldoc);
+		}
 		var processor = new XSLTProcessor();
 		processor.importStylesheet(newDocument);
 		var xmldoc = processor.transformToFragment(xsltransformdoc.xsldoc.xmldoc,document);

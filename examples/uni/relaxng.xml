@@ -84,7 +84,15 @@
               <element name="caption">
                 <text/>
               </element>
-              
+              <oneOrMore>
+                <element name="col">
+                  <optional>
+                    <attribute name="align">
+                      <data type="NCName"/>
+                    </attribute>
+                  </optional>
+                </element>
+              </oneOrMore>
               <oneOrMore>
                 <element name="tr">
                   <attribute name="align">
@@ -97,15 +105,7 @@
                   </oneOrMore>
                 </element>
               </oneOrMore>
-              <oneOrMore>
-                <element name="col">
-                  <optional>
-                    <attribute name="align">
-                      <data type="NCName"/>
-                    </attribute>
-                  </optional>
-                </element>
-              </oneOrMore>
+              
             </element>
           </choice>
         </oneOrMore>

@@ -26,8 +26,8 @@
  <!--           <h1>Headline 1</h1> wird durch dc:title eingefuellt -->
                 <anchor/>
                 <h2>Example of University of Zurich</h2>
-                <p> Paragraph</p>
-                <h2>Styles (headline 2)</h2>
+                <p> Paragraph</p> 
+          <h2>Styles (headline 2)</h2>
                 <p>Different <b>text style</b>s can be used: <b>bold</b> or <i>italic</i> or
                 <small>small</small></p>
                 <p>There is also an element <attention>attdddention"</attention>.</p>
@@ -73,6 +73,6 @@
                         <li>This is an ordered list</li>
                         <li>The xml follows the xhtml standard</li>
                 </ol>
-                <index abstracts="true"/>
+                <index abstracts="true"/> 
         </body>
 </unizh:content-document>

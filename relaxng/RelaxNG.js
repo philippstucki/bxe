@@ -181,6 +181,48 @@ OneOrMoreVDOM.prototype.isValid = function(ctxt) {
 	return false;
 }
 
+OneOrMoreVDOM.prototype.allowedElements = function() {
+	var child = this.firstChild;
+	var ac = new Array();
+	
+	while (child) {
+		var subac = child.allowedElements();
+		if (typeof subac == "string") {
+			ac.push(subac);
+		} else {
+			for (var i = 0; i < subac.length; i++) {
+				ac.push(subac[i]);
+			}
+		}
+		child = child.nextSibling;
+	}
+	return ac;
+	
+}
+
+ChoiceVDOM.prototype.allowedElements = function() {
+	var child = this.firstChild;
+	var ac = new Array();
+	
+	while (child) {
+		var subac = child.allowedElements();
+		if (typeof subac == "string") {
+			ac.push(subac);
+		} else if (subac) {
+			for (var i = 0; i < subac.length; i++) {
+				ac.push(subac[i]);
+			}
+		}
+		child = child.nextSibling;
+	}
+	
+	return ac;
+	
+}
+
+ElementVDOM.prototype.allowedElements = function() {
+	return this.nodeName;
+}
 ElementVDOM.prototype.__defineSetter__("nodeName", function(name) {
 	var html = true;
 	if (html) {

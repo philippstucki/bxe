@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: webdav.js,v 1.4 2003/08/13 15:19:33 chregu Exp $
+// $Id: webdav.js,v 1.5 2003/08/18 07:52:23 chregu Exp $
 /**
 * @file
 * Implements the http TransportDriver 
@@ -83,7 +83,6 @@ BXE_TransportDriver_webdav.prototype._responseXML = function(e) {
 	}
 		
 	else if (p.responseXML) {
-		BX_debug(p);
 		if (p.responseXML.firstChild.nodeName == 'parsererror')
 		{
 			alerttext="Something went wrong during parsing of the response:\n\n";
