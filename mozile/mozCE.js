@@ -692,7 +692,8 @@ Selection.prototype.cut = function()
 {
 	this.copy();
 	bxe_history_snapshot();
-	this.deleteSelection(false);
+	var sel = window.getSelection();
+	bxe_deleteEventKey(sel, false);
 }
 
 /*
