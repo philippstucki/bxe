@@ -385,8 +385,7 @@ function bxe_draw_widgets() {
 
 	toolbar.addItem(bxe_format_list);
 	
-	
-	toolbar.addButtons(buttons);
+	toolbar.addButtons(bxe_config.getButtons());
 	
 	
 	toolbar.draw();

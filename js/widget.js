@@ -343,7 +343,6 @@ function Widget_ToolBar () {
 Widget_ToolBar.prototype = new Widget();
 
 Widget_ToolBar.prototype.addButtons = function ( buttons) {
-	
 	for (but in buttons) {
 		if (but != "Dimension") {
 			var button = new Widget_ToolBarButton(but,buttons[but][3]);
@@ -389,6 +388,7 @@ function Widget_ToolBarButton (id,namespaceURI) {
 		this.node = this.initNode("div","ToolBarButton",id);
 		this.node.setAttribute("title",id);
 		this.Display = "block";
+		var buttons = bxe_config.getButtons();
 		var col =  buttons[id][0];
 		var row =  buttons[id][1];
 		

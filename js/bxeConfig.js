@@ -28,9 +28,49 @@ bxeConfig.parseConfig = function  (e) {
 	
 	bxe_config.cssfiles = bxe_config.getContentMultiple("/config/files/css/file");
 	bxe_config.scriptfiles = bxe_config.getContentMultiple("/config/files/scripts/file");
+	bxe_config.getButtons();
 	config_loaded(bxe_config);
 }
 
+bxeConfig.prototype.getButtons = function() {
+	
+	if (!this.buttons) {
+	this.buttons = new Array();
+	var node;
+	var tmpArray = new Array();
+	
+	// get dimensions
+	var result = this.doc.evaluate("/config/buttons/dimension", this.doc, null, 0, null);
+	node = result.iterateNext();
+	tmpArray.push(node.getAttribute("width"));
+	tmpArray.push(node.getAttribute("height"));
+	tmpArray.push(node.getAttribute("buttonwidth"));
+	tmpArray.push(node.getAttribute("buttonheight"));
+	
+	this.buttons["Dimension"] = tmpArray;
+	
+	var result = this.doc.evaluate("/config/buttons/button", this.doc, null, 0, null);
+    
+    var i = 0;
+	var ns;
+    while (node = result.iterateNext())
+    {
+		tmpArray = new Array();
+		tmpArray.push(node.getAttribute("col"));
+		tmpArray.push(node.getAttribute("row"));
+		tmpArray.push(node.getAttribute("action"));
+		ns = node.getAttribute("ns");
+		if (ns) {
+			tmpArray.push(ns);
+		}
+		this.buttons[node.getAttribute("name")] = tmpArray;
+        dump (node.getAttribute("name") + "...\n");
+    }
+	}
+	
+	return this.buttons;
+	
+}
 bxeConfig.prototype.getContentMultiple = function (xpath)
 {
     var result = this.doc.evaluate(xpath, this.doc, null, 0, null);

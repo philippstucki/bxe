@@ -56,41 +56,6 @@ var ptbStyles = new Array(
 			"width", "100%",
 			"margin-left", "0px");
 
-// button definitions
-var buttons=new Array();
-
-buttons=
-    {
-	"Dimension": [120,140,20,20],//width,height and button width,height in px
-    
-	"b":[1,1,"ToggleTextClass","http://www.w3.org/1999/xhtml"],
-    "italic":[0,1,"ToggleTextClass","http://www.w3.org/1999/xhtml"],
-    "underline":[2,1,"ToggleTextClass","http://www.w3.org/1999/xhtml"],
-    "strikethrough":[3,1,"ToggleTextClass","http://www.w3.org/1999/xhtml"],
-    "subscript":[4,1,"ToggleTextClass","http://www.w3.org/1999/xhtml"],
-    "superscript":[5,1,"ToggleTextClass","http://www.w3.org/1999/xhtml"],
-    "link":[0,5,"InsertLink"],
-  //  "unlink":[1,5,true],
-    "create_table":[2,5,"InsertTable"],
-    /*"Outdent":[1,2,true],
-    "Indent":[0,2,true],*/
-    "Unordered_List":[3,2,"UnorderedList"],
-    "Ordered_List":[2,2,"OrderedList"],
-  /*  "Left":[0,3,true],
-    "Center":[1,3,true],
-    "Right":[2,3,true],
-    "Justify":[3,3,false],
-    "New_Page":[0,6,false],*/
-    "Copy":[0,4,"ClipboardCopy"],
-    "Cut":[1,4,"ClipboardCut"],
-    "Paste":[2,4,"ClipboardPaste"],
-    "Image":[3,5,"InsertImage"],
-    //"HR":[4,5,],
-    "Save":[1,6,"DocumentSave"]
-  /*  "Raw_HTML":[2,6,false],
-    "Undo":[3,6,"Undo"],
-    "Redo":[4,6,"Redo"]*/
-	};
 
 var buttonStyles = new Array(
 	"height", "20px", 
