@@ -16,8 +16,10 @@ xx xxx xxx, Version 1.1.0
 - Changed handling of validation error during initial loading 
     (changing to source mode is possible for fixing the error) (r870)
 
-xx December 2004 Version 1.0.0
+3 December 2004 Version 1.0.0
 
+- Fixed problem with changing block elements, if there's only one (r1005)
+- Fixed "disappearing image" when on last position and hitting <return> (r1002)
 - Fixed CleanInline for nested inline styles (r990)
 - Fixed horizontal scrolling on paste (r983)
 
