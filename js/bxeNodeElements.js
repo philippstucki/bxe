@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeNodeElements.js,v 1.38 2004/02/05 11:20:14 chregu Exp $
+// $Id: bxeNodeElements.js,v 1.39 2004/02/17 10:04:24 chregu Exp $
 
 Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 	alert("Node.prototype.insertIntoHTMLDocument is deprecated");
@@ -158,31 +158,7 @@ Node.prototype.__defineSetter__(
 		this._XMLNode = node;
 	}
 );
-/*
-Node.prototype.getXPathString = function() {
-	
-	var prevSibling = this;
-	var position = 1;
-	var xpathstring = "";
-	if (this.parentNode.nodeType == 1) {
-		xpathstring = this.parentNode.getXPathString() ;
-	}
-	if (this.nodeType == 3 ) {
-		xpathstring += "/text()";
-	}
-	else {
-		prevSibling = prevSibling.previousSibling
-		while (prevSibling ) {
-			if (prevSibling.nodeName == this.nodeName) {
-				position++;
-			}
-			prevSibling = prevSibling.previousSibling
-		}
-		xpathstring += "/" + this.nodeName +"[" + position + "]";
-	}
-	return xpathstring;
-}
-*/
+
 Element.prototype.getCStyle = function(style) {
 	return document.defaultView.getComputedStyle(this, null).getPropertyValue(style);
 }
