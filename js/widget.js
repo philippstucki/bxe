@@ -556,7 +556,7 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 	var sel  = window.getSelection();
 	var cssr = sel.getEditableRange();
 	//var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
-	var ac = node.XMLNode._xmlnode.allowedChildren;
+	var ac = node.XMLNode.allowedChildren;
 	if (!(sel.isCollapsed)) {
 		for (i = 0; i < ac.length; i++) {
 			var menui = this.Popup.addMenuItem(ac[i], function(e) { 
@@ -609,14 +609,21 @@ function Widget_ModalBox () {
 
 Widget_MenuPopup.prototype.appendAllowedSiblings = function( node) {
 	var ac = node.XMLNode._xmlnode.parentNode.allowedChildren;
-	ac.sort();
+	function nodeSort(a,b) {
+		if (a.nodeName > b.nodeName) {
+			return 1;
+		} else {
+			return -1;
+		}
+	}
+	ac.sort(nodeSort);
 	for (i = 0; i < ac.length; i++) {
-			var menui =this.addMenuItem("Append " + ac[i], function(e) { 
+			var menui =this.addMenuItem("Append " + ac[i].nodeName, function(e) { 
 				var widget = e.currentTarget.Widget;
 				eDOMEventCall("appendNode",document,{"appendToNode": widget.AppendToNode, "localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI})
 			});
-			menui.InsertLocalName = ac[i];
-			menui.InsertNamespaceURI;
+			menui.InsertLocalName = ac[i].localName;
+			menui.InsertNamespaceURI = ac[i].namespaceURI;
 			menui.AppendToNode = node.XMLNode;
 		}
 }
