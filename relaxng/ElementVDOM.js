@@ -87,9 +87,20 @@ ElementVDOM.prototype.isValid = function(ctxt) {
 		
 		
 		var _attr = this.attributes;
+		var _vdomAttr = new Array();
+		
 		for(var i in _attr) {
 			 _attr[i].isValid(ctxt);
+			 _vdomAttr[_attr[i].name] = true;
 		}
+		
+		var _nodeAttr = ctxt.node.attributes;
+		for(var i in _nodeAttr) {
+			if (typeof _vdomAttr[_nodeAttr[i].nodeName] == "undefined") {
+				ctxt.setErrorMessage("The attribute " + _nodeAttr[i].nodeName + " is not allowed in " +  ctxt.node.nodeName );
+			}
+		}
+		
 		ctxt.node.vdom = this;
 		ctxt.nextVDOM();
 		return true;
