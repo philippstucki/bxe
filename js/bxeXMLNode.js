@@ -49,6 +49,9 @@ XMLNode.prototype.init = function ( nodein, localName, nodeType, autocreate) {
 					this.localName = this._node.localName;
 				}
 			}
+			if (this._node.hasAttribute("__bxe_ns")) {
+				this.namespaceURI = this._node.getAttribute("__bxe_ns");
+			}
 		} else {
 			this.localName = this._node.nodeName;
 		}
@@ -67,10 +70,18 @@ XMLNode.prototype.insertAfter = function(newNode, oldNode) {
 
 XMLNode.prototype.insertBefore = function(newNode,oldNode) {
 	newNode = this.appendChild(newNode);
+	newNode._node = this._node.insertBefore(newNode._node,oldNode._node);
+	this.insertBeforeIntern(newNode,oldNode);
+	newNode._node.XMLNode = newNode;
+
+}
+
+XMLNode.prototype.insertBeforeIntern = function(newNode, oldNode) {
+	try {
+
 	newNode.unlink();
 	newNode.parentNode = this;
 	newNode.ownerDocument = this.ownerDocument;
-	newNode._node = this._node.insertBefore(newNode._node,oldNode._node);
 	if (oldNode != null) {
 		if (oldNode.previousSibling != null) {
 			oldNode.previousSibling.nextSibling = newNode;
@@ -82,30 +93,57 @@ XMLNode.prototype.insertBefore = function(newNode,oldNode) {
 		oldNode.previousSibling = newNode;
 		newNode.nextSibling = oldNode;
 	}
-	newNode._node.XMLNode = newNode;
-
+	} catch(e) {alert(e);}
 }
 
 XMLNode.prototype.unlink = function () {
 	
 	if (this.nextSibling == null) {
-		this.parentNode.lastChild = this.previousSibling;
+		if ( this.parentNode != null) {
+			this.parentNode.lastChild = this.previousSibling;
+		}
 	} else {
 		this.nextSibling.previousSibling = this.previousSibling;
 	}
 	if (this.previousSibling == null) {
-		this.parentNode.firstChild = this.nextSibling;
+		if (this.parentNode != null) {
+			this.parentNode.firstChild = this.nextSibling;
+		}
 	} else {
 		this.previousSibling.nextSibling = this.nextSibling;
 	}
 	this.parentNode = null;
 }
 
+XMLNode.prototype.unlinkChildren = function () {
+	
+	var child = this.firstChild;
+	
+	while (child) {
+		child.parentNode = null;
+		child = child.nextSibling;
+	}
+	this.firstChild = null;
+	this.lastChild = null;
+}
+
+
 XMLNode.prototype.appendChild = function(newNode) {
 	//BX_debug(newNode);
+	this.appendChildIntern(newNode);
+	newNode._node = this._node.appendChild(newNode._node);
+	if (this._node.ownerDocument == document ) {
+		newNode.createNS(newNode.namespaceURI, newNode.localName, newNode.nodeType);
+	}
+	return newNode;
+}
+
+XMLNode.prototype.appendChildIntern = function (newNode) {
 	newNode.parentNode = this;
 	if (this.firstChild == null) {
+
 		this.firstChild = newNode;
+
 		this.lastChild = newNode;
 		newNode.nextSibling = null;
 		newNode.previousSibling = null;
@@ -115,14 +153,8 @@ XMLNode.prototype.appendChild = function(newNode) {
 		this.lastChild = newNode;
 		newNode.nextSibling = null;
 	}
-	if (this._node.ownerDocument == document ) {
-		newNode.createNS(newNode.namespaceURI, newNode.localName, newNode.nodeType);
-	} else {
-	}
-	newNode.ownerDocument = this.ownerDocument;
-	newNode._node = this._node.appendChild(newNode._node);
 
-	return newNode;
+	newNode.ownerDocument = this.ownerDocument;
 }
 
 

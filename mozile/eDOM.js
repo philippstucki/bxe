@@ -289,10 +289,12 @@ Node.prototype.__defineGetter__(
  */
 Element.prototype.insertAfter = function(elementToInsert, child)
 {
-	if(this.lastChild == child)
-		this.appendChild(elementToInsert);
+	if(this.lastChild == child) {
+		alert("here");
+		return this.appendChild(elementToInsert);
+	}
 	else
-		this.insertBefore(elementToInsert, child.nextSibling);
+		return this.insertBefore(elementToInsert, child.nextSibling);
 }
 
 /**
@@ -1165,8 +1167,9 @@ InsertionPoint.prototype.splitLine = function()
 	if(result != InsertionPoint.SAME_LINE) // at end line
 	{ 
 		newLineContainer.appendChild(document.createTextNode(STRING_NBSP));
-		line.container.parentNode.insertAfter(newLineContainer, line.container);
-
+		var nextSibling = line.container.nextSibling;
+		var newNode = line.container.parentNode.insertAfter(newLineContainer, line.container);
+		eDOMEventCall("insertedBefore",nextSibling,newNode);
 		// put cp in new line
 		this.__ipNode = newLineContainer.firstChild;
 		this.__ipOffset = 0;
@@ -1179,6 +1182,7 @@ InsertionPoint.prototype.splitLine = function()
 	{
 		newLineContainer.appendChild(document.createTextNode(STRING_NBSP));
 		line.container.parentNode.insertBefore(newLineContainer, line.container);
+		eDOMEventCall("insertedBefore",line.container,newLineContainer);
 		return;
 	}
 
@@ -1191,6 +1195,7 @@ InsertionPoint.prototype.splitLine = function()
 	newLineContainer.appendChild(newLineContents);
 	line.container.normalize();
 	line.container.parentNode.insertBefore(newLineContainer, line.container);
+	eDOMEventCall("insertedBefore",line.container,newLineContainer);
 	this.__ipNode = tp.referencedTextNode;
 	this.__ipOffset = tp.referencedOffset;		
 }

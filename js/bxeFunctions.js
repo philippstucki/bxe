@@ -221,14 +221,33 @@ function bxe_toggleSourceMode(e) {
 
 function bxe_toggleTextClass(e) {
 	var sel = window.getSelection();
-	
 	sel.toggleTextClass(e.additionalInfo.localName);
 	sel = window.getSelection();
 	var _node = sel.anchorNode.parentNode;
 	_node.XMLNode.namespaceURI = e.additionalInfo.namespaceURI;
 	_node.XMLNode = new XMLNode(  e.additionalInfo.namespaceURI,   e.additionalInfo.localName, 1);
-	dump(_node.parentNode);
 	_node.parentNode.updateXMLNode();
+}
+
+function bxe_insertedBefore(e) {
+	try {
+	var oldNode = e.target.XMLNode;
+	var newNode = e.additionalInfo;
+
+	newNode.XMLNode =  new XMLNode(newNode);
+	oldNode.parentNode.insertBeforeIntern(newNode.XMLNode, oldNode);
+	if (newNode.firstChild ) {
+		newNode.updateXMLNode();
+	}
+	
+	
+	if (oldNode.firstChild ) {
+		oldNode.unlinkChildren();
+		oldNode._node.updateXMLNode();
+	}
+	}
+	catch(e) {bxe_catch_alert(e);}
+
 }
 
 function bxe_appendNode(e) {

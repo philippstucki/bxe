@@ -30,7 +30,7 @@ Node.prototype.doEvents = function(event) {
 		try {
 			this.parentNode.doEvents(event);
 		} catch(e) {
-			dump("no checkEvents on parentNode " + this.parentNode);
+			//dump("no checkEvents on parentNode " + this.parentNode);
 		}
 	}
 }

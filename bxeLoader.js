@@ -273,6 +273,7 @@ function xml_loaded(xmldoc) {
 	document.eDOMaddEventListener("InsertImage",bxe_InsertImage,false);
 	document.eDOMaddEventListener("OrderedList",bxe_UnorderedList,false);
 	document.eDOMaddEventListener("UnorderedList",bxe_OrderedList,false);
+	document.eDOMaddEventListener("insertedBefore",bxe_insertedBefore,false);
 
 	document.eDOMaddEventListener("changeLinesContainer",bxe_changeLinesContainer,false);
 	document.eDOMaddEventListener("Exit",bxe_exit,false);

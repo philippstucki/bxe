@@ -315,11 +315,11 @@ Node.prototype.updateXMLNode = function () {
 	if (!this.XMLNode.previousSibling) {
 		this.XMLNode.parentNode.firstChild = this.XMLNode;
 	}
-
-
 	this.XMLNode._node = this
-/*	dump (this.XMLNode.nodeType);
-	dump ("\n**********\n");*/
+
+	if (this.nodeType == 1 && this.hasAttribute("__bxe_ns")) {
+		this.XMLNode.namespaceURI = this.getAttribute("__bxe_ns");
+	}
 	if (this.firstChild) {
 		var node = this.firstChild;
 		while (node) {
@@ -329,3 +329,5 @@ Node.prototype.updateXMLNode = function () {
 	}
 
 }
+
+
