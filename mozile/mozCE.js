@@ -490,13 +490,29 @@ Selection.prototype.insertNode = function(node)
 Selection.prototype.paste = function()
 {
 	var clipboard = mozilla.getClipboard();
-	window.getSelection().insertNode(clipboard.getData(MozClipboard.TEXT_FLAVOR));
-	var node = window.getSelection().anchorNode;
-	if( node.nodeType == 3) {
-		node.normalize();
+	var content = clipboard.getData(MozClipboard.TEXT_FLAVOR);
+	if (content && content.data) {
 		
+		if (content.data.search(/\n.+/) > -1) {
+			content = content.data;
+			content.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+			var elementName = bxe_config.options['autoParaElementName'];
+			var elementNamespace = bxe_config.options['autoParaElementNamespace']
+			var elementName_start = "p";
+			if (elementNamespace) {
+				elementName_start += " xmlns='http://www.w3.org/1999/xhtml'";
+			}
+			content = "<"+elementName_start + ">"+ content.replace(/\n/g,"</"+elementName+"><"+elementName_start+" >")+"</"+elementName+">";
+			bxe_insertContent_async(content,BXE_SELECTION,BXE_SPLIT_IF_INLINE);
+		} else {
+			window.getSelection().insertNode(content);
+		}
+		var node = window.getSelection().anchorNode;
+		if( node.nodeType == 3) {
+			node.normalize();
+		}
+		bxe_history_snapshot_async();
 	}
-	bxe_history_snapshot_async();
 	return node;
 	
 }
@@ -578,7 +594,6 @@ Selection.prototype.pasteKeyDown = function() {
 	
 	var cssr = this.getEditableRange();
 	
-	
 	iframe._cssr = cssr;
 	iframe._input.focus();
 }
@@ -589,7 +604,7 @@ Selection.prototype.pasteKeyUp = function () {
 	
 	var iframe = document.getElementById("ClipboardIFrame");
 	iframe._input.blur();
-	
+
 	//copy the content of the hidden form into the placeholder span
 	var text = iframe._placeholder.appendChild(document.createTextNode(iframe._input.value));
 	
@@ -613,6 +628,7 @@ Selection.prototype.pasteKeyUp = function () {
 		try {
 			var internal = confirm( promptText)
 		} catch(e) {}
+		
 		if(!internal) {
 			clipboard.setData(rng);
 		}

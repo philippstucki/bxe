@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id: config.xml,v 1.14 2004/02/20 15:06:48 chregu Exp $ --><config>
+<!-- $Id$ --><config>
     <files>
         <input>
             <!-- The XML-document with the actual data -->
@@ -54,6 +54,10 @@
         
         
     </files>
+    <options> 
+    <option name="autoParaElementName">p</option>
+    <option name="autoParaElementNamespace">http://www.w3.org/1999/xhtml</option>
+    </options>
 <!-- here we define the buttons for the top button bar -->
     <buttons>
      <!-- the dimension tag is for defining the dimensions of your button image and how
