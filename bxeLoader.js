@@ -373,8 +373,7 @@ function validation_loaded(vdom) {
 	}
 	else {
 		bxe_about_box.addText("Document is valid.");
-		bxe_lastSaveXml = bxe_getXmlDocument();
-		
+		bxe_lastSavedXML = bxe_getXmlDocument();
 	}
 	var endTimer = new Date();
 	debug ("startTime: " + startTimer);
