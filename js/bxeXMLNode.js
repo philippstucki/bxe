@@ -382,11 +382,16 @@ XMLNode.prototype.getBeforeAndAfterString = function () {
 	var after = "";
 	
 	nodeName = nodeName + this.localName;
+	before = "<"+ nodeName;
+	var attribs = this.attributes;
+	for (var i = 0; i < attribs.length; i++) {
+		before = before + " " + attribs[i].localName + '="'+attribs[i].value+'"';
+	}
 	if (this.hasChildNodes() ){
-		before = "<"+ nodeName + ">";
+		before = before + ">";
 		after = "</"+ nodeName +">";
 	} else {
-		before = "<"+ nodeName + "/>";
+		before = before + "/>";
 	}
 	return new Array(before,after);
 	

@@ -53,12 +53,9 @@ function bxe_toggleTagMode(e) {
 	
 	if (!editableArea._TagMode) {
 		createTagNameAttributes(editableArea);
-		//var x = document.styleSheets[0];
-		//x.insertRule('#' + editableArea.id + ' *:before {content: attr(_edom_tagnameopen); margin-left: 2px; margin-right: 2px; font: 9px Geneva, Verdana, sans-serif; padding: 0px 1px 0 px 1px; border: 1px solid black; background: #888;  color: #FFF;}',x.cssRules.length);
-		//x.insertRule('#' + editableArea.id + ' *:after {content:  attr(_edom_tagnameclose) ; margin-left: 2px; margin-right: 2px; font: 9px Geneva, Verdana, sans-serif; padding: 0px 1px 0 px 1px; border: 1px solid black; background: #888;  color: #FFF;}',x.cssRules.length);
-		editableArea.addEventListener("DOMNodeInserted",addTagnames_bxe,false);
+		/*editableArea.addEventListener("DOMNodeInserted",addTagnames_bxe,false);
 		editableArea.addEventListener("DOMNodeRemoved",addTagnames_bxe,false);
-		editableArea.addEventListener("DOMAttrModified",addTagnames_bxe,false);
+		editableArea.addEventListener("DOMAttrModified",addTagnames_bxe,false);*/
 		editableArea._TagMode = true;
 		editableArea.AreaInfo.TagModeMenu.Checked = true;
 		editableArea.AreaInfo.NormalModeMenu.Checked = false;
@@ -67,10 +64,10 @@ function bxe_toggleTagMode(e) {
 			editableArea, NodeFilter.SHOW_ELEMENT,
 			null, 
 			true);
-		var node =editableArea;
-		editableArea.removeEventListener("DOMNodeInserted",addTagnames_bxe,false);
+		var node = editableArea;
+		/*editableArea.removeEventListener("DOMNodeInserted",addTagnames_bxe,false);
 		editableArea.removeEventListener("DOMAttrModified",addTagnames_bxe,false);
-		editableArea.removeEventListener("DOMNodeRemoved",addTagnames_bxe,false);
+		editableArea.removeEventListener("DOMNodeRemoved",addTagnames_bxe,false);*/
 		
 		do {
 			if (node.hasChildNodes()) {
@@ -79,9 +76,6 @@ function bxe_toggleTagMode(e) {
 			node.removeAttribute("_edom_tagnameclose");
 			node =   walker.nextNode() 
 		} while(node)
-		//var x = document.styleSheets[0];
-		//x.deleteRule(x.cssRules.length-1);
-		//x.deleteRule(x.cssRules.length-1);
 		editableArea._TagMode = false;
 		editableArea.AreaInfo.TagModeMenu.Checked = false;
 		editableArea.AreaInfo.NormalModeMenu.Checked = true;
@@ -115,43 +109,26 @@ function addTagnames_bxe (e) {
 	e.currentTarget.removeEventListener("DOMAttrModified",addTagnames_bxe,false);
 	
 	var nodeTarget = e.target; 
-
-	createTagNameAttributes(nodeTarget.parentNode);
+try {
+	createTagNameAttributes(nodeTarget.parentNode.parentNode);
+} catch (e) {bxe_catch_alert(e);}
 	e.currentTarget.addEventListener("DOMAttrModified",addTagnames_bxe,false);
 	
 }
 
 function createTagNameAttributes(startNode) {
-	var xmldoc = startNode.ownerDocument;
-	var walker = document.createTreeWalker(
-		startNode,
-		NodeFilter.SHOW_ELEMENT,
-		{
-			acceptNode : function(node) {
-				return NodeFilter.FILTER_ACCEPT;
+	var walker = startNode.XMLNode.createTreeWalker();
+	var node = walker.nextNode();
+	while( node) {
+		if (node.nodeType == 1) {
+			var xmlstring = node.getBeforeAndAfterString(false,true);
+			node._node.setAttribute("_edom_tagnameopen",xmlstring[0]);
+			if (xmlstring[1]) {
+				node._node.setAttribute("_edom_tagnameclose",xmlstring[1]);
 			}
 		}
-		, true);
-		
-	var node = walker.nextNode();
-	do {
-			var parentN = null;
-			if (node.parentNode.XMLNode._xmlnode) {
-				parentN = node.parentNode.XMLNode._xmlnode;
-			} else {
-				parentN = startNode.XMLNode._xmlnode;
-			}
-			var newNode = node.convertToXMLNode(document);
-			parentN.removeAllChildren();
-			parentN.appendChild(newNode);
-			var xmlstring =  parentN.getBeforeAndAfterString(node.hasChildNodes());
-			node.setAttribute("_edom_tagnameopen", xmlstring[0]);
-			if (xmlstring[1]) {
-				node.setAttribute("_edom_tagnameclose", xmlstring[1]);
-			}
-			node.XMLNode.setNode(xmlstring[2]);
-			node = walker.nextNode()
-	} while( node)
+		node = walker.nextNode();
+	}
 }
 
 function bxe_toggleSourceMode(e) {
