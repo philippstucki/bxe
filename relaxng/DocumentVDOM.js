@@ -44,7 +44,7 @@ DocumentVDOM.prototype.loadSchema = function(file, callback) {
 	this.filename = file;
 	// load schema file
 	try {
-	this.xmldoc.load(file);
+		this.xmldoc.load(file);
 	} catch (e) {
 		return false;
 	}

@@ -189,7 +189,7 @@ function mozile_loaded() {
 }
 
 function xml_loaded(xmldoc) {
-	bxe_about_box.addText("Load RelaxNG ...");
+	bxe_about_box.addText("Load RelaxNG " + bxe_config.validationfile + " ");
 	if (!(bxe_config.validationfile && xmldoc.XMLNode.loadSchema(bxe_config.validationfile,validation_loaded))) {
 		bxe_about_box.addText("RelaxNG File was not found");
 	}
@@ -353,6 +353,7 @@ Function.prototype.getName = function () {
 		return "anonymous function";
 	}
 }
+
 function bxe_getCaller( fn )
 {
 	switch( typeof( fn ))

@@ -1,4 +1,4 @@
-
+const BXE_VALID_NOMESSAGE = 1;
 
 XMLNode.prototype.isNodeValid = function(deep, wFValidityCheckLevel ) {
 	
@@ -12,7 +12,9 @@ XMLNode.prototype.isNodeValid = function(deep, wFValidityCheckLevel ) {
 				c.errormsg[i]["node"]._node.setAttribute("__bxe_invalid","true");
 			} 
 		}
-		bxe_validationAlert(c.errormsg);
+		if (!(wFValidityCheckLevel & 1)) {
+			bxe_validationAlert(c.errormsg);
+		}
 		return false;
 	} else {
 		return true;

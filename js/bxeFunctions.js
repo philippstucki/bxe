@@ -265,11 +265,19 @@ function bxe_toggleSourceMode(e) {
 			editableArea.XMLNode._node.removeAllChildren();
 			
 			editableArea.XMLNode._node.appendAllChildren(innerhtmlValue.firstChild);
+
 			
+			
+			editableArea._SourceMode = false;
 			//preserve vdom...
 			var eaVDOM = editableArea.XMLNode._vdom;
 			editableArea.XMLNode = editableArea.XMLNode._node.ownerDocument.init(editableArea.XMLNode._node);
 			editableArea.XMLNode.vdom = eaVDOM;
+		
+			
+			
+			
+			
 			editableArea.removeAllChildren();
 			/*
 			
@@ -280,8 +288,7 @@ function bxe_toggleSourceMode(e) {
 			
 			editableArea.XMLNode.insertIntoHTMLDocument(editableArea,true);
 			editableArea.XMLNode.xmlBridge = xmlnode;
-			dump("valid? " +editableArea.XMLNode.isNodeValid(true) + "\n");
-			editableArea._SourceMode = false;
+			
 			editableArea.AreaInfo.SourceModeMenu.Checked = false;
 			editableArea.AreaInfo.NormalModeMenu.Checked = true;
 			/*normalize namesapces */
@@ -292,6 +299,10 @@ function bxe_toggleSourceMode(e) {
 						xmlnode.removeAttributeNS(XMLNS,prefix);
 					}
 				}
+			}
+				
+			if ( ! (editableArea.XMLNode.isNodeValid(true))) {
+				bxe_toggleSourceMode(e);
 			}
 			
 		}

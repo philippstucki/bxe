@@ -492,10 +492,12 @@ Widget_AboutBox.prototype.setText = function(text) {
 }
 
 Widget_AboutBox.prototype.addText = function(text) {
+	var id = "Widget_AboutBox.addText";
 	this.TextNode.data =this.TextNode.data + " " + text;
 	if ( this.TextNode.data.length  > 120) {
 		this.TextNode.data = "..." + this.TextNode.data.substr(this.TextNode.data.length - 120);
 	}
+	debug(text);
 	window.status = this.TextNode.data;
 }
 
