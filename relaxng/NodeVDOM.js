@@ -11,9 +11,8 @@ NodeVDOM.prototype.getVdomForChild = function (child ) {
 	ctxt.node = child;
 	var vdom = this.firstChild;
 	while (vdom) {
-		dump (child.nodeName + " = " + vdom.nodeName + "\n");
+		//dump (child.nodeName + " = " + vdom.nodeName + "\n");
 		if (vdom.isValid(ctxt)) {
-			dump ("here\n");
 			return vdom;
 		}
 		vdom = vdom.nextSibling;

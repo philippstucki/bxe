@@ -11,7 +11,7 @@ Node.prototype.isNodeValid = function(deep, wFValidityCheckLevel ) {
 }
 
 Attr.prototype._isNodeValid = function(wFValidityCheckLevel ) {
-	dump("Attr Check: " + this.name + "\n");
+	//dump("Attr Check: " + this.name + "\n");
 }
 
 Node.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
@@ -62,7 +62,7 @@ Node.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 	}
 	if (ctxt.isError) {
 		ctxt.dumpErrorMessages();
-	}
+	} 
 	return ctxt;
 	
 }
@@ -125,7 +125,8 @@ ContextVDOM.prototype.isValid = function() {
 		return this.vdom.isValid(this);
 	} else {
 		if (this.node.hasChildNodes()) {
-			dump(this.node.nodeName + " is not allowed to have children \n");
+			//dump(this.node.nodeName + " is not allowed to have children \n");
+			ctxt.setErrorMessage(this.node.nodeName + " is not allowed to have children")
 			return false;
 		} else {
 			this.node.vdom = this.vdom;

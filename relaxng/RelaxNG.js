@@ -162,10 +162,10 @@ ChoiceVDOM.prototype = new NodeVDOM();
 
 ChoiceVDOM.prototype.isValid = function(ctxt) {
 	var child = this.firstChild;
-	dump ("Choice.isValid:\n");
+	//dump ("Choice.isValid:\n");
 
 	while (child) {
-		dump ("Choice.child.isValid: " + child.nodeName + "\n");
+		//dump ("Choice.child.isValid: " + child.nodeName + "\n");
 		if (child.isValid(ctxt)) {
 			ctxt.vdom = this;
 			return true;
@@ -197,7 +197,7 @@ function TextVDOM(node ) {
 }
 
 TextVDOM.prototype.isValid = function(ctxt) {
-	dump("TextVDOM.isValid :" + ctxt.node.data + ":\n");
+	//dump("TextVDOM.isValid :" + ctxt.node.data + ":\n");
 	if (ctxt.node.nodeType == 3) {
 		return true;
 	} else {
@@ -217,9 +217,9 @@ function OneOrMoreVDOM(node) {
 
 OneOrMoreVDOM.prototype.isValid = function(ctxt) {
 	var child = this.firstChild;
-	dump ("OneorMore.isValid:\n");
+	//dump ("OneorMore.isValid:\n");
 	while (child) {
-		dump ("OneorMore.child.isValid: " + child.nodeName + "\n");
+		//dump ("OneorMore.child.isValid: " + child.nodeName + "\n");
 		if (child.isValid(ctxt)) {
 			ctxt.vdom = this;
 			this.hit = true;

@@ -725,7 +725,7 @@ Widget_ModalAttributeBox.prototype.setAttributes = function(xmlnode) {
 	}
 }
 function Widget_XPathMouseOver (e) {
-	dump (e.currentTarget._htmlnode + "\n");
+	//dump (e.currentTarget._htmlnode + "\n");
 	e.currentTarget._htmlnode.setAttribute("__bxe_highlight","true");
 }
 function Widget_XPathMouseOut (e) {

@@ -57,6 +57,9 @@ XMLNode.prototype.setNode = function(xmlnode) {
 	this.localName = xmlnode.localName;
 	this.prefix = xmlnode.prefix;
 	this.nodeType = xmlnode.nodeType;
+	/*if (xmlnode.vdom) {
+		this._vdom = xmlnode.vdom;
+	}*/
 }
 
 XMLNode.prototype.removeAllChildren = function() {
