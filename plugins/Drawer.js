@@ -10,8 +10,10 @@ function BxeDrawer() {
 		var div = document.createElement("div");
 		div.setAttribute("id","kupu-librarydrawer");
 		body.appendChild(div);
-		var librariesURI = mozile_root_dir + "kupu/kupudrawers/demolibraries.xml"; 
-		
+		//var librariesURI = mozile_root_dir + "kupu/kupudrawers/demolibraries.xml"; 
+	    var imageLibrariesURI = mozile_root_dir + "kupu/kupudrawers/demolibraries.xml"; 
+	    var linkLibrariesURI = mozile_root_dir + "kupu/kupudrawers/demolibraries.xml"; 
+        
         if (options["imageLibrariesURI"]) {
 			imageLibrariesURI = options["imageLibrariesURI"];
 		}
