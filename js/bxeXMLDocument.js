@@ -69,7 +69,7 @@ XMLDocument.prototype.transformToXPathMode = function(xslfile) {
 		var xsltransformdoc = document.implementation.createDocument("", "", null);
 		xsltransformdoc.addEventListener("load", onload_xsltransform, false);
 		xsltransformdoc.xsldoc = xsldoc;
-		xsltransformdoc.load("xsl/transformxsl.xsl");
+		xsltransformdoc.load(mozile_root_dir + "xsl/transformxsl.xsl");
 	}
 	
 	function onload_xsltransform (e) {

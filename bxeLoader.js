@@ -117,6 +117,7 @@ bxe_globals.prototype.loadXML = function(xmlfile) {
 		} else {
 			e.target.td.Docu.xmldoc.insertIntoHTMLDocument();
 		}
+		xml_loaded();
 	}
 	td.Docu = this;
 	td.load(xmlfile,callback);
@@ -255,8 +256,10 @@ function xml_loaded() {
 	document.eDOMaddEventListener("toggleNormalMode",toggleNormalMode_bxe,false);
 	document.eDOMaddEventListener("DocumentSave",__bxeSave,false);
 	document.eDOMaddEventListener("ToggleTextClass",toggleTextClass_bxe,false);
+	document.eDOMaddEventListener("InsertLink",bxe_InsertLink,false);
 	document.eDOMaddEventListener("changeLinesContainer",changeLinesContainer_bxe,false);
 }
+
 function config_loaded(bxe_config_in) {
 	
 	bxe_config = bxe_config_in;

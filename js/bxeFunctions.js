@@ -321,3 +321,17 @@ function MouseClickEvent(e) {
 	}
 	
 }
+
+
+function bxe_InsertLink() {
+	
+	if(window.getSelection().isCollapsed) // must have a selection or don't prompt
+		return;
+	var href = prompt("Enter a URL:", "");
+	if(href == null) // null href means prompt canceled - BUG FIX FROM Karl Guertin
+		return;
+	if(href != "") 
+		window.getSelection().linkText(href);
+	else
+		window.getSelection().clearTextLinks();
+}
