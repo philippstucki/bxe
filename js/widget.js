@@ -559,7 +559,7 @@ Widget_StatusBar.prototype.buildXPath = function (node) {
 Widget_StatusBar.prototype.buildPopup = function (node) {
 		this.Popup.removeAllMenuItems();
 		this.Popup.initTitle(node.XMLNode.localName);
-		if (node.XMLNode.attributes.length > 0 ) {
+		if (node.XMLNode.vdom.hasAttributes ) {
 			var menui = this.Popup.addMenuItem("Edit Attributes..", this.EditAttributes.popup);
 			menui.Modal = this.EditAttributes;
 		}
@@ -589,7 +589,7 @@ Widget_ContextMenu.prototype.show = function(e,node) {
 Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 	this.Popup.removeAllMenuItems();
 	this.Popup.initTitle(node.XMLNode.localName);
-	if (node.XMLNode.attributes.length > 0 && this.EditAttributes) {
+	if (node.XMLNode.vdom.hasAttributes && this.EditAttributes) {
 		var menui = this.Popup.addMenuItem("Edit Attributes..", this.EditAttributes.popup);
 		menui.Modal = this.EditAttributes;
 	}
@@ -660,6 +660,7 @@ Widget_MenuPopup.prototype.appendAllowedSiblings = function( node) {
 			var menui = this.addMenuItem("Append " + ac[i].nodeName, function(e) { 
 				var widget = e.currentTarget.Widget;
 				eDOMEventCall("appendNode",document,{"appendToNode": widget.AppendToNode, "localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI})
+				
 			});
 			menui.InsertLocalName = ac[i].localName;
 			menui.InsertNamespaceURI = ac[i].namespaceURI;
@@ -841,7 +842,6 @@ Widget_ModalAttributeBox.prototype.drawAttributes = function(xmlnode) {
 			this.addItem(attr[i].name,xmlnode.getAttribute(attr[i].name),"select",null,attr[i].choices);
 			
 		} else {
-			
 			this.addItem(attr[i].name,xmlnode.getAttribute(attr[i].name),"textfield");
 		}
 		

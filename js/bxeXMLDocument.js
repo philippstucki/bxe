@@ -1,9 +1,19 @@
-XMLDocument.prototype.init= function (startNode) {
+
+
+XMLDocument.prototype.init = function (startNode) {
 	if (!startNode) {
 		startNode = this.documentElement;
 	}
-	var walker = this.createTreeWalker(
-		startNode,NodeFilter.SHOW_ALL,
+	this.XMLNode = new XMLNodeDocument();
+	this.XMLNode._node = this;
+	this.XMLNode.nodeType = 9;
+	
+	return startNode.init();
+}
+
+Node.prototype.init = function() {
+	var walker = this.ownerDocument.createTreeWalker(
+		this,NodeFilter.SHOW_ALL,
 	{
 		acceptNode : function(node) {			
 			return NodeFilter.FILTER_ACCEPT;
@@ -11,12 +21,9 @@ XMLDocument.prototype.init= function (startNode) {
 	}
 	, true);
 
-	var node = startNode;
+	var node = this;
 	var firstChild = false;
-	if (startNode == this.documentElement) {
-		this.XMLNode = new XMLNodeDocument();
-		this.XMLNode._node = this;
-	}
+
 	do  {
 		if (node.nodeType == 1) {
 			node.XMLNode = new XMLNodeElement(node);
@@ -26,11 +33,10 @@ XMLDocument.prototype.init= function (startNode) {
 		node = walker.nextNode();
 	}  while(node );
 	
-	walker.currentNode = startNode;
-	if (startNode == this.documentElement) {
-		this.XMLNode.documentElement = this.documentElement.XMLNode;
-		this.XMLNode.nodeType = 9;
-		this.documentElement.XMLNode.parentNode = this.XMLNode;
+	walker.currentNode = this;
+	if (this == this.ownerDocument.documentElement) {
+		this.ownerDocument.XMLNode.documentElement = this.ownerDocument.documentElement.XMLNode;
+        this.ownerDocument.documentElement.XMLNode.parentNode = this.ownerDocument.XMLNode;
 	} else {
 	}
 	
@@ -38,7 +44,7 @@ XMLDocument.prototype.init= function (startNode) {
 	do  {
 
 		x = node.XMLNode;
-		x.ownerDocument = this.XMLNode;
+		x.ownerDocument = this.ownerDocument.XMLNode;
 		if (node.parentNode) {
 			x.parentNode = node.parentNode.XMLNode;
 		}
@@ -58,7 +64,7 @@ XMLDocument.prototype.init= function (startNode) {
 		x.prefix = node.prefix;
 		node = walker.nextNode();
 	}  while(node );
-	return startNode.XMLNode;
+	return this.XMLNode;
 /*	var xw = new XMLNodeWalker(this.documentElement.XMLNode.firstChild);
 	node = xw.currentNode;
 	while (node) {
@@ -259,6 +265,8 @@ XMLNode.prototype.buildXML = function () {
 	} else {
 		srcNode = this._node;
 	}
+	
+	
 	srcNode.removeAllChildren();
 	var xmldoc = srcNode.ownerDocument;
 	var node = walker.nextNode();

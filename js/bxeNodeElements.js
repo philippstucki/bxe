@@ -1,5 +1,6 @@
 Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
-	
+	alert("DEPERECATED");
+
 	var walker = document.createTreeWalker(
 	 this,NodeFilter.SHOW_ALL,
 	{
@@ -274,16 +275,16 @@ Node.prototype.__defineGetter__ (
 	}
 )
 
-Node.prototype.updateXMLNode = function () {
+Node.prototype.updateXMLNode = function (force) {
 	debug ("updateXMLNode " + this);
-	if (this.nodeType == 1 && !this.userModifiable) {
+	if (this.nodeType == 1 && !this.userModifiable && this.hasChildren) {
 		return;
 	}
 	if (this._XMLNode && this.XMLNode.xmlBridge) {
 		var firstChild = this.firstNotInternalChild;
 		if (firstChild) {
 			this.XMLNode.firstChild = firstChild.XMLNode;
-			return firstChild.updateXMLNode();}
+			return firstChild.updateXMLNode(force);}
 		else { 
 			this.XMLNode.firstChild = null;
 			return ;
@@ -291,16 +292,16 @@ Node.prototype.updateXMLNode = function () {
 	}
 
 		
-	if (!this.parentNode._XMLNode) {
-		return this.parentNode.updateXMLNode();
+	if (!this.parentNode._XMLNode ) {
+		return this.parentNode.updateXMLNode(force);
 	}
 	if (this.nodeType == 3) {
 		this.normalize();
 	}
 	var prev = this.previousNotInternalSibling;
 	if (prev ) {
-		if (!prev._XMLNode) {
-			prev.updateXMLNode();
+		if (!prev._XMLNode ) {
+			prev.updateXMLNode(force);
 		}
 		this.XMLNode.previousSibling = prev.XMLNode;
 		prev.XMLNode.nextSibling = this.XMLNode;
@@ -309,8 +310,9 @@ Node.prototype.updateXMLNode = function () {
 	}
 	var next = this.nextNotInternalSibling;
 	if (next ) {
-		if (!next._XMLNode) {
-			next.updateXMLNode();
+		
+		if (!next._XMLNode || force) {
+			next.updateXMLNode(force);
 		}
 		
 		this.XMLNode.nextSibling = next.XMLNode;
@@ -337,7 +339,7 @@ Node.prototype.updateXMLNode = function () {
 	if (child) {
 		
 		while (child) {
-			child.updateXMLNode();
+			child.updateXMLNode(force);
 			child = child.nextNotInternalSibling;
 		}
 	}

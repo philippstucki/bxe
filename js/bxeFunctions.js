@@ -448,18 +448,36 @@ function bxe_NodeInsertedBefore(e) {
 
 function bxe_appendNode(e) {
 	var aNode = e.additionalInfo.appendToNode;
-	var newNode = new XMLNode(e.additionalInfo.namespaceURI,e.additionalInfo.localName, 1 ) ;
-	
-	aNode.parentNode.insertAfter(newNode,aNode);
-	newNode.setContent("#" + e.additionalInfo.localName + " ");
+				
+	if (e.additionalInfo.node) {
+		var newNode = e.additionalInfo.node.init();
+		aNode.parentNode.insertBeforeIntern(newNode,aNode.nextSibling);
+		newNode.insertIntoHTMLDocument(aNode._node);
+	}
+	else {
 
-	var sel = window.getSelection();
-	sel.removeAllRanges();
-	var rng = document.createRange();
-	rng.setStart(newNode._node.firstChild,1);
-	rng.setEnd(newNode._node.firstChild,newNode._node.firstChild.data.length-1);
-	//dump(e.additionalInfo.localName + " is valid " +_node.XMLNode._xmlnode.isNodeValid(true));
-	sel.addRange(rng);
+		var newNode = new XMLNodeElement(e.additionalInfo.namespaceURI,e.additionalInfo.localName, 1 ) ;
+		aNode.parentNode.insertAfter(newNode,aNode);
+		debug("valid? : " + newNode.isNodeValid());
+		var cb = bxe_getCallback(e.additionalInfo.localName, e.additionalInfo.namespaceURI);
+		if (cb ) {
+			bxe_doCallback(cb, newNode);
+		} else {
+			newNode.setContent("#" + e.additionalInfo.localName + " ");
+
+		}
+		
+	}
+
+	
+	if (newNode._node.firstChild) {
+		var sel = window.getSelection();
+		var startip = newNode._node.firstInsertionPoint();
+		var lastip = newNode._node.lastInsertionPoint();
+		sel.collapse(startip.ipNode, startip.ipOffset);
+		sel.extend(lastip.ipNode, lastip.ipOffset);
+		
+	}
 	
 }
 
@@ -1015,5 +1033,77 @@ function bxe_deregisterKeyHandlers() {
 	document.removeEventListener("keyup", keyUpHandler, true);
 }
 
+function bxe_insertContent(node,replaceNode) {
+	var docfrag;
+	if (typeof node == "string") {
+		docfrag = node.convertToXML()
+	} else {
+		docfrag = node;
+	}
+	if(replaceNode) {
+//		if (replaceNode.nodeName == docfrag.firstChild.nodeName && replaceNode.namespaceURI == docfrag.firstChild.namespaceURI) {
+			var attribs = docfrag.firstChild.attributes;
+			for (var i = 0; i < attribs.length ; i++) {
+				replaceNode.setAttribute(attribs.item(i).nodeName ,attribs.item(i).value);
+			}
+//		} else {}
+			docfrag.firstChild.init();
+			var child = docfrag.firstChild.firstChild;
+			var newNode;
+			while (child) {
+				newNode = child.XMLNode;
+				replaceNode.insertBeforeIntern(newNode,null);
+				
+				child = child.nextSibling;
+			}
+			replaceNode.insertIntoHTMLDocument(replaceNode._node,true);
+	} else {
+		docfrag.firstChild.init();
+		var sel= window.getSelection();
+		var cssr =sel.getEditableRange();
+		eDOMEventCall("appendNode",document,{"appendToNode":cssr.startContainer.parentNode.XMLNode, "node": docfrag.firstChild})
+	}
+	
+	
+}
+
+String.prototype.convertToXML = function() {
+	var BX_parser = new DOMParser();
+	var content = this.toString();
+	if (content.indexOf("<") >= 0) {
+		
+		content = BX_parser.parseFromString("<?xml version='1.0'?><rooot>"+content+"</rooot>","text/xml");
+		content = content.documentElement;
+		
+		BX_tmp_r1 = document.createRange();
+		
+		BX_tmp_r1.selectNodeContents(content);
+		content = BX_tmp_r1.extractContents();
+		
+	} else {
+		content = document.createTextNode(content);
+	}
+	return content;
+	
+}
+
+function bxe_getCallback (nodeName, namespaceURI) {
+	
+	if (bxe_config.callbacks[namespaceURI + ":" + nodeName]) {
+		return bxe_config.callbacks[namespaceURI + ":" + nodeName];
+	} else {
+		return null;
+	}
+}
+
+function bxe_doCallback(cb, node ) {
+	if (cb["type"] == "popup") {
+		var pop = window.open(cb["content"],"popup","width=350,height=400");
+		window.bxe_ContextNode = node;
+		pop.focus();
+		
+	}
+}
+		
 
 

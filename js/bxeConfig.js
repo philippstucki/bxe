@@ -25,7 +25,7 @@ bxeConfig.parseConfig = function  (e) {
 	bxe_about_box.addText("Config Loaded");
 	var bxe_config = e.td.bxeConfig;
 	bxe_config.doc = e.document;
-	
+
 	bxe_config.xmlfile = bxe_config.getContent("/config/files/input/file[@name='BX_xmlfile']");
 	bxe_config.xslfile = bxe_config.getContent("/config/files/input/file[@name='BX_xslfile']");
 	bxe_config.xhtmlfile = bxe_config.getContent("/config/files/input/file[@name='BX_xhtmlfile']");
@@ -34,6 +34,19 @@ bxeConfig.parseConfig = function  (e) {
 	
 	bxe_config.cssfiles = bxe_config.getContentMultiple("/config/files/css/file");
 	bxe_config.scriptfiles = bxe_config.getContentMultiple("/config/files/scripts/file");
+	var callbackNodes = bxe_config.doc.evaluate("/config/callbacks/element", bxe_config.doc, null, 0, null);
+	bxe_config.callbacks = new Array();
+	
+	node = callbackNodes.iterateNext();
+	var tmpArray; 
+	
+	while (node) {
+		var tmpArray = new Array();
+		tmpArray["type"] = node.getAttribute("type");
+		tmpArray["content"] = node.firstChild.data;
+		bxe_config.callbacks[node.getAttribute("ns")+":"+node.getAttribute("name")] = tmpArray;
+		node = callbackNodes.iterateNext();
+	}
 	bxe_config.getButtons();
 	config_loaded(bxe_config);
 }

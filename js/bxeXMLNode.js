@@ -1,5 +1,4 @@
 function XMLNode  ( nodein, localName, nodeType, autocreate) {
-
 	this.init( nodein, localName, nodeType, autocreate);
 }
 
@@ -26,7 +25,6 @@ XMLNode.prototype.init = function ( nodein, localName, nodeType, autocreate) {
 	if (autocreate) {
 		this.createNS(nodein, localName);
 	}
-	
 	if (this._node && this._node.ownerDocument == document) {
 		if (this._node.nodeType == 1) {
 			if (this._node.nodeName.toLowerCase() != "span") {
@@ -55,6 +53,12 @@ XMLNode.prototype.init = function ( nodein, localName, nodeType, autocreate) {
 			if (this._node.hasAttribute("__bxe_ns")) {
 				this.namespaceURI = this._node.getAttribute("__bxe_ns");
 			}
+			attribs = this._node.attributes;
+			debug("attribs " + attribs);
+			for (var i = 0; i < attribs.length; i++) {
+				this.setAttributeNS(attribs[i].namespaceURI,attribs[i].localName,attribs[i].value);
+			}
+			
 		} else {
 			this.localName = this._node.nodeName;
 		}
@@ -68,6 +72,7 @@ XMLNode.prototype.init = function ( nodein, localName, nodeType, autocreate) {
 //XMLNode.prototype =  document.createElement("bxe");
 
 XMLNode.prototype.insertAfter = function(newNode, oldNode) {
+	
 	this.insertBefore(newNode,oldNode.nextSibling);
 }
 
@@ -95,7 +100,19 @@ XMLNode.prototype.insertBeforeIntern = function(newNode, oldNode) {
 		}
 		oldNode.previousSibling = newNode;
 		newNode.nextSibling = oldNode;
+	} else  {
+		if (this.lastChild) { 
+			newNode.previousSibling = this.lastChild;
+			this.lastChild.nextSibling = newNode;
+		} else {
+			this.firstChild = newNode;
+			newNode.previousSibling = null;
+		}
+		newNode.nextSibling = null;
+		this.lastChild = newNode;
+		
 	}
+	
 	} catch(e) {alert(e);}
 }
 
@@ -134,7 +151,7 @@ XMLNode.prototype.unlinkChildren = function () {
 XMLNode.prototype.appendChild = function(newNode) {
 	//BX_debug(newNode);
 	if (this._node.ownerDocument == document ) {
-		newNode.createNS(newNode.namespaceURI, newNode.localName, newNode.nodeType);
+		newNode.createNS(newNode.namespaceURI, newNode.localName, newNode.attributes);
 	}
 	newNode._node = this._node.appendChild(newNode._node);
 
@@ -146,7 +163,6 @@ XMLNode.prototype.appendChild = function(newNode) {
 XMLNode.prototype.appendChildIntern = function (newNode) {
 	
 	if (newNode._node.nodeType == 11) {
-		debug (newNode._node.firstChild);
 		var child = newNode._node.firstChild;
 		while (child) {
 			this.appendChildIntern(child.XMLNode);
@@ -340,15 +356,16 @@ XMLNode.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 	
 	var walker = this.createTreeWalker();
 	var node;
-
 	if(onlyChildren) {
 		node = walker.nextNode();
 	} else {
-		node = this._node;
+		node = this;
 		
 	}
-	htmlnode.XMLNode = node.parentNode;
-	node.parentNode._node = htmlnode;
+	if (node.parentNode) {
+		htmlnode.XMLNode = node.parentNode;
+		node.parentNode._node = htmlnode;
+	}
 	var firstChild = false;
 	do  {
 			var newNode;
@@ -356,7 +373,6 @@ XMLNode.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 			//node.NodeMode = "html";
 			if (node.nodeType == 1 ) {
 				newNode = node.makeHTMLNode()
-				
 				if (! node.hasChildNodes() && !(node.namespaceURI == XHTMLNS && node.localName == "img")) {
 						var xmlstring = node.getBeforeAndAfterString(false,true);
 						
@@ -490,14 +506,12 @@ XMLNode.prototype.isInHTMLDocument= function() {
 }
 
 XMLNode.prototype.makeHTMLNode = function () {
-	//dump("here " + " " + this.data + " " +this.nodeType + " " +this.localName+"");
 	if (this.nodeType == 1) {
 		var attribs = this._node.attributes;
 		this.createNS(this.namespaceURI, this.localName,attribs);
 		for (var i = 0; i < attribs.length; i++) {
 			this._node.setAttributeNS(attribs[i].namespaceURI,attribs[i].localName,attribs[i].value);
 		}
-		
 	} else if (this.nodeType == 3 ) {
 		this._node = document.createTextNode(this.data);
 	}
@@ -590,8 +604,10 @@ XMLNodeElement.prototype.__defineGetter__(
 		var attribs;
 		if (this.xmlBridge) {
 			attribs = this.xmlBridge.attributes;
-		} else {
+		} else if (this._node) {
 			attribs = this._node.attributes;
+		} else {
+			attribs = new Array;
 		}
 		var attributes = new Array();
 		for (var i = 0; i < attribs.length; i++) {
