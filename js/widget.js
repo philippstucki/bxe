@@ -1037,7 +1037,7 @@ Widget_ModalAttributeBox.prototype.drawAttributes = function(xmlnode) {
 		if (!bxe_config.dontShowInAttributeDialog[attr[i].name]) {
 			
 			if (! (attr[i].name == "class" && xmlnode.getAttribute(attr[i].name) == xmlnode.localName)) {
-				if (i == "__bxe_choices") {
+				if (i == "__bxe_choices") {
 					for (var j in attr[i]) {
 						for (var k in attr[i][j]) {
 							this.addAttributeItem(attr[i][j][k],xmlnode.getAttribute(attr[i][j][k].name),true);
