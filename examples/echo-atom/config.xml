@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- $Id: config.xml,v 1.1 2003/08/18 22:35:34 michi Exp $ -->
+<!-- $Id: config.xml,v 1.2 2003/08/19 16:56:03 michi Exp $ -->
 <config>
     <files>
     <!-- the following file definitions are presumably the most important
@@ -63,7 +63,7 @@
             <!-- Document specific css
                 This is the one, which you should adjust.
              -->
-             <file>css/site.css</file>
+             <file>entry.css</file>
           
         </css>
         
