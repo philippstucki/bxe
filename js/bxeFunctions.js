@@ -911,7 +911,9 @@ function BX_showInWindow(string)
 	win.document.writeln("<body>");
 
     win.document.writeln("<pre>");
-    win.document.writeln(string.replace(/</g,"&lt;"));
+	if (typeof string == "string") {
+		win.document.writeln(string.replace(/</g,"&lt;"));
+	}
 	win.document.writeln("</pre>");
 	win.document.writeln("</body>");
 	win.document.writeln("</html>");
