@@ -374,16 +374,20 @@ function bxe_toggleSourceMode(e) {
 		form.style.border = "0px";
 		form.style.height = editableArea.getCStyle("height");
 		form.style.width = editableArea.getCStyle("width");
-		form.style.fontFamily = editableArea.getCStyle("font-family");
-		form.style.fontSize = editableArea.getCStyle("font-size");
-		
-		
+		/*form.style.fontFamily = editableArea.getCStyle("font-family");
+		form.style.fontSize = "12px";
+		*/
 		editableArea.removeAllChildren();
-//		editableArea.setStyle("white-space","-moz-pre-wrap");
 		
 		var xmlstr = document.saveChildrenXML(xmldoc,true);
 		form.value = xmlstr.str;
-	
+		
+		var breaks = form.value.match(/[\n\r]/g);
+		if (breaks) {
+			breaks = breaks.length;
+			form.style.minHeight = ((breaks + 1) * 13) + "px";
+		}
+		
 		editableArea.appendChild(form)
 		form.focus();
 		//editableArea.appendChild(document.createTextNode(xmlstr.str));
@@ -926,6 +930,7 @@ function bxe_changeLinesContainer(e) {
 		nodeParts[1] = null;
 	}
 	var newContainer = window.getSelection().changeLinesContainer(nodeParts[0],  nodeParts[1]);
+	
 	for(var i=0; i<newContainer.length; i++)
 	{ 
 		newContainer[i].XMLNode = new XMLNodeElement( nodeParts[1], nodeParts[0], newContainer[i].nodeType);
