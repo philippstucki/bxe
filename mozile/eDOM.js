@@ -2643,6 +2643,7 @@ ContainedLine.prototype.removeContainer = function()
  */
 ContainedLine.prototype.normalizeWhitespace = function()
 {
+
 	if(document.defaultView.getComputedStyle(this.container, null).getPropertyValue("white-space") == "pre")
 		return;
 
@@ -2657,14 +2658,18 @@ ContainedLine.prototype.normalizeWhitespace = function()
 //fix by chregu, it deleted to much, when span/object was in the node
 //only delete contents, if there really is no content..
 	if (range.toString().replace(/\s*/g,"").length == 0) {
-		range.deleteContents();
+		if (this.container.lastChild.childNodes.length == 0) {
+			range.deleteContents();
+		}
 	}
 	// then normalize start
 	range.selectNode(this.container.firstChild);
 	range.setEnd(this.__firstInsertionPoint.ipNode, this.__firstInsertionPoint.ipOffset);
 	// the same fix by chregu as 5 lines above
-	if (range.toString().replace(/\s*/g,"").length == 0) { 
-		range.deleteContents();
+	if (range.toString().replace(/\s*/g,"").length == 0) {
+		if (this.container.firstChild.childNodes.length == 0) {
+			range.deleteContents();
+		}
 	}
 	this.__firstInsertionPoint.ipOffset = 0;
 
