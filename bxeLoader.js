@@ -371,7 +371,7 @@ function config_loaded(bxe_config_in) {
 	//set button image location and begin preloading
 	if (btn['location']) {
 		buttonImgLoc = btn['location'];
-	} else {
+	} else {
 		buttonImgLoc = mozile_root_dir + "/images/buttons.png";
 	}
 	var preloadthebutton = new Image();
