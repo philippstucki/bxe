@@ -233,6 +233,46 @@ Node.prototype.initXMLNode = function () {
 	
 }
 
+Node.prototype.__defineGetter__ ( 
+	"previousNotInternalSibling",
+	function () {
+		var prev = this.previousSibling;
+		while (prev) {
+			if(prev.nodeType != 1 || ! prev.hasAttribute("_edom_internal_node")) {
+				return prev;
+			}
+			prev = prev.previousSibling;
+		}
+		return null;
+	}
+)
+
+Node.prototype.__defineGetter__ ( 
+	"nextNotInternalSibling",
+	function () {
+		var next = this.nextSibling;
+		while (next) {
+			if(next.nodeType != 1  || ! next.hasAttribute("_edom_internal_node")) {
+				return next;
+			}
+			next = next.nextSibling;
+		}
+		return null;
+	}
+)
+Node.prototype.__defineGetter__ ( 
+	"firstNotInternalChild",
+	function () {
+		var first = this.firstChild;
+		while (first) {
+			if(first.nodeType != 1  || ! first.hasAttribute("_edom_internal_node")) {
+				return first;
+			}
+			first = first.nextSibling;
+		}
+		return null;
+	}
+)
 
 Node.prototype.updateXMLNode = function () {
 	debug("updateXMLNode: " + this);
@@ -246,23 +286,24 @@ Node.prototype.updateXMLNode = function () {
 	if (this.nodeType == 3) {
 		this.normalize();
 	}
-	
-	if (this.previousSibling ) {
-		if (!this.previousSibling._XMLNode) {
-			this.previousSibling.updateXMLNode();
+	var prev = this.previousNotInternalSibling;
+	if (prev ) {
+		if (!prev._XMLNode) {
+			prev.updateXMLNode();
 		}
-		this.XMLNode.previousSibling = this.previousSibling.XMLNode;
-		this.previousSibling.XMLNode.nextSibling = this.XMLNode;
+		this.XMLNode.previousSibling = prev.XMLNode;
+		prev.XMLNode.nextSibling = this.XMLNode;
 	} else {
 		this.XMLNode.previousSibling = null;
 	}
-	if (this.nextSibling ) {
-		if (!this.nextSibling._XMLNode) {
-			this.nextSibling.updateXMLNode();
+	var next = this.nextNotInternalSibling;
+	if (next ) {
+		if (!next._XMLNode) {
+			next.updateXMLNode();
 		}
 		
-		this.XMLNode.nextSibling = this.nextSibling.XMLNode;
-		this.nextSibling.XMLNode.previousSibling = this.XMLNode;
+		this.XMLNode.nextSibling = next.XMLNode;
+		next.XMLNode.previousSibling = this.XMLNode;
 	} else {
 		this.XMLNode.nextSibling = null;
 	}
@@ -280,11 +321,12 @@ Node.prototype.updateXMLNode = function () {
 	if (this.nodeType == 1 && this.hasAttribute("__bxe_ns")) {
 		this.XMLNode.namespaceURI = this.getAttribute("__bxe_ns");
 	}
-	if (this.firstChild) {
-		var node = this.firstChild;
-		while (node) {
-			node.updateXMLNode();
-			node = node.nextSibling;
+	var child = this.firstNotInternalChild;
+	if (child) {
+		
+		while (child) {
+			child.updateXMLNode();
+			child = child.nextNotInternalSibling;
 		}
 	}
 
