@@ -96,4 +96,11 @@ title:first-child {
     text-decoration:underline;
 } 
 
+.superscript {
+     vertical-align: super
+}
+
+.subscript {
+     vertical-align: sub
+}
 
