@@ -63,7 +63,7 @@ buttons=
     {
 	"Dimension": [120,140,20,20],//width,height and button width,height in px
     
-	"bold":[1,1,"ToggleTextClass"],
+	"b":[1,1,"ToggleTextClass","http://www.w3.org/1999/xhtml"],
     "italic":[0,1,"ToggleTextClass"],
     "underline":[2,1,"ToggleTextClass"],
     "strikethrough":[3,1,"ToggleTextClass"],

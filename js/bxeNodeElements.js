@@ -24,6 +24,13 @@ Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 				if (node.namespaceURI ==  XHTMLNS) {
 					var newElement = document.createElement(node.localName);
 					newElement.XMLNode.localName = node.localName;
+					// prevent open links
+					if (node.localName.toLowerCase() == "a") {
+						newElement.onclick = function(e) {e.preventDefault(); }
+						newElement.onmousedown = function(e) {e.preventDefault(); }
+						newElement.onmouseup = function(e) {e.preventDefault(); }
+					}
+					
 				} else {
 					var newElement = document.createElement("span");
 					newElement.setAttribute("class",node.localName);
@@ -43,7 +50,7 @@ Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 			} else {
 				var newNode = parentN.appendChild(document.importNode(node,true));
 			}
-			newNode.XMLNode._xmlnode = node;
+			newNode.XMLNode.setNode(node);
 			node.htmlNode = newNode;
 			if (this.nodeType == 3) {
 				return;
@@ -105,8 +112,8 @@ Node.prototype.convertToXMLNode = function(xmldoc) {
 	var newElement = null;
 	if (this.nodeType == 1 ) {
 		if (!this.XMLNode.namespaceURI) { this.XMLNode.namespaceURI = null;}
-		if (this.localName.toLowerCase() != "span" && (this.namespaceURI == XHTMLNS )) {
-			newElement = xmldoc.createElementNS(this.XMLNode.namespaceURI,this.localName);
+		if (this.localName.toLowerCase() != "span" && (this.XMLNode.namespaceURI == XHTMLNS )) {
+			newElement = xmldoc.createElementNS(this.XMLNode.namespaceURI,this.localName.toLowerCase());
 		} else {
 			var classes = this.getClasses();
 			if (classes.length > 0) {
@@ -125,7 +132,7 @@ Node.prototype.convertToXMLNode = function(xmldoc) {
 			var attribs = this.attributes;
 			for (var i = 0; i < attribs.length; i++) {
 				if (!(this.namespaceURI != XHTMLNS && attribs[i].localName == "class")) {
-					if (attribs[i].localName.substr(0,5) != "_edom") {
+					if (attribs[i].localName.substr(0,5) != "_edom" && attribs[i].localName.substr(0,5) != "__bxe") {
 						newElement.setAttributeNode(attribs[i]);
 					}
 				}
@@ -149,7 +156,7 @@ Node.prototype.getXMLComponents = function () {
 	
 	if (this.nodeType == 1 ) {
 		if (this.localName.toLowerCase() != "span" && (this.namespaceURI == XHTMLNS )) {
-			localName = this.localName;
+			localName = this.localName.toLowerCase();
 			namespaceURI = XHTMLNS;
 		} else {
 			var classes = this.getClasses();
@@ -175,9 +182,25 @@ Node.prototype.getXMLComponents = function () {
 function XMLNode  (htmlnode) {
 	this.localName = null;
 	this.namespaceURI = null;
-	this.prefix = null;	
+	this.prefix = null;
 	this.nodeType = htmlnode.nodeType;
 	this._htmlnode = htmlnode;
+	if (htmlnode) {
+		if (htmlnode.namespaceURI == null) {
+			if (htmlnode.nodeName.toLowerCase() =="span") {
+				this.localName = htmlnode.getClasses();
+			} else  {
+				this.localName = htmlnode.nodeName.toLowerCase();
+				this.namespaceURI = XHTMLNS;
+			}
+		}
+		
+		else {
+			this.localName = htmlnode.nodeName;
+		}
+		
+		//this.namespaceURI = htmlnode.XMLNode.namespaceURI;
+	}
 }
 
 XMLNode.prototype.setNode = function(xmlnode) {
@@ -208,6 +231,19 @@ XMLNode.prototype.__defineGetter__(
 	}
 );
 
+XMLNode.prototype.setAttribute = function(name, value) {
+	this._xmlnode.setAttribute(name,value);
+	this._htmlnode.setAttribute(name,value);
+}
+
+XMLNode.prototype.__defineGetter__( 
+	"attributes",
+	function()
+	{
+		return this._xmlnode.attributes;
+	}
+);
+
 XMLNode.prototype.__defineGetter__( 
 	"nodeName",
 	function()
@@ -227,6 +263,13 @@ Node.prototype.__defineGetter__(
 	}
 );
 
+Node.prototype.__defineSetter__(
+	"XMLNode",
+	function(node)
+	{
+		this._XMLNode = node;
+	}
+);
 
 Node.prototype.getXPathString = function() {
 	

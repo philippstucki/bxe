@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: webdav.js,v 1.2 2003/07/30 13:54:41 chregu Exp $
+// $Id: webdav.js,v 1.3 2003/08/08 15:50:50 chregu Exp $
 /**
 * @file
 * Implements the http TransportDriver 
@@ -38,8 +38,6 @@ function BXE_TransportDriver_webdav (parent)
 	*/
 	//check doku, if we can access parent otherwise
 	this.parent = parent;
-	
-	
 }
 
 /*

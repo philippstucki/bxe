@@ -42,16 +42,10 @@
 mozile_js_files = new Array();
 mozile_js_files.push("mozile/mozWrappers.js");
 mozile_js_files.push("mozile/eDOM.js");
-mozile_js_files.push("jsdav.js");
-mozile_js_files.push("td/webdav.js");
 mozile_js_files.push("widget.js");
-
-
 mozile_js_files.push("mozile/eDOMXHTML.js");
 mozile_js_files.push("bxeNodeElements.js");
-
 mozile_js_files.push("bxeXMLDocument.js");
-
 mozile_js_files.push("mozile/domlevel3.js");
 mozile_js_files.push("mozile/mozCE.js");
 mozile_js_files.push("mozile/mozIECE.js");
@@ -59,7 +53,10 @@ mozile_js_files.push("mozile/mozilekb.js");
 mozile_js_files.push("bxehtmltb.js");
 mozile_js_files.push("mozile/mozileModify.js");
 mozile_js_files.push("eDOMEvents.js");
-mozile_js_files.push("xsltTransformer.js");
+mozile_js_files.push("jsdav.js");
+mozile_js_files.push("td/webdav.js");
+
+//mozile_js_files.push("xsltTransformer.js");
 
 
 mozile_js_files.push("bxeFunctions.js");
@@ -68,6 +65,7 @@ var mozile_root_dir = "./";
 var bxe_xmlfile = "test.xml";
 // Detect Gecko but exclude Safari (for now); for now, only support XHTML
 
+var bxe_about_box = null;
 
 function bxe_globals() {}
 
@@ -91,6 +89,8 @@ function foobar() {
 
 function bxe_nsResolver (node) {
 	this.metaTagNSResolver = null;
+	this.metaTagNSResolverUri = null;
+	
 	//this.htmlDocNSResolver = null;
 	this.xmlDocNSResolver = null;
 	this.node = node;
@@ -146,7 +146,24 @@ bxe_nsResolver.prototype.lookupNamespaceURI = function (prefix) {
 	return null;
 }
 
+bxe_nsResolver.prototype.lookupNamespacePrefix = function (uri) {
 
+	if (!this.metaTagNSResolverUri) {
+		var metas = document.getElementsByName("bxeNS");
+		this.metaTagNSResolverUri = new Array();
+		for (var i=0; i < metas.length; i++) {
+			if (metas[i].localName.toLowerCase() == "meta") {
+				var ns = metas[i].getAttribute("content").split("=");
+				this.metaTagNSResolverUri[ns[1]] = ns[0]
+			}
+		}
+	}
+	//check if the prefix was there and return it
+	if (this.metaTagNSResolverUri[uri]) {
+		return this.metaTagNSResolverUri[uri];
+	}
+	return null;
+}
 
 
 
@@ -175,22 +192,22 @@ if((navigator.product == 'Gecko') && (navigator.userAgent.indexOf("Safari") == -
 				}
 			}
 		}
-		
+		mozile_js_files_loaded = 0;
 		for (var i=0; i < mozile_js_files.length; i++) 
 		{
 			var scr = document.createElementNS("http://www.w3.org/1999/xhtml","script");
 			var src = mozile_root_dir + mozile_js_files[i];
 			if (mozile_js_files[i] == "widget.js") {
 				scr.onload = widget_loaded;
+			} else {
+				scr.onload = script_loaded;
 			}
-			
 			scr.setAttribute("src", src);
 			
 			scr.setAttribute("language","JavaScript");
 			head.appendChild(scr);
 		}
 		//when last include src is loaded, call onload handler
-		scr.onload = mozile_loaded;
 		
 	}
 	else
@@ -200,6 +217,18 @@ function widget_loaded() {
 	bxe_about_box = new Widget_AboutBox();
 	bxe_about_box.draw();
 	bxe_about_box.setText("Loading files ...");
+
+}
+
+function script_loaded() {
+	mozile_js_files_loaded++;
+	if ( mozile_js_files.length == mozile_js_files_loaded + 1) {
+		mozile_loaded();
+	} else {
+		if (bxe_about_box) {
+			bxe_about_box.addText(mozile_js_files_loaded );
+		}
+	}
 }
 
 function mozile_loaded() {

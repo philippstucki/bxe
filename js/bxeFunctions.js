@@ -15,8 +15,7 @@ function __bxeSave(e) {
 		var xmldoc = areaNodes[i].convertToXMLDocFrag();
 	}
 
-	alert(xmldoc.ownerDocument.saveXML(xmldoc.ownerDocument));
-
+alert(xmldoc.ownerDocument.saveXML(xmldoc));
 	return ;
 	var td = new BXE_TransportDriver_webdav();
 	function callback (e) {
@@ -24,6 +23,7 @@ function __bxeSave(e) {
 		this.td.Docu.xmldoc.insertIntoHTMLDocument()
 	}
 	td.Docu = this;
+	
 	td.save("webdavtest.xml",null,xmldoc.ownerDocument.saveXML(xmldoc));
 }
 
@@ -137,10 +137,16 @@ function createTagNameAttributes(startNode) {
 				lastChild = lastChild.firstChild;
 			}
 			//node.xmlNodeNew = lastChild;
-			lastChild.appendChild(xmldoc.createTextNode("::"));
-			var xmlstring = xmldoc.saveChildrenXML(parentN,true).split("::");
-			node.setAttribute("_edom_tagnameopen", xmlstring[0]);
-			node.setAttribute("_edom_tagnameclose", xmlstring[1]);
+			try {
+				lastChild.appendChild(xmldoc.createTextNode("::"));
+				var xmlstring = xmldoc.saveChildrenXML(parentN,true).str.split("::");
+				node.setAttribute("_edom_tagnameopen", xmlstring[0]);
+				node.setAttribute("_edom_tagnameclose", xmlstring[1]);
+			} catch(e) {
+			    var xmlstring = xmldoc.saveChildrenXML(parentN,true).str;
+				node.setAttribute("_edom_tagnameopen", xmlstring);
+			}
+			
 			node.XMLNode.setNode(lastChild);
 	} while(node = walker.nextNode() )
 }
@@ -195,25 +201,7 @@ function toggleSourceMode_bxe(e) {
 }
 
 function toggleTextClass_bxe(e) {
-	window.getSelection().toggleTextClass(e.additionalInfo);
-	/*
-	var walker = document.createTreeWalker(
-	 window.getSelection().getRangeAt(0).startContainer.parentNode,NodeFilter.SHOW_ELEMENT,
-	{
-		acceptNode : function(node) {
-			
-			return NodeFilter.FILTER_ACCEPT;
-		}
-	}
-	, true);
-	
-	var node =walker.currentNode;
-	do {
-		node.SplitClasses();
-	
- 	}  while(node = walker.nextNode() );
-	*/
-	
+	window.getSelection().toggleTextClass(e.additionalInfo.localName);
 }
 
 function changeLinesContainer_bxe(e) {
@@ -314,8 +302,8 @@ function bxe_draw_widgets() {
 	var toolbar = new Widget_ToolBar();
 	var menulist = new Widget_MenuList("m",function(e) {eDOMEventCall("changeLinesContainer",document,this.value)});
 	menulist.appendItem("H1","h1");
-	menulist.appendItem("bar","foo");
-	menulist.appendItem("blbla","foo");
+	menulist.appendItem("H2","h2");
+	menulist.appendItem("H3","h3");
 	toolbar.addItem(menulist);
 	
 	

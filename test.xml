@@ -27,17 +27,17 @@
                 <unizh:anchor/>
                 <p> Paragraph</p>
                 <h2>Styles (headline 2)</h2>
-                <p>Different text styles can be used: bold or italic or
-                small</p>
+                <p>Different text styles can be used: <b>bold</b> or <i>italic</i> or
+                <small>small</small></p>
                 <p>There is also an element <unizh:attention>attention"</unizh:attention>.</p>
                 <p>Links can be set to <a href="http://www.unizh.ch/">external resources</a>
                 as well as to <a href="/studium/mobilitaet/sokrates.html">internal
                 pages</a>.</p>
                 <p>There are also markups: <unizh:attention>warning</unizh:attention> and cite</p>
-                <img src="uni-logo.gif" alt="Logo der Universität Zürich">
+                 <object src="http://www.unizh.ch/img_uni/unilogo.gif" alt="Logo der Universität Zürich">
                         <lenya:caption>Caption</lenya:caption>
                         <lenya:producer>Author</lenya:producer>
-                </img>
+                </object>
                 <lenya:asset src="anmeldeformular.pdf" mime-type="application/pdf">
                         <lenya:asset-title>Anmeldeformular für den Sommerkurs</lenya:asset-title>
                 </lenya:asset>
