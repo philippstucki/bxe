@@ -526,6 +526,7 @@ Selection.prototype._createHiddenForm = function() {
 		iframe.setAttribute("style","  -moz-user-input: enabled; position: absolute; width: 0px; height: 0px; overflow: hidden; top: 0px; left: 0px;");
 		iframe =  document.getElementsByTagName("body")[0].appendChild(iframe);
 		var input = document.createElement("textarea");
+		input.id =  'hiddenform';
 		input.setAttribute("style","height: 3000px;");
 		// don't know of any other solution to get a Range object for the input value
 		// therefore we create a span element, so we can use selectNodeContents on that later

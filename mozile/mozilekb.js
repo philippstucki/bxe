@@ -205,7 +205,7 @@ function ctrlKeyDownHandler(event,cssr) {
 	if(String.fromCharCode(event.keyCode).toLowerCase() == "v")
 	{
 		//don't handle it, if we're in a textarea
-		if (event.target.localName == "TEXTAREA") {
+		if (event.target.localName == "TEXTAREA" && event.target.id != 'hiddenform') {
 			return false;
 		}		
 		if (!mozilla.__allowedNativeCalls) {
@@ -217,7 +217,7 @@ function ctrlKeyDownHandler(event,cssr) {
 	if(String.fromCharCode(event.keyCode).toLowerCase() == "c")
 	{
 		//don't handle it, if we're in a textarea
-		if (event.target.localName == "TEXTAREA") {
+		if (event.target.localName == "TEXTAREA" && event.target.id != 'hiddenform') {
 			return false;
 		}
 		if (!mozilla.__allowedNativeCalls) {
@@ -248,7 +248,7 @@ function ctrlKeyUpHandler(event,cssr) {
 	if(String.fromCharCode(event.keyCode).toLowerCase() == "v")
 	{
 		//don't handle it, if we're in a textarea
-		if (event.target.localName == "TEXTAREA") {
+		if (event.target.localName == "TEXTAREA" && event.target.id != 'hiddenform') {
 			return false;
 		}
 		if (!mozilla.__allowedNativeCalls) {
@@ -260,7 +260,7 @@ function ctrlKeyUpHandler(event,cssr) {
 	if(String.fromCharCode(event.keyCode).toLowerCase() == "c")
 	{
 		//don't handle it, if we're in a textarea
-		if (event.target.localName == "TEXTAREA") {
+		if (event.target.localName == "TEXTAREA" && event.target.id != 'hiddenform') {
 			return false;
 		}
 		if (!mozilla.__allowedNativeCalls) {
