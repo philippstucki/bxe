@@ -299,7 +299,9 @@ function LibraryDrawer(tool, xsluri, libsuri, searchuri) {
         var selitem = this.xmldata.selectSingleNode(selxpath);
         if (selitem) {
             var seldiv = document.getElementById(selitem.getAttribute('id'));
-            seldiv.className = 'kupu-libsource';
+            if (seldiv) {
+                seldiv.className = 'kupu-libsource';
+            }
             selitem.removeAttribute('selected');
         };
 
