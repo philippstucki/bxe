@@ -88,39 +88,50 @@ XMLDocument.prototype.insertIntoHTMLDocument = function(htmlnode) {
 		nodes[i].removeAllChildren();
 		var xpath = nodes[i].getAttribute("bxe_xpath");
 		var xmlresult = this.evaluate(xpath, this.documentElement, nsResolver, 0, null);
-
-		if (document.defaultView.getComputedStyle(nodes[i], null).getPropertyValue("display") == "inline") { 
-			bxe_areaHolder = document.createElement("span");
-			nodes[i].display = "inline";
-		} else {
-			bxe_areaHolder = document.createElement("div");
-			nodes[i].display = "block";
-		}
-		bxe_areaHolder.setAttribute("name","bxe_areaHolder");
-		nodes[i].parentNode.insertBefore(bxe_areaHolder,nodes[i]);
-		bxe_areaHolder.appendChild(nodes[i]);
+		//get first xmlnode
 		xmlnode = xmlresult.iterateNext();
-		var xmlresults = new Array;
-		while (xmlnode) {
-			xmlresults.push(xmlnode);
-			xmlnode = xmlresult.iterateNext();
-		}
-		for (var j = 0; j < xmlresults.length; j++) {
-			//dump ("result node type " + xmlresults[j].nodeType + xmlresults[j].nodeName+ "\n");
-			xmlresults[j].XMLNode.xmlBridge = xmlresults[j]; 
-			var menu = new Widget_AreaInfo(nodes[i]);
-			bxe_alignAreaNode(menu,nodes[i]);
-			nodes[i].AreaInfo = menu;
-			menu.editableArea = nodes[i];
-			
-			if (xmlresults[j].nodeType == 1) {
-				var fc = xmlresults[j].XMLNode.insertIntoHTMLDocument(nodes[i],true);
-				
+		
+		//FIXME: if node does not exist in XML document, make it editable anyway...
+		if (xmlnode) {
+			if (document.defaultView.getComputedStyle(nodes[i], null).getPropertyValue("display") == "inline") { 
+				bxe_areaHolder = document.createElement("span");
+				nodes[i].display = "inline";
 			} else {
-				xmlresults[j].XMLNode.insertIntoHTMLDocument(nodes[i],false);
+				bxe_areaHolder = document.createElement("div");
+				nodes[i].display = "block";
 			}
-			menu.MenuPopup.setTitle(xmlresults[j].XMLNode.getXPathString());
+			bxe_areaHolder.setAttribute("name","bxe_areaHolder");
+			nodes[i].parentNode.insertBefore(bxe_areaHolder,nodes[i]);
+			bxe_areaHolder.appendChild(nodes[i]);
 			
+			var xmlresults = new Array;
+			while (xmlnode) {
+				xmlresults.push(xmlnode);
+				xmlnode = xmlresult.iterateNext();
+			}
+			for (var j = 0; j < xmlresults.length; j++) {
+				//dump ("result node type " + xmlresults[j].nodeType + xmlresults[j].nodeName+ "\n");
+				xmlresults[j].XMLNode.xmlBridge = xmlresults[j]; 
+				var menu = new Widget_AreaInfo(nodes[i]);
+				bxe_alignAreaNode(menu,nodes[i]);
+				nodes[i].AreaInfo = menu;
+				menu.editableArea = nodes[i];
+				
+				if (xmlresults[j].nodeType == 1) {
+					var fc = xmlresults[j].XMLNode.insertIntoHTMLDocument(nodes[i],true);
+					
+				} else {
+					xmlresults[j].XMLNode.insertIntoHTMLDocument(nodes[i],false);
+				}
+				menu.MenuPopup.setTitle(xmlresults[j].XMLNode.getXPathString());
+				
+			}
+		} else {
+			nodes[i].removeAttribute("bxe_xpath");
+			var noticeNode = document.createElementNS(XHTMLNS,"span");
+			noticeNode.setAttribute("class","bxe_notice");
+			noticeNode.appendChild(document.createTextNode("Node " + xpath + " was not found in the XML document"));
+			nodes[i].insertBefore(noticeNode,nodes[i].firstChild);
 		}
 		
 	}
