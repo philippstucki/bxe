@@ -74,12 +74,15 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
 }
 
 .MenuBar, .StatusBar {
-    -moz-user-modify: read-only;
-    -moz-user-input: disabled;
-    -moz-user-select: none;
     height: 16px;
     width: 100%;
     background-color:     #ff6600;
+}
+
+.Menubar {
+    -moz-user-modify: read-only;
+    -moz-user-input: disabled;
+    -moz-user-select: none;
 }
 
 .StatusBar span:before {
@@ -114,20 +117,16 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
     cursor: pointer; 
 }
 
-
-
 .MenuList {
     width: 10em;
-    -moz-user-modify: read-only;
-    -moz-user-select: normal;
-        -moz-user-input: enabled;
-
 }
 
+
+
 .ToolBar {
-        -moz-user-modify: read-only;
+   /* -moz-user-modify: read-only;
     -moz-user-input: disabled;
-    -moz-user-select: none;
+    -moz-user-select: none;*/
     height: 28px;
     background-color: #ff6611;
     position: fixed;
@@ -145,9 +144,9 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
   width: 20px; 
   border: solid 1px #C0C0C0;
   background-color: #C0C0C0;
-  -moz-user-modify: read-only;
+  /*-moz-user-modify: read-only;
   -moz-user-input: disabled;
-  -moz-user-select: none;
+  -moz-user-select: none;*/
 }
 .ToolBarButton:hover {
     border: outset 1px;
