@@ -207,14 +207,19 @@ Widget_MenuItem.prototype.__defineGetter__(
 	}
 );
 
-Widget_MenuItem.prototype.addMenu = function (menu) {
+Widget_MenuItem.prototype.addMenu = function (menu,onmouseover) {
 	var img = this.node.appendChild(document.createElement("img"));
 	img.src = mozile_root_dir+ "images/triangle.png";
 	img.setAttribute("align","right");
 	this.node.insertBefore(img,this.node.firstChild);
 	this.SubMenu = menu;
+	if (onmouseover) {
+		this.node.addEventListener("mouseover",onmouseover, false);
+	}
+
 	this.node.addEventListener("mouseover",Widget_MenuItem_showSubmenu, false);
-	this.node.addEventListener("mouseout",Widget_MenuItem_hideSubmenu, false);	
+	this.node.addEventListener("mouseout",Widget_MenuItem_hideSubmenu, false);
+		
 }
 
 function Widget_MenuItem_showSubmenu() {
@@ -524,6 +529,7 @@ function Widget_ContextMenu () {
 	this.Popup = new Widget_MenuPopup();
 	this.Popup.position(0,0,"absolute");
 	this.Popup.ContextMenu = this;
+	this.subPopup = new Widget_MenuPopup();
 }
 
 Widget_ContextMenu.prototype = new Widget();
@@ -558,25 +564,25 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 			menui.InsertNamespaceURI;
 		}
 	}
-	var ac = node.XMLNode._xmlnode.parentNode.allowedChildren;
-	ac.sort();
-	for (i = 0; i < ac.length; i++) {
-			var menui = this.Popup.addMenuItem("Append " + ac[i], function(e) { 
-				var widget = e.currentTarget.Widget;
-				eDOMEventCall("appendNode",document,{"appendToNode": widget.AppendToNode, "localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI})
-			});
-			menui.Cssr = cssr;
-			menui.InsertLocalName = ac[i];
-			menui.InsertNamespaceURI;
-			menui.AppendToNode = node.XMLNode;
-		}
+	this.Popup.appendAllowedSiblings(node);
 	this.Popup._node = node;
 	this.Popup.addSeparator();
 	node = node.XMLNode.parentNode;
+	
+	//parent nodes
 	while(node && node.nodeType == 1) {
 		var ele = this.Popup.addMenuItem(node.nodeName);
-		var sub = new Widget_MenuPopup(node.nodeName);
-		ele.addMenu(sub);
+		ele.AppendToNode = node;
+		if (node._htmlnode && node._htmlnode != cssr.top) {
+			ele.SubPopup = this.subPopup;
+			ele.addMenu(this.subPopup,function(e){
+				var sub = e.currentTarget.Widget.SubPopup;
+				sub.removeAllMenuItems();
+				sub.appendAllowedSiblings(e.currentTarget.Widget.AppendToNode._htmlnode)
+			});
+		} else {
+			ele.Disabled = true;
+		}
 		node = node.parentNode;
 	} 
 	
@@ -592,6 +598,21 @@ function Widget_ModalBox () {
 	this.Display = "block";
 	
 }
+
+Widget_MenuPopup.prototype.appendAllowedSiblings = function( node) {
+	var ac = node.XMLNode._xmlnode.parentNode.allowedChildren;
+	ac.sort();
+	for (i = 0; i < ac.length; i++) {
+			var menui =this.addMenuItem("Append " + ac[i], function(e) { 
+				var widget = e.currentTarget.Widget;
+				eDOMEventCall("appendNode",document,{"appendToNode": widget.AppendToNode, "localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI})
+			});
+			menui.InsertLocalName = ac[i];
+			menui.InsertNamespaceURI;
+			menui.AppendToNode = node.XMLNode;
+		}
+}
+
 
 Widget_ModalBox.prototype = new Widget();
 
