@@ -34,12 +34,22 @@ bxeConfig.parseConfig = function  (e) {
 	
 	bxe_config.cssfiles = bxe_config.getContentMultiple("/config/files/css/file");
 	bxe_config.scriptfiles = bxe_config.getContentMultiple("/config/files/scripts/file");
+	var dSIC = bxe_config.doc.evaluate("/config/context[@type='dontShow']/element", bxe_config.doc, null, 0, null); 
+	
+	var tmpArray;
+	bxe_config.dontShowInContext = new Array();
+	node = dSIC.iterateNext();
+	while (node) {
+		bxe_config.dontShowInContext[node.getAttribute("ns")+":"+node.getAttribute("name")] = true;
+		node = dSIC.iterateNext();
+	}
+	
+	
 	var callbackNodes = bxe_config.doc.evaluate("/config/callbacks/element", bxe_config.doc, null, 0, null);
 	bxe_config.callbacks = new Array();
 	
 	node = callbackNodes.iterateNext();
-	var tmpArray; 
-	
+
 	while (node) {
 		var tmpArray = new Array();
 		tmpArray["type"] = node.getAttribute("type");

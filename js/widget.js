@@ -591,6 +591,14 @@ Widget_ContextMenu.prototype.show = function(e,node) {
 }
 
 Widget_ContextMenu.prototype.buildPopup = function (e,node) {
+		
+	function nodeSort(a,b) {
+		if (a.nodeName > b.nodeName) {
+			return 1;
+		} else {
+			return -1;
+		}
+	}
 	this.Popup.removeAllMenuItems();
 	this.Popup.initTitle(node.XMLNode.localName);
 	if (node.XMLNode.vdom.hasAttributes && this.EditAttributes) {
@@ -603,19 +611,22 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 	//var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
 	if (!(sel.isCollapsed)) {
 			var ac = node.XMLNode.allowedChildren;
+			ac.sort(nodeSort);
 			for (i = 0; i < ac.length; i++) {
-				var menui =this.Popup.addMenuItem( ac[i].nodeName, function(e) { 
-					var widget = e.currentTarget.Widget;
-					var sel = window.getSelection();
-					sel.removeAllRanges();
-					var rng = widget.Cssr.cloneRange();
-					sel.addRange(rng);
-					eDOMEventCall("toggleTextClass",document,{"localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI})
-				});
-				menui.InsertLocalName = ac[i].localName;
-				menui.InsertNamespaceURI = ac[i].namespaceURI;
-				menui.AppendToNode = node.XMLNode;
-				menui.Cssr = cssr;
+				if (!bxe_config.dontShowInContext[ac[i].namespaceURI + ":" +ac[i].localName]) {
+					var menui =this.Popup.addMenuItem( ac[i].nodeName, function(e) { 
+						var widget = e.currentTarget.Widget;
+						var sel = window.getSelection();
+						sel.removeAllRanges();
+						var rng = widget.Cssr.cloneRange();
+						sel.addRange(rng);
+						eDOMEventCall("toggleTextClass",document,{"localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI})
+					});
+					menui.InsertLocalName = ac[i].localName;
+					menui.InsertNamespaceURI = ac[i].namespaceURI;
+					menui.AppendToNode = node.XMLNode;
+					menui.Cssr = cssr;
+				}
 			}
 	} 
 	//this.Popup.insertAllowedChildren(node);
@@ -671,14 +682,16 @@ Widget_MenuPopup.prototype.appendAllowedSiblings = function( node) {
 	ac.sort(nodeSort);
 	
 	for (i = 0; i < ac.length; i++) {
-			var menui = this.addMenuItem("Append " + ac[i].nodeName, function(e) { 
-				var widget = e.currentTarget.Widget;
-				eDOMEventCall("appendNode",document,{"appendToNode": widget.AppendToNode, "localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI})
+		if (!bxe_config.dontShowInContext[ac[i].namespaceURI + ":" +ac[i].localName]) {
+				var menui = this.addMenuItem("Append " + ac[i].nodeName, function(e) { 
+					var widget = e.currentTarget.Widget;
+					eDOMEventCall("appendNode",document,{"appendToNode": widget.AppendToNode, "localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI})
 				
-			});
-			menui.InsertLocalName = ac[i].localName;
-			menui.InsertNamespaceURI = ac[i].namespaceURI;
-			menui.AppendToNode = node.XMLNode;
+				});
+				menui.InsertLocalName = ac[i].localName;
+				menui.InsertNamespaceURI = ac[i].namespaceURI;
+				menui.AppendToNode = node.XMLNode;
+		}
 		}
 }
 
