@@ -26,6 +26,7 @@ mozile_js_files.push("js/widget.js");
 mozile_js_files.push("mozile/eDOM.js");
 mozile_js_files.push("js/bxeConfig.js");
 mozile_js_files.push("mozile/eDOMXHTML.js");
+mozile_js_files.push("js/bxeXMLNode.js");
 mozile_js_files.push("js/bxeNodeElements.js");
 mozile_js_files.push("js/bxeXMLDocument.js");
 mozile_js_files.push("td/http.js");
