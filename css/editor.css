@@ -69,7 +69,7 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
 .MenuBar, .StatusBar {
     height: 16px;
     width: 100%;
-    background-color:     #ff6600;;
+    background-color:     #ff6600;
 }
 
 .StatusBar span:before {
@@ -111,8 +111,8 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
 }
 
 .ToolBar {
-    height: 30px;
-    background-color: #ff6614;
+    height: 28px;
+    background-color: #ff6611;
     position: fixed;
     z-index: 999;
     -moz-user-select: none;
@@ -122,6 +122,8 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
     left: 0px;
     width: 100%;
     border-left: 5px;
+    border-bottom: 1px dotted black;
+    border-top: 1px dotted black;
 }
 
 .ToolBarButton {
@@ -138,7 +140,7 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
 }
 
 .AboutBox {
-   border: outset 1px black;;
+  border: outset 1px black;;
   background-color: #ff6600;
   background-image: url("../images/bxelogo.png");
   background-repeat: no-repeat;

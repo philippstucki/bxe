@@ -348,4 +348,7 @@ a.navigationactive:visited {
     overflow: hidden;
     padding-top: 0px;
 }
+.AboutBox a {
+  color: #000000;
+}
 
