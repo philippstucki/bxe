@@ -50,7 +50,13 @@ Node.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 				}
 			}
 		} else {
-				ctxt.setErrorMessage(ctxt.node.localName + " is not allowed as child of  " + this.localName );
+				if (ctxt.node.parentNode.isAllowedChild(ctxt.node)) {
+					ctxt.setErrorMessage(ctxt.node.localName + " is not allowed at this position as child of  " + this.localName );
+				
+				}
+				else {
+					ctxt.setErrorMessage(ctxt.node.localName + " is not allowed as child of  " + this.localName );
+				}
 		}
 	} while (ctxt.next())
 	}

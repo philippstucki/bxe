@@ -21,4 +21,19 @@ Element.prototype.__defineGetter__(
 }
 )
 
+Element.prototype.isAllowedChild = function(node) {
+	
+	var ac = this.allowedChildren;
+	for (var i = 0; i < ac.length; i++) {
+		dump ("************\n");
+		dump( ac[i].localName + "\n");
+		dump( node.XMLNode.localName + "\n");
+		if (ac[i].localName == node.localName && ac[i].namespaceURI == node.namespaceURI) {
+			return true;
+		}
+	}
+	return false;
+		
+}
+
 
