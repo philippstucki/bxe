@@ -55,6 +55,14 @@ HTMLTableCellElement.prototype.TableRemoveCol = function() {
 HTMLTableCellElement.prototype.TableAppendRow = function () {
 	var newRow = this.parentNode.cloneNode(true);
 	this.parentNode.parentNode.insertAfter(newRow,this.parentNode);
+	
+	var _children = newRow.childNodes;
+	for (var i in _children) {
+		if (_children[i].nodeType == 1) {
+			_children[i].removeAllChildren();
+			_children[i].appendChild(document.createTextNode(STRING_NBSP));
+		} 
+	}
 }
 
 HTMLTableCellElement.prototype.TableAppendCol = function () {
