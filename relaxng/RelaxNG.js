@@ -123,10 +123,10 @@ NodeVDOM.prototype.parseChildren = function(node) {
 		} else if (childNodes[i].isRelaxNGElement("ref")) {
 			//FIXME this can be done smarter... cache the defines.
 			var grammarChild = this.node.ownerDocument.documentElement.childNodes;
-			dump ("ref: " + childNodes[i].getAttribute("name") +"\n");
+			//dump ("ref: " + childNodes[i].getAttribute("name") +"\n");
 			for (var j = 0; j < grammarChild.length; j++) {
 				if (grammarChild[j].isRelaxNGElement("define") && grammarChild[j].getAttribute("name") == childNodes[i].getAttribute("name")) {
-					dump ("define" + grammarChild[j].getAttribute("name") +"\n"); 
+					//dump ("define" + grammarChild[j].getAttribute("name") +"\n"); 
 					this.parseChildren(grammarChild[j]);
 				}
 			}
@@ -169,16 +169,22 @@ ChoiceVDOM.prototype = new NodeVDOM();
 
 ChoiceVDOM.prototype.isValid = function(ctxt) {
 	var child = this.firstChild;
-	//dump ("Choice.isValid:\n");
-
+	//dump ("Choice.isValid: " + this.nodeName+"\n");
+	var hasEmpty = false;
 	while (child) {
 		//dump ("Choice.child.isValid: " + child.nodeName + "\n");
+		if (child.type == "RELAXNG_EMPTY") {
+			hasEmpty = true;
+		}
 		if (child.isValid(ctxt)) {
 			ctxt.vdom = this;
 			return true;
-
 		}
 		child= child.nextSibling;
+	}
+	if (hasEmpty) {
+		var vdom = ctxt.nextVDOM();
+		return vdom.isValid(ctxt);
 	}
 	return false;
 }
@@ -195,6 +201,10 @@ function EmptyVDOM(node) {
 	this.node = node;
 	this.type = "RELAXNG_EMPTY";
 	this.nodeName = "RELAXNG_EMPTY";
+}
+
+EmptyVDOM.prototype.isValid  = function() {
+	return false;
 }
 TextVDOM.prototype = new NodeVDOM();
 
@@ -237,7 +247,9 @@ OneOrMoreVDOM.prototype.isValid = function(ctxt) {
 	}
 	if (this.hit) {
 		var vdom = ctxt.nextVDOM();
-		return vdom.isValid(ctxt);
+		if (vdom) {
+			return vdom.isValid(ctxt);
+		} 
 	}
 	return false;
 }

@@ -127,7 +127,6 @@ ContextVDOM.prototype.nextVDOM = function() {
 }
 
 ContextVDOM.prototype.isValid = function() {
-	dump ("Ctxt.isValid");
 	if (this.vdom) {
 //		dump("this.vdom " +this.vdom  +"\n");
 		return this.vdom.isValid(this);

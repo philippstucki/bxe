@@ -44,7 +44,7 @@ NodeVDOM.prototype.appendChild = function(newElement) {
 	}
 }
 NodeVDOM.prototype.isValid = function(node) {
-	dump("\n---NodeVDOM.prototype.isValid----\n");
+	//dump("\n---NodeVDOM.prototype.isValid----\n");
 	return true;
 }
 	
