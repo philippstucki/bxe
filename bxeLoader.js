@@ -13,7 +13,7 @@
 //
 // $Id$
 
-var BXE_VERSION = "0.9.5";
+var BXE_VERSION = "0.9.6-dev";
 var BXE_BUILD = "200407042345"
 var BXE_REVISION = "$Rev$".replace(/\$Rev: ([0-9]+) \$/,"r$1");
 
