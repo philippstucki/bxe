@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: webdav.js,v 1.5 2003/08/18 07:52:23 chregu Exp $
+// $Id: webdav.js,v 1.6 2003/08/20 09:57:06 chregu Exp $
 /**
 * @file
 * Implements the http TransportDriver 
@@ -81,7 +81,7 @@ BXE_TransportDriver_webdav.prototype._responseXML = function(e) {
 	if (p.status == 204) {
 		alert("Save succeeded");
 	}
-		
+	
 	else if (p.responseXML) {
 		if (p.responseXML.firstChild.nodeName == 'parsererror')
 		{
@@ -99,6 +99,9 @@ BXE_TransportDriver_webdav.prototype._responseXML = function(e) {
 		alerttext="Something went wrong during saving:\n\n";
 		alert(alerttext + p.responseText) ;
 	}
+	if (p.Exit) {
+		eDOMEventCall("Exit",document);
+	}
 }	
 
 
@@ -114,6 +117,9 @@ BXE_TransportDriver_webdav.prototype._responseXML = function(e) {
 
 BXE_TransportDriver_webdav.prototype.save = function(filename,options, content)
 {
+	if(this.Exit) {
+		this.p.request.Exit = this.Exit;
+	}
 	this.p.request.td = this;
 	this.p.request.onload = this._responseXML;
 	this.p.PUT(filename, content );

@@ -20,11 +20,8 @@ function __bxeSave(e) {
 	}
 
 	var td = new BXE_TransportDriver_webdav();
-	function callback (e) {
-		this.td.Docu.xmldoc =  this.responseXML;
-		this.td.Docu.xmldoc.insertIntoHTMLDocument()
-	}
 	td.Docu = this;
+	td.Exit = e.additionalInfo.exit;
 	td.save(bxe_config.xmlfile,null,xmldoc.ownerDocument.saveXML(xmldoc.ownerDocument));
 }
 
@@ -322,7 +319,9 @@ function bxe_draw_widgets() {
 	//imgspan.appendChild(img);
 	img.setAttribute("align","right");
 	menubar.node.appendChild(img);
-	var submenu = new Array("Save",function() {eDOMEventCall("DocumentSave",document);},"Load","load");
+	var submenu = new Array("Save",function() {eDOMEventCall("DocumentSave",document);});
+	submenu.push("Save & Exit",function() {eDOMEventCall("DocumentSave",document,{"exit": true});});
+	submenu.push("Exit",function() {eDOMEventCall("Exit",document);});
 	menubar.addMenu("File",submenu);
 
 	var submenu = new Array("Undo",bxe_not_yet_implemented,"Redo",bxe_not_yet_implemented);
@@ -479,4 +478,8 @@ function bxe_catch_alert(e ) {
 	mes += "Type: " + e.name + "\n";
 	mes += "Stack:" + e.stack + "\n";
 	alert(mes);
+}
+
+function bxe_exit(e) {
+	window.location = bxe_config.exitdestination;
 }

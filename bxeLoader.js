@@ -276,7 +276,8 @@ function xml_loaded(e) {
 	document.eDOMaddEventListener("UnorderedList",bxe_OrderedList,false);
 
 	document.eDOMaddEventListener("changeLinesContainer",bxe_changeLinesContainer,false);
-	
+	document.eDOMaddEventListener("Exit",bxe_exit,false);
+
 	document.addEventListener("contextmenu",bxe_ContextMenuEvent, false);
 	
 	bxe_context_menu = new Widget_ContextMenu();

@@ -481,10 +481,6 @@ Widget_StatusBar.prototype.buildXPath = function (node) {
 	}
 	node = node.XMLNode;
 	this.node.removeAllChildren();
-	
-	
-	
-	
 	this.Popup.position(0,0,"absolute");
 	this.Popup.StatusBar = this;
 	while(node && node.nodeType == 1) {
