@@ -1070,25 +1070,25 @@ function bxe_draw_widgets() {
 	
 	
 	// make menubar
-	var menubar = new Widget_MenuBar();
+	bxe_menubar = new Widget_MenuBar();
 	var img = document.createElement("img");
 	img.setAttribute("src",mozile_root_dir + "images/bxe.png");
 	
 	img.setAttribute("align","right");
-	menubar.node.appendChild(img);
+	bxe_menubar.node.appendChild(img);
 	var submenu = new Array("Save",function() {eDOMEventCall("DocumentSave",document);});
 	submenu.push("Save & Exit",function() {eDOMEventCall("DocumentSave",document,{"exit": true});});
 	submenu.push("Exit",function() {eDOMEventCall("Exit",document);});
-	menubar.addMenu("File",submenu);
+	bxe_menubar.addMenu("File",submenu);
 
 	var submenu2 = new Array("Undo",function() {eDOMEventCall("Undo",document);},"Redo",function () {eDOMEventCall("Redo",document)});
-	menubar.addMenu("Edit",submenu2);
+	bxe_menubar.addMenu("Edit",submenu2);
 	
 	var submenu3 = new Array();
 	submenu3.push("Show XML Document",function(e) {BX_showInWindow(bxe_getXmlDocument());})
 	submenu3.push("Show RNG Document",function(e) {BX_showInWindow(bxe_getRelaxNGDocument());})
 	
-	menubar.addMenu("Debug",submenu3);
+	bxe_menubar.addMenu("Debug",submenu3);
 	
 	
 	var submenu4 = new Array();
@@ -1143,9 +1143,9 @@ function bxe_draw_widgets() {
 	});
 	
 	
-	menubar.addMenu("Help",submenu4);
+	bxe_menubar.addMenu("Help",submenu4);
 	
-	menubar.draw();
+	bxe_menubar.draw();
 	
 	//make toolbar
 	
@@ -1171,7 +1171,6 @@ function bxe_draw_widgets() {
 	
 	
 	window.setTimeout(bxe_about_box_fade_out, 1000);
-	
 }
 
 function MouseClickEvent(e) {
@@ -2032,5 +2031,19 @@ function bxe_ShowAssetDrawer() {
     if (drawertool.cssr) {
         drawertool.openDrawer('assetdrawer');
     }
+}
+
+function bxe_start_plugins () {
+	
+	var ps = bxe_config.getPlugins();
+	
+	if (ps.length > 0) {
+		for (var i = 0; i < ps.length; i++) {
+			var p = bxe_plugins[ps[i]];
+			if (p.start) {
+				p.start();
+			}
+		}
+	}
 }
 

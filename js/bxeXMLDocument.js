@@ -102,8 +102,9 @@ XMLDocument.prototype.insertIntoHTMLDocument = function(htmlnode) {
 		}
 		
 	}
-	
 	bxe_draw_widgets();
+	bxe_start_plugins();
+
 }
 
 XMLDocument.prototype.checkParserError = function()
