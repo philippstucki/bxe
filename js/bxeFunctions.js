@@ -371,12 +371,13 @@ function MouseClickEvent(e) {
 
 function bxe_updateXPath() {
 	var sel = window.getSelection();
-	bxe_status_bar.buildXPath(sel.anchorNode);
 	var cssr = sel.getEditableRange();
+	if (cssr) {
+	bxe_status_bar.buildXPath(sel.anchorNode);
 	var lines = cssr.lines();
 	bxe_format_list.removeAllItems();
 	
-	if (lines[0].container) {
+	if (lines[0] && lines[0].container) {
 		bxe_format_list.appendItem(lines[0].container.XMLNode.localName,lines[0].container.XMLNode.localName);
 		var ac = lines[0].container.XMLNode.parentNode._xmlnode.allowedChildren;
 		ac.sort();
@@ -385,6 +386,7 @@ function bxe_updateXPath() {
 		}
 	} else {
 		bxe_format_list.appendItem("no block found","");
+	}
 	}
 }
 
