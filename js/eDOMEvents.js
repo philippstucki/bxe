@@ -1,3 +1,18 @@
+// +----------------------------------------------------------------------+
+// | Bitflux Editor                                                       |
+// +----------------------------------------------------------------------+
+// | Copyright (c) 2003 Bitflux GmbH                                      |
+// +----------------------------------------------------------------------+
+// | This software is published under the terms of the Apache Software    |
+// | License a copy of which has been included with this distribution in  |
+// | the LICENSE file and is available through the web at                 |
+// | http://bitflux.ch/editor/license.html                                |
+// +----------------------------------------------------------------------+
+// | Author: Christian Stocker <chregu@bitflux.ch>                        |
+// +----------------------------------------------------------------------+
+//
+// $Id: eDOMEvents.js,v 1.6 2003/11/18 21:41:10 chregu Exp $
+
 Node.prototype.eDOMaddEventListener = function (eventType, func, captures) {
 	if (!this._events) {
 		this._events = new Array();

@@ -17,6 +17,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+// $Id: mozCE.js,v 1.13 2003/11/18 21:41:10 chregu Exp $
+
 /* 
  * mozCE V0.5
  * 

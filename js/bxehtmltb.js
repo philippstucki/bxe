@@ -18,6 +18,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+// $Id: bxehtmltb.js,v 1.9 2003/11/18 21:41:10 chregu Exp $
+
 /*******************************************************************************************************
  * Simple, html-based editing toolbar for mozile: it appears once an editable area is 
  * selected: V0.46

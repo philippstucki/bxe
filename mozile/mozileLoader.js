@@ -18,6 +18,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+// $Id: mozileLoader.js,v 1.4 2003/11/18 21:41:10 chregu Exp $
+
 /*
  * mozileLoader V0.5
  *

@@ -1,21 +1,17 @@
-/* ***** BEGIN LICENSE BLOCK *****
-* Licensed under Version: MPL 1.1/GPL 2.0/LGPL 2.1
-* Full Terms at http://mozile.mozdev.org/license.html
-*
-* Software distributed under the License is distributed on an "AS IS" basis,
-* WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
-* for the specific language governing rights and limitations under the
-* License.
-*
-* The Original Code is Playsophy code.
-*
-* The Initial Developer of the Original Code is Playsophy
-* Portions created by the Initial Developer are Copyright (C) 2002-2003
-* the Initial Developer. All Rights Reserved.
-*
-* Contributor(s):
-*
-* ***** END LICENSE BLOCK ***** */
+// +----------------------------------------------------------------------+
+// | Bitflux Editor                                                       |
+// +----------------------------------------------------------------------+
+// | Copyright (c) 2003 Bitflux GmbH                                      |
+// +----------------------------------------------------------------------+
+// | This software is published under the terms of the Apache Software    |
+// | License a copy of which has been included with this distribution in  |
+// | the LICENSE file and is available through the web at                 |
+// | http://bitflux.ch/editor/license.html                                |
+// +----------------------------------------------------------------------+
+// | Author: Christian Stocker <chregu@bitflux.ch>                        |
+// +----------------------------------------------------------------------+
+//
+// $Id: bxeLoader.js,v 1.128 2003/11/18 21:41:09 chregu Exp $
 
 const BXE_VERSION = "0.1alpha";
 const BXE_BUILD = "200311180330"

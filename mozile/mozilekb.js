@@ -17,6 +17,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+// $Id: mozilekb.js,v 1.23 2003/11/18 21:41:10 chregu Exp $
+
 /* 
  * mozilekb V0.46
  * 

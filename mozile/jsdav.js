@@ -20,6 +20,9 @@
 * Contributor(s): Stephan Richter
 *
 ******************************************************************************
+
+// $Id: jsdav.js,v 1.2 2003/11/18 21:41:10 chregu Exp $
+
 WebDAV specific methods.
 
 Features:
@@ -122,7 +125,7 @@ To do:
 
     - Implement Lock-Token Header.
 
-$Id: jsdav.js,v 1.1 2003/09/09 15:25:16 chregu Exp $
+$Id: jsdav.js,v 1.2 2003/11/18 21:41:10 chregu Exp $
 
 ******************************************************************************/
 

@@ -1,3 +1,19 @@
+// +----------------------------------------------------------------------+
+// | Bitflux Editor                                                       |
+// +----------------------------------------------------------------------+
+// | Copyright (c) 2003 Bitflux GmbH                                      |
+// +----------------------------------------------------------------------+
+// | This software is published under the terms of the Apache Software    |
+// | License a copy of which has been included with this distribution in  |
+// | the LICENSE file and is available through the web at                 |
+// | http://bitflux.ch/editor/license.html                                |
+// +----------------------------------------------------------------------+
+// | Author: Christian Stocker <chregu@bitflux.ch>                        |
+// +----------------------------------------------------------------------+
+//
+// $Id: bxeXMLNode.js,v 1.30 2003/11/18 21:41:10 chregu Exp $
+
+
 function XMLNode  ( nodein, localName, nodeType, autocreate) {
 	this.init( nodein, localName, nodeType, autocreate);
 }

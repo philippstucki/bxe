@@ -1,7 +1,7 @@
 // +----------------------------------------------------------------------+
 // | Bitflux Editor													   |
 // +----------------------------------------------------------------------+
-// | Copyright (c) 2001,2002 Bitflux GmbH								 |
+// | Copyright (c) 2003 Bitflux GmbH     								 |
 // +----------------------------------------------------------------------+
 // | This software is published under the terms of the Apache Software	|
 // | License a copy of which has been included with this distribution in  |
@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>						|
 // +----------------------------------------------------------------------+
 //
-// $Id: relaxngtest.js,v 1.2 2003/09/08 06:37:55 chregu Exp $
+// $Id: relaxngtest.js,v 1.3 2003/11/18 21:41:10 chregu Exp $
 /**
 * @file
 *
