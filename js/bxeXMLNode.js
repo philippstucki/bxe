@@ -332,7 +332,6 @@ XMLNode.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 	node.parentNode._node = htmlnode;
 	var firstChild = false;
 	do  {
-		//dump(node + "\n");
 			var newNode;
 			//newElement =  node.parentNode.XMLNode.appendChild(newElement);
 			//node.NodeMode = "html";
@@ -463,14 +462,16 @@ XMLNodeWalker.prototype.nextNode = function() {
 	}
 	else if(this.currentNode.parentNode) {
 		this.currentNode = this.currentNode.parentNode;
-		while ( this.currentNode && !this.currentNode.nextSibling ) { 
+		while ( this.currentNode && this.currentNode != this.startNode && !this.currentNode.nextSibling ) { 
 			this.currentNode = this.currentNode.parentNode;
 		}
-		if (this.currentNode ) {
+		if (this.currentNode && this.currentNode != this.startNode ) {
 			this.currentNode = this.currentNode.nextSibling;
 			return this.currentNode;
 		}
-		else { return null};
+		else { 
+			return null
+		};
 	}
 	return null;
 	
@@ -497,12 +498,12 @@ XMLNode.prototype.makeHTMLNode = function () {
 			this._node = this._node.documentElement;
 	}
 	if (this.parentNode && this.parentNode.isInHTMLDocument()) {
-		this.parentNode._node.appendChild(this._node);
+		this._node = this.parentNode._node.appendChild(this._node);
 	} else {
 	}
+		
 	this._node.XMLNode = this;
 	return this._node;	
-	//dump("\n");
 }
 
 XMLNode.prototype.__defineGetter__ (
