@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: NodeVAL.js,v 1.26 2003/11/19 17:53:34 chregu Exp $
+// $Id: NodeVAL.js,v 1.27 2003/12/01 01:28:44 chregu Exp $
 
 const BXE_VALID_NOMESSAGE = 1;
 
@@ -97,7 +97,9 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 			}
 			if(ctxt.node.hasAttributes()) {
 				for( var i = 0; i < ctxt.node.attributes.length; i++) {
+					if (ctxt.node.attributes[i]._isNodeValid) {
 					 ctxt.node.attributes[i]._isNodeValid( wFValidityCheckLevel);
+					}
 				}
 			}
 		} else {

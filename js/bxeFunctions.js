@@ -11,10 +11,14 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.113 2003/11/26 07:04:35 chregu Exp $
+// $Id: bxeFunctions.js,v 1.114 2003/12/01 01:28:44 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
+
+
+const BXE_SELECTION = 1;
+const BXE_APPEND = 2;
 
 var bxe_snapshots = new Array();
 var bxe_snapshots_position = 0;
@@ -361,16 +365,18 @@ function bxe_toggleTextClass(e) {
 	if (!bxe_checkIsAllowedChild( e.additionalInfo.namespaceURI,e.additionalInfo.localName,sel)) {
 		return false;
 	}
+	var cb = bxe_getCallback(e.additionalInfo.localName, e.additionalInfo.namespaceURI);
+	if (cb ) {
+		bxe_doCallback(cb, BXE_SELECTION);
+		return;
+	}
 
 	sel.toggleTextClass(e.additionalInfo.localName);
 	sel = window.getSelection();
 	var _node = sel.anchorNode.parentNode;
 	_node.updateXMLNode();
 	debug("isValid?" + _node.parentNode.XMLNode.isNodeValid());
-	var cb = bxe_getCallback(e.additionalInfo.localName, e.additionalInfo.namespaceURI);
-	if (cb ) {
-		bxe_doCallback(cb, _node);
-	}
+
 }
 
 
@@ -633,7 +639,14 @@ function bxe_NodeInsertedBefore(e) {
 function bxe_appendNode(e) {
 	var aNode = e.additionalInfo.appendToNode;
 	bxe_history_snapshot();
+	
 	if (e.additionalInfo.node) {
+		var cb = bxe_getCallback(e.additionalInfo.node.localName, e.additionalInfo.node.namespaceURI);
+		if (cb ) {
+			bxe_doCallback(cb, aNode);
+			return;
+		}
+		
 		var newNode = e.additionalInfo.node.init();
 
 		aNode.parentNode.insertAfter(newNode,aNode);
@@ -647,6 +660,12 @@ function bxe_appendNode(e) {
 	}
 	else {
 
+		var cb = bxe_getCallback(e.additionalInfo.localName,e.additionalInfo.namespaceURI);
+		
+		if (cb ) {
+			bxe_doCallback(cb, aNode);
+			return;
+		}
 		var newNode = new XMLNodeElement(e.additionalInfo.namespaceURI,e.additionalInfo.localName, 1 ) ;
 		aNode.parentNode.insertAfter(newNode,aNode);
 		debug("valid? : " + newNode.isNodeValid());
@@ -806,9 +825,14 @@ function BX_showInWindow(string)
     var win = window.open("","debug");
 
     win.document.innerHTML = "";
+	win.document.writeln("<html>");
+	win.document.writeln("<body>");
 
     win.document.writeln("<pre>");
     win.document.writeln(string.replace(/</g,"&lt;"));
+	win.document.writeln("</pre>");
+	win.document.writeln("</body>");
+	win.document.writeln("</html>");
 }
 
 function bxe_about_box_fade_out (e) {
@@ -1044,13 +1068,13 @@ function bxe_OrderedList() {
 
 function bxe_InsertObject() {
 	var sel = window.getSelection();
-	if (!bxe_checkIsAllowedChild(XHTMLNS,"object",sel)) {
+	/*if (!bxe_checkIsAllowedChild(XHTMLNS,"object",sel)) {
 		return false;
-	}
+	}*/
 	var object = documentCreateXHTMLElement("object");
-	var cssr = sel.getEditableRange();
+	/*var cssr = sel.getEditableRange();
 	var exCon = cssr.extractContents();
-	object.appendChild(exCon);
+	object.appendChild(exCon);*/
 	sel.insertNode(object);
 }
 
@@ -1141,17 +1165,19 @@ function bxe_InsertTable() {
 function bxe_InsertLink(e) {
 	
 	var sel = window.getSelection();
-	if (!bxe_checkIsAllowedChild(XHTMLNS,"a",sel)) {
-		return false;
-	}
 	if (bxe_checkForSourceMode(sel)) {
 		return false;
 	}
-	
-	if(sel.isCollapsed) // must have a selection or don't prompt
+	if (!bxe_checkIsAllowedChild(XHTMLNS,"a",sel)) {
+		return false;
+	}
+	var aValue = "";
+	if (sel.anchorNode.parentNode.XMLNode.localName == "a") {
+		aValue = sel.anchorNode.parentNode.getAttribute("href");
+	}
+	else if(sel.isCollapsed) { // must have a selection or don't prompt
 		return;
-	
-	
+	}
 
 	var mod = mozilla.getWidgetModalBox("Enter a URL:", function(values) {
 		var href = values["href"];
@@ -1166,18 +1192,12 @@ function bxe_InsertLink(e) {
 	}
 	);
 		
-	mod.addItem("href","","textfield","Enter a URL:");
+	
+	mod.addItem("href",aValue,"textfield","Enter a URL:");
 	mod.show(100,50, "fixed");
 	
 	
 	return;
-	
-	
-	var href = prompt("Enter a URL:", "");
-	
-
-	var sel = window.getSelection();
-	sel.anchorNode.parentNode.updateXMLNode();
 }
 
 
@@ -1382,34 +1402,22 @@ function bxe_insertContent(node,replaceNode) {
 	} else {
 		docfrag = node;
 	}
-	if(replaceNode) {
-//		if (replaceNode.nodeName == docfrag.firstChild.nodeName && replaceNode.namespaceURI == docfrag.firstChild.namespaceURI) {
-			var attribs = docfrag.firstChild.attributes;
-			for (var i = 0; i < attribs.length ; i++) {
-				replaceNode.setAttribute(attribs.item(i).nodeName ,attribs.item(i).value);
-			}
-//		} else {}
-			docfrag.firstChild.init();
-			var child = docfrag.firstChild.firstChild;
-			var newNode;
-			replaceNode.removeAllChildren();
-			while (child) {
-				newNode = child.XMLNode;
-				replaceNode.insertBeforeIntern(newNode,null);
-				
-				child = child.nextSibling;
-			}
-			replaceNode.insertIntoHTMLDocument(replaceNode._node,true);
-			eDOMEventCall("NodeAttributesModified",replaceNode._node);
-
+	if (replaceNode == BXE_SELECTION) {
+		var sel = window.getSelection();
+		sel.insertNodeRaw(docfrag.firstChild);
+	} else if (replaceNode) {
+		
+		var newNode = docfrag.firstChild.init();
+		
+		replaceNode.parentNode.insertAfter(newNode,replaceNode);
+		newNode._node.updateXMLNode();
+		debug("valid? : " + newNode.isNodeValid());
 	} else {
 		docfrag.firstChild.init();
 		var sel= window.getSelection();
 		var cssr =sel.getEditableRange();
 		eDOMEventCall("appendNode",document,{"appendToNode":cssr.startContainer.parentNode.XMLNode, "node": docfrag.firstChild})
 	}
-	
-	
 }
 
 String.prototype.convertToXML = function() {
@@ -1443,8 +1451,9 @@ function bxe_getCallback (nodeName, namespaceURI) {
 
 function bxe_doCallback(cb, node ) {
 	if (cb["type"] == "popup") {
-		var pop = window.open(cb["content"],"popup","width=500,height=600");
 		window.bxe_ContextNode = node;
+		
+		var pop = window.open(cb["content"],"popup","width=500,height=600");
 		pop.focus();
 		
 	}

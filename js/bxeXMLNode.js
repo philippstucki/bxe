@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLNode.js,v 1.32 2003/11/19 17:53:34 chregu Exp $
+// $Id: bxeXMLNode.js,v 1.33 2003/12/01 01:28:44 chregu Exp $
 
 
 function XMLNode  ( nodein, localName, nodeType, autocreate) {
@@ -187,6 +187,7 @@ XMLNode.prototype.appendChild = function(newNode) {
 	if (this._node.ownerDocument == document ) {
 		newNode.createNS(newNode.namespaceURI, newNode.localName, newNode.attributes);
 	}
+
 	
 	var child = newNode.firstChild;
 	while (child) {
@@ -467,10 +468,13 @@ XMLNode.prototype.createNS = function (namespaceURI, localName, attribs) {
 			this._node.setAttribute("class", localName);
 		}
 		else {
-			this._node = documentCreateXHTMLElement(this.localName.toLowerCase(),attribs);
+			this._node = documentCreateXHTMLElement(this.localName.toLowerCase());
 		}
 		this.localName = localName;
 		this.namespaceURI = namespaceURI;
+		for (var i = 0; i< attribs.length; i++) {
+				this.setAttributeNS(attribs[i].namespaceURI, attribs[i].localName,attribs[i].value);
+		}
 	}
 	else if (this.nodeType == 3) {
 		this._node = document.createTextNode(namespaceURI);
@@ -672,6 +676,11 @@ XMLNodeElement.prototype.__defineGetter__(
 XMLNodeElement.prototype.setAttribute = function(name,value) {
 	return this._node.setAttribute(name, value);
 }
+
+XMLNodeElement.prototype.setAttributeNode = function(node) {
+	return this._node.setAttributeNode(node);
+}
+
 
 XMLNodeElement.prototype.setAttributeNS = function(namespace,name,value) {
 	return this._node.setAttributeNS(namespace,name, value);

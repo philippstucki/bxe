@@ -11,11 +11,11 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeNodeElements.js,v 1.31 2003/11/18 21:41:10 chregu Exp $
+// $Id: bxeNodeElements.js,v 1.32 2003/12/01 01:28:44 chregu Exp $
 
 Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
-	alert("DEPERECATED");
-
+	alert("Node.prototype.insertIntoHTMLDocument is deprecated");
+	return;
 	var walker = document.createTreeWalker(
 	 this,NodeFilter.SHOW_ALL,
 	{

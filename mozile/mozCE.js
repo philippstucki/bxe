@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: mozCE.js,v 1.14 2003/11/19 17:53:34 chregu Exp $
+// $Id: mozCE.js,v 1.15 2003/12/01 01:28:44 chregu Exp $
 
 /* 
  * mozCE V0.5
@@ -398,18 +398,8 @@ Selection.prototype.toggleListLines = function(requestedList, alternateList)
 
 }
 
-Selection.prototype.insertNode = function(node)
-{
+Selection.prototype.insertNodeRaw = function (node) {
 	var cssr = this.getEditableRange();
-	var checkNode = node;
-	if (node.nodeType == 11 ) {
-		checkNode = node.firstChild;
-	}
-	if (checkNode && checkNode.XMLNode) {
-		if (!bxe_checkIsAllowedChild(checkNode.XMLNode.namespaceURI,checkNode.XMLNode.localName,this)) {
-			return false;
-		}
-	}
 	if(!cssr)
 		return;
 	// if there's a selection then delete it
@@ -421,19 +411,42 @@ Selection.prototype.insertNode = function(node)
 	ip.insertNode(node);
 	//cssr.lines[0].container.updateXMLNode();
 	var _upNode = ip.ipNode;
+	
 	if (_upNode.nodeType == 3) {
 		_upNode = _upNode.parentNode;
 	}
+	while(! _upNode._XMLNode) {
+		_upNode = _upNode.parentNode;
+	}
 	_upNode.updateXMLNode();
+
+	
 	cssr.selectInsertionPoint(ip);
 
 	cssr.__clearTextBoundaries(); // POST05: don't want to have to use this
 
 	this.selectEditableRange(cssr);
+}
+
+Selection.prototype.insertNode = function(node)
+{
+	
+	var checkNode = node;
+	if (node.nodeType == 11 ) {
+		checkNode = node.firstChild;
+	}
+	if (checkNode && checkNode.XMLNode) {
+		if (!bxe_checkIsAllowedChild(checkNode.XMLNode.namespaceURI,checkNode.XMLNode.localName,this)) {
+			return false;
+		}
+	}
 	var cb = bxe_getCallback(node.XMLNode.localName, node.XMLNode.namespaceURI);
 	if (cb ) {
-		bxe_doCallback(cb, node);
+		bxe_doCallback(cb, BXE_SELECTION);
+		return;
 	}
+	return this.insertNodeRaw(node);
+
 	
 }
 
