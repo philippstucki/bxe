@@ -212,6 +212,7 @@ function OneOrMoreVDOM(node) {
 	this.type = "RELAXNG_ONEORMORE";
 	this.nodeName = "RELAXNG_ONEORMORE";
 	this.node = node;
+	this.hit = false;
 }
 
 OneOrMoreVDOM.prototype.isValid = function(ctxt) {
@@ -221,9 +222,14 @@ OneOrMoreVDOM.prototype.isValid = function(ctxt) {
 		dump ("OneorMore.child.isValid: " + child.nodeName + "\n");
 		if (child.isValid(ctxt)) {
 			ctxt.vdom = this;
+			this.hit = true;
 			return true;
 		}
 		child = child.nextSibling;
+	}
+	if (this.hit) {
+		var vdom = ctxt.nextVDOM();
+		return vdom.isValid(ctxt);
 	}
 	return false;
 }

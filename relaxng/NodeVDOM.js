@@ -18,14 +18,7 @@ NodeVDOM.prototype.getVdomForChild = function (child ) {
 		}
 		vdom = vdom.nextSibling;
 	}
-/*	while (vdom) {
-		dump(ctxt.vdom.nodeName + " = " + child.nodeName);
-		if (ctxt.vdom.nodeName == child.nodeName) {
-			dump (" there ");
-			return vdom;
-		}
-		vdom = ctxt.nextVDOM();
-	}*/
+
 	return null;
 }
 
