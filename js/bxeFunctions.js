@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.136 2004/01/13 05:54:16 chregu Exp $
+// $Id: bxeFunctions.js,v 1.137 2004/01/13 11:30:46 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -781,9 +781,10 @@ function bxe_changeLinesContainer(e) {
 	var newContainer = window.getSelection().changeLinesContainer(nodeParts[0]);
 	for(var i=0; i<newContainer.length; i++)
 	{ 
-		newContainer[i].XMLNode = new XMLNode( nodeParts[1], nodeParts[0], newContainer[i].nodeType);
+		newContainer[i].XMLNode = new XMLNodeElement( nodeParts[1], nodeParts[0], newContainer[i].nodeType);
 		try {
 			newContainer[i].updateXMLNode();
+			
 		} catch(e) { alert(newContainer[i] + " can't be updateXMLNode()'ed");
 		}
 	}

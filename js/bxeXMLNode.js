@@ -11,10 +11,11 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLNode.js,v 1.38 2003/12/19 13:14:54 chregu Exp $
+// $Id: bxeXMLNode.js,v 1.39 2004/01/13 11:30:46 chregu Exp $
 
 
 function XMLNode  ( nodein, localName, nodeType, autocreate) {
+	this.objectType ="XMLNode";
 	this.init( nodein, localName, nodeType, autocreate);
 }
 
@@ -616,7 +617,7 @@ XMLNode.prototype.info = function() {
 	
 
 function XMLNodeElement ( nodein, localName, nodeType, autocreate) {
-
+this.objectType ="XMLNodeElement";
 	this.init( nodein, localName, nodeType, autocreate);
 
 }
