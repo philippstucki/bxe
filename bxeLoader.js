@@ -15,6 +15,8 @@
 
 var BXE_VERSION = "0.9.4-dev";
 var BXE_BUILD = "200404300330"
+var BXE_REVISION = "$Revision$";
+
 var bxe_notSupportedText = "Bitflux Editor only works with Mozilla >= 1.4 / Firefox on any platform. \nCurrently we recommend Mozilla 1.6 or Firefox 0.8.";
 
 if (window.location.protocol == "file:" || window.location.host.match(/localhost.*/)) {

@@ -986,6 +986,7 @@ function bxe_draw_widgets() {
 		modal.initPane();
 		var innerhtml =  "<br/>BXE Version: " + BXE_VERSION  + "<br />";
 		innerhtml += "BXE Build Date: " + BXE_BUILD + "<br/><br/>";
+		innerhtml += "BXE Revision: " + BXE_REVISION + "<br/><br/>";
 		innerhtml += "User Agent: " + navigator.userAgent + "<br/><br/>";
 		modal.PaneNode.innerHTML = innerhtml;
 		modal.draw();

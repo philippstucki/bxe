@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: widget.js,v 1.73 2004/03/22 11:18:42 chregu Exp $
+// $Id$
 
 function Widget () {}
 
@@ -462,7 +462,7 @@ function Widget_ToolBarButton (id,namespaceURI) {
 	this.node.ElementNamespaceURI = namespaceURI;
 	if (buttons[id]['type'] == "function") {
 		this.node.addEventListener("click", function(e) { eval(buttons[id]['data']+"(e)") }, false);
-	} else if (buttons[id]['type'] == "insertElement") {
+	} else if (buttons[id]['type'] == "insertElement" || buttons[id]['type'] == "InsertElement") {
 			this.node.addEventListener("click",function(e) { var sel = window.getSelection();
 			var object = bxe_Node_createNS(1, e.target.ElementNamespaceURI, buttons[id]['data']);
 			sel.insertNode(object);}, false);
@@ -493,7 +493,7 @@ function Widget_AboutBox() {
 	//this.node.style.height = height + "px";
 	this.position((window.innerWidth- width)/2,(window.innerHeight-height)/3,"fixed");
 	this.node.onclick = function(e) { this.style.display = 'none';}
-	var htmltext = "<a href='http://bitfluxeditor.org' target='_new'>http://bitfluxeditor.org</a> <br/> Version: " + BXE_VERSION + "/" + BXE_BUILD;
+	var htmltext = "<a href='http://bitfluxeditor.org' target='_new'>http://bitfluxeditor.org</a> <br/> Version: " + BXE_VERSION + "/" + BXE_BUILD + "/" + BXE_REVISION;
 	htmltext += '<br/><br/>';
 	htmltext += "<table>";
 	htmltext += "<tr><td>Credits:</td></tr>";
