@@ -1311,7 +1311,7 @@ InsertionPoint.prototype.deletePreviousInLine = function()
 	var prevResult = previp.backOne();
 	var nextip = this.clone();
 	var nextResult = nextip.forwardOne();
-	if((prevResult != InsertionPoint.SAME_LINE) && (nextResult != InsertionPoint.SAME_LINE))
+	if(!(this.__ipNode.previousSibling) && (prevResult != InsertionPoint.SAME_LINE) && (nextResult != InsertionPoint.SAME_LINE))
 	{
 		var line = this.line.deleteContents();
 		line.container.updateXMLNode();
@@ -1323,6 +1323,7 @@ InsertionPoint.prototype.deletePreviousInLine = function()
 	// special case eol wsp exposure: if deletion would expose a space then make sure that space becomes an nbsp
 	if(nextResult != InsertionPoint.SAME_LINE)
 	{
+		
 		if(previp.whitespace) // assuming previp in same line as checked one element line already
 			previp.__ipNode.replaceData(previp.ipOffset, 1, STRING_NBSP);		
 	}
@@ -1350,10 +1351,12 @@ InsertionPoint.prototype.deletePreviousInLine = function()
 
 	cssr.includeExclusiveParents(); 
 	// TMP: POST05: include exclusive shouldn't do a partial grab of one end or the other of a range but it does now!
-	if((cssr.startContainer == startip.ipNode) || (cssr.endContainer == this.ipNode))
+	if(this.__ipNode.previousSibling || (cssr.startContainer == startip.ipNode) || (cssr.endContainer == this.ipNode)) {
 		keepRange.deleteContents();
-	else {
+	} else {
 		//FIXME: HERE WILL THE NODE BE DELETED, MAKE  AN EVENT!!!!!!!!
+				
+				
 		var sC = cssr.startContainer;
 		cssr.deleteContents();
 		if (sC.parentNode.userModifiable) {
