@@ -1,3 +1,7 @@
+body {
+    margin-top: 60px;
+
+}
 
 .MenuItem, .MenuItemDisabled, .MenuItemChecked, .MenuItemSeparator {
 	font-family: Arial, Helvetica, sans-serif; 
@@ -27,6 +31,9 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
 }
 
 .MenuPopup {
+    -moz-user-modify: read-only;
+    -moz-user-input: disabled;
+    -moz-user-select: none;
     position: relative;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px; 
@@ -67,6 +74,9 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
 }
 
 .MenuBar, .StatusBar {
+    -moz-user-modify: read-only;
+    -moz-user-input: disabled;
+    -moz-user-select: none;
     height: 16px;
     width: 100%;
     background-color:     #ff6600;
@@ -108,16 +118,20 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
 
 .MenuList {
     width: 10em;
+    -moz-user-modify: read-only;
+    -moz-user-select: normal;
+        -moz-user-input: enabled;
+
 }
 
 .ToolBar {
+        -moz-user-modify: read-only;
+    -moz-user-input: disabled;
+    -moz-user-select: none;
     height: 28px;
     background-color: #ff6611;
     position: fixed;
     z-index: 999;
-    -moz-user-select: none;
-    -moz-user-modify: read-only;
-    -moz-user-input: enabled;
     top: 16px;
     left: 0px;
     width: 100%;
@@ -224,17 +238,18 @@ table.beauty  {
 }
 
 [bxe_xpath] {
-	width:90%; 
+	width:80%; 
 	min-height:10px; 
 	
 	margin-top:0px;
 	margin-bottom: 10px;
 	padding: 2px;
-	-moz-user-modify: read-write;
-	-moz-user-input: enabled;
-	-moz-user-select: normal;
+	-moz-user-modify: read-write !important;
+	-moz-user-input: enabled  !important;
+	-moz-user-select: normal  !important;
 	-moz-outline: dotted black 1px;
 }
+
 .bold, .b {
     font-weight: bold;
 }
@@ -282,13 +297,11 @@ table.beauty  {
  background: #888;
   color: #FFF;
 }
-		
-body {
-    margin-top: 60px;
-    }
-    
+
+
+
 [__bxe_highlight=true] {
-   
+    
     background-color: #FEB676;
 }
 
