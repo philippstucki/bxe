@@ -1228,7 +1228,13 @@ function bxe_InsertObject() {
 function bxe_InsertAsset() {
 	
 	var sel = window.getSelection();
+	
 	if (bxe_checkForSourceMode(sel)) {
+		return false;
+	}
+	var cssr = sel.getEditableRange();
+	if (!bxe_checkIsAllowedChild("http://apache.org/cocoon/lenya/page-envelope/1.0","asset",sel, true) && !bxe_checkIsAllowedChildOfNode("http://apache.org/cocoon/lenya/page-envelope/1.0","asset",cssr.startContainer.parentNode.parentNode, true)) {
+		alert ("Asset is not allowed here");
 		return false;
 	}
 	var object = document.createElementNS("http://apache.org/cocoon/lenya/page-envelope/1.0","asset");
