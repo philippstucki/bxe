@@ -178,10 +178,17 @@ XMLDocument.prototype.importXHTMLDocument = function(xhtmlfile) {
 	
 	function onload_xhtml(e) {
 		var xhtmldoc = e.currentTarget;
+		debug ("XHTML loaded");
 		
 		bxe_about_box.addText("XHTML loaded...");
 		var bxe_area = document.getElementsByTagName("body")[0];
-		var new_body = document.importNode(xhtmldoc.getElementsByTagName("body")[0],true);
+		var bodyInXhtml = xhtmldoc.getElementsByTagName("body");
+		if (!(bodyInXhtml && bodyInXhtml.length > 0)) {
+			bxe_about_box.addText(" Loading Failed. no 'body' element found in your external XHTML document.");
+			alert("no 'body' element found in your external XHTML document. ");
+			return false; 
+		}
+		var new_body = document.importNode(bodyInXhtml[0],true);
 		bxe_about_box.node = new_body.appendChild(bxe_about_box.node);
 		bxe_area.removeAllChildren();
 		bxe_area.appendAllChildren(new_body);
@@ -193,6 +200,7 @@ XMLDocument.prototype.importXHTMLDocument = function(xhtmlfile) {
 	var xhtmldoc = document.implementation.createDocument("", "", null);
 	xhtmldoc.addEventListener("load", onload_xhtml, false);
 	xhtmldoc.xmldoc = this;
+	dump("start loading " + xhtmlfile + "\n");
 	try {
 		xhtmldoc.load(xhtmlfile);
 	} catch(e) {

@@ -150,7 +150,7 @@ function widget_loaded(e) {
 
 function corescript_loaded(e) {
 	mozile_corescript_loaded++;
-	debug("from core script " + mozile_corescript_loaded + " loaded: " + e.currentTarget.src);
+	debug("from core script " + mozile_corescript_loaded + " of " + mozile_js_files.length  + "loaded: " + e.currentTarget.src);
 	if ( mozile_js_files.length == mozile_corescript_loaded) {
 		debug("call mozile_core_loaded()");
 		mozile_core_loaded();
