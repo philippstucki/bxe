@@ -1197,7 +1197,7 @@ function bxe_OrderedList() {
 
 function bxe_InsertObject() {
 	var sel = window.getSelection();
-	var object = documentCreateXHTMLElement("img");
+	var object = documentCreateXHTMLElement("object");
 	
 	sel.insertNode(object);
 }
