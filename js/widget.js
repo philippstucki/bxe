@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: widget.js,v 1.66 2004/01/15 08:24:48 chregu Exp $
+// $Id: widget.js,v 1.67 2004/01/19 00:19:34 chregu Exp $
 
 function Widget () {}
 
@@ -720,10 +720,8 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 
 
 Widget_MenuPopup.prototype.appendAllowedSiblings = function( node) {
-	var start = new Date();
 	var ac = node.XMLNode.allowedNextSiblings;
-	var end = new Date();
-	dump ("appendAllowedSiblings " +(end-start) + " \n"); 
+
 	function nodeSort(a,b) {
 		if (a.nodeName > b.nodeName) {
 			return 1;
@@ -947,14 +945,19 @@ Widget_ModalAttributeBox.prototype.drawAttributes = function(xmlnode) {
 	var attr = xmlnode.vdom.attributes;
 	
 	var text = "";
+	
 	for (var i in attr) {
 		if (!bxe_config.dontShowInAttributeDialog[attr[i].name]) {
+			var text = attr[i].name;
+			if (!attr[i].optional) {
+				text = text + " *";
+			}
 			if (! (attr[i].name == "class" && xmlnode.getAttribute(attr[i].name) == xmlnode.localName)) {
 				if (attr[i].dataType == "choice") {
-					this.addItem(attr[i].name,xmlnode.getAttribute(attr[i].name),"select",null,attr[i].choices);
+					this.addItem(text,xmlnode.getAttribute(attr[i].name),"select",null,attr[i].choices);
 			
 				} else {
-					this.addItem(attr[i].name,xmlnode.getAttribute(attr[i].name),"textfield");
+					this.addItem(text,xmlnode.getAttribute(attr[i].name),"textfield");
 				}
 			}
 
