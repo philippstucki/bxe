@@ -217,7 +217,13 @@ bxeConfig.prototype.getPlugins = function () {
 			this.pluginOptions[node.getAttribute("name")] = new Array();
 			var options = this.doc.evaluate("option", node, null, 0, null);
 			while (onode = options.iterateNext()) {
-				this.pluginOptions[node.getAttribute("name")][onode.getAttribute("name")] = onode.firstChild.data;
+				var frag = onode.firstChild;
+				var fragString = ""; 
+				while (frag) {
+					fragString += onode.ownerDocument.saveXML(frag);
+					frag = frag.nextSibling;
+				}
+				this.pluginOptions[node.getAttribute("name")][onode.getAttribute("name")]  = fragString;
 			}
 		}
 	}
