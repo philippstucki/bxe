@@ -69,7 +69,7 @@ XMLNode.prototype.init = function ( nodein, localName, nodeType, autocreate) {
 	}
 	if (this._node && this._node.ownerDocument == document) {
 		if (this._node.nodeType == 1) {
-			if (this._node.nodeName.toLowerCase() != "span" || this._node.getAttribute("__bxe_keep_span")  ) {
+			if (this._node.nodeName.toLowerCase() != "span" ) {
 				if  (this.namespaceURI == XHTMLNS ) {
 					this.localName = this._node.nodeName.toLowerCase();
 				} 

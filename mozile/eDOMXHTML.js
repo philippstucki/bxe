@@ -511,8 +511,10 @@ if (typeof eDOM_bxe_mode == "undefined") {
 	var eDOM_bxe_mode = false;
 }
  
-Range.prototype.styleText = function(styleName, styleValue, isClass, namespaceURI)
+Range.prototype.styleText = function(styleName, foo, bar, namespaceURI)
 {
+	
+	
 	// if collapsed then return - works for inline style or block: make editor do work
 	if(this.collapsed)
 		return;
@@ -528,83 +530,36 @@ Range.prototype.styleText = function(styleName, styleValue, isClass, namespaceUR
 	// POST04: replace with walker - work like normalizeElements
 	for(i=0; i<textNodes.length; i++)
 	{
-		var textContainer = textNodes[i].parentNode; // if setting restore context?
-
-		// only apply to containers that don't have property already
-		if(!styleValue || document.defaultView.getComputedStyle(textContainer, null).getPropertyValue(styleName) != styleValue)
-		{	
-			// if text doesn't have exclusive parent then will need to give it one!
-			if(textContainer.childNodes.length > 1 || (textContainer.childNodes.length == 1 && textContainer.getCStyle("display") != "inline"))
-			{
-				var styleHolder;
-				// spans are special: we don't embed spans in a span - we put spans around all 
-				// the text nodes in the span
-				// note: assume not span within a span so we only have a series of text nodes
-				if(textContainer.nodeNamed("span") && !eDOM_bxe_mode)
-				{ 
-					if(textNodes[i].previousSibling)
-					{
-						var siblingStyleHolder = textContainer.cloneNode(false);
-						textContainer.parentNode.insertBefore(siblingStyleHolder, textContainer);
-						siblingStyleHolder.appendChild(textNodes[i].previousSibling);	
-						eDOMEventCall("NodeInserted",siblingStyleHolder);
-					}
-
-					if(textNodes[i].nextSibling)
-					{
-						var siblingStyleHolder = textContainer.cloneNode(false);
-						if(textContainer.nextSibling)
-							textContainer.parentNode.insertBefore(siblingStyleHolder, textContainer.nextSibling);
-						else 
-							textContainer.parentNode.appendChild(siblingStyleHolder);
-						siblingStyleHolder.appendChild(textNodes[i].nextSibling);	
-						eDOMEventCall("NodeInserted",siblingStyleHolder);
-
-					}									
-				}
-				// one text node within a non span element - put this text node within a span
-				else
-				{
-					//only works reliable for xhtml stuff right now..
-					if (isClass && styleName) {
-						if (namespaceURI != XHTMLNS) {
-							var _node = new XMLNodeElement(namespaceURI,styleName,1,true);
-							var styleHolder = _node._node;
-							//remove _XMLNode, otherwise updateXMLNode gets confused later
-							styleHolder._XMLNode = null;
-						} else {
-							var styleHolder = documentCreateXHTMLElement(styleName);
-						}
-					} else {
-						if (namespaceURI != XHTMLNS) {
-							var _node = new XMLNodeElement(namespaceURI,styleName,1,true)
-							var styleHolder = _node._node;
-							//remove _XMLNode, otherwise updateXMLNode gets confused later
-							styleHolder._XMLNode = null;
-						} else {
-							var styleHolder = documentCreateXHTMLElement("span");
-						}
-					}
-					textContainer.insertBefore(styleHolder, textNodes[i]);
-					styleHolder.appendChild(textNodes[i]);
-					eDOMEventCall("NodeInserted",styleHolder);
-
-					textNodes[i] = styleHolder.firstChild;
-					textContainer = styleHolder;
-				}
+		var textContainer = textNodes[i].parentNode;
+		
+		//check if that inline style already was applied somewhere within this block element
+		while (textContainer && textContainer.getCStyle("display") == "inline") {
+			if (textContainer.XMLNode.namespaceURI == namespaceURI && textContainer.XMLNode.localName == styleName) {
+				continue;
 			}
-			if (isClass) {
-				if (styleValue) {
-					if (textContainer.localName != styleName) {
-						textContainer.addClass(styleName);
-					}
-				} else {
-					textContainer.removeClass(styleName);
-				}
-			} else {
-				textContainer.style.setProperty(styleName, styleValue, "");
-			}
+			textContainer = textContainer.parentNode;
 		}
+		
+		textContainer = textNodes[i].parentNode; 
+		
+		var styleHolder;
+		
+		if (namespaceURI != XHTMLNS) {
+			var _node = new XMLNodeElement(namespaceURI,styleName,1,true);
+			var styleHolder = _node._node;
+			//remove _XMLNode, otherwise updateXMLNode gets confused later
+			styleHolder._XMLNode = null;
+		} else {
+			var styleHolder = documentCreateXHTMLElement(styleName);
+		}
+		
+		textContainer.insertBefore(styleHolder, textNodes[i]);
+		styleHolder.appendChild(textNodes[i]);
+		eDOMEventCall("NodeInserted",styleHolder);
+		
+		textNodes[i] = styleHolder.firstChild;
+		textContainer = styleHolder;
+		
 	}
 					
 	this.__restoreTextBoundaries(); // restore boundaries after styles are applied: CAN NIX IF GET CONTAINER AT START?

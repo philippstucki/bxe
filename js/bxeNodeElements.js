@@ -231,9 +231,9 @@ Node.prototype.updateXMLNode = function (force) {
 		this.normalize();
 	}
 	
-	if (this.nodeType== 1 && this.hasAttribute("class")) {
+	/*if (this.nodeType== 1 && this.hasAttribute("class")) {
 		this.SplitClasses();
-	}
+	}*/
 	var prev = this.previousNotInternalSibling;
 	if (prev ) {
 		if (!prev._XMLNode ) {
