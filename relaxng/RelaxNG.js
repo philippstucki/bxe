@@ -253,7 +253,7 @@ ChoiceVDOM.prototype.allowedElements = function() {
 	
 	while (child) {
 		var subac = child.allowedElements();
-		if (subac.nodeName) {
+		if (subac && subac.nodeName) {
 			ac.push(subac);
 		} else if (subac) {
 			for (var i = 0; i < subac.length; i++) {
