@@ -25,6 +25,7 @@ mozileTransportDriver_http.prototype.load = function(filename, td) {
 	var docu = document.implementation.createDocument("","",null);
 	docu.loader = this.parent;
 	docu.td = td;
+	bxe_config.td = td;
 	docu.onload = this.loadCallback;
 	try {
 		docu.load(filename);
@@ -46,7 +47,12 @@ mozileTransportDriver_http.prototype.loadCallback = function (e) {
 	reqObj.isError = false;
 	reqObj.status = 200;
 	reqObj.statusText = "OK";
-	e.currentTarget.td.loadCallback(reqObj);
+	var td = e.currentTarget.td;
+	if (!td) {
+		debug("td was not in e.currentTarget!!! Get it from global var");
+		td = bxe_config.td;
+	}
+	td.loadCallback(reqObj);
 }
 
 
