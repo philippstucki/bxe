@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.131 2003/12/22 13:28:38 chregu Exp $
+// $Id: bxeFunctions.js,v 1.132 2003/12/22 13:34:30 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -516,16 +516,23 @@ function bxe_ContextPopup(e) {
 	var clip = mozilla.getClipboard();
 	if (clip._clipboard) {
 		if (node.parentNode.isAllowedChild(clip._clipboard.firstChild.namespaceURI, clip._clipboard.firstChild.localName)) {
-		popup.addMenuItem("Append " + clip._clipboard.firstChild.nodeName + " from Clipboard", function (e) {
-			var widget = e.currentTarget.Widget;
-			var appNode = widget.MenuPopup.MainNode;
-			var clip = mozilla.getClipboard();
-			var clipNode = clip.getData(MozClipboard.TEXT_FLAVOR);
-		
-			eDOMEventCall("appendNode",document,{"appendToNode":appNode, "node": clipNode.firstChild})
-		});
+			var _clipboardNodeName = "";
+			if (clip._clipboard.firstChild.XMLNode) {
+				_clipboardNodeName = clip._clipboard.firstChild.XMLNode.nodeName;
+			} else {
+				_clipboardNodeName = lip._clipboard.firstChild.nodeName;
+			}
+			
+			popup.addMenuItem("Append " + _clipboardNodeName + " from Clipboard", function (e) {
+				var widget = e.currentTarget.Widget;
+				var appNode = widget.MenuPopup.MainNode;
+				var clip = mozilla.getClipboard();
+				var clipNode = clip.getData(MozClipboard.TEXT_FLAVOR);
+				
+				eDOMEventCall("appendNode",document,{"appendToNode":appNode, "node": clipNode.firstChild})
+			});
 		}
-
+		
 	}
 	
 	popup.addMenuItem("Delete "  + e.target.XMLNode.nodeName  + " Element", function (e) {
