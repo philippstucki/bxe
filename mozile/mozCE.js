@@ -18,7 +18,7 @@
  * ***** END LICENSE BLOCK ***** */
 
 /* 
- * mozCE V0.46
+ * mozCE V0.5
  * 
  * Mozilla Inline text editing that relies on eDOM, extensions to the standard w3c DOM.
  *
@@ -26,7 +26,7 @@
  * Mozilla's proprietary Selection object as well as eDOM, a set of browser independent
  * extensions to the w3c DOM for building editors. 
  *
- * POST04:
+ * POST05:
  * - refactor userModify code as part of "EditableElement" 
  * - IE's "ContentEditable" means that an element is editable whenever its "ContentEditable"
  * setting is true. However, we may change this so that you have to set editing on for a
@@ -47,6 +47,7 @@
  * - http://www.w3.org/TR/1999/WD-css3-userint-19990916#user-modify
  *
  * POST04
+ * - rename to be "mozSelection.js"
  * - remove need to spec ContentEditable as equivalent to mozUserModify: do mapping in
  * style sheet: *[contentEditable="true"] 
  * - to change as part of "editableElement": may also move Selection methods into EditableElement
@@ -160,7 +161,55 @@ Element.prototype.__defineGetter__(
 
 /***************************************************************************************************************
  * New Selection methods to support styling the current selection
+ *
+ * POST05:
+ * - move alot of the content here (the XHTML specific stuff) to eDOMXHTML leaving these methods as just Selection
+ * wrappers for Range methods.
  ***************************************************************************************************************/
+
+/**
+ * "Delete" for selected XHTML represents three behaviors:
+ * - if range isn't collapsed then delete contents of the range - treat table contents properly (see code for behavior)
+ * - if range is collapsed
+ *   - if at start of line then merge line with previous line if there is one and this is appropriate
+ *   - otherwise delete character or element before the selected point in the line
+ *
+ * Note: this is an XHTML compliant deletion. It is driven solely by CSS settings. This works for XHTML selections but
+ * it is unlikely to work for semantically rich and restrictive XML. Deletion of an XML document would have to pay 
+ * attention to that document's semantics.
+ */
+Selection.prototype.deleteSelection = function(backspace)
+{
+	var cssr = this.getEditableRange();
+
+	if(!cssr)
+		return;
+
+	if(cssr.collapsed)
+	{
+		var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
+		if (backspace) {
+			ip.forwardOne();
+		}
+		var result = ip.deletePreviousInLine();
+		if(!result)
+		{
+			var line = ip.line;
+			ip = line.deleteStructure();
+		}
+
+		cssr.selectInsertionPoint(ip);
+	}
+	else
+	{
+		cssr.extractContentsByCSS();
+	}
+
+	// this.selectEditableRange(cssr);
+
+	this.removeAllRanges();
+	this.addRange(cssr.cloneRange());
+}
 
 /**
  * POST05: change so defaultValue doesn't have to be passed in; think about toggling whole line if selection collapsed
@@ -239,6 +288,9 @@ Selection.prototype.clearTextLinks = function()
 	this.selectEditableRange(cssr);
 }
 
+/**
+ * This will only style contained lines
+ */
 Selection.prototype.styleLines = function(styleName, styleValue)
 {
 	var cssr = this.getEditableRange();
@@ -246,10 +298,19 @@ Selection.prototype.styleLines = function(styleName, styleValue)
 	if(!cssr)
 		return;
 
-	var lines = cssr.lines();	
+	var lines = cssr.lines;	
 
 	for(var i=0; i<lines.length; i++)
 	{
+		// turn bounded line into contained line or put in container for top line
+		if((lines[i].lineType == CSSLine.BOUNDED_LINE) || lines[i].topLine)
+		{
+			// special case: empty bounded line - don't try to style this!
+			if(lines[i].emptyLine)
+				continue;
+			lines[i] = lines[i].setContainer(documentCreateXHTMLElement(defaultContainerName), false);
+		}
+
 		lines[i].setStyle(styleName, styleValue);
 	}
 
@@ -263,10 +324,16 @@ Selection.prototype.changeLinesContainer = function(containerName, isClass)
 	if(!cssr)
 		return;
 	var newContainer = new Array();
-	var lines = cssr.lines();
+	var lines = cssr.lines;
 	for(var i=0; i<lines.length; i++)
-	{ // replace container unless it is top
-		newContainer.push(lines[i].changeContainer(containerName, (lines[i].container == cssr.top), isClass));
+	{
+		// keep container if it is a contained line but not a block:
+		// - it is top
+		// - it is a table cell
+		// - it is a list item
+		var keep = ((lines[i].lineType == CSSLine.CONTAINED_LINE) && (lines[i].containedLineType != ContainedLine.BLOCK));
+		newContainer.push(keep)
+		lines[i].setContainer(documentCreateXHTMLElement(containerName), !keep);
 	}
 
 	this.selectEditableRange(cssr);
@@ -280,10 +347,10 @@ Selection.prototype.removeLinesContainer = function()
 	if(!cssr)
 		return;
 
-	var lines = cssr.lines();
+	var lines = cssr.lines;
 	for(var i=0; i<lines.length; i++)
 	{
-		if(lines[i].container != cssr.top) // as long as container isn't top then remove it
+		if((lines[i].lineType == CSSLine.CONTAINED_LINE) && !lines[i].topLine) // as long as contained line and container isn't top then remove it
 			lines[i].removeContainer();
 	}
 
@@ -329,20 +396,23 @@ Selection.prototype.toggleListLines = function(requestedList, alternateList)
 Selection.prototype.insertNode = function(node)
 {
 	var cssr = this.getEditableRange();
-	
+
 	if(!cssr)
 		return;
 
-	var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
+	var ip = cssr.firstInsertionPoint;
 
 	ip.insertNode(node);
 	cssr.selectInsertionPoint(ip);
-	cssr.__clearTextBoundaries(); // POST04: don't want to have to use this
+
+	cssr.__clearTextBoundaries(); // POST05: don't want to have to use this
 
 	this.selectEditableRange(cssr);
 }
 
-// Delegates "USERMODIFY" level check to "insertNode"
+/**
+ * POST05: paste more than text
+ */
 Selection.prototype.paste = function()
 {
 	var clipboard = mozilla.getClipboard();
@@ -462,12 +532,12 @@ Selection.prototype.copy = function()
 		return; 
 
 	// data to save - render as text (temporary thing - move to html later)
+	var text = cssr.toString();
 
 	var clipboard = mozilla.getClipboard();
-	// clipboard.setData(deletedFragment.saveXML(), "text/html"); // go back to this once, paste supports html paste!
-	// above to be handled in mozClipboard, IMHO (chregu) 
 
-	clipboard.setData(cssr,MozClipboard.TEXT_FLAVOR);
+	// clipboard.setData(deletedFragment.saveXML(), "text/html"); // go back to this once, paste supports html paste!
+	clipboard.setData(text, MozClipboard.TEXT_FLAVOR);
 }
 
 Selection.prototype.cut = function()
@@ -483,7 +553,8 @@ Selection.prototype.cut = function()
 	// above (conversion from selection to HTML text) to be handled in mozClipboard, IMHO (chregu) 
 	clipboard.setData(cssr, MozClipboard.TEXT_FLAVOR);
 
-	var deletedFragment = cssr.deleteTextTree();
+	var deletedFragment = cssr.extractContentsByCSS();
+	
 
 	this.removeAllRanges();
 	this.addRange(cssr);

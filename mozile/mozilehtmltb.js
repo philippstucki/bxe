@@ -20,7 +20,7 @@
 
 /*******************************************************************************************************
  * Simple, html-based editing toolbar for mozile: it appears once an editable area is 
- * selected: V0.46
+ * selected: V0.5
  *
  * POST04: 
  * - make OO - too hacky (see mozileModify's button disable!)
@@ -414,7 +414,13 @@ function ptbbuttonclick()
 			window.getSelection().insertNode(hr);
 			break;
 		case 'Create_Table':
-			alert("Table insertion coming soon ...");
+			var rowno = prompt("number of rows");
+			var colno = prompt("number of columns");
+			var te = documentCreateTable(rowno, colno);
+			if(!te)
+				alert("Can't create table: invalid data");
+			else
+				window.getSelection().insertNode(te);
 			break;
 		case 'Copy':
 			window.getSelection().copy();

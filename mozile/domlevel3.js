@@ -18,7 +18,7 @@
  * ***** END LICENSE BLOCK ***** */
 
 /*************************************************************************************************************
- * domlevel3 V0.46
+ * domlevel3 V0.5
  *
  * Early DOM Level 3 implementation - part of: 
  * - the Validation module: http://www.w3.org/TR/2003/WD-DOM-Level-3-Val-20030205/

@@ -14,11 +14,12 @@
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
+ * - Christian Stocker (Bitflux)
  *
  * ***** END LICENSE BLOCK ***** */
 
 /*
- * mozWrapper.js v0.46
+ * mozWrapper.js v0.5
  * 
  * Global Mozilla singleton that provides access native objects needed in Mozile:
  * - clipboard
@@ -41,48 +42,6 @@
  * - address ftp and post [ie/ maybe abstraction of "save" for a file]
  */
 
-/* http://www.mozilla.org/projects/security/components/jssec.html
-UniversalBrowserRead
-
-	Reading of sensitive browser data.
-This allows the script to pass the same origin check when reading from any document.
-
-UniversalBrowserWrite
-
-	Modification of sensitive browser data.
-This allows the script to pass the same origin check when writing to any document.
-
-UniversalXPConnect
-
-	Unrestricted access to browser APIs using XPConnect
-
-UniversalPreferencesRead
-
-	Read preferences using the navigator.preference method.
-
-UniversalPreferencesWrite
-
-	Set preferences using the navigator.preference method.
-
-UniversalFileRead
-
-	Access to file:// URLs.
-
-+ window object: All of the following operations require UniversalBrowserWrite.
-
-... netscape.security.PrivilegeManager.revertPrivilege(
- "UniversalBrowserAccess"); ... isolate privileged code in here ...
-... need calls in each function as privilege goes out of scope at end of function!
-*/
-
-// http://www.mozilla.org/projects/security/components/ConfigPolicy.html
-// http://www.mozilla.org/editor/midasdemo/securityprefs.html
-
-// Mozilla/Defaults/Pref/user.js
-
-// http://www.mozilla.org/projects/security/components/jssec.html
-
-// Must get to the bottom of policies so relate them to permissions I ask for
 /*******************************************************************************************************
  * Global object - ideally set up at browser initialization but is only a JS object here.
  *******************************************************************************************************/
@@ -91,6 +50,7 @@ var mozilla = new Moz();
 
 function Moz()
 {
+	this.__clipboard = null;
 	try {
 		// try enable xpconnect
 		netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
@@ -101,6 +61,47 @@ function Moz()
 		return;
 	}
 	this.__allowedNativeCalls = true;
+}
+
+/**
+ * May get the Mozilla clipboard if available - otherwise get IFrame clipboard
+ */
+Moz.prototype.getClipboard = function() 
+{
+	if(!this.__clipboard) 
+	{
+		if(this.__allowedNativeCalls)
+			this.__clipboard = new MozClipboard();
+		else
+			this.__clipboard = new NonNativeClipboard();
+	}
+
+	return this.__clipboard;
+}
+
+/*******************************************************************************************************
+ * Non native clipboard: used if native support is not available - only handles
+ *
+ * POST05: 
+ * - Christian's IFrame clipboard: enhance nonNativeClipboard to use an id'ed IFrame to paste too and from
+ * a Mozile page from other applications.
+ *******************************************************************************************************/
+
+function NonNativeClipboard()
+{
+	this.__copiedData = null;
+}
+
+NonNativeClipboard.prototype.getData = function(dataFlavor)
+{
+	// return copy of internal contents if any
+	if(this.__copiedData)
+		return this.__copiedData;
+}
+
+NonNativeClipboard.prototype.setData = function(data, dataFlavor)
+{
+	this.__copiedData = data;
 }
 
 /*******************************************************************************************************
@@ -133,30 +134,13 @@ function Moz()
  * 
  ******************************************************************************************************/
 
-Moz.prototype.getClipboard = function() 
+function MozClipboard()
 {
-	// store this clipboard as a "static" variable, so we only have to instanciate it once (singleton pattern)
-	if (this._clipboard) {
-		return this._clipboard;
-	}
-	return this._clipboard = new MozClipboard(this.__allowedNativeCalls);
-}
-
-function MozClipboard(nativeSupport)
-{
-	// setup internal clipboard
-	this._clipboard = null;
-	//setup privileged support
-	if (nativeSupport) {
-		this.nativeSupport = true;
 	// enable xpconnect
 	netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+
 	// create an object for accessing the native clipboard
 	this.clip = Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);
-	} else {
-		this.nativeSupport = false;
-	}
-
 }
 
 // POST05: redo as consts (scale's better)
@@ -168,22 +152,12 @@ MozClipboard.HTML_FLAVOR = "text/html";
  * 
  * - return requested flavor if available; otherwise return text if available; other return null
  *
- * - It uses a mix between internal and system clipboard (if system clipboard is available)
- *   If system clipboard changed after the last Mozile-Copy-operation (= different text in system CP than internal CP)
- *    we will return this text as a text node, otherwise just return the document fragement in the internal CP.
- *
  * POST05:
  * - do data downgrading too ie/ if text is not available but text is requested then return another format AS text!
  * (required as if I copy html and then try to get it as text, I get nothing now!)
  */
 MozClipboard.prototype.getData = function(dataFlavor)
 {
-	// if no native support, just return the internal clipboard (it's a document fragment, usually)
-	if (!this.nativeSupport) {
-		return this._clipboard.cloneNode(true);
-	// otherwise check the system clipboard and use that, if it has different data
-	} else {
-	
 	// enable xpconnect: must do again in this function even though enabled for constructor (seems daft)
 	netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
 
@@ -209,43 +183,21 @@ MozClipboard.prototype.getData = function(dataFlavor)
 		}
 		catch(e)
 		{
-				return this._clipboard.cloneNode(true); // nothing we can copy from the system clipboard
+			return null; // nothing we can copy
 		}
 	}
+
 	str= str.value.QueryInterface(Components.interfaces.nsISupportsString);
 	if(str)
 		str = (str.data.substring(0,len.value / 2));
-		
-		// if system clipboard has the same text as the internal clipboard, take the docfragment from the internal
-		if (str == this._clipboardText) {
-			return this._clipboard.cloneNode(true);
-		// otherwise return the text from the system clipboard
-		} else {
-			return document.createTextNode(str);
-		}
-	}
-
-
+	return str;
 }
 
 /**
  * Add data to the clipboard: data in the form of a string
- *
- * It adds it to the internal CP as well as to the system CP.
- *
- * data hast to be a range.
  */
 MozClipboard.prototype.setData = function(data, dataFlavor)
 {
-	//copy the selection to the internal clipboard
-	this._clipboard = data.cloneContents();
-	//to allow easier comparing of system and internal clipboard, store the plaintext in this variable
-	this._clipboardText = data.toString();
-	
-	//if nativeSupport, add the content to the system clipboard
-	if (this.nativeSupport) {
-
-		data = data.toString();
 	netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
 
 	// xpcom wrapper for data - note: wstring doesn't seem to work so choose string - seems arbitrary but it works!
@@ -259,7 +211,6 @@ MozClipboard.prototype.setData = function(data, dataFlavor)
 	this.clip.setData(trans, null, this.clip.kGlobalClipboard); // note: I don't know the difference between global and selection but selection works!
 
 	this.clip.forceDataToClipboard(this.clip.kGlobalClipboard);
-}
 }
 
 /************************************************************************************
@@ -277,6 +228,8 @@ MozClipboard.prototype.setData = function(data, dataFlavor)
 
 Moz.prototype.enableCaretBrowsing = function()
 {
+	if(!this.__allowedNativeCalls)
+		return;
 	netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
 	var prefs = Components.classes['@mozilla.org/preferences-service;1'].getService(Components.interfaces.nsIPrefService).getBranch(null);
 	if(!prefs.getBoolPref('accessibility.browsewithcaret'))
@@ -285,6 +238,8 @@ Moz.prototype.enableCaretBrowsing = function()
 
 Moz.prototype.disableCaretBrowsing = function()
 {
+	if(!this.__allowedNativeCalls)
+		return;
 	netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
 	var prefs = Components.classes['@mozilla.org/preferences-service;1'].getService(Components.interfaces.nsIPrefService).getBranch(null);
 	if(prefs.getBoolPref('accessibility.browsewithcaret'))
@@ -380,43 +335,3 @@ MozLocalFile.prototype.write = function(data)
 	fos.flush();
 	fos.close();
 }
-
-
-Moz.prototype.getEventHandler= function () {
-	// store this events as a "static" variable, so we only have to instanciate it once (singleton pattern)
-	if (this.eventHandler) {
-		return this.eventHandler;
-	}
-	return this.eventHandler = new MozEventHandler();
-}
-
-
-
-function MozEventHandler() {
-	this._events = new Array();
-
-}
-
-
-MozEventHandler.prototype.addEventListener= function (eventType, func, captures) {
-	
-	if (!this._events[eventType]) {
-		this._events[eventType] = new Array();
-	}
-	var funcname = func.name
-	if (! funcname) {
-		funcname = this._events[eventType].length;
-	}
-	this._events[eventType][funcname] = func;
-}
-
-
-MozEventHandler.prototype.initEvent = function (eventType) {
-	
-	if(this._events[eventType]) {
-		for (i in this._events[eventType]) {
-			this._events[eventType][i]();
-		}
-	}
-}
-

@@ -18,7 +18,7 @@
  * ***** END LICENSE BLOCK ***** */
 
 /*
- * mozIECE V0.46
+ * mozIECE V0.5
  * 
  * Support for IE's contentEditable commands to allow for simple cross-browser editors
  * and toolbars. A cross browser toolbar (unlike the basic Mozile toolbar) should use these

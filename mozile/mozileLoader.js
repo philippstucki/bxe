@@ -14,11 +14,12 @@
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
+ *	James A. Overton <james@overton.ca>
  *
  * ***** END LICENSE BLOCK ***** */
 
 /*
- * mozileLoader V0.46
+ * mozileLoader V0.5
  *
  * Loads mozile for a page if in a Geiko browser. This is the only javascript
  * file that a user needs to explicitly include in a page. This shields Mozile
@@ -26,11 +27,10 @@
  * locally - though perhaps it would always load "mozileModify" or "per page"
  * customization mechanism.
  *
- * Method: http://devedge.netscape.com/viewsource/2002/browser-detection/
+ * Methods: http://devedge.netscape.com/viewsource/2002/browser-detection/
+ *          http://devedge.netscape.com/library/manuals/2001/xpinstall/1.0/Chap4.html#1005439
  *
- * POST04:
- * - if mozile installed => only load mozileModify.js?
- * - make work for more than XHTML (document.documentElement insert?)/ use name spaces?
+ * POST05:
  * - distinguish old Geiko browsers (once tested to see which have 
  * problems)
  * - if IE:
@@ -45,10 +45,9 @@ mozile_js_files.push("mozCE.js");
 mozile_js_files.push("mozWrappers.js");
 mozile_js_files.push("mozIECE.js");
 mozile_js_files.push("mozilekb.js");
-mozile_js_files.push("mozilehtmltb.js");
-mozile_js_files.push("mozileModify.js");
+mozile_js_files.push("mozileSave.js");
 
-var mozile_root_dir = "./";
+var mozile_root_dir = "chrome://mozile/content/"; // default location of mozile is in an extension
 
 // Detect Gecko but exclude Safari (for now); for now, only support XHTML
 if((navigator.product == 'Gecko') && (navigator.userAgent.indexOf("Safari") == -1))
@@ -60,20 +59,27 @@ if((navigator.product == 'Gecko') && (navigator.userAgent.indexOf("Safari") == -
 
 	if(head)
 	{
-		// get the location of this script and reuse it for the others
-		for(var i=0; i<head.childNodes.length; i++)
+		// if there is no Mozile installed already then use a remote Mozile hosted along with this Loader file
+		if(!InstallTrigger.getVersion("mozile"))
 		{
-			var mozileLoaderRE = /(.*)mozileLoader.js$/;
-			if(head.childNodes[i].nodeName == "SCRIPT")
+			// get the location of this script and reuse it for the others
+			for(var i=0; i<head.childNodes.length; i++)
 			{
-				var src = head.childNodes[i].src;
-				var result = mozileLoaderRE.exec(src);
-				if(result)
+				var mozileLoaderRE = /(.*)mozileLoader.js$/;
+				if(head.childNodes[i].nodeName == "SCRIPT")
 				{
-					mozile_root_dir = result[1];
-					break;
+					var src = head.childNodes[i].src;
+					var result = mozileLoaderRE.exec(src);
+					if(result)
+					{
+						mozile_root_dir = result[1];
+						break;
+					}
 				}
 			}
+
+			// remote has an in-page toolbar: the chrome version has the toolbar in the browser itself
+			mozile_js_files.push("mozilehtmltb.js");
 		}
 	
 		for (var i=0; i < mozile_js_files.length; i++) 
