@@ -12,7 +12,7 @@ function __bxeSave(e) {
 	}
 	var xmlstr = bxe_getXmlDocument()
 	
-	td.save(bxe_config.xmlfile,null,xmlstr);
+	td.save(bxe_config.xmlfile, xmlstr);
 }
 
 function bxe_getXmlDocument() {
