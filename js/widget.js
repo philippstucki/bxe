@@ -400,9 +400,9 @@ Widget_ToolBar.prototype = new Widget();
 
 Widget_ToolBar.prototype.addButtons = function ( buttons) {
 	for (but in buttons) {
-        if (but != "Dimension") {
+		if (but != "Dimension") {
 			var button = new Widget_ToolBarButton(but,buttons[but]['ns']);
-            this.addItem(button);	
+			this.addItem(button);	
 		}
 	}
 	
@@ -447,7 +447,8 @@ function Widget_ToolBarButton (id,namespaceURI) {
 		var buttons = bxe_config.getButtons();
 		var col =  buttons[id]['col'];
 		var row =  buttons[id]['row'];
-	
+		
+		
 	var clipoffset = 
 	    [buttons['Dimension'][2]*col, // left
 	     buttons['Dimension'][3]*row]; //top
