@@ -74,31 +74,33 @@ Node.prototype.fixNamespaces = function () {
 	do {
 		//dump(node.localName + " " + nsResolver.lookupNamespacePrefix(node.namespaceURI) +"\n");
 		node.prefix = nsResolver.lookupNamespacePrefix(node.namespaceURI);
-		
-	} while(node = walker.nextNode() )
+		node = walker.nextNode()
+	} while( node)
 	
 }
 
 
 function documentSaveChildrenXML(snode, withParentNS) {
-
+	var root;
+	var doc;
+	var xmlstr;
 	if (snode && snode.nodeType != Node.DOCUMENT_NODE) {
-		var doc = snode.ownerDocument;
-		var root = snode;
+		doc = snode.ownerDocument;
+		root = snode;
 	} else {
-		var doc = this;
-		var root = this.documentElement;
+		doc = this;
+		root = this.documentElement;
 	}
 
 	if (withParentNS) {
-		var xmlstr = doc.saveXML(root);
+		xmlstr = doc.saveXML(root);
 		var parser = new DOMParser();
 		var xmldoc = parser.parseFromString(xmlstr,"text/xml");
 		xmlstr = xmlstr.replace(/^<[^>]+>/,"").replace(/<\/[^>]+>$/,"");
 		return {"str":xmlstr, "rootPrefix":xmldoc.documentElement.prefix,"rootNamespace":xmldoc.documentElement.namespaceURI};
 	} 
 
-	var xmlstr= "";
+	xmlstr= "";
 
 	
 	var children = snode.childNodes;

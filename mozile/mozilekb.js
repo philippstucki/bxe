@@ -74,6 +74,7 @@ function keyPressHandler(event)
   		event.preventDefault();
   		return false;
 	}
+	return true;
 }
 
 function keyDownHandler(event)
@@ -93,6 +94,7 @@ function keyDownHandler(event)
   		event.preventDefault();
   		return false;
 	}
+	return true;
 }
 
 function keyUpHandler(event)
@@ -112,12 +114,14 @@ function keyUpHandler(event)
   		event.preventDefault();
   		return false;
 	}
+	return true;
 }
 
-function ctrlKeyPressHandler(event, cssr)
+function ctrlKeyPressHandler(event)
 {
+	var cssr;
 	if(!event.charCode)
-		return;
+		return false;
 
 	if(String.fromCharCode(event.charCode).toLowerCase() == "v")
 	{
@@ -150,22 +154,22 @@ function ctrlKeyPressHandler(event, cssr)
 	}
 	else if(String.fromCharCode(event.charCode)==  "y")
 	{
-		var cssr = window.getSelection().getEditableRange();
+		cssr = window.getSelection().getEditableRange();
 		if(!cssr)
 		{
 			alert("You have to select an edit area first");
-			return;
+			return false;
 		}
 		eDOMEventCall("toggleTagMode",cssr.top);
 		return true;
 	}
 	else if(String.fromCharCode(event.charCode) == "Y")
 	{
-		var cssr = window.getSelection().getEditableRange();
+		cssr = window.getSelection().getEditableRange();
 		if(!cssr)
 		{
 			alert("You have to select an edit area first");
-			return;
+			return false;
 		}
 		eDOMEventCall("toggleSourceMode",cssr.top);
 
@@ -177,7 +181,7 @@ function ctrlKeyPressHandler(event, cssr)
 function ctrlKeyDownHandler(event,cssr) {
 	
 	if(!event.keyCode)
-		return;
+		return false;
 	
 	if(String.fromCharCode(event.keyCode).toLowerCase() == "v")
 	{
@@ -212,7 +216,7 @@ function ctrlKeyDownHandler(event,cssr) {
 function ctrlKeyUpHandler(event,cssr) {
 	
 	if(!event.keyCode)
-		return;
+		return false;
 	
 	if(String.fromCharCode(event.keyCode).toLowerCase() == "v")
 	{
@@ -252,19 +256,22 @@ function ctrlKeyUpHandler(event,cssr) {
 function nonctrlKeyPressHandler(event)
 {
 	var sel = window.getSelection();
+	var ip;
+	var cssr;
+	var rng;
 	// BACKSPACE AND DELETE (DOM_VK_BACK_SPACE, DOM_VK_DELETE)
 	if((event.keyCode == 8) || (event.keyCode == 46))
 	{
-		var cssr = sel.getEditableRange();
+		cssr = sel.getEditableRange();
 		if(!cssr)
 		{
-			return;
+			return false;
 		}
 
 		// first let's test collapsed
 		if(cssr.collapsed )
 		{
-			var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
+			ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
 			if (event.keyCode == 46) {
 				ip.forwardOne();
 			}
@@ -285,20 +292,20 @@ function nonctrlKeyPressHandler(event)
 	// PREV (event.DOM_VK_LEFT) Required as Moz left/right doesn't handle white space properly
 	if(event.keyCode == 37 && !event.shiftKey)
 	{
-		var cssr = sel.getEditableRange();
+		cssr = sel.getEditableRange();
 		if(!cssr)
 		{
-			return;
+			return false;
 		}
 
 		if(!cssr.collapsed)
 			cssr.collapse(true);
 
-		var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
+		ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
 		ip.backOne();
 		cssr.selectInsertionPoint(ip);
 		sel.removeAllRanges();
-		var rng = cssr.cloneRange();
+		rng = cssr.cloneRange();
 		sel.addRange(rng);
 		bxe_delayedUpdateXPath();
 		return true;
@@ -308,10 +315,10 @@ function nonctrlKeyPressHandler(event)
 	// NEXT (event.DOM_VK_RIGHT) Required as Moz left/right doesn't handle white space properly
 	if(event.keyCode == 39 && !event.shiftKey)
 	{	
-		var cssr = sel.getEditableRange();
+		cssr = sel.getEditableRange();
 		if(!cssr)
 		{
-			return;
+			return false;
 		}
 
 		if(!cssr.collapsed)
@@ -319,7 +326,7 @@ function nonctrlKeyPressHandler(event)
 
 		var caretTop = cssr.top;
 
-		var ip = documentCreateInsertionPoint(caretTop, cssr.startContainer, cssr.startOffset);
+		ip = documentCreateInsertionPoint(caretTop, cssr.startContainer, cssr.startOffset);
 	
 		ip.forwardOne();
 		
@@ -327,7 +334,7 @@ function nonctrlKeyPressHandler(event)
 		cssr.collapse(false);
 
 		sel.removeAllRanges();
-		var rng = cssr.cloneRange();
+		rng = cssr.cloneRange();
 		sel.addRange(rng);
 
 		bxe_delayedUpdateXPath();
@@ -343,10 +350,10 @@ function nonctrlKeyPressHandler(event)
 	// RETURN OR ENTER (event.DOM_VK_ENTER DOM_VK_RETURN)
 	if(event.keyCode == 13)
 	{
-		var cssr = sel.getEditableRange();
+		cssr = sel.getEditableRange();
 		if(!cssr)
 		{
-			return;
+			return false;
 		}
 
 		if(!cssr.collapsed)
@@ -367,10 +374,10 @@ function nonctrlKeyPressHandler(event)
 	// POST04: for non-pre, may change to mean switch to next editable area
 	if(event.keyCode == event.DOM_VK_TAB)
 	{
-		var cssr = sel.getEditableRange();
+		cssr = sel.getEditableRange();
 		if(!cssr)
 		{
-			return;
+			return false;
 		}
 
 		// if there's a selection then delete it
@@ -380,7 +387,7 @@ function nonctrlKeyPressHandler(event)
 		}
 
 		// seems to mess up the current position!
-		var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
+		ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
 		if(ip.cssWhitespace == "pre")
 			ip.insertCharacter(CHARCODE_TAB);
 		else
@@ -394,10 +401,10 @@ function nonctrlKeyPressHandler(event)
 	// ALPHANUM
 	if(event.charCode)
 	{
-		var cssr = sel.getEditableRange();
+		cssr = sel.getEditableRange();
 		if(!cssr)
 		{
-			return;
+			return false;
 		}
 
 		// if there's a selection then delete it
@@ -408,7 +415,7 @@ function nonctrlKeyPressHandler(event)
 		}
 
 		// seems to mess up the current position!
-		var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
+		ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
 
 		ip.insertCharacter(event.charCode);		
 

@@ -386,7 +386,7 @@ Selection.prototype.copyKeyDown = function() {
 	//remove all children in the placeholder span
 	iframe._placeholder.removeAllChildren();
 	//get the clipboard object
-	var clipboard = mozilla.getClipboard();
+	clipboard = mozilla.getClipboard();
 	
 	//insert the text from the internal clipboard in the placeholder span
 	iframe._placeholder.appendChild(document.createTextNode(clipboard._clipboardText));

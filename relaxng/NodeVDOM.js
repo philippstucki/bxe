@@ -1,4 +1,4 @@
-NodeVDOM = function(node) {
+function NodeVDOM (node) {
 	this.node = node;
 	this.minOccurs = null;
 	this.maxOccurs = null;
@@ -31,7 +31,7 @@ NodeVDOM.prototype.parseChildren = function() {};
 NodeVDOM.prototype.appendChild = function(newElement) {
 	
 	newElement.parentNode = this;
-	if (this.firstChild == null) {
+	if (typeof this.firstChild == "undefined" || this.firstChild == null) {
 		this.firstChild =  newElement;
 		this.lastChild =  newElement;
 		newElement.nextSibling = null;

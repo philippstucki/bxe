@@ -10,7 +10,7 @@ Document.prototype.validateDocument = function() {
 	}
 	
 	//check root element
-	vdomCurrentChild = this.documentElement.vdom.firstChild;
+	//var vdomCurrentChild = this.documentElement.vdom.firstChild;
 	return this.documentElement._isNodeValid(true);
 }
 

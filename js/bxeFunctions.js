@@ -27,7 +27,7 @@ function bxe_toggleTagMode(e) {
 	try {
 	var editableArea = e.target;
 	if (editableArea._SourceMode) {
-			var e = new eDOMEvent();
+			e = new eDOMEvent();
 			e.setTarget(editableArea);
 			e.initEvent("toggleSourceMode");
 	}
@@ -59,7 +59,8 @@ function bxe_toggleTagMode(e) {
 				node.removeAttribute("_edom_tagnameopen");
 			}
 			node.removeAttribute("_edom_tagnameclose");
-		} while(node =   walker.nextNode() )
+			node =   walker.nextNode() 
+		} while(node)
 		//var x = document.styleSheets[0];
 		//x.deleteRule(x.cssRules.length-1);
 		//x.deleteRule(x.cssRules.length-1);
@@ -76,12 +77,12 @@ function bxe_toggleNormalMode (e) {
 	try {
 	var editableArea = e.target;
 	if (editableArea._SourceMode) {
-			var e = new eDOMEvent();
+			e = new eDOMEvent();
 			e.setTarget(editableArea);
 			e.initEvent("toggleSourceMode");
 	}
 	if (editableArea._TagMode) {
-			var e = new eDOMEvent();
+			e = new eDOMEvent();
 			e.setTarget(editableArea);
 			e.initEvent("toggleTagMode");
 	}
@@ -131,7 +132,8 @@ function createTagNameAttributes(startNode) {
 				node.setAttribute("_edom_tagnameclose", xmlstring[1]);
 			}
 			node.XMLNode.setNode(xmlstring[2]);
-	} while(node = walker.nextNode() )
+			node = walker.nextNode()
+	} while( node)
 }
 
 function bxe_toggleSourceMode(e) {
@@ -139,7 +141,7 @@ function bxe_toggleSourceMode(e) {
 	var editableArea = e.target;
 
 	if (editableArea._TagMode) {
-			var e = new eDOMEvent();
+			e = new eDOMEvent();
 			e.setTarget(editableArea);
 			e.initEvent("toggleTagMode");
 	}
@@ -195,7 +197,7 @@ function bxe_toggleTextClass(e) {
 	var sel = window.getSelection();
 	
 	sel.toggleTextClass(e.additionalInfo.localName);
-	var sel = window.getSelection();
+	sel = window.getSelection();
 	var _node = sel.anchorNode.parentNode;
 	while (!(_node.XMLNode && _node.XMLNode._xmlnode)) {
 		_node = _node.parentNode;
@@ -240,8 +242,10 @@ function bxe_getAllEditableAreas() {
 	var result = document.evaluate("/html/body//*[@bxe_xpath]", document.documentElement,nsResolver, 0, null);
 	var node = null;
 	var nodes = new Array();
-	while (node = result.iterateNext()) {
+	node = result.iterateNext()
+	while (node) {
 		nodes.push(node);
+		node = result.iterateNext()
 	}
 	return nodes;
 }
@@ -378,6 +382,7 @@ function MouseClickEvent(e) {
 	if(target.userModifiable) {
 		return bxe_updateXPath();
 	}
+	return true;
 }
 
 function bxe_updateXPath() {
@@ -414,7 +419,7 @@ function bxe_ContextMenuEvent(e) {
 	var cssr = sel.getEditableRange();
 	if(!cssr)
 	{
-		return;
+		return true;
 	}
 	var no ;
 	if (cssr.startContainer.nodeType == Node.TEXT_NODE) {

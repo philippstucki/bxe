@@ -122,17 +122,17 @@ function PTB()
 	// add a row of buttons and selectors
 	var tbTR = document.createElement("tr");
 	tbTB.appendChild(tbTR);
-	for(var i=0; i<selectors.length; i++)
+	for(i=0; i<selectors.length; i++)
 	{
 		tbTR.appendChild(createSelector(selectors[i]));
 	}
-	for(var i=1; i<buttons.length; i++)
+	for(i=1; i<buttons.length; i++)
 	{
 		if(buttons[i][3])
 			tbTR.appendChild(createButton(i));
 	}
 	var possButtons = document.getElementsByTagName("div");
-	for(var i=0; i<possButtons.length; i++)
+	for(i=0; i<possButtons.length; i++)
 	{
 		if(possButtons[i].className == "button")
 		{	

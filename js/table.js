@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: table.js,v 1.1 2003/08/18 07:52:23 chregu Exp $
+// $Id: table.js,v 1.2 2003/08/21 14:17:48 chregu Exp $
 /**
  * @file
  * Implements the table plugin
@@ -144,7 +144,7 @@ function BX_table_insert_col()
         }
     }
     //for each row, add a entry
-    for (var i = 0; i < tbody.childNodes.length; i++)
+    for (i = 0; i < tbody.childNodes.length; i++)
     {
         if (tbody.childNodes[i].nodeName.toLowerCase() == "row")
         {

@@ -10,7 +10,7 @@ XMLDocument.prototype.insertIntoHTMLDocument = function() {
 	
 	
 	var nodes = bxe_getAllEditableAreas();
-	
+	var bxe_areaHolder;
 	for (var i = 0; i < nodes.length; i++) {
 
 		nodes[i].removeAllChildren();
@@ -18,16 +18,17 @@ XMLDocument.prototype.insertIntoHTMLDocument = function() {
 		var xmlresult = this.evaluate(xpath, this.documentElement, nsResolver, 0, null);
 
 		if (document.defaultView.getComputedStyle(nodes[i], null).getPropertyValue("display") == "inline") { 
-			var bxe_areaHolder = document.createElement("span");
+			bxe_areaHolder = document.createElement("span");
 			nodes[i].display = "inline";
 		} else {
-			var bxe_areaHolder = document.createElement("div");
+			bxe_areaHolder = document.createElement("div");
 			nodes[i].display = "block";
 		}
 		bxe_areaHolder.setAttribute("name","bxe_areaHolder");
 		nodes[i].parentNode.insertBefore(bxe_areaHolder,nodes[i]);
 		bxe_areaHolder.appendChild(nodes[i]);
-		while (xmlnode = xmlresult.iterateNext()) {
+		xmlnode = xmlresult.iterateNext()
+		while (xmlnode ) {
 			if (xmlnode.nodeType == 1) {
 				nodes[i].XMLNode.setNode( xmlnode);
 				xmlnode.insertIntoHTMLDocument(nodes[i],true);
@@ -39,6 +40,7 @@ XMLDocument.prototype.insertIntoHTMLDocument = function() {
 			bxe_alignAreaNode(menu,nodes[i]);
 			nodes[i].AreaInfo = menu;
 			menu.editableArea = nodes[i];
+			xmlnode = xmlresult.iterateNext()
 		}
 		
 	}
@@ -88,7 +90,7 @@ XMLDocument.prototype.transformToXPathMode = function(xslfile) {
 		catch (e) {
 			alert ( e + "\n\n xsltransformdoc.xsldoc is : " + xsltransformdoc.xsldoc);
 		}
-		var processor = new XSLTProcessor();
+		processor = new XSLTProcessor();
 		try {
 			processor.importStylesheet(newDocument);
 		} catch(e) {

@@ -18,6 +18,7 @@ DocumentVDOM.prototype.parseSchema = function() {
 		return false;
 	}
 	this.onparse(this);
+	return true;
 } 
 /* 
 *   Starts the loading of the schema with a simple http-get

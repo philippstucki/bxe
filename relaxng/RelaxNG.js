@@ -13,7 +13,7 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 	}
 	return true;
 }
-
+var rng_nsResolver;
 DocumentVDOM.prototype.parseStart = function(node) {
 	var startChildren = node.childNodes;
 	rng_nsResolver = new bxe_RelaxNG_nsResolver(this.xmldoc.documentElement);
@@ -99,11 +99,14 @@ Node.prototype.isRelaxNGElement = function(nodename) {
 	
 
 NodeVDOM.prototype.parseChildren = function(node) {
+	var childNodes;
 	if (node) {
-		var childNodes = node.childNodes;
+		childNodes = node.childNodes;
 	} else {
-		var childNodes = this.node.childNodes;
+		childNodes = this.node.childNodes;
 	}
+	var newChoice;
+	var newOneOrMore;
 	for (var i = 0; i < childNodes.length; i++) {
 		if (childNodes[i].isRelaxNGElement("element")) {
 			var newElement = new ElementVDOM(childNodes[i]);
@@ -126,7 +129,7 @@ NodeVDOM.prototype.parseChildren = function(node) {
 		} 
 
 		else if (childNodes[i].isRelaxNGElement("oneOrMore")) {
-			var newOneOrMore = new OneOrMoreVDOM(childNodes[i]);
+			newOneOrMore = new OneOrMoreVDOM(childNodes[i]);
 			this.appendChild(newOneOrMore)
 			newOneOrMore.parseChildren(childNodes[i]);
 			
@@ -135,7 +138,7 @@ NodeVDOM.prototype.parseChildren = function(node) {
 			this.appendChild(new TextVDOM(childNodes[i]));
 
 		} else if (childNodes[i].isRelaxNGElement("zeroOrMore")) {
-			var newOneOrMore = new OneOrMoreVDOM(childNodes[i]);
+			newOneOrMore = new OneOrMoreVDOM(childNodes[i]);
 			this.appendChild(newOneOrMore);
 			newOneOrMore.appendChild(new EmptyVDOM());
 			newOneOrMore.parseChildren(childNodes[i]);
@@ -145,13 +148,13 @@ NodeVDOM.prototype.parseChildren = function(node) {
 			
 			
 		} else if (childNodes[i].isRelaxNGElement("optional")) {
-			var newChoice = new ChoiceVDOM(childNodes[i]);
+			newChoice = new ChoiceVDOM(childNodes[i]);
 			this.appendChild(newChoice);
 			newChoice.appendChild(new EmptyVDOM());
 			newChoice.parseChildren();
 		}
 		else if (childNodes[i].isRelaxNGElement("choice")) {
-			var newChoice = new ChoiceVDOM(childNodes[i]);
+			newChoice = new ChoiceVDOM(childNodes[i]);
 			this.appendChild(newChoice);
 			newChoice.parseChildren();
 		}
@@ -173,6 +176,7 @@ ChoiceVDOM.prototype.isValid = function(ctxt) {
 		}
 		child= child.nextSibling;
 	}
+	return false;
 }
 
 function ChoiceVDOM(node) {
@@ -314,7 +318,7 @@ NodeVDOM.prototype.getStructure = function(level) {
 	for (var i = 0; i <= level; i++) {
 		indent += "  ";
 	}
-	for (var i in this.attributes) {
+	for ( i in this.attributes) {
 		out += indent + "@" + i + " " + this.attributes[i].dataType + "\n";
 		
 	}

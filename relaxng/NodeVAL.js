@@ -69,7 +69,7 @@ Node.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 
 function ContextVDOM (node,vdom) {
 	this.node = node.firstChild;
-    if (vdom && vdom.firstChild) {
+    if (typeof vdom.firstChild != "undefined") {
     	this.vdom = vdom.firstChild;
     } else {
         this.vdom = null;
@@ -141,7 +141,7 @@ ContextVDOM.prototype.isValid = function() {
 
 Node.prototype.__defineGetter__(
 	"vdom", function () {
-		if (!this._vdom) {
+		if (typeof this._vdom == "undefined" || !this._vdom) {
 			// if documentElement
 			if (this.parentNode.nodeType == 9) {
 				if (this.nodeName == this.ownerDocument.vdom.firstChild.nodeName) {

@@ -106,7 +106,7 @@ function toggleSourceMode(e) {
 	var editableArea = e.target;
 	
 	if (editableArea._TagMode) {
-			var e = new eDOMEvent();
+			e = new eDOMEvent();
 			e.setTarget(editableArea);
 			e.initEvent("toggleTagMode");
 	}
@@ -134,18 +134,20 @@ function toggleTagMode(e) {
 	var editableArea = e.target;
 	
 	if (editableArea._SourceMode) {
-			var e = new eDOMEvent();
+			e = new eDOMEvent();
 			e.setTarget(editableArea);
 			e.initEvent("toggleSourceMode");
 	}
-
+	var x;
+	var node;
+	var walker
 	if (!editableArea._TagMode) {
-		var walker = document.createTreeWalker(
+		walker = document.createTreeWalker(
 			editableArea, NodeFilter.SHOW_ELEMENT,
 			null, 
 			editableArea.ownerDocument);
-		var node = null;
-		while(node =   walker.nextNode() ) {
+		node =   walker.nextNode();
+		while(node  ) {
 			var _tagnameOpen = node.nodeName;
 			var _tagnameClose = node.nodeName;
 			for( var i =0; i < node.attributes.length; i++) {
@@ -160,9 +162,9 @@ function toggleTagMode(e) {
 				node.setAttribute("_tagnameopen",_tagnameOpen);
 				node.setAttribute("_tagnameclose",_tagnameClose);
 			}
-			
+			node = =   walker.nextNode();
 		}
-		var x = document.styleSheets[0];
+		x = document.styleSheets[0];
 		x.insertRule('#' + editableArea.id + ' *:before {content: "<" attr(_tagnameOpen)  ">"; margin-left: 2px; margin-right: 2px; font: 9px Geneva, Verdana, sans-serif; padding: 0px 1px 0 px 1px; border: 1px solid black; background: #888;  color: #FFF;}',x.cssRules.length);
 		x.insertRule('#' + editableArea.id + ' *:after {content: "</" attr(_tagnameClose)  ">"; margin-left: 2px; margin-right: 2px; font: 9px Geneva, Verdana, sans-serif; padding: 0px 1px 0 px 1px; border: 1px solid black; background: #888;  color: #FFF;}',x.cssRules.length);
 		document.addEventListener("DOMNodeInserted",addTagnames,false);
@@ -170,20 +172,21 @@ function toggleTagMode(e) {
 		document.addEventListener("DOMAttrModified",addTagnames,false);
 		editableArea._TagMode = true;
 	} else {
-		var walker = document.createTreeWalker(
+		walker = document.createTreeWalker(
 			editableArea, NodeFilter.SHOW_ELEMENT,
 			null, 
 			editableArea.ownerDocument);
-		var node = null;
+		node = null;
 		document.removeEventListener("DOMNodeInserted",addTagnames,false);
 		document.removeEventListener("DOMAttrModified",addTagnames,false);
 		document.removeEventListener("DOMNodeRemoved",addTagnames,false);
-		
-		while(node =   walker.nextNode() ) {
+		node =   walker.nextNode();
+		while(node ) {
 			node.removeAttribute("_tagnameopen");
 			node.removeAttribute("_tagnameclose");
+			node = walker.nextNode()
 		}
-		var x = document.styleSheets[0];
+		x = document.styleSheets[0];
 		x.deleteRule(x.cssRules.length-1);
 		x.deleteRule(x.cssRules.length-1);
 

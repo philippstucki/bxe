@@ -82,7 +82,7 @@ bxeConfig.prototype.translateUrl = function (node)
 bxeConfig.prototype.getContent= function (xpath)
 {
     var result = this.doc.evaluate(xpath, this.doc, null, 0, null);
-    node = result.iterateNext();
+    var node = result.iterateNext();
     return this.translateUrl(node);
 }
 
@@ -94,6 +94,8 @@ bxeConfig.prototype.parseUrlParams = function () {
     for (var param in params)
     {
         var p = params[param].split("=");
-        this.urlParams[p[0]] = p[1];
+		if (typeof p[1] != "undefined") {
+			this.urlParams[p[0]] = p[1];
+		} 
     }
 }
