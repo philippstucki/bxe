@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLNode.js,v 1.45 2004/02/12 11:36:48 chregu Exp $
+// $Id: bxeXMLNode.js,v 1.46 2004/03/04 16:48:44 chregu Exp $
 
 function bxe_XMLNodeInit (nodein, localName, nodeType, autocreate) {
 	if (nodein.nodeType == 1 || typeof nodein == "string") {
@@ -67,10 +67,12 @@ XMLNode.prototype.init = function ( nodein, localName, nodeType, autocreate) {
 			if (this._node.nodeName.toLowerCase() != "span") {
 				if  (this.namespaceURI == XHTMLNS ) {
 					this.localName = this._node.nodeName.toLowerCase();
-				} else if (this.namespaceURI =="") {
+				} /*
+				removed, otherwise empty namespace nodes get the XHTMLNS namespace...
+				else if (this.namespaceURI == "") {
 						this.localName = this._node.nodeName.toLowerCase();
 						this.namespaceURI = XHTMLNS;
-				}
+				}*/
 			} else {
 				var classes = this._node.getClasses();
 				if (classes.length > 0) {
