@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: mozCE.js,v 1.18 2004/01/12 17:21:45 chregu Exp $
+// $Id: mozCE.js,v 1.19 2004/01/13 05:03:24 chregu Exp $
 
 /* 
  * mozCE V0.5
@@ -534,11 +534,14 @@ Selection.prototype.pasteKeyDown = function() {
 	}
 	// delete value of hidden form
 	iframe._input.value = "";
-	
 	// delete childnodes of placeholder
 	iframe._placeholder.removeAllChildren();
 	//store the range for later retrieval
+	
+	
 	var cssr = this.getEditableRange();
+	
+	
 	iframe._cssr = cssr;
 	iframe._input.focus();
 }
@@ -564,14 +567,28 @@ Selection.prototype.pasteKeyUp = function () {
 		var promptText = "Internal and System-Clipboard are differing: \n\n";
 		promptText += "Internal : '" + clipboard._clipboardText + "'\n\n";
 		promptText += "System   : '" + rng.toString() +"'\n\n";
-		promptText += "If you want to use the Internal, click OK, otherwise Cancel\n";
+		promptText += "If you want to use the Internal, click OK, otherwise (using System) Cancel\n";
 			
 		if(!confirm( promptText)) {
 			clipboard.setData(rng);
 		}
 	}
 	//restore the selection
-	this.selectEditableRange(iframe._cssr);
+	var cssr = iframe._cssr;
+	var _eol = cssr.firstInsertionPoint.endOfLine;
+	this.selectEditableRange(cssr);
+	
+	if (_eol && !cssr.firstInsertionPoint.endOfLine) {
+		ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
+		
+		if(ip != InsertionPoint.SAME_LINE)
+		ip.backOne();
+		cssr.selectInsertionPoint(ip);
+		this.removeAllRanges();
+		rng = cssr.cloneRange();
+		this.addRange(rng);
+	}
+	
 	// paste the content of the internal clipboard
 	this.paste();
 }
@@ -652,7 +669,7 @@ Selection.prototype.selectEditableRange = function(cssr)
 {
 	if (cssr) {
 	cssr.__restoreTextBoundaries(); // POST04: required cause of line manip that effects range but makes rest more complex
-	var rng = document.createRange();
+	//var rng = document.createRange();
 	this.removeAllRanges();
 	this.addRange(cssr.cloneRange());
 	}	
