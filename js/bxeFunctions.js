@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.158 2004/04/14 13:17:48 chregu Exp $
+// $Id$
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -1658,7 +1658,7 @@ function bxe_deregisterKeyHandlers() {
 	document.removeEventListener("keyup", keyUpHandler, true);
 }
 
-function bxe_insertContent(content,replaceNode, options) {
+function bxe_insertContent(content, replaceNode, options) {
 	window.setTimeout(function() {bxe_insertContent_async(content,replaceNode,options);},1);
 }
 
