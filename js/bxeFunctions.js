@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.117 2003/12/01 09:42:41 chregu Exp $
+// $Id: bxeFunctions.js,v 1.118 2003/12/01 09:57:42 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -390,6 +390,7 @@ function bxe_toggleTextClass(e) {
 	sel = window.getSelection();
 	var _node = sel.anchorNode.parentNode;
 	_node.updateXMLNode();
+	
 	debug("isValid?" + _node.parentNode.XMLNode.isNodeValid());
 
 }
@@ -1061,13 +1062,7 @@ function bxe_OrderedList() {
 
 function bxe_InsertObject() {
 	var sel = window.getSelection();
-	/*if (!bxe_checkIsAllowedChild(XHTMLNS,"object",sel)) {
-		return false;
-	}*/
 	var object = documentCreateXHTMLElement("object");
-	/*var cssr = sel.getEditableRange();
-	var exCon = cssr.extractContents();
-	object.appendChild(exCon);*/
 	sel.insertNode(object);
 }
 
@@ -1106,7 +1101,7 @@ function bxe_checkForSourceMode(sel) {
 	return false;
 }
 
-function bxe_checkIsAllowedChild (namespaceURI, localName, sel, noAlert) {
+function bxe_checkIsAllowedChild(namespaceURI, localName, sel, noAlert) {
 	if (!sel) {
 		sel = window.getSelection();
 	}

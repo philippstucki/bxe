@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: eDOMXHTML.js,v 1.8 2003/11/18 21:41:10 chregu Exp $
+// $Id: eDOMXHTML.js,v 1.9 2003/12/01 09:57:42 chregu Exp $
 
 /**********************************************************************************
  * eDOMXHTML.js V0.5
@@ -541,7 +541,12 @@ Range.prototype.styleText = function(styleName, styleValue, isClass)
 				// one text node within a non span element - put this text node within a span
 				else
 				{
-					var styleHolder = documentCreateXHTMLElement('span');
+					//only works reliable for xhtml stuff right now..
+					if (isClass && styleName) {
+						var styleHolder = documentCreateXHTMLElement(styleName);
+					} else {
+						var styleHolder = documentCreateXHTMLElement("span");
+					}
 					textContainer.insertBefore(styleHolder, textNodes[i]);
 					styleHolder.appendChild(textNodes[i]);
 					eDOMEventCall("NodeInserted",styleHolder);
