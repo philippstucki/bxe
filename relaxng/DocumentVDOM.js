@@ -59,14 +59,14 @@ DocumentVDOM.prototype.loadSchema = function(file, callback) {
 	this.xmldoc.DocumentVDOM = this;
 	this.filename = file;
 
-	if (file.substring(0,1) == "/") {
+	if (file.substring(0,1) == "/" || file.indexOf("://") > 0) {
 		this.directory = bxe_getDirPart(file);
 	} else {
 		var dir = bxe_getDirPart(window.location.toString());
 		this.directory =  bxe_getDirPart(dir + file);
 	}
 	// load schema file
-	debug("blabla");
+	
 	try {
 		this.xmldoc.load(file);
 	} catch (e) {

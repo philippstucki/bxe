@@ -80,6 +80,7 @@ mozileTransportDriver_http.prototype.loadCallback = function (e) {
 mozileTransportDriver_http.prototype.save = function(filename, content, td)
 {
 	this.p = new XMLHttpRequest();
+	this.p.overrideMimeType("text/xml");
 	this.p.onload = this.saveCallback;
 	this.p.td = td;
 	this.p.open("POST",filename );

@@ -173,6 +173,7 @@ function DavClient() {
        See http://asg.web.cmu.edu/rfc/rfc2518.html#sec-8.6
     */
     this.request = new XMLHttpRequest();
+	this.request.overrideMimeType("text/xml");
 }
 
 /* Define read-only responseObjects attribute that contains an object tree of
