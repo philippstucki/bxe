@@ -503,7 +503,7 @@ function nonctrlKeyPressHandler(event)
 				sel.deleteSelection(backspace);
 			} else {
 				sel.deleteSelection(backspace);
-				sel.anchorNode.updateXMLNode();
+				sel.anchorNode.parentNode.updateXMLNode();
 			}
 		}
 
