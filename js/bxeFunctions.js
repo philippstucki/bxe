@@ -2,29 +2,27 @@ const BXENS = "http://bitfluxeditor.org/namespace";
 
 function __bxeSave(e) {
 	
-	var cssr = window.getSelection().getEditableRange();
+	/*var cssr = window.getSelection().getEditableRange();
 	if(!cssr)
 	{
 		alert("*mozileModify.js:mozileSave: this default implementation only works if the current selection is in an editable area");
 		return;
-	}
+	}*/
 
 	var areaNodes = bxe_getAllEditableAreas();
 	for (var i = 0; i < areaNodes.length; i++) {
 		
 		var xmldoc = areaNodes[i].convertToXMLDocFrag();
+		//xmldoc = areaNodes[i].XMLNode.insertIntoXMLDocument(xmldoc);
 	}
 
-alert(xmldoc.ownerDocument.saveXML(xmldoc));
-	return ;
 	var td = new BXE_TransportDriver_webdav();
 	function callback (e) {
 		this.td.Docu.xmldoc =  this.responseXML;
 		this.td.Docu.xmldoc.insertIntoHTMLDocument()
 	}
 	td.Docu = this;
-	
-	td.save("webdavtest.xml",null,xmldoc.ownerDocument.saveXML(xmldoc));
+	td.save(bxe_xmlfile,null,xmldoc.ownerDocument.saveXML(xmldoc.ownerDocument));
 }
 
 

@@ -44,7 +44,7 @@
                 <lenya:asset src="briefvorlage.doc" mime-type="application/msword">
                         <lenya:asset-title>Briefvorlage</lenya:asset-title>
                 </lenya:asset>
-                <h2>Tables</h2>
+                <h2>Tablessss</h2>
                 <table class="basic">
                         <caption>Table Title</caption>
                         <col/>

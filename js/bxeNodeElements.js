@@ -131,7 +131,7 @@ Node.prototype.convertToXMLNode = function(xmldoc) {
 		if (this.hasAttributes()) {
 			var attribs = this.attributes;
 			for (var i = 0; i < attribs.length; i++) {
-				if (!(this.namespaceURI != XHTMLNS && attribs[i].localName == "class")) {
+				if (!(this.XMLNode.namespaceURI != XHTMLNS && attribs[i].localName == "class")) {
 					if (attribs[i].localName.substr(0,5) != "_edom" && attribs[i].localName.substr(0,5) != "__bxe") {
 						newElement.setAttributeNode(attribs[i]);
 					}
@@ -219,6 +219,15 @@ XMLNode.prototype.insertBefore = function (nodeOne,nodeTwo) {
 	return this._xmlnode.insertBefore(nodeOne,nodeTwo);
 }
 
+/*
+XMLNode.prototype.insertIntoXMLDocument = function (node) {
+	alert (node.ownerDocument.saveXML(node)	);
+
+	this._xmlnode.removeAllChildren();
+
+	var newnode = this._xmlnode.ownerDocument.importNode(node,true);
+    return this._xmlnode.appendChild(newnode);
+}*/
 XMLNode.prototype.__defineGetter__( 
 	"parentNode",
 	function()

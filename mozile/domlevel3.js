@@ -49,11 +49,34 @@ function documentSaveXML(snode)
 	//create a new XMLSerializer
 	var objXMLSerializer = new XMLSerializer();
 	//get the XML string
+	//snode.fixNamespaces();
 	var strXML = objXMLSerializer.serializeToString(snode);
-    
+    //strXML= strXML.replace(/(<\/*)xhtml:/g,"$1");
+	//strXML= strXML.replace(/xmlns:xhtml/g,"xmlns");
 	//return the XML string
 	return strXML;
 }
+
+Node.prototype.fixNamespaces = function () {
+	var walker = this.ownerDocument.createTreeWalker(
+		this,
+		NodeFilter.SHOW_ELEMENT,
+		{
+			acceptNode : function(node) {
+				return NodeFilter.FILTER_ACCEPT;
+			}
+		}
+		, true);
+	var nsResolver = new bxe_nsResolver(this.ownerDocument.documentElement);
+	node = this;
+	do {
+		//dump(node.localName + " " + nsResolver.lookupNamespacePrefix(node.namespaceURI) +"\n");
+		node.prefix = nsResolver.lookupNamespacePrefix(node.namespaceURI);
+		
+	} while(node = walker.nextNode() )
+	
+}
+
 
 function documentSaveChildrenXML(snode, withParentNS) {
 

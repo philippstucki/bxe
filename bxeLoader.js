@@ -38,7 +38,9 @@
  *   - load IE toolbar
  */
  
- const BXE_VERSION = "0.1alpha"
+var bxe_xmlfile = "test.xml";
+
+const BXE_VERSION = "0.1alpha"
 mozile_js_files = new Array();
 mozile_js_files.push("mozile/mozWrappers.js");
 mozile_js_files.push("mozile/eDOM.js");
@@ -62,7 +64,7 @@ mozile_js_files.push("td/webdav.js");
 mozile_js_files.push("bxeFunctions.js");
 
 var mozile_root_dir = "./";
-var bxe_xmlfile = "test.xml";
+
 // Detect Gecko but exclude Safari (for now); for now, only support XHTML
 
 var bxe_about_box = null;
