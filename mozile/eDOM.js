@@ -1558,10 +1558,22 @@ InsertionPoint.prototype.insertNode = function(node)
 		this.__insertTextNode(node);
 		return;
 	}
-
+	if(node.nodeType == 11) // Node.DOCUMENT_FRAGMENT)
+	{
+		var i = node.childNodes.length;
+		var child = node.firstChild;
+		while(child) { 
+			var oldChild = child; 
+			child = child.nextSibling; 
+			this.insertNode(oldChild); 
+		} 
+	}
+	
 	// assume element node - if not then exception
 	if(node.nodeType != Node.ELEMENT_NODE)
 		return; // POST05: exception
+
+
 
 	// empty element
 	if(node.contentType == Element.EMPTY_CONTENTTYPE)
