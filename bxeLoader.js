@@ -58,6 +58,7 @@ var bxe_format_list = null;
 var bxe_toolbar = null;
 var bxe_menubar = null;
 var bxe_context_menu = null;
+var bxe_widgets_drawn = false;
 var bxe_plugins = new Array();
 
 var bxe_delayedUpdate = false;

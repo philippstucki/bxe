@@ -56,17 +56,25 @@ XMLDocument.prototype.insertIntoHTMLDocument = function(htmlnode) {
 		
 		//FIXME: if node does not exist in XML document, make it editable anyway...
 		if (xmlnode) {
-			if (document.defaultView.getComputedStyle(nodes[i], null).getPropertyValue("display") == "inline") { 
-				bxe_areaHolder = document.createElement("span");
-				nodes[i].display = "inline";
+			if(nodes[i].parentNode && nodes[i].parentNode.getAttribute("name") == "bxe_areaHolder") {
+				bxe_areaHolder = nodes[i].parentNode ;
+				var menu = nodes[i].AreaInfo;
 			} else {
-				bxe_areaHolder = document.createElement("div");
-				nodes[i].display = "block";
+				if (document.defaultView.getComputedStyle(nodes[i], null).getPropertyValue("display") == "inline") { 
+					bxe_areaHolder = document.createElement("span");
+					nodes[i].display = "inline";
+				} else {
+					bxe_areaHolder = document.createElement("div");
+					nodes[i].display = "block";
+				}
+				bxe_areaHolder.setAttribute("name","bxe_areaHolder");
+				nodes[i].parentNode.insertBefore(bxe_areaHolder,nodes[i]);
+				bxe_areaHolder.appendChild(nodes[i]);
+				var menu = new Widget_AreaInfo(nodes[i]);
+				bxe_alignAreaNode(menu,nodes[i]);
+				nodes[i].AreaInfo = menu;
 			}
-			bxe_areaHolder.setAttribute("name","bxe_areaHolder");
-			nodes[i].parentNode.insertBefore(bxe_areaHolder,nodes[i]);
-			bxe_areaHolder.appendChild(nodes[i]);
-			
+			menu.editableArea = nodes[i];
 			var xmlresults = new Array;
 			while (xmlnode) {
 				xmlresults.push(xmlnode);
@@ -79,10 +87,6 @@ XMLDocument.prototype.insertIntoHTMLDocument = function(htmlnode) {
 				}
 				
 				xmlresults[j].XMLNode.xmlBridge = xmlresults[j]; 
-				var menu = new Widget_AreaInfo(nodes[i]);
-				bxe_alignAreaNode(menu,nodes[i]);
-				nodes[i].AreaInfo = menu;
-				menu.editableArea = nodes[i];
 				
 				if (xmlresults[j].nodeType == 1) {
 					var fc = xmlresults[j].XMLNode.insertIntoHTMLDocument(nodes[i],true);
@@ -102,8 +106,11 @@ XMLDocument.prototype.insertIntoHTMLDocument = function(htmlnode) {
 		}
 		
 	}
-	bxe_draw_widgets();
-	bxe_start_plugins();
+	if (!bxe_widgets_drawn) {
+		bxe_draw_widgets();
+		bxe_start_plugins();
+		bxe_widgets_drawn = true;
+	}
 
 }
 
