@@ -35,40 +35,39 @@ bxeConfig.parseConfig = function  (e) {
 bxeConfig.prototype.getButtons = function() {
 	
 	if (!this.buttons) {
-	this.buttons = new Array();
-	var node;
-	var tmpArray = new Array();
-	
-	// get dimensions
-	var result = this.doc.evaluate("/config/buttons/dimension", this.doc, null, 0, null);
-	node = result.iterateNext();
-	if (!node) {
-		alert("no button definitions found in config.xml");
-	}
-	tmpArray.push(node.getAttribute("width"));
-	tmpArray.push(node.getAttribute("height"));
-	tmpArray.push(node.getAttribute("buttonwidth"));
-	tmpArray.push(node.getAttribute("buttonheight"));
-	
-	this.buttons["Dimension"] = tmpArray;
-	
-	var result = this.doc.evaluate("/config/buttons/button", this.doc, null, 0, null);
-    
-    var i = 0;
-	var ns;
-    while (node = result.iterateNext())
-    {
-		tmpArray = new Array();
-		tmpArray.push(node.getAttribute("col"));
-		tmpArray.push(node.getAttribute("row"));
-		tmpArray.push(node.getAttribute("action"));
-		ns = node.getAttribute("ns");
-		if (ns) {
-			tmpArray.push(ns);
+		this.buttons = new Array();
+		var node;
+		var tmpArray = new Array();
+		
+		// get dimensions
+		var result = this.doc.evaluate("/config/buttons/dimension", this.doc, null, 0, null);
+		node = result.iterateNext();
+		if (!node) {
+			alert("no button definitions found in config.xml");
 		}
-		this.buttons[node.getAttribute("name")] = tmpArray;
-        dump (node.getAttribute("name") + "...\n");
-    }
+		tmpArray.push(node.getAttribute("width"));
+		tmpArray.push(node.getAttribute("height"));
+		tmpArray.push(node.getAttribute("buttonwidth"));
+		tmpArray.push(node.getAttribute("buttonheight"));
+		
+		this.buttons["Dimension"] = tmpArray;
+		
+		var result = this.doc.evaluate("/config/buttons/button", this.doc, null, 0, null);
+		
+		var i = 0;
+		var ns;
+		while (node = result.iterateNext())
+		{
+			tmpArray = new Array();
+			tmpArray.push(node.getAttribute("col"));
+			tmpArray.push(node.getAttribute("row"));
+			tmpArray.push(node.getAttribute("action"));
+			ns = node.getAttribute("ns");
+			if (ns) {
+				tmpArray.push(ns);
+			}
+			this.buttons[node.getAttribute("name")] = tmpArray;
+		}
 	}
 	
 	return this.buttons;
