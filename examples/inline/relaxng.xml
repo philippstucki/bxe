@@ -47,15 +47,20 @@
                     <element name="main">
                         <element name="section">
                             <oneOrMore>
-                                <element name="para">
-                                    <zeroOrMore>
-                                        <choice>
-                                            <text/>
-                                            <ref name="Inline.class"/>
-                                        </choice>
-                                    </zeroOrMore>
-                                </element>
+                                <choice>
+                                    <ref name="title"/>
+                                    <element name="para">
+                                        <oneOrMore>
+                                            <choice>
+                                                <text/>
+                                                <ref name="Inline.class"/>
+                                            </choice>
+                                        </oneOrMore>
+                                    </element>
+                                </choice>
                             </oneOrMore>
+                         
+
                         </element>
                     </element>
                     <ref name="title"/>
@@ -77,6 +82,8 @@
                     <element name="en">
                         <text/>
                     </element>
+
+                    <ref name="Inline.class"/>
                 </choice>
             </oneOrMore>
         </element>
@@ -95,7 +102,7 @@
             <ref name="ulink"/>
             <ref name="subscript"/>
             <ref name="superscript"/>
-            
+
         </choice>
     </define>
 
@@ -131,7 +138,7 @@
             <ref name="Inline.model"/>
         </element>
     </define>
-    
+
     <define name="subscript">
         <element name="subscript">
             <ref name="Inline.model"/>
