@@ -334,9 +334,7 @@ function bxe_draw_widgets() {
 	
 	var toolbar = new Widget_ToolBar();
 	bxe_format_list = new Widget_MenuList("m",function(e) {eDOMEventCall("changeLinesContainer",document,this.value)});
-	bxe_format_list.appendItem("H1","h1");
-	bxe_format_list.appendItem("H2","h2");
-	bxe_format_list.appendItem("H3","h3");
+
 	toolbar.addItem(bxe_format_list);
 	
 	
