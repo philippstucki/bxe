@@ -22,6 +22,7 @@ bxeConfig.parseConfig = function  (e) {
 	
 	bxe_config.xmlfile = bxe_config.getContent("/config/files/input/file[@name='BX_xmlfile']");
 	bxe_config.xslfile = bxe_config.getContent("/config/files/input/file[@name='BX_xslfile']");
+	bxe_config.xhtmlfile = bxe_config.getContent("/config/files/input/file[@name='BX_xhtmlfile']");
 	bxe_config.validationfile = bxe_config.getContent("/config/files/input/file[@name='BX_validationfile']");
 	bxe_config.exitdestination = bxe_config.getContent("/config/files/output/file[@name='BX_exitdestination']");
 	

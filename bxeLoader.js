@@ -119,7 +119,9 @@ bxe_globals.prototype.loadXML = function(xmlfile) {
 		e.target.td.Docu.xmldoc =  e.target.responseXML;
 		bxe_config.xmldoc = e.target.td.Docu.xmldoc;
 		e.target.td.Docu.xmldoc.init();
-		if (bxe_config.xslfile) {
+		if (bxe_config.xhtmlfile) {
+			e.target.td.Docu.xmldoc.importXHTMLDocument(bxe_config.xhtmlfile)
+		} else if (bxe_config.xslfile) {
 			e.target.td.Docu.xmldoc.transformToXPathMode(bxe_config.xslfile)
 		} else {
 			e.target.td.Docu.xmldoc.insertIntoHTMLDocument();

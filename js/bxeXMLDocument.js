@@ -177,6 +177,30 @@ XMLDocument.prototype.transformToXPathMode = function(xslfile) {
 	
 }
 
+
+XMLDocument.prototype.importXHTMLDocument = function(xhtmlfile) {
+	var xhtmldoc = document.implementation.createDocument("", "", null);
+	xhtmldoc.addEventListener("load", onload_xhtml, false);
+	xhtmldoc.xmldoc = this;
+	try {
+		xhtmldoc.load(xhtmlfile);
+	} catch(e) {
+		alert("The xhtmlfile: '" + xhtmlfile + "' was not found");
+	}
+	function onload_xhtml(e) {
+		xhtmldoc = e.currentTarget;
+		var bxe_area = document.getElementsByTagName("body")[0];
+		bxe_area.removeAllChildren();
+		bxe_area.appendAllChildren(document.importNode(xhtmldoc.getElementsByTagName("body")[0],true));
+		//bxe_area.parentNode.replaceChildren(document.importNode(xhtmldoc.getElementsByTagName("body")[0],true),bxe_area);
+		xhtmldoc.xmldoc.insertIntoHTMLDocument();
+		xml_loaded(xhtmldoc.xmldoc);
+	}
+	
+}
+
+
+
 function XMLNodeDocument () {
 	
 }
