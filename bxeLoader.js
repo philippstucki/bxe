@@ -11,9 +11,9 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeLoader.js,v 1.240 2004/02/17 14:19:01 chregu Exp $
+// $Id: bxeLoader.js,v 1.241 2004/02/20 08:32:25 chregu Exp $
 
-const BXE_VERSION = "0.9.2";
+const BXE_VERSION = "0.9.3-dev";
 const BXE_BUILD = "200402171519"
 
 const E_FATAL = 1;
@@ -110,13 +110,12 @@ function bxe_start(config_file,fromUrl, configArray) {
 			
 		}
 		else {
-			alert("*** ALERT: MozileLoader only works in XHTML - load Mozile JS explicitly in XML files");
+			alert("*** ALERT: MozileLoader only works in (X)HTML - load Mozile JS explicitly in XML files");
 		}
 	}
 	
 }
 
-// Detect Gecko but exclude Safari (for now); for now, only support XHTML
 
 function bxe_load_xml (xmlfile) {
 	
