@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.116 2003/12/01 09:02:14 chregu Exp $
+// $Id: bxeFunctions.js,v 1.117 2003/12/01 09:42:41 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -370,8 +370,23 @@ function bxe_toggleTextClass(e) {
 		bxe_doCallback(cb, BXE_SELECTION);
 		return;
 	}
-
-	sel.toggleTextClass(e.additionalInfo.localName);
+	if (sel.isCollapsed) {
+			var newNode = new XMLNodeElement(e.additionalInfo.namespaceURI,e.additionalInfo.localName, 1 , true) ;
+			sel.insertNode(newNode._node);
+/*			debug("valid? : " + newNode.isNodeValid());
+	*/		
+			newNode.makeDefaultNodes(false);
+			if (newNode._node.firstChild) {
+				var sel = window.getSelection();
+				var startip = newNode._node.firstInsertionPoint();
+				var lastip = newNode._node.lastInsertionPoint();
+				sel.collapse(startip.ipNode, startip.ipOffset);
+				sel.extend(lastip.ipNode, lastip.ipOffset);
+				
+			}
+	} else {
+		sel.toggleTextClass(e.additionalInfo.localName);
+	}
 	sel = window.getSelection();
 	var _node = sel.anchorNode.parentNode;
 	_node.updateXMLNode();
@@ -669,29 +684,7 @@ function bxe_appendNode(e) {
 		var newNode = new XMLNodeElement(e.additionalInfo.namespaceURI,e.additionalInfo.localName, 1 ) ;
 		aNode.parentNode.insertAfter(newNode,aNode);
 		debug("valid? : " + newNode.isNodeValid());
-		var cb = bxe_getCallback(e.additionalInfo.localName, e.additionalInfo.namespaceURI);
-		if (cb ) {
-			bxe_doCallback(cb, newNode);
-		} else {
-			debug ("check can Have Text");
-			var cHT  =  newNode.canHaveText;
-			if (cHT ) {
-				if (!e.additionalInfo.noPlaceholderText) {
-					newNode.setContent("#" + e.additionalInfo.localName + " ");
-				}
-			} else {
-				var ac = newNode.allowedChildren;
-				if (ac.length == 1)  {
-					eDOMEventCall("appendChildNode",document,{"appendToNode": newNode, "localName":ac[0].nodeName,"namespaceURI":ac[0].namespaceURI});
-				} else if (ac.length > 1) {
-					bxe_context_menu.buildElementChooserPopup(newNode,ac);
-				}
-				else {
-					var xmlstring = newNode.getBeforeAndAfterString(false,true);
-					newNode.setAttribute("_edom_tagnameopen",xmlstring[0]);
-				}
-			}
-		}
+		newNode.makeDefaultNodes(e.additionalInfo.noPlaceholderText);
 		
 	}
 
@@ -1495,4 +1488,6 @@ function bxe_nodeSort(a,b) {
 		return -1;
 	}
 }
+
+
 

@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLNode.js,v 1.33 2003/12/01 01:28:44 chregu Exp $
+// $Id: bxeXMLNode.js,v 1.34 2003/12/01 09:42:41 chregu Exp $
 
 
 function XMLNode  ( nodein, localName, nodeType, autocreate) {
@@ -472,8 +472,11 @@ XMLNode.prototype.createNS = function (namespaceURI, localName, attribs) {
 		}
 		this.localName = localName;
 		this.namespaceURI = namespaceURI;
-		for (var i = 0; i< attribs.length; i++) {
+		if (attribs) {
+			for (var i = 0; i< attribs.length; i++) {
 				this.setAttributeNS(attribs[i].namespaceURI, attribs[i].localName,attribs[i].value);
+			}
+			
 		}
 	}
 	else if (this.nodeType == 3) {
@@ -697,6 +700,30 @@ XMLNodeElement.prototype.getAttributeNS = function(namespace,name) {
 XMLNodeElement.prototype.removeAttribute = function(name) {
 	return this._node.removeAttribute(name);
 }
+
+
+XMLNodeElement.prototype.makeDefaultNodes = function(noPlaceholderText) {
+	
+	
+	var cHT  =  this.canHaveText;
+	if (cHT ) {
+		if (!noPlaceholderText) {
+			this.setContent("#" + this.localName + " ");
+		}
+	} else {
+		var ac = this.allowedChildren;
+		if (ac.length == 1)  {
+			eDOMEventCall("appendChildNode",document,{"appendToNode": this, "localName":ac[0].nodeName,"namespaceURI":ac[0].namespaceURI});
+		} else if (ac.length > 1) {
+			bxe_context_menu.buildElementChooserPopup(this,ac);
+		}
+		else {
+			var xmlstring = this.getBeforeAndAfterString(false,true);
+			this.setAttribute("_edom_tagnameopen",xmlstring[0]);
+		}
+	}
+}
+
 	
 	
 	
