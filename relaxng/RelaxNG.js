@@ -6,7 +6,7 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 	this.parseIncludes();
 
 	var rootChildren = this.xmldoc.documentElement.childNodes;
-	
+
 	for (var i = 0; i < rootChildren.length; i++) {
 		if (rootChildren[i].isRelaxNGElement("start")) {
 			this.parseStart(rootChildren[i]);
@@ -18,27 +18,32 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 DocumentVDOM.prototype.parseIncludes = function() {
 	var rootChild = this.xmldoc.documentElement.firstChild;
 	var alreadyNext;
+	this.replaceIncludePaths(this.xmldoc,this.directory);
 	while (rootChild) {
 		alreadyNext = false;
 		if (rootChild.isRelaxNGElement("include")) {
 			var td = new mozileTransportDriver("http");
-			debug (rootChild.getAttribute("href"));
+			var href = rootChild.getAttribute("href");
 			bxe_about_box.addText(rootChild.getAttribute("href") + " " );
-			td.load(rootChild.getAttribute("href"), null, false);
-			
-			if (td.document.documentElement.isRelaxNGElement("grammar")) {
-				var child = td.document.documentElement.firstChild;
-				var insertionNode = rootChild.nextSibling;
-				while (child) {
-					var newChild = this.xmldoc.importNode(child,true);
-					rootChild.parentNode.insertBefore(newChild,insertionNode);
-					child = child.nextSibling;
+			var req =  td.load(href, null, false);
+			if (req.isError) {
+				debug("!!!RelaxNG file " + rootChild.getAttribute("href") + " could not be loaded!!!")
+			} else {
+				this.replaceIncludePaths(td.document,href);
+				if (td.document.documentElement.isRelaxNGElement("grammar")) {
+					var child = td.document.documentElement.firstChild;
+					var insertionNode = rootChild.nextSibling;
+					while (child) {
+						var newChild = this.xmldoc.importNode(child,true);
+						rootChild.parentNode.insertBefore(newChild,insertionNode);
+						child = child.nextSibling;
+					}
 				}
-				var rootChildOld = rootChild;
-				var rootChild = rootChild.nextSibling;
-				alreadyNext = true;
-				rootChildOld.parentNode.removeChild(rootChildOld);
 			}
+			var rootChildOld = rootChild;
+			var rootChild = rootChild.nextSibling;
+			alreadyNext = true;
+			rootChildOld.parentNode.removeChild(rootChildOld);
 		}
 		if (!alreadyNext) {
 			rootChild = rootChild.nextSibling;
@@ -47,6 +52,19 @@ DocumentVDOM.prototype.parseIncludes = function() {
 
 }
 
+DocumentVDOM.prototype.replaceIncludePaths = function(doc, currentFile) {
+	var includes = doc.documentElement.getElementsByTagNameNS("http://relaxng.org/ns/structure/1.0","include");
+	var workingdir = bxe_getDirPart(currentFile);
+	//replace includes with fulluri
+	var href;
+	for (var i = 0; i < includes.length; i++) {
+		href = includes[i].getAttribute("href");
+		if (href.indexOf("/") != 0  && href.indexOf("://") < 0) {
+			href = workingdir + href;
+		}
+		includes[i].setAttribute("href", href);
+	}
+}
 var rng_nsResolver;
 DocumentVDOM.prototype.parseStart = function(node) {
 	var startChildren = node.childNodes;

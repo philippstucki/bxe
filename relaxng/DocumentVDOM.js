@@ -37,11 +37,13 @@ DocumentVDOM.prototype.loadSchema = function(file, callback) {
 	this.onparse = callback;
 	// make XMLDocument
 	this.xmldoc = document.implementation.createDocument("","",null);
-	// set onload handler (async = false doesn't work in mozilla AFAIK)
+	// set onload handler
 	this.xmldoc.onload = function(e) {e.currentTarget.DocumentVDOM.parseSchema();};
 	//set a reference to the DocumentVDOM, so we can access it in the callback
 	this.xmldoc.DocumentVDOM = this;
 	this.filename = file;
+	var dir = bxe_getDirPart(window.location.toString());
+	this.directory =  bxe_getDirPart(dir + file);
 	// load schema file
 	try {
 		this.xmldoc.load(file);
