@@ -15,7 +15,7 @@
 
 var BXE_VERSION = "0.9.4-dev";
 var BXE_BUILD = "200404280330"
-
+var bxe_notSupportedText = "Bitflux Editor only works with Mozilla >= 1.4 / Firefox on any platform. \nCurrently we recommend Mozilla 1.6 or Firefox 0.8.";
 
 if (window.location.protocol == "file:" || window.location.host.match(/localhost.*/)) {
 	var DebugOutput = false;
@@ -67,7 +67,9 @@ function bxe_start(config_file,fromUrl, configArray) {
 	}*/
 	if((navigator.product == 'Gecko') && (navigator.userAgent.indexOf("Safari") == -1))
 	{
-		
+		if ( !bxe_checkSupportedBrowsers()) {
+			alert(bxe_notSupportedText + "\n" + "If you think, your browser does meet this criteria, please report it to bx-editor-dev@lists.bitflux.ch")
+		}
 		// navigator.productSub > '20020801' (test to see what the date should be)
 		
 		// POST04: if document.documentElement != HTML then ... or no "head" ...
@@ -112,12 +114,21 @@ function bxe_start(config_file,fromUrl, configArray) {
 			alert("*** ALERT: MozileLoader only works in (X)HTML - load Mozile JS explicitly in XML files");
 		}
 	} else {
-		alert ("Bitflux Editor only works with Mozilla/Firefox on any platform. \nCurrently we recommend Mozilla 1.6 or Firefox 0.8. \nBut Mozilla >= 1.4 should work as well.");
+		alert (bxe_notSupportedText);
 	}
 	
 	
 }
 
+function bxe_checkSupportedBrowsers() {
+	var mozillaRvVersion = navigator.userAgent.match(/rv:([[0-9a-z\.]*)/)[1];
+	var mozillaRvVersionInt = parseFloat(mozillaRvVersion);
+	alert(mozillaRvVersionInt);
+	if (mozillaRvVersionInt >= 1.6) {
+		return true;
+	}
+	return false;
+}
 
 function bxe_load_xml (xmlfile) {
 	
