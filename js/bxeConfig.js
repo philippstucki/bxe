@@ -14,6 +14,7 @@ function  bxeConfig (filename,fromUrl, configArray) {
 		td.load(filename, bxeConfig.parseConfig, false);
 	} catch(e) { bxe_catch_alert(e);}
 	return true;
+	
 }
 
 bxeConfig.parseConfig = function  (e) {

@@ -438,15 +438,21 @@ function bxe_NodeRemovedChildOnly (e) {
 	
 }
 function bxe_ContextPopup(e) {
+	try {
 	var node = e.target.XMLNode;
 	var popup = e.additionalInfo;
-	
+	if (node.vdom.hasAttributes ) {
+		
+		var menui = popup.addMenuItem("Edit Attributes..", mozilla.getWidgetGlobals().EditAttributes.popup);
+		menui.MenuPopup._node = node._node;
+	}
 
 	popup.addMenuItem("Delete Node", function (e) {
 		var widget = e.currentTarget.Widget;
 		var delNode = widget.MenuPopup.MainNode._node;
 		var _par = delNode.parentNode;
 		_upNode = delNode.previousSibling;
+		bxe_history_snapshot();
 		_par.removeChild(delNode);
 		_upNode.updateXMLNode();
 		
@@ -527,6 +533,7 @@ function bxe_ContextPopup(e) {
 		
 	}
 	popup.MainNode = node;
+	} catch (e) { bxe_catch_alert(e);}
 }
 
 function bxe_NodeChanged(e) {

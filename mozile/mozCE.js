@@ -605,8 +605,10 @@ Selection.prototype.getEditableRange = function()
  */
 Selection.prototype.selectEditableRange = function(cssr)
 {
+	if (cssr) {
 	cssr.__restoreTextBoundaries(); // POST04: required cause of line manip that effects range but makes rest more complex
 	var rng = document.createRange();
 	this.removeAllRanges();
-	this.addRange(cssr.cloneRange());	
+	this.addRange(cssr.cloneRange());
+	}	
 }

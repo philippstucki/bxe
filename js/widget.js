@@ -261,7 +261,8 @@ function Widget_MenuItem_hideSubmenu() {
 }
 
 function Widget_Globals () {
-	
+	this.EditAttributes = new Widget_ModalAttributeBox();
+
 }
 
 
@@ -508,7 +509,6 @@ function Widget_StatusBar () {
 	this.positionize();
 	window.onresize = this.positionize;
 	this.Display  = "block";
-	this.EditAttributes = new Widget_ModalAttributeBox();
 	this.buildXPath(bxe_config.xmldoc.documentElement);
 	
 	this.draw();	
@@ -569,10 +569,6 @@ Widget_StatusBar.prototype.buildPopup = function (node) {
 
 		
 		if (node.XMLNode.isInHTMLDocument() && !node.XMLNode.xmlBridge) {
-			if (node.XMLNode.vdom.hasAttributes ) {
-				var menui = this.Popup.addMenuItem("Edit Attributes..", this.EditAttributes.popup);
-				menui.Modal = this.EditAttributes;
-			}
 			eDOMEventCall("ContextPopup",node,this.Popup);
 			this.Popup.appendAllowedSiblings(node);
 		}
@@ -588,7 +584,7 @@ function Widget_ContextMenu () {
 	this.Popup.position(0,0,"absolute");
 	this.Popup.ContextMenu = this;
 	this.subPopup = new Widget_MenuPopup();
-	this.Popup.EditAttributes = new Widget_ModalAttributeBox();
+	//this.Popup.EditAttributes = new Widget_ModalAttributeBox();
 	
 }
 
@@ -624,11 +620,11 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 	this.Popup.removeAllMenuItems();
 	this.Popup.initTitle(node.XMLNode.localName);
 	/* currently not working */
-	if (node.XMLNode.vdom.hasAttributes && this.Popup.EditAttributes) {
+	/*if (node.XMLNode.vdom.hasAttributes && this.Popup.EditAttributes) {
 		var menui = this.Popup.addMenuItem("Edit Attributes..", this.Popup.EditAttributes.popup);
 		menui.Modal = this.Popup.EditAttributes;
 		menui.MenuPopup._node = node;
-	}
+	}*/
 	
 	var sel  = window.getSelection();
 	var cssr = sel.getEditableRange();
@@ -669,12 +665,12 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 				var sub = e.currentTarget.Widget.SubPopup;
 				sub.removeAllMenuItems();
 				var newNode = e.currentTarget.Widget.AppendToNode._node;
-				if (newNode.XMLNode.vdom.hasAttributes && e.currentTarget.Widget.EditAttribute) {
+				/*if (newNode.XMLNode.vdom.hasAttributes && e.currentTarget.Widget.EditAttribute) {
 						var menui = sub.addMenuItem("Edit Attributes..", sub.EditAttributes.popup);
 						menui.Modal = e.currentTarget.Widget.EditAttributes;
 						menui.MenuPopup._node = newNode;
-				}
-				eDOMEventCall("ContextPopup",e.currentTarget.Widget.AppendToNode._node,sub);
+				}*/
+				eDOMEventCall("ContextPopup",newNode,sub);
 				sub.appendAllowedSiblings(e.currentTarget.Widget.AppendToNode._node);
 			});
 		} else {
@@ -821,6 +817,7 @@ Widget_ModalBox.prototype.addText = function(text) {
 }
 
 Widget_ModalBox.prototype.show = function(x,y, position) {
+	try {
 	if (this.hasTable) {
 		var subm = document.createElement("input");
 		subm.setAttribute("type","submit");
@@ -863,6 +860,8 @@ Widget_ModalBox.prototype.show = function(x,y, position) {
 	if (!position) { position = "absolute";};
 	this.position(x,y, position);
 	this.draw();
+	}
+	catch (e) { bxe_catch_alert(e);} 
 	bxe_deregisterKeyHandlers();
 }
 Widget_ModalBox.prototype.initTitle = function(title) {
@@ -893,16 +892,21 @@ function Widget_ModalAttributeBox() {
 Widget_ModalAttributeBox.prototype = new Widget_ModalBox();
 
 Widget_ModalAttributeBox.prototype.popup = function(e) {
-	
-	var box = e.target.Widget.Modal; 
-	var xmlnode = e.target.Widget.MenuPopup._node.XMLNode;
-	box.reset("Edit Attributes of " + xmlnode.localName, function(values) { 
+	try {
+		
+	var box = mozilla.getWidgetGlobals().EditAttributes;
+	var xmlnode = e.target.Widget.MenuPopup.MainNode;
+	box.reset("Edit Attributes of " + xmlnode.localName, function(values) {
+		
 		this.setAttributes(values);
 	}
 	);
 	box.RefXMLNode = xmlnode;
 	box.drawAttributes(xmlnode);
+	//box.show(0,0 ,"absolute");
+	
 	box.show(e.pageX ,e.pageY ,"absolute");
+	} catch(e) {bxe_catch_alert(e);}
 }
 
 Widget_ModalAttributeBox.prototype.drawAttributes = function(xmlnode) {
@@ -923,9 +927,10 @@ Widget_ModalAttributeBox.prototype.drawAttributes = function(xmlnode) {
 }
 
 Widget_ModalAttributeBox.prototype.setAttributes = function(values) {
-	var xmlnode = this.RefXMLNode
+	var xmlnode = this.RefXMLNode;
+	try {
 	for (var attrName in values) {
-		
+		dump ( attrName + "  " + values[attrName] + "\n");
 		attrValue = values[attrName];
 		if (attrValue) {
 			xmlnode.setAttribute(attrName, attrValue);
@@ -933,6 +938,7 @@ Widget_ModalAttributeBox.prototype.setAttributes = function(values) {
 			xmlnode.removeAttribute(attrName);
 		}
 	}
+	} catch (e) { bxe_catch_alert(e);}
 	eDOMEventCall("NodeAttributesModified",xmlnode._node);
 }
 function Widget_XPathMouseOver (e) {
