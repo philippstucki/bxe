@@ -139,7 +139,7 @@
 .AboutBox {
    border: outset 1px black;;
   background-color: #ff6600;
-  background-image: url("images/bxelogo.png");
+  background-image: url("../images/bxelogo.png");
   background-repeat: no-repeat;
   background-position: 8px 5px;
   font-family: Verdana,Arial,Helvetica,sans-serif;
