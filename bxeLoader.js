@@ -123,7 +123,6 @@ function bxe_start(config_file,fromUrl, configArray) {
 function bxe_checkSupportedBrowsers() {
 	var mozillaRvVersion = navigator.userAgent.match(/rv:([[0-9a-z\.]*)/)[1];
 	var mozillaRvVersionInt = parseFloat(mozillaRvVersion);
-	alert(mozillaRvVersionInt);
 	if (mozillaRvVersionInt >= 1.6) {
 		return true;
 	}
