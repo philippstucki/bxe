@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.135 2004/01/13 05:32:41 chregu Exp $
+// $Id: bxeFunctions.js,v 1.136 2004/01/13 05:54:16 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -1168,7 +1168,7 @@ function bxe_checkIsAllowedChild(namespaceURI, localName, sel, noAlert) {
 	} else {
 		parentnode = cssr.startContainer;
 	}
-	if (localName == null | parentnode.XMLNode.isAllowedChild(namespaceURI, localName) ) {
+	if (localName == null || parentnode.XMLNode.isAllowedChild(namespaceURI, localName) ) {
 		return true;
 	} else {
 		if (!noAlert) {
