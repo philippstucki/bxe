@@ -648,26 +648,23 @@ ChoiceVDOM.prototype = new NodeVDOM();
 ChoiceVDOM.prototype.isValid = function(ctxt) {
 	var refsPosition = ctxt.refs.length;
 	var child = this.getFirstChild(ctxt);
-	//debug ("Choice.isValid?: " + this.nodeName+"\n");
+
 	var hasEmpty = false;
-	
 	while (child) {
-	//	debug ("Choice.child.isValid?: " + child.nodeName + "\n");
 		if (child.type == "RELAXNG_EMPTY") {
 			hasEmpty = true;
 		}
 		if (child.isValid(ctxt)) {
-			debug("Choice.isValid!");
 			//ctxt.setVDOM(child,refsPosition);
 			return true;
 		}
 		child = child.getNextSibling(ctxt);
 	}
-	//ctxt.setVDOM(this,refsPosition);
-	if (hasEmpty) {
+	//this._attributes is like having an <empty/> element, meaning, the choice can be empty
+	// as we check attributes in a different way, this is a safe assumption
+	if (hasEmpty || this._attributes) {
 		var vdom = ctxt.nextVDOM();
 		if (vdom) {
-			debug ("============ hasEmpty " + vdom.nodeName);
 			var v =  vdom.isValid(ctxt);
 			if (v) {
 				ctxt.setVDOM(this, refsPosition);
@@ -675,7 +672,6 @@ ChoiceVDOM.prototype.isValid = function(ctxt) {
 			return v;
 		}
 	}
-	debug("Choice.isNotValid");
 	return false;
 }
 
