@@ -191,14 +191,14 @@ function bxe_history_undo() {
 			var xmldoc = BX_parser.parseFromString(xmlstr,"text/xml");
 			var vdom = bxe_config.xmldoc.XMLNode.vdom;
 			bxe_config.xmldoc = xmldoc;
-		xmldoc.init();
-		xmldoc.insertIntoHTMLDocument();
-		bxe_config.xmldoc.XMLNode.vdom = vdom;
-		try {
-			bxe_config.xmldoc.XMLNode.validateDocument();
-		} catch(e) {
-			bxe_catch_alert(e);
-		}
+			xmldoc.init();
+			xmldoc.insertIntoHTMLDocument();
+			bxe_config.xmldoc.XMLNode.vdom = vdom;
+			try {
+				bxe_config.xmldoc.XMLNode.validateDocument();
+			} catch(e) {
+				bxe_catch_alert(e);
+			}
 		}
 	} 
 	/*bxe_snapshots[bxe_snapshots_position] == xmlstr;
