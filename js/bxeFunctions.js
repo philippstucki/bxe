@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.142 2004/01/15 13:52:15 chregu Exp $
+// $Id: bxeFunctions.js,v 1.143 2004/01/19 01:39:15 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -205,7 +205,6 @@ function bxe_getXmlDomDocument() {
 		if ((areaNodes[i]._SourceMode)) {
 			return false;
 		}
-		//xmldoc = areaNodes[i].XMLNode.insertIntoXMLDocument(xmldoc);
 		xml = areaNodes[i].XMLNode.buildXML();
 		
 	}
@@ -219,7 +218,6 @@ function bxe_getXmlDocument() {
 	if (!xml ) { return xml;}
 	return xml.saveXML(xml);
 
-//	return areaNodes[0].XMLNode.ownerDocument.buildXML();
 }
 
 function bxe_getRelaxNGDocument() {
@@ -227,8 +225,6 @@ function bxe_getRelaxNGDocument() {
 	var areaNodes = bxe_getAllEditableAreas();
 	var xml = areaNodes[0].XMLNode.ownerDocument._vdom.xmldoc;
 	return xml.saveXML(xml);
-
-//	return areaNodes[0].XMLNode.ownerDocument.buildXML();
 }
 
 
