@@ -46,6 +46,14 @@ mozile_js_files.push("mozWrappers.js");
 mozile_js_files.push("mozIECE.js");
 mozile_js_files.push("mozilekb.js");
 mozile_js_files.push("mozileSave.js");
+mozile_js_files.push("mozileTransportDriver.js");
+
+// if you want webdav support, add the following two methods
+//mozile_js_files.push("td/webdav.js");
+//mozile_js_files.push("jsdav.js");
+
+// if you want save-to-file support, add the following file
+//mozile_js_files.push("td/file.js");
 
 var mozile_root_dir = "chrome://mozile/content/"; // default location of mozile is in an extension
 

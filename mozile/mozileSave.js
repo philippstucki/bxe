@@ -38,14 +38,14 @@
 function mozileSave()
 {
 	// call default  
-	//__mozileDummySave();
+	__mozileDummySave();
 	
 	// one alternative: save the document as a whole.
 	// __mozileSaveToFile();
 	
 	// second alternative: saveing using TransportDrivers
 	// replace "file" by "webdav", if you want to use webdav
-	__mozileTDSave("file");
+	//__mozileTDSave("file");
 }
 
 
