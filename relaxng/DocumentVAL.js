@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: DocumentVAL.js,v 1.11 2004/01/19 01:38:48 chregu Exp $
+// $Id: DocumentVAL.js,v 1.12 2004/01/19 02:04:59 chregu Exp $
 
 XMLNodeDocument.prototype.loadSchema = function(file ,callback) {
 	this._vdom = new DocumentVDOM();
@@ -19,7 +19,7 @@ XMLNodeDocument.prototype.loadSchema = function(file ,callback) {
 }
 
 XMLNodeDocument.prototype.validateDocument = function() {
-	dump("her");
+	
 	if (!this.vdom) {
 		//if vdom was not attached to the document, try to find the global one...
 		this.vdom = bxe_config.DocumentVDOM;
