@@ -1564,7 +1564,6 @@ InsertionPoint.prototype.insertNode = function(node)
 		while(child) { 
 			var oldChild = child; 
 			child = child.nextSibling;
-			dump(oldChild.nodeType + " " + oldChild.nodeName + " " + oldChild.data+ "\n")
 			if (oldChild.nodeType == Node.TEXT_NODE) {
 				this.insertNode(oldChild);
 			} else {

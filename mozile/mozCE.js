@@ -399,7 +399,11 @@ Selection.prototype.insertNode = function(node)
 
 	if(!cssr)
 		return;
-
+	// if there's a selection then delete it
+	if(!cssr.collapsed)
+	{
+		cssr.extractContentsByCSS();
+	}
 	var ip = cssr.firstInsertionPoint;
 
 	ip.insertNode(node);
