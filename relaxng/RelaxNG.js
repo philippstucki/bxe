@@ -2,9 +2,10 @@
 
 DocumentVDOM.prototype.parseRelaxNG = function () {
 	
+	this.xmldoc.documentElement.setAttributeNS("http://www.w3.org/2000/xmlns/","xmlns:rng","http://relaxng.org/ns/structure/1.0");
+	
 	//do includes
 	this.parseIncludes();
-
 	var rootChildren = this.xmldoc.documentElement.childNodes;
 
 	for (var i = 0; i < rootChildren.length; i++) {
@@ -30,6 +31,7 @@ DocumentVDOM.prototype.parseIncludes = function() {
 				debug("!!!RelaxNG file " + rootChild.getAttribute("href") + " could not be loaded!!!")
 			} else {
 				this.replaceIncludePaths(td.document,href);
+				
 				if (td.document.documentElement.isRelaxNGElement("grammar")) {
 					var child = td.document.documentElement.firstChild;
 					var insertionNode = rootChild.nextSibling;
@@ -69,25 +71,35 @@ var rng_nsResolver;
 DocumentVDOM.prototype.parseStart = function(node) {
 	var startChildren = node.childNodes;
 	rng_nsResolver = new bxe_RelaxNG_nsResolver(this.xmldoc.documentElement);
-	
+	var startNode = null;
+	Ende:
 	for (var i = 0; i < startChildren.length; i++) {
+		debug ("i" + i + " " +startChildren[i].nodeName);
 		if (startChildren[i].isRelaxNGElement("element")) {
-			var startElement = new ElementVDOM(startChildren[i]);
-			this.firstChild = startElement;
-			startElement.parentNode = this;
-			var nsParts = rng_nsResolver.parseNodeNameOnElement(startChildren[i]);
-			startElement.nodeName = nsParts.nodeName;
-			startElement.localName = nsParts.localName;
-			startElement.namespaceURI = nsParts.namespaceURI;
-			startElement.prefix = nsParts.prefix;
-			startElement.canBeRoot = true;
-			startElement.nextSibling = null;
-			startElement.previousSibling = null;
-			
-			break;
+			startNode = startChildren[i];
+			break Ende;
 		} 
+		if (startChildren[i].isRelaxNGElement("ref")) {
+			var xp = "/rng:grammar/rng:define[@name = '" + startChildren[i].getAttribute("name") + "']/rng:element"
+			startNode = this.xmldoc.documentElement.getXPathFirst(xp); 
+			break Ende;
+		}
 	}
-	
+	if (startNode) {
+		var startElement = new ElementVDOM(startNode);
+		this.firstChild = startElement;
+		startElement.parentNode = this;
+		var nsParts = rng_nsResolver.parseNodeNameOnElement(startNode);
+		startElement.nodeName = nsParts.nodeName;
+		startElement.localName = nsParts.localName;
+		startElement.namespaceURI = nsParts.namespaceURI;
+		startElement.prefix = nsParts.prefix;
+		startElement.canBeRoot = true;
+		startElement.nextSibling = null;
+		startElement.previousSibling = null;
+	}
+	debug(startNode );
+	dump("before parseChildren");
 	startElement.parseChildren();
 	dump("RelaxNG is parsed\n");
 
@@ -174,7 +186,7 @@ Node.prototype.isRelaxNGElement = function(nodename) {
 
 NodeVDOM.prototype.parseChildren = function(node) {
 	var childNodes;
-	
+
 	if (node) {
 		childNodes = node.childNodes;
 	} else {
@@ -197,13 +209,16 @@ NodeVDOM.prototype.parseChildren = function(node) {
 			
 		} else if (childNodes[i].isRelaxNGElement("ref")) {
 			//FIXME this can be done smarter... cache the defines.
-			var grammarChild = this.node.ownerDocument.documentElement.childNodes;
-			//dump ("ref: " + childNodes[i].getAttribute("name") +"\n");
-			for (var j = 0; j < grammarChild.length; j++) {
-				if (grammarChild[j].isRelaxNGElement("define") && grammarChild[j].getAttribute("name") == childNodes[i].getAttribute("name")) {
-					//dump ("define" + grammarChild[j].getAttribute("name") +"\n"); 
-					this.parseChildren(grammarChild[j]);
-				}
+			var xp = "/rng:grammar/rng:define[@name = '" + childNodes[i].getAttribute("name") + "']"
+			var defineChild = this.node.ownerDocument.documentElement.getXPathFirst(xp);
+			if (defineChild) {
+			debug ("isParsed " + defineChild.getAttribute("name") + " = " + defineChild.isParsed);
+			//FIXME:...
+			//if (!defineChild.isParsed) {
+				defineChild.isParsed = true;
+				this.parseChildren(defineChild);
+				
+			//} 
 			}
 		} 
 
@@ -234,7 +249,7 @@ NodeVDOM.prototype.parseChildren = function(node) {
 			newChoice.appendChild(new EmptyVDOM());
 			newChoice.parseChildren();
 		}
-		else if (childNodes[i].isRelaxNGElement("choice")) {
+		else if (childNodes[i].isRelaxNGElement("choice") || childNodes[i].isRelaxNGElement("interleave")) {
 			newChoice = new ChoiceVDOM(childNodes[i]);
 			this.appendChild(newChoice);
 			newChoice.parseChildren();
