@@ -174,7 +174,9 @@ XMLDocument.prototype.importXHTMLDocument = function(xhtmlfile) {
 		}
 		var new_body = document.importNode(bodyInXhtml[0],true);
 		bxe_about_box.node = new_body.appendChild(bxe_about_box.node);
-		bxe_area.removeAllChildren();
+		if (bxe_config.options['ExternalXhtmlReplaceBodyChildren'] == 'false') {
+		  	bxe_area.removeAllChildren();
+		}
 		bxe_area.appendAllChildren(new_body);
 		xhtmldoc.xmldoc.insertIntoHTMLDocument();
 		var links =  xhtmldoc.getElementsByTagName("link");
