@@ -26,11 +26,20 @@ function __bxeSave(e) {
 	}
 	var url = bxe_config.xmlfile;
 	if (td.Exit) {
-		url += "?exit=true";
+		url = bxe_addParamToUrl(url,"exit=true");
 	} else {
-		url += "?exit=false";
+		url = bxe_addParamToUrl(url,"exit=false");
 	}
 	td.save(url, xmlstr, callback);
+}
+
+function bxe_addParamToUrl(url, param) {
+	if (url.indexOf("?") == -1) {
+		url += "?" + param;
+	} else {
+		url += "&" + param;
+	}
+	return url;
 }
 
 function bench(func, string,iter) {
