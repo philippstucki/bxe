@@ -468,7 +468,7 @@ NodeVDOM.prototype.parseChildren = function(node) {
 				this._hasEmpty = false;
 				break;
 			case "attribute":
-				this.addAttributeNode( new AttributeVDOM(childNodes[i]), "optional");
+				this.addAttributeNode( new AttributeVDOM(childNodes[i]));
 				break;
 			case "optional":
 				newChoice = new ChoiceVDOM(childNodes[i]);

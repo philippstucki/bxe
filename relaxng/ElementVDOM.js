@@ -33,11 +33,17 @@ function ElementVDOM(node) {
 ElementVDOM.prototype = new NodeVDOM();
 
 NodeVDOM.prototype.addAttributeNode = function(attribute) {
-/* FIXME: This try/catch had to be inserted for making it work for MIT
-should look into it, what really was the issue.. */
 try {
 	this._attributes[attribute.name] = attribute;
-} catch(e) {};
+} catch(e) {
+	/* FIXME: This try/catch had to be inserted for making it work for MIT
+	should look into it, what really was the issue.. */
+	try {
+		this._attributes = new Array();
+		this._attributes[attribute.name] = attribute;
+	} catch (e) {
+	}
+};
 }
 
 ElementVDOM.prototype.__defineGetter__ ( 
@@ -59,6 +65,7 @@ NodeVDOM.prototype.getAllAttributes = function () {
 	var child = this.firstChild;
 	var attr = this._attributes;
 	while (child) {
+		
 		if (child.nodeName == "RELAXNG_REF" && child.DefineVDOM) {
 			var AA = child.DefineVDOM.getAllAttributes()
 			if (AA) {
@@ -66,6 +73,18 @@ NodeVDOM.prototype.getAllAttributes = function () {
 					attr[AA[i].name]= AA[i];
 					//attr.push(AA[i]);
 				}
+			}
+		} else if (child.nodeName == "RELAXNG_CHOICE") {
+			var AA = child.getAllAttributes();
+			if (AA) {
+				if (! attr['__bxe_choices']) {
+					attr['__bxe_choices'] = new Array();
+				}
+				var _choicesAttr = new Array();
+				for (i in AA) {
+					_choicesAttr[AA[i].name]= AA[i];
+				}
+				attr['__bxe_choices'].push(_choicesAttr);
 			}
 		}
 		child = child.nextSibling;
@@ -93,13 +112,47 @@ ElementVDOM.prototype.isValid = function(ctxt) {
 		
 		var _attr = this.attributes;
 		var _vdomAttr = new Array();
+		var _nodeAttr = ctxt.node.attributes;
 		
 		for(var i in _attr) {
-			 _attr[i].isValid(ctxt);
-			 _vdomAttr[_attr[i].name] = true;
+			//choice attributes
+			if(i == '__bxe_choices') {
+				for (var j in _attr['__bxe_choices']) {
+					var _choices = _attr['__bxe_choices'][j];
+					//loop through all available attributes
+					var _hasOne = false;
+					var _hasMoreThanOne = false;
+					var _attrList = "";
+					for (var k in _choices) {
+						_attrList += ", " + _choices[k].name; 
+						// if we already found one attribute of the choices list -> alert
+						if (_hasOne) {
+							_hasMoreThanOne = true;
+						}
+						//check if it's in the node
+						// and if there is one, check it's validity
+						else if ( ctxt.node.getAttribute && ctxt.node.getAttribute(_choices[k].name)) {
+							_choices[k].isValid(ctxt);
+							_hasOne = true;
+						}
+						_vdomAttr[_choices[k].name] = true;
+					}
+					if (_hasMoreThanOne) {
+						var errMsg = "Only one of the following attributes is allowed in " + ctxt.node.nodeName + ": ";
+						errMsg += _attrList.substring(1,_attrList.length);
+						ctxt.setErrorMessage(errMsg );
+					} else if (!_hasOne) {
+						var errMsg = ctxt.node.nodeName +  " needs one of the following attributes : ";
+						errMsg += _attrList.substring(1,_attrList.length);
+						ctxt.setErrorMessage(errMsg );
+					}
+				}
+			} else {
+				_attr[i].isValid(ctxt);
+			 	_vdomAttr[_attr[i].name] = true;
+			}
 		}
 		
-		var _nodeAttr = ctxt.node.attributes;
 		
 		for(var i in _nodeAttr) {
 			if (typeof _vdomAttr[_nodeAttr[i].nodeName] == "undefined") {

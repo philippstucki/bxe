@@ -16,6 +16,7 @@ xx xxx xxx, Version 1.1.0
 - Improved speed (minimal...) (r926)
 - Changed handling of validation error during initial loading 
     (changing to source mode is possible for fixing the error) (r870)
+- Added validation of <choice><attribute/> construct (r1031)
 
 3 December 2004 Version 1.0.0
 
