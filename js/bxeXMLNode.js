@@ -441,7 +441,7 @@ XMLNode.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 			//node.NodeMode = "html";
 			if (node.nodeType == 1 ) {
 				newNode = node.makeHTMLNode()
-				if (! node.hasChildNodes() && !(node.namespaceURI == XHTMLNS && node.localName == "img")) {
+				if (! node.hasChildNodes() && !(node.namespaceURI == XHTMLNS && ( node.localName == "img" || node.localName == "object")) ) {
 						var xmlstring = node.getBeforeAndAfterString(false,true);
 						
 						newNode.setAttribute("_edom_tagnameopen",xmlstring[0]);
