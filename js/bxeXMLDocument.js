@@ -233,19 +233,6 @@ function XMLNodeDocument () {
 	
 }
 
-XMLNodeDocument.prototype.validateDocument = function () {
-alert("XMLNodeDocument.prototype.validateDocument in bxeXMLDocument.js is DEPRECATED. You just hit a bug ;)");
-	if (!this.vdom) {
-		alert ("no Schema assigned to Document");
-		return false;
-	}
-	
-	//check root element
-	//var vdomCurrentChild = this.documentElement.vdom.firstChild;
-	var c = this.documentElement._isNodeValid(true);
-	
-	return c;
-}
 
 XMLNodeDocument.prototype.__defineGetter__( 
 	"documentElement",

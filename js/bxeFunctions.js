@@ -285,11 +285,7 @@ function bxe_toggleSourceMode(e) {
 			var eaVDOM = editableArea.XMLNode._vdom;
 			editableArea.XMLNode = editableArea.XMLNode._node.ownerDocument.init(editableArea.XMLNode._node);
 			editableArea.XMLNode.vdom = eaVDOM;
-		
-			
-			
-			
-			
+
 			editableArea.removeAllChildren();
 			/*
 			
@@ -312,8 +308,8 @@ function bxe_toggleSourceMode(e) {
 					}
 				}
 			}
-				
-			if ( ! (editableArea.XMLNode.isNodeValid(true))) {
+			var valid = editableArea.XMLNode.isNodeValid(true);
+			if ( ! valid) {
 				bxe_toggleSourceMode(e);
 			}
 			
