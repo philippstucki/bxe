@@ -765,7 +765,7 @@ function LibraryDrawer(tool, xsluri, libsuri, searchuri) {
         var doc = this._transformXml();
         var sourcenode = doc.selectSingleNode('//*[@id="'+id+'"]');
         var targetnode = document.getElementById(id);
-        this._replaceNodeContents(document, targetnode, sourcenode);
+       this._replaceNodeContents(document, targetnode, sourcenode);
     };
 
     this.deselectActiveCollection = function() {
