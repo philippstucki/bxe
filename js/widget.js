@@ -53,7 +53,7 @@ function Widget_AreaInfo (areaNode) {
 	this.node.style.width = "0px";
 	this.node.style.height = "0px";
 	areaNode.parentNode.insertBefore(this.node,areaNode);
-	this.MenuPopup = new Widget_MenuPopup(areaNode.XMLNode._xmlnode.getXPathString());
+	this.MenuPopup = new Widget_MenuPopup(areaNode.XMLNode.getXPathString());
 	var doo = this.MenuPopup.addMenuItem("View",null);
 	var submenu = new Widget_MenuPopup();
 	this.NormalModeMenu = submenu.addMenuItem("Normal",function(e) {eDOMEventCall("toggleNormalMode",e.target.Widget.AreaNode )});

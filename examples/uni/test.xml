@@ -22,10 +22,10 @@
                 </unizh:highlight>
         </unizh:highlights>
         <body>
-                <unizh:parenttitle/>
+            <unizh:parenttitle/>
  <!--           <h1>Headline 1</h1> wird durch dc:title eingefuellt -->
                 <anchor/>
-                <h2>Example of University of Zurich</h2>
+                <h2>Example of Univers<h3>hello</h3>ity of Zurich</h2>
                 <p> Paragraph</p> 
           <h2>Styles (headline 2)</h2>
                 <p>Different <b>text style</b>s can be used: <b>bold</b> or <i>italic</i> or
