@@ -163,6 +163,7 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
   padding-left: 8px;
   padding-top: 40px;
   -moz-opacity: 1;
+  overflow: visible;
 }
 
 .AboutBox a {
@@ -173,8 +174,10 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
    margin: 0px;
    padding: 0px;
    -x-border-x-spacing: 0px;
+   font-family: Verdana, Arial, Helvetica, sans-serif;
+   font-size: 12px;
+   line-height: 14px;
 }
-
 
 
 .AboutBox div {
@@ -183,6 +186,7 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
     overflow: hidden;
     padding-top: 0px;
     padding-right: 10px;
+    
 }
 
 .ModalBox {

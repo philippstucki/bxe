@@ -490,7 +490,7 @@ function Widget_AboutBox() {
 	this.Display = "block";
 	this.node.appendToBody();
 	this.node.style.width = width + "px";
-	this.node.style.height = height + "px";
+	//this.node.style.height = height + "px";
 	this.position((window.innerWidth- width)/2,(window.innerHeight-height)/3,"fixed");
 	this.node.onclick = function(e) { this.style.display = 'none';}
 	var htmltext = "<a href='http://bitfluxeditor.org' target='_new'>http://bitfluxeditor.org</a> <br/> Version: " + BXE_VERSION + "/" + BXE_BUILD;
@@ -503,16 +503,20 @@ function Widget_AboutBox() {
 	htmltext += '<tr><td><a href="http://kupu.oscom.org">Kupu</a> &nbsp;</td><td> (ImageDrawer) </td></tr>';
 	
 	htmltext += '<tr id="okButton" style="display: none" ><td> </td><td><p/><input type="submit" value="OK"/></td></tr>';
+	htmltext += '<tr ><td colspan="2" id="AboutBoxScroller" > </td></tr>';
 
 	htmltext += '</table>';
 	
 	var abouttext = this.node.innerHTML = htmltext;
-	var textdiv = document.createElement("div");
-	this.TextNode = document.createTextNode(" ");
-	textdiv.appendChild(this.TextNode);
+	//var textdiv = document.createElement("div");
+	var textdiv = document.getElementById("AboutBoxScroller")
+	this.TextNode = document.getElementById("AboutBoxScroller").firstChild;
+	/*textdiv.appendChild(this.TextNode);
 	this.node.appendChild(textdiv );
 	textdiv.style.top = (height - 150 ) + "px";;
-	textdiv.style.position = "relative";
+	textdiv.style.position = "relative";*/
+	textdiv.style.paddingTop = "20px";
+	this.node.style.overflow = "visible";
 	this.show();
 	
 }
@@ -529,6 +533,9 @@ Widget_AboutBox.prototype.show = function (okButton) {
 
 
 Widget_AboutBox.prototype.setText = function(text) {
+	if (text == "") {
+		this.TextNode.parentNode.parentNode.style.display = "none";
+	}
 	this.TextNode.data = text;
 }
 

@@ -318,7 +318,7 @@ function validation_loaded(vdom) {
 		bxe_disableEditablePage();
 	}
 	else {
-		bxe_about_box.addText("<br/>Document is valid.");
+		bxe_about_box.addText("Document is valid.");
 		
 	}
 	var endTimer = new Date();
