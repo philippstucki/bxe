@@ -18,9 +18,15 @@
 * ***** END LICENSE BLOCK ***** */
 
 const BXE_VERSION = "0.1alpha";
-const BXE_BUILD = "200311110330"
+const BXE_BUILD = "200311110420"
 
-var DebugOutput = true;
+const E_FATAL = 1;
+
+if (window.location.protocol == "file:" || window.location.host.match(/localhost.*/)) {
+	var DebugOutput = false;
+} else {
+	var DebugOutput = false;
+}
 
 mozile_js_files = new Array();
 
@@ -54,6 +60,8 @@ var bxe_format_list = null;
 var bxe_context_menu = null;
 var bxe_delayedUpdate = false;
 var eDOM_bxe_mode = true; 
+
+var startTimer = new Date();
 
 function bxe_start(config_file,fromUrl, configArray) {
 
@@ -244,6 +252,10 @@ function validation_loaded(vdom) {
 		bxe_about_box.addText("Document is valid.");
 		
 	}
+	var endTimer = new Date();
+	debug ("startTime: " + startTimer);
+	debug ("endTime  : " + endTimer);
+	dump ("Total Start Time: " + (endTimer - startTimer)/1000 + " sec\n"); 
 }
 
 function config_loaded(bxe_config_in) {

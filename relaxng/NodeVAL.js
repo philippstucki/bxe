@@ -40,18 +40,12 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 	}
 	debug ("_isNodeValid " + this.nodeName );
 	try {
-		debug ("just before new ContextVDOM (NodeVAL.js line 43");
+		debug ("just before new ContextVDOM (NodeVAL.js line 43)");
 		var ctxt = new ContextVDOM(this,this.vdom);
 	
 	} catch (e) { bxe_catch_alert(e); debug ("couldn't make new context..");}
-//	debug ("after new ContextVDOM " + ctxt.node.nodeName);
-	if (ctxt.node) {
+	if (ctxt && ctxt.node) {
 	do {
-		//debug ("node " + ctxt.node.nodeName);;
-		if (ctxt.vdom) {
-			//debug(" vdom " +ctxt.vdom.nodeName);
-			//debug (" " + ctxt.vdom.name);
-		}
 		
 		if (ctxt.node.nodeType == "3" && ctxt.node.isWhitespaceOnly) {
 			continue;
@@ -66,13 +60,20 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 		
 		if (  ctxt.isValid()) {
 			if(ctxt.node.hasChildNodes() && deep) {
-				
+				var refsPosition = ctxt.refs.length;
+				//var oldVdom = ctxt.node.vdom;
+				oldVdom = ctxt.vdom;	
+				debug(oldVdom.nodeName + " ..... ");
 				debug("*****Go deeper " + ctxt.node.nodeName);
 				var retctxt = ctxt.node._isNodeValid(deep,  wFValidityCheckLevel )
+				
 				debug("*****back deeper " + ctxt.node.nodeName);
 				if (retctxt.isError) {
 					ctxt.addErrorMessages(retctxt.errormsg);
+				} else {
+//					ctxt.setVDOM(oldVdom, refsPosition);
 				}
+				
 			}
 			if(ctxt.node.hasAttributes()) {
 				for( var i = 0; i < ctxt.node.attributes.length; i++) {
@@ -80,12 +81,12 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 				}
 			}
 		} else {
-				if (ctxt.node.parentNode.isAllowedChild(ctxt.node)) {
+				/*if (ctxt.node.parentNode.isAllowedChild(ctxt.node)) {
 					ctxt.setErrorMessage(ctxt.node.localName +"("+ctxt.node.namespaceURI+ ") is not allowed at this position as child of  " + this.localName );
 				}
-				else {
+				else {*/
 					ctxt.setErrorMessage(ctxt.node.localName +"("+ctxt.node.namespaceURI+ ")"+ " is not allowed as child of  " + this.localName +"("+this.namespaceURI+ ")");
-				}
+				//}
 		}
 		//debug ("---------");
 	} while (ctxt.next())
@@ -100,8 +101,8 @@ function ContextVDOM (node,vdom) {
 	this.node = node.firstChild;
 	this.nr = ctxtcounter++;
 	debug (node.nodeName);
-	debug (vdom.nodeName);
-	this.isError = false;
+/*	debug (vdom.nodeName);
+*/	this.isError = false;
 	this.errormsg = new Array();
 	this.refs = new Array();
 
@@ -116,11 +117,12 @@ function ContextVDOM (node,vdom) {
 
 ContextVDOM.prototype.next = function() {
 	debug ("ctxt.next " + typeof this.node +  " " + this.node.nodeName);
+	debug ("ctxt.VDOM " + this.vdom.nodeName +  " " + this.vdom.name);
 	debug ("data " + this.node._node);
 	if (this.node.nextSibling) {
 		
 		this.node = this.node.nextSibling;
-		if (this.node.nodeName == "null") {
+		if (this.node._node.nodeType == 3 ) {
 			debug("ctxt.next next.nodeName is null...");
 			return this.next();
 		}
@@ -198,6 +200,7 @@ ContextVDOM.prototype.isValid = function() {
 
 
 ContextVDOM.prototype.setVDOM = function(vdom, refsPosition) {
+
 	if (refsPosition && this.refs.length >  0 ) {
 		debug("//////// setVDOM " + vdom.nodeName);
 		debug("////////         " + this.refs[this.refs.length -1].name);
@@ -209,6 +212,7 @@ ContextVDOM.prototype.setVDOM = function(vdom, refsPosition) {
 		debug("last refs " + this.refs[this.refs.length -1].name);
 	}
 	this.vdom = vdom;
+	debug("this.vdom " + this.vdom.nodeName);
 }
 
 XMLNode.prototype.__defineGetter__(

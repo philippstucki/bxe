@@ -40,6 +40,9 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 			node.parentNode.removeChild(node);
 			node = newNode;
 	}*/
+	//remove attributes and empty nodes...
+	
+	
 	debug("end remove whitespace");
 	debug(this.xmldoc.saveXML(this.xmldoc));
 	
@@ -327,7 +330,7 @@ NodeVDOM.prototype.parseChildren = function(node) {
 			this.appendChild(newElement);
 			newElement.parseChildren();
 			
-		} else if (childNodes[i].isRelaxNGElement("ref")) {
+		} else if (childNodes[i].isRelaxNGElement("ref") && !childNodes[i].getAttribute("name").match(/\.attlist/)) {
 			//FIXME this can be done smarter... cache the defines.
 			var xp = "/rng:grammar/rng:define[@name = '" + childNodes[i].getAttribute("name") + "']"
 			var defineChild = this.node.ownerDocument.documentElement.getXPathFirst(xp);
@@ -558,11 +561,11 @@ DefineVDOM.prototype.__defineGetter__("nextSibling",
 ChoiceVDOM.prototype = new NodeVDOM();
 
 ChoiceVDOM.prototype.isValid = function(ctxt) {
-	var child = this.firstChild;
+	var refsPosition = ctxt.refs.length;
+	var child = this.getFirstChild(ctxt);
 	dump ("Choice.isValid?: " + this.nodeName+"\n");
 	var hasEmpty = false;
-	var refsPosition = ctxt.refs.length;
-
+	
 	while (child) {
 		dump ("Choice.child.isValid?: " + child.nodeName + "\n");
 		if (child.type == "RELAXNG_EMPTY") {
@@ -570,7 +573,7 @@ ChoiceVDOM.prototype.isValid = function(ctxt) {
 		}
 		if (child.isValid(ctxt)) {
 			debug("Choice.isValid!");
-			ctxt.setVDOM(this,refsPosition);
+			//ctxt.setVDOM(child,refsPosition);
 			return true;
 		}
 		child = child.getNextSibling(ctxt);
@@ -581,7 +584,6 @@ ChoiceVDOM.prototype.isValid = function(ctxt) {
 		if (vdom) {
 			debug ("============ hasEmpty " + vdom.nodeName);
 			var v =  vdom.isValid(ctxt);
-			debug ("v is " + v);
 			if (v) {
 				ctxt.setVDOM(this, refsPosition);
 			}
@@ -603,24 +605,30 @@ InterleaveVDOM.prototype = new NodeVDOM();
 
 InterleaveVDOM.prototype.isValid = function(ctxt) {
 	
+	var refsPosition = ctxt.refs.length;
 	var child = this.getFirstChild(ctxt);
 	dump ("Interleave.isValid: " + ctxt.node.nodeName + "\n");
 	var hasEmpty = false;
-	var refsPosition = ctxt.refs.length;
 	while (child) {
 		debug("Interleave.child: " + child.nodeName);
 		if (child.isValid(ctxt)) {
-			debug("check was valid " + child.nodeName);
-		
-			debug (child.nodeName + ctxt.vdom.nodeName + " isValid ***");
+			var ret = ctxt.next();
+			if (ret == null) {
+				return true;
+			}
 			ctxt.setVDOM(this, refsPosition);
-			return true;
+			child = this.getFirstChild(ctxt);
+			this.hit = true;
 		}
 		child = child.getNextSibling(ctxt);
 	}
 	ctxt.setVDOM(this, refsPosition);
-	ctxt.vdom = this.getFirstChild(ctxt);
-	return false;
+	ctxt.nextVDOM();
+	if (this.hit) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 InterleaveVDOM.prototype.allowedElements = function(ctxt) {
@@ -699,24 +707,17 @@ function OneOrMoreVDOM(node) {
 }
 
 OneOrMoreVDOM.prototype.isValid = function(ctxt) {
-	var child = this.getFirstChild(ctxt);
-	//dump ("OneorMore.isValid:\n");
 	var refsPosition = ctxt.refs.length;
-
+	var child = this.getFirstChild(ctxt);
 	while (child) {
-		dump ("OneorMore.child.isValid: " + child.nodeName + "\n");
 		if (child.isValid(ctxt)) {
-			ctxt.setVDOM(this, refsPosition);
 			this.hit = true;
-		}
+			ctxt.setVDOM(this, refsPosition);
+			return true;
+		} 
 		child = child.getNextSibling(ctxt);
 	}
-	if (this.hit) {
-		var vdom = ctxt.nextVDOM();
-		if (vdom) {
-			return vdom.isValid(ctxt);
-		} 
-	}
+	ctxt.setVDOM(this, refsPosition);
 	return false;
 }
 
