@@ -471,7 +471,6 @@ function bxe_InsertTable() {
 }
 
 function bxe_InsertLink() {
-	
 	if(window.getSelection().isCollapsed) // must have a selection or don't prompt
 		return;
 	var href = prompt("Enter a URL:", "");
@@ -481,6 +480,13 @@ function bxe_InsertLink() {
 		window.getSelection().linkText(href);
 	else
 		window.getSelection().clearTextLinks();
+
+	var sel = window.getSelection();
+	var aNode = sel.anchorNode.parentNode;
+	aNode.XMLNode.namespaceURI = XHTMLNS;
+	aNode.onclick = function(e) {e.preventDefault(); }
+	aNode.onmousedown = function(e) {e.preventDefault(); }
+	aNode.onmouseup = function(e) {e.preventDefault(); }
 }
 
 

@@ -64,11 +64,11 @@ buttons=
 	"Dimension": [120,140,20,20],//width,height and button width,height in px
     
 	"b":[1,1,"ToggleTextClass","http://www.w3.org/1999/xhtml"],
-    "italic":[0,1,"ToggleTextClass"],
-    "underline":[2,1,"ToggleTextClass"],
-    "strikethrough":[3,1,"ToggleTextClass"],
-    "subscript":[4,1,"ToggleTextClass"],
-    "superscript":[5,1,"ToggleTextClass"],
+    "italic":[0,1,"ToggleTextClass","http://www.w3.org/1999/xhtml"],
+    "underline":[2,1,"ToggleTextClass","http://www.w3.org/1999/xhtml"],
+    "strikethrough":[3,1,"ToggleTextClass","http://www.w3.org/1999/xhtml"],
+    "subscript":[4,1,"ToggleTextClass","http://www.w3.org/1999/xhtml"],
+    "superscript":[5,1,"ToggleTextClass","http://www.w3.org/1999/xhtml"],
     "link":[0,5,"InsertLink"],
   //  "unlink":[1,5,true],
     "create_table":[2,5,"InsertTable"],
