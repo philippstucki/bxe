@@ -145,8 +145,10 @@ function bxe_toggleSourceMode(e) {
 	}
 	if (!editableArea._SourceMode) {
 		var xmldoc = editableArea.convertToXMLDocFrag();
+
 		editableArea.removeAllChildren();
 		editableArea.setStyle("white-space","-moz-pre-wrap");
+		
 		var xmlstr = document.saveChildrenXML(xmldoc,true);
 		editableArea.appendChild(document.createTextNode(xmlstr.str));
 		editableArea.XMLNode.prefix = xmlstr.rootPrefix;
@@ -192,6 +194,19 @@ function bxe_toggleSourceMode(e) {
 			editableArea._SourceMode = false;
 			editableArea.AreaInfo.SourceModeMenu.Checked = false;
 			editableArea.AreaInfo.NormalModeMenu.Checked = true;
+			/*normalize namesapces */
+			if (editableArea.XMLNode.xmlBridge.parentNode.nodeType == 1) {
+				nsparent = editableArea.XMLNode.xmlBridge.parentNode.getNamespaceDefinitions();
+				for (var prefix in nsparent) {
+					if (nsparent[prefix] == ns[prefix]) {
+						if (prefix == "xmlns") {
+							xmlnode.removeAttributeNS(XMLNS,"xmlns");
+						} else {
+							xmlnode.removeAttribute("xmlns:"+prefix);
+						}
+					}
+				}
+			}
 			
 		}
 	}
@@ -210,7 +225,13 @@ function bxe_toggleTextClass(e) {
 	_node.parentNode.updateXMLNode();
 }
 
-function bxe_insertedBefore(e) {
+
+function bxe_NodeInsertedParent(e) {
+	alert("document wide");
+	
+}
+
+function bxe_NodeInsertedBefore(e) {
 	try {
 	var oldNode = e.target.XMLNode;
 	var newNode = e.additionalInfo;
@@ -412,8 +433,6 @@ function MouseClickEvent(e) {
 	
 	
 	var target = e.target.parentElement;
-	
-	
 	if(target.userModifiable) {
 		return bxe_updateXPath();
 	}
@@ -494,11 +513,25 @@ function bxe_ContextMenuEvent(e) {
 }
 
 function bxe_UnorderedList() {
-	window.getSelection().toggleListLines("OL", "UL");
+	function callback(e) {
+		alert("function event");
+	}
+	document.eDOMaddEventListener("NodeInsertedParent",callback,false);
+	window.getSelection().toggleListLines("ul", "ol");
+	document.eDOMremoveEventListener("NodeInsertedParent",callback,false);
+	/*var sel = window.getSelection();
+	var cssr = sel.getEditableRange();
+	if (cssr) {
+		var lines = cssr.lines();
+		var newContainer = lines[0].container.parentNode;
+		newContainer.XMLNode.init(newContainer);
+		newContainer.updateXMLNode();
+	}*/
+	bxe_updateXPath();
 }
 
 function bxe_OrderedList() {
-	window.getSelection().toggleListLines("UL", "OL");
+	window.getSelection().toggleListLines("ol", "ul");
 }
 
 function bxe_InsertImage() {
