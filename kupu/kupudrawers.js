@@ -80,7 +80,6 @@ DrawerTool.prototype = new KupuTool;
 
 function Drawer(elementid, tool) {
     /* base prototype for drawers */
-
     this.element = document.getElementById(elementid);
     this.tool = tool;
     
@@ -143,6 +142,8 @@ function LibraryDrawer(tool, xsluri, libsuri, searchuri) {
         // somewhere further down the chain starting with 
         // this._libsXslCallback()
         this.xmldata = null;
+          
+     
     };
     this.init(tool, xsluri, libsuri, searchuri);
 
@@ -701,6 +702,7 @@ function LibraryDrawer(tool, xsluri, libsuri, searchuri) {
         // load the xsl and the initial xml
         var wrapped_callback = new ContextFixer(this._libsXslCallback, this);
         this._loadXML(this.xsluri, wrapped_callback.execute);
+    
     };
 
     /*** bootstrapping ***/
@@ -762,10 +764,13 @@ function LibraryDrawer(tool, xsluri, libsuri, searchuri) {
         if(!id) {
             id = this.drawerid;
         };
-        var doc = this._transformXml();
+        
+       var doc = this._transformXml();
         var sourcenode = doc.selectSingleNode('//*[@id="'+id+'"]');
         var targetnode = document.getElementById(id);
-       this._replaceNodeContents(document, targetnode, sourcenode);
+        
+        //alert("id: "+id+" "+targetnode);
+        this._replaceNodeContents(document, targetnode, sourcenode);
     };
 
     this.deselectActiveCollection = function() {
@@ -1086,12 +1091,14 @@ function LibraryDrawer(tool, xsluri, libsuri, searchuri) {
           // something
           body = null;
         };
+        
         xmlhttp.open(method, uri, true);
         // use ContextFixer to wrap the Sarissa callback, both for isolating 
         // the 'this' problem and to be able to pass in an extra argument 
         // (callback)
         var wrapped_callback = new ContextFixer(this._sarissaCallback, xmlhttp,
                                                 callback, uri);
+        
         xmlhttp.onreadystatechange = wrapped_callback.execute;
         if (method == "POST") {
             // by default, we would send a 'text/xml' request, which
@@ -1111,6 +1118,7 @@ function LibraryDrawer(tool, xsluri, libsuri, searchuri) {
         if (this.editor.getBrowserName() != 'IE') {
             container.ownerDocument.contentWindow = doc.contentWindow;
         };
+        
         while (target.hasChildNodes()) {
             target.removeChild(target.firstChild);
         };
@@ -1152,7 +1160,6 @@ LibraryDrawer.prototype = new Drawer;
 
 function ImageLibraryDrawer(tool, xsluri, libsuri, searchuri) {
     /* a specific LibraryDrawer for images */
-
     this.init(tool, xsluri, libsuri, searchuri);
     
     this.save = function() {

@@ -399,6 +399,7 @@ function LibraryDrawer(tool, xsluri, libsuri, searchuri) {
     };
 
     this._loadXML = function(uri, callback, body) {
+        
         /* load the XML from a uri
         
             calls callback with one arg (the XML DOM) when done
@@ -427,6 +428,7 @@ function LibraryDrawer(tool, xsluri, libsuri, searchuri) {
             xmlhttp.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
         };
         xmlhttp.send(body);
+
     };
 
     this._replaceNodeContents = function(doc, target, container) {
