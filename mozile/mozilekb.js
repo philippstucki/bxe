@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: mozilekb.js,v 1.31 2004/02/26 17:27:11 chregu Exp $
+// $Id: mozilekb.js,v 1.32 2004/03/31 06:38:14 chregu Exp $
 
 /* 
  * mozilekb V0.46
@@ -394,8 +394,15 @@ function nonctrlKeyPressHandler(event)
 				td = true
 			}  
 			var _par = ip.ipNode.parentNode;
-				
-			if (_par.XMLNode && _par.XMLNode.localName == "object") {
+			//FIXME make soft breaks configurable
+			if (  event.shiftKey) {
+				if (_par.XMLNode.isAllowedChild(XHTMLNS,"br")) {
+					var secondTextNode = ip.ipNode.splitText(ip.ipOffset);
+					ip.ipNode.parentNode.insertBefore(documentCreateXHTMLElement("br"), secondTextNode);
+					_par.updateXMLNode();
+				}
+			}
+			else if (_par.XMLNode && _par.XMLNode.localName == "object") {
 				
 				var secondTextNode = ip.ipNode.splitText(ip.ipOffset);
 				ip.ipNode.parentNode.insertBefore(documentCreateXHTMLElement("br"), secondTextNode);
