@@ -861,6 +861,9 @@ Widget_ModalBox.prototype.addText = function(text) {
 	table.appendChild(tr);
 	var td = document.createElement("td");
 	td.setAttribute("colspan",2);
+	if (text.length>1000)  {
+		text=text.substring(0,1000)+" ...";
+	}
 	td.appendChild(document.createTextNode(text));
 	tr.appendChild(td);
 }
