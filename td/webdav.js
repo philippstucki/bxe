@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: webdav.js,v 1.6 2003/08/20 09:57:06 chregu Exp $
+// $Id: webdav.js,v 1.7 2003/09/08 06:37:55 chregu Exp $
 /**
 * @file
 * Implements the http TransportDriver 
@@ -47,7 +47,7 @@ function BXE_TransportDriver_webdav (parent)
 * @treturn XMLDocument newly created xml document
 */
 
-BXE_TransportDriver_webdav.prototype.load = function(filename,callback) {
+BXE_TransportDriver_webdav.prototype.load = function(filename, callback) {
 	//docu.loader = this.parent;
 	this.p.request.td = this;
 	if (callback) {
@@ -115,7 +115,7 @@ BXE_TransportDriver_webdav.prototype._responseXML = function(e) {
 * @treturn void Nothing
 */
 
-BXE_TransportDriver_webdav.prototype.save = function(filename,options, content)
+BXE_TransportDriver_webdav.prototype.save = function(filename, content, callback)
 {
 	if(this.Exit) {
 		this.p.request.Exit = this.Exit;

@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: http.js,v 1.4 2003/09/04 08:03:57 chregu Exp $
+// $Id: http.js,v 1.5 2003/09/08 06:37:55 chregu Exp $
 /**
 * @file
 * Implements the http TransportDriver 
@@ -120,11 +120,10 @@ BXE_TransportDriver_http.prototype._responseXML = function(e) {
 * assignment (in PHP you have to use $HTTP_RAW_POST_DATA for getting the content)
 * See php/save.php for an example how to implement it in PHP.
 * @tparam String filename the filename (can be http://... or just a relative path)
-* @tparam Mixed options Not used here
 * @treturn void Nothing
 */
 
-BXE_TransportDriver_http.prototype.save = function(filename,options, xml)
+BXE_TransportDriver_http.prototype.save = function(filename, xml, callback)
 {
 	this.p.onload = this._responseXML;
 	this.p.open("POST",filename );

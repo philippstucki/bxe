@@ -11,20 +11,15 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>						|
 // +----------------------------------------------------------------------+
 //
-// $Id: relaxngtest.js,v 1.1 2003/08/27 09:12:12 chregu Exp $
+// $Id: relaxngtest.js,v 1.2 2003/09/08 06:37:55 chregu Exp $
 /**
 * @file
-* Implements the http TransportDriver 
 *
+* IMplements a relaxng test driver
+*
+* Not a real transport driver...
 */
 
-/**
-* http TransportDriver
-* @ctor
-* The constructor
-* @tparam Object parent the "parent" Object (the loader)
-* @see BXE_TransportDriver
-*/
 function BXE_TransportDriver_relaxng (parent)
 {
 	/**
@@ -104,7 +99,7 @@ BXE_TransportDriver_relaxng.prototype._responseXML = function(e) {
 * @treturn void Nothing
 */
 
-BXE_TransportDriver_relaxng.prototype.check = function(filename,options, xml)
+BXE_TransportDriver_relaxng.prototype.check = function(filename, xml, callback)
 {
 	var xmlstr = bxe_getXmlDocument();
 	var relaxngstr =  bxe_getRelaxNGDocument();
