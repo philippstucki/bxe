@@ -257,3 +257,60 @@ function bxe_about_box_fade_out (e) {
 		bxe_about_box.node.style.display = "none";
 	}
 }
+
+function bxe_draw_widgets() {
+	
+	
+	// make menubar
+	var menubar = new Widget_MenuBar();
+	var img = document.createElement("img");
+	img.setAttribute("src","bxe.png");
+	
+	//imgspan.appendChild(img);
+	img.setAttribute("align","right");
+	menubar.node.appendChild(img);
+	var submenu = new Array("Save",function() {alert("hello")},"Load","load");
+	menubar.addMenu("File",submenu);
+
+	var submenu = new Array("Undo",bxe_not_yet_implemented,"Redo",bxe_not_yet_implemented);
+	menubar.addMenu("Edit",submenu);
+	
+
+	menubar.draw();
+	
+	//make toolbar
+	
+	var toolbar = new Widget_ToolBar();
+	var menulist = new Widget_MenuList("m",function(e) {eDOMEventCall("changeLinesContainer",document,this.value)});
+	menulist.appendItem("H1","h1");
+	menulist.appendItem("bar","foo");
+	menulist.appendItem("blbla","foo");
+	toolbar.addItem(menulist);
+	
+	
+	toolbar.addButtons(buttons);
+	
+	
+	toolbar.draw();
+
+	bxe_status_bar = new Widget_StatusBar();
+	document.addEventListener("click",MouseClickEvent,false);
+
+
+	// if not content editable and ptb is enabled then hide the toolbar (watch out
+	// for selection within the toolbar itself though!)
+	
+	
+	window.setTimeout(bxe_about_box_fade_out, 1000);
+	
+}
+
+function MouseClickEvent(e) {
+	
+	
+	var target = e.target.parentElement;
+	if(target.userModifiable) {
+		bxe_status_bar.buildXPath(target);
+	}
+	
+}

@@ -217,6 +217,8 @@ function mozile_loaded() {
 }
 
 
+
+
 function bxe_not_yet_implemented() {
 	alert("not yet implemented");
 }

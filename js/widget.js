@@ -286,7 +286,7 @@ Widget_Menu.prototype.addMenuPopup = function(submenus) {
 			submenu.addMenuItem(label, submenus.shift());
 		}
 	}
-	submenu.position(this.node.offsetLeft , this.node.offsetTop + this.node.offsetHeight   ,"absolute");
+	submenu.position(this.node.offsetLeft +5, this.node.offsetTop + this.node.offsetHeight   ,"absolute");
 	this.MenuPopup = submenu;
 	this.node.addEventListener("click", function(e) {
 		this.Widget.MenuPopup.draw();
@@ -371,10 +371,10 @@ function Widget_ToolBarButton (id) {
 
 	this.node.style.setProperty("background-image","url("+buttonImgLoc+")","");
 	this.node.style.setProperty("background-position","-"+clipoffset[0]+"px -"+clipoffset[1]+"px","");
-	this.node.addEventListener("mousedown",function(e) {this.style.border="inset 1px"}, false);
-	this.node.addEventListener("mouseup",function(e) {this.style.border="outset 1px"}, false);
-	this.node.addEventListener("mouseout",function(e) {this.style.border="solid 1px #C0C0C0"}, false);
-	this.node.addEventListener("mouseover",function(e) {this.style.border="outset 1px"}, false);
+	this.node.addEventListener("mousedown",function(e) {this.style.border="solid 1px"}, false);
+	this.node.addEventListener("mouseup",function(e) {this.style.border="dotted 1px"}, false);
+	this.node.addEventListener("mouseout",function(e) {this.style.border="dotted 1px #C0C0C0"}, false);
+	this.node.addEventListener("mouseover",function(e) {this.style.border="dotted 1px"}, false);
 	this.node.addEventListener("click",function(e) { eDOMEventCall(buttons[id][2],document,this.getAttribute("title"))}, false);
 }	
 
@@ -418,6 +418,34 @@ Widget_AboutBox.prototype.addText = function(text) {
 		this.TextNode.data = "..." + this.TextNode.data.substr(this.TextNode.data.length - 60);
 	}
 }
+
+
+function Widget_StatusBar () {
+	this.node = this.initNode("div","StatusBar","StatusBar");
+	this.node.appendToBody();
+	this.position(0,window.innerHeight - 20,"absolute");
+	this.Display  = "block";
+	this.buildXPath(bxe_globals.xmldoc.documentElement);
+	
+	
+	this.draw();
+}
+
+Widget_StatusBar.prototype = new Widget();
+
+Widget_StatusBar.prototype.buildXPath = function (node) {
+	if (node.xmlNode) {
+		node = node.xmlNode;
+	}
+	this.node.removeAllChildren();
+	while(node && node.nodeType == 1) {
+		var rootNode = document.createElement("span");
+		rootNode.appendChild(document.createTextNode(node.nodeName));
+		this.node.insertBefore(rootNode,this.node.firstChild);
+		node = node.parentNode;
+	}
+}
+
 
 
 	

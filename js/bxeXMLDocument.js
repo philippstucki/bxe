@@ -2,7 +2,7 @@
 XMLDocument.prototype.insertIntoHTMLDocument = function() {
 	
 	
-	this.transformToInternalFormat();
+	//this.transformToInternalFormat();
 	
 
 	//var nsResolver = this.createNSResolver(this.documentElement);
@@ -44,48 +44,5 @@ XMLDocument.prototype.insertIntoHTMLDocument = function() {
 		
 	}
 	
-	// make menubar
-	var menubar = new Widget_MenuBar();
-	var img = document.createElement("img");
-	img.setAttribute("src","bxe.png");
-	
-	//imgspan.appendChild(img);
-	img.setAttribute("align","right");
-	menubar.node.appendChild(img);
-	var submenu = new Array("Save",function() {alert("hello")},"Load","load");
-	menubar.addMenu("File",submenu);
-
-	var submenu = new Array("Undo",bxe_not_yet_implemented,"Redo",bxe_not_yet_implemented);
-	menubar.addMenu("Edit",submenu);
-	
-
-	menubar.draw();
-	
-	//make toolbar
-	
-	var toolbar = new Widget_ToolBar();
-	var menulist = new Widget_MenuList("m",function(e) {eDOMEventCall("changeLinesContainer",document,this.value)});
-	menulist.appendItem("H1","h1");
-	menulist.appendItem("bar","foo");
-	menulist.appendItem("blbla","foo");
-	toolbar.addItem(menulist);
-	
-	
-	toolbar.addButtons(buttons);
-	
-
-	
-	
-
-	
-	
-	//var button = new Widget_ToolBarButton("italic",1,2);
-	//alert(toolbar.node.saveXML(toolbar.node));
-	//toolbar.addItem(button);
-	
-	toolbar.draw();
-	
-	
-	window.setTimeout(bxe_about_box_fade_out, 1000);
-	
+	bxe_draw_widgets();
 }
