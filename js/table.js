@@ -11,163 +11,171 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: table.js,v 1.3 2003/08/21 20:12:31 chregu Exp $
-/**
-* @file
-* Implements the table plugin
-*
-* The functions here will go into some table Class.
-* we need also some kind of plugin-interface. to be defined yet
-*/
+// $Id: table.js,v 1.4 2003/09/14 10:33:17 chregu Exp $
 
 
-function bxe_table_insert(e)
-{
-	var table = bxe_table_newtable();
-	window.getSelection().insertNode(table);
+HTMLTableCellElement.prototype.TableAppendRow = function () {
+	var newRow = this.parentNode.cloneNode(true);
+	this.parentNode.parentNode.insertAfter(newRow,this.parentNode);
 }
 
-function bxe_table_newtable()
-{
-	
-	
-	var TRows = 2;
-	var TCols = 2;
-	var table = document.createElementNS(XHTMLNS,"table");
-	for (var i  = 0; i < TRows; i++)
-	{
-		var trElement = document.createElementNS(XHTMLNS,"tr");
+HTMLTableCellElement.prototype.TableAppendCol = function () {
+	var pos = this.findPosition();
+	var table = this.parentNode.parentNode;
+	var row = table.firstChild;
+	var colpos = 1;
+	while (row) {
+		if (row.nodeType == 1) {
+			if ( row.localName.toLowerCase() == "tr") {
+				var cell = row.firstChild;
+				var nextpos = 1;
+				
+				while (cell) {
+					if (cell.nodeType == 1 && cell.localName.toLowerCase() == "td") {
+						if (nextpos >= pos) {
+							var newtd = document.createElementNS(XHTMLNS,"td");
+							newtd.appendChild(document.createTextNode(STRING_NBSP));
+							row.insertBefore(newtd,cell.nextSibling);
+							break;
+						}
+						if (cell.hasAttribute("colspan")) {
+							nextpos += parseInt( cell.getAttribute("colspan"));
+						} else {
+							nextpos++;
+						}
+						
+						
+					}
+					cell = cell.nextSibling;
+				}
+				
+			} else if ( row.localName.toLowerCase() == "col") {
+				dump (colpos + " ==  " + pos + "\n");
+				if (colpos == pos) {
+					
+					table.insertBefore(document.createElementNS(XHTMLNS, "col"),row.nextSibling);
+				}
+				colpos++;
+			}
+		}
 		
-		for (var j  = 0; j < TCols; j++)
-		{
-			var tdElement = document.createElementNS(XHTMLNS,"td");
-			
-			var textNode = document.createTextNode("#");
-			tdElement.appendChild(textNode);
-			trElement.appendChild(tdElement)
-		}
-		var tr = table.appendChild(trElement);
+		row = row.nextSibling;
 	}
-	return table;
 	
 }
 
-function BX_table_insert_row_or_col(roworcol)
-{
-	if(BX_popup.style.visibility== 'visible')
-	{
-		if (document.getElementById("bxe_tabelle").ch[0].checked)
-		{
-			BX_table_insert_row();
+HTMLTableCellElement.prototype.findPosition = function () {
+	// find position
+	var prevSibling = this.previousSibling;
+	var pos = 1;
+	while(prevSibling) {
+		if (prevSibling.nodeType == 1 && prevSibling.localName.toLowerCase() == "td") {
+			if (prevSibling.hasAttribute("colspan")) {
+				pos += parseInt( prevSibling.getAttribute("colspan"));
+			} else {
+				pos++;
+			}
 		}
-		else
-		{
-			BX_table_insert_col();
-		}
-		BX_popup.style.visibility= 'hidden';
-		BX_addEvents();
-		return;
+		prevSibling = prevSibling.previousSibling;
 	}
-	
-	
-	if (!(BX_range))
-	{
-		alert("Nothing selected, please select a table cell");
-		return;
-	}
-	if (BX_range.startContainer.parentNode.nodeName.toLowerCase() != "entry")
-	{
-		alert("No table-cell (but " + BX_range.startContainer.parentNode.nodeName +") selected, please choose one");
-		return ;
-	}
-	BX_popup_start("Add Row or Col",110,90);
-	var output = "";
-	output += "<form action='javascript:BX_table_insert_row_or_col();' id='bxe_tabelle' name='tabelle'><table class=\"usual\"><tr>";
-	output += "<td ><input name='ch' type='radio' value='row' checked='checked' /></td><td >add row</td>\n";
-	output += "</tr><tr><td ><input name='ch' type='radio' value='col' /></td><td >add col</td>\n";
-	
-	output += "</tr><tr><td colspan='2'><input type='submit' class=\"usual\" value='add' /> </td>";
-	output += "</tr></table></form>";
-	
-	BX_popup_addHtml(output);
-	BX_popup_show();
-	BX_popup.style.top=BX_popup.offsetTop - 1 + "px";
-	
-}
-function BX_table_insert_row()
-{
-	var cell = BX_range.startContainer.parentNode;
-	var row = cell.parentNode;
-	var tbody = row.parentNode;
-	
-	var newRow = BX_xml.doc.createElementNS("http://www.w3.org/1999/xhtml","row");
-	BX_node_insertID(newRow);
-	for (var i = 0; i < row.childNodes.length; i++)
-	{
-		var newCell = BX_xml.doc.createElementNS("http://www.w3.org/1999/xhtml","entry");
-		BX_node_insertID(newCell);
-		var textNode = BX_xml.doc.createTextNode("#");
-		newCell.appendChild(textNode);
-		newRow.appendChild(newCell);
-	}
-	
-	tbody.replaceChild(newRow,row);
-	bla = tbody.insertBefore(row,newRow);
-	BX_range.setEnd(bla.nextSibling.childNodes[0].childNodes[0],0);
-	BX_range.setStart(bla.nextSibling.childNodes[0].childNodes[0],0);
-	
+	return pos;
 }
 
-function BX_table_insert_col()
-{
-	if (!(BX_range))
-	{
-		alert("Nothing selected, please select a table cell");
-		return;
+HTMLTableCellElement.prototype.TableCellMergeRight = function () {
+	var nextSibling = this.nextSibling;
+	while (nextSibling && nextSibling.nodeType != 1) {
+		nextSibling = nextSibling.nextSibling;
 	}
-	var cell = BX_range.startContainer.parentNode;
-	if (cell.nodeName.toLowerCase() != "entry")
-	{
-		alert("No table-cell selected, please choose one");
-		return ;
+	var child = nextSibling.firstChild;
+	while (child) {
+		this.appendChild(child);
+		child = child.nextSibling;
 	}
-	var row = cell.parentNode;
-	var tbody = row.parentNode;
-	var cellPos;
-	// find on which position we are
-	for (var i = 0; i < row.childNodes.length; i++)
-	{
-		if (row.childNodes[i] == cell)
-		{
-			cellPos = i;
+	this.normalize();
+	nextSibling.parentNode.removeChild(nextSibling);
+	var colspan = this.getAttribute("colspan");
+	if (!colspan) {
+		colspan = 1;
+	}
+	this.setAttribute("colspan", colspan+1);
+}
+
+
+
+HTMLTableCellElement.prototype.TableCellMergeDown = function () {
+	
+	var pos = this.findPosition();
+	var thisRowspan = 1;
+	if (this.hasAttribute("rowspan")) {
+		thisRowspan = this.getAttribute("rowspan");
+	}
+	this.setAttribute("rowspan",thisRowspan+1);	
+	
+	// find the same cell in the row below..
+	var tr = null;
+	// find next Row
+	
+	var nextSibling = this.parentNode.nextSibling
+	while(nextSibling) {
+		if (nextSibling.nodeType == 1 && nextSibling.localName.toLowerCase() == "tr") {
+			tr = nextSibling;
 			break;
 		}
+		nextSibling = nextSibling.nextSibling;
 	}
-	//for each row, add a entry
-	for (i = 0; i < tbody.childNodes.length; i++)
-	{
-		if (tbody.childNodes[i].nodeName.toLowerCase() == "row")
-		{
-			var newCell = BX_xml.doc.createElementNS("http://www.w3.org/1999/xhtml","entry");
-			BX_node_insertID(newCell);
-			var textNode = BX_xml.doc.createTextNode("#");
-			newCell.appendChild(textNode);
-			var oldCell = tbody.childNodes[i].childNodes[cellPos];
-			tbody.childNodes[i].replaceChild(newCell,oldCell);
-			bla = tbody.childNodes[i].insertBefore(oldCell,newCell);
-		}
-	}
-	BX_range.setEnd(newCell.childNodes[0],0);
-	BX_range.setStart(newCell.childNodes[0],0);
-}
-
-
-function BX_mousetrack(e) {
 	
-	if (e)
-	{
-		mouseX = e.pageX;
-		mouseY = e.pageY;
+	if (!tr) {
+		alert("no next table row found");
+		return;
 	}
+	
+	nextSibling = tr.firstChild;
+	var nextpos = 1;
+	while(nextSibling) {
+		if (nextSibling.nodeType == 1 && nextSibling.localName.toLowerCase() == "td") {
+			if (nextSibling.hasAttribute("colspan")) {
+				nextpos += parseInt( nextSibling.getAttribute("colspan"));
+			} else {
+				nextpos++;
+			}
+			if (nextpos > pos) {
+				break;
+			}
+		}
+		nextSibling = nextSibling.nextSibling;
+	}
+	
+	
+	var child = nextSibling.firstChild;
+	while (child) {
+		this.appendChild(child);
+		child = child.nextSibling;
+	}
+	this.normalize();
+	tr.removeChild(nextSibling);
 }
+
+HTMLTableCellElement.prototype.TableCellSplit = function () {
+	
+	var cssr = window.getSelection().getEditableRange();
+	var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
+	ip.splitContainedLine();
+
+	var colspan = this.getAttribute("colspan");
+	if (colspan > 2) {
+		this.setAttribute("colspan", colspan-1);
+	} else {
+		this.removeAttribute("colspan");
+	}
+	var nextSibling = this.nextSibling;
+	while (nextSibling && nextSibling.nodeType != 1) {
+		nextSibling = nextSibling.nextSibling;
+	}
+	if (nextSibling) {
+		nextSibling.reomveAttribute("colspan");
+	}
+	
+}
+
+
 
