@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.124 2003/12/05 00:51:53 chregu Exp $
+// $Id: bxeFunctions.js,v 1.125 2003/12/05 01:24:42 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -1349,13 +1349,6 @@ documentCreateXHTMLElement = function (elementName,attribs) {
 		case "img":
 			htmlelementname = "span";
 			childNode = document.createElementNS(XHTMLNS,elementName);
-			
-			if (attribs) {
-				
-				for (var i = 0; i < attribs.length ;  i++) {
-					childNode.setAttributeNode(attribs[i].cloneNode(true));
-				}
-			}
 			childNode.setAttribute("_edom_internal_node","true");
 			break;
 		default:
@@ -1365,7 +1358,13 @@ documentCreateXHTMLElement = function (elementName,attribs) {
 	if (elementName != htmlelementname) {
 		newNode.setAttribute("class", elementName);
 	}
+			
 	if (childNode) {
+		if (attribs) {
+			for (var i = 0; i < attribs.length ;  i++) {
+				childNode.setAttributeNS(attribs[i].namespaceURI, attribs[i].localName,attribs[i].value);
+			}
+		}	
 		newNode.appendChild(childNode);
 		newNode.InternalChildNode = childNode;
 		newNode.eDOMaddEventListener("NodeAttributesModified",bxe_InternalChildNodesAttrChanged,false);

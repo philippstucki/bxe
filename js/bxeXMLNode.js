@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLNode.js,v 1.36 2003/12/05 00:51:53 chregu Exp $
+// $Id: bxeXMLNode.js,v 1.37 2003/12/05 01:24:42 chregu Exp $
 
 
 function XMLNode  ( nodein, localName, nodeType, autocreate) {
@@ -461,28 +461,14 @@ XMLNode.prototype.getBeforeAndAfterString = function () {
 	
 }
 XMLNode.prototype.createNS = function (namespaceURI, localName, attribs) {
+	
 	var htmlelementname;
 	if (this.nodeType == 1) {
-		if (namespaceURI != XHTMLNS) {
-			htmlelementname = "span"
-			this._node = document.createElement(htmlelementname);
-			this._node.setAttribute("class", localName);
-			if (attribs) {
-				for (var i = 0; i< attribs.length; i++) {
-					this.setAttributeNS(attribs[i].namespaceURI, attribs[i].localName,attribs[i].value);
-				}
-			}
-		}
-		else {
-			this._node = documentCreateXHTMLElement(this.localName.toLowerCase(), attribs);
-		}
 		this.localName = localName;
 		this.namespaceURI = namespaceURI;
-		
 	}
-	else if (this.nodeType == 3) {
-		this._node = document.createTextNode(namespaceURI);
-	}
+	this._node = bxe_Node_createNS(this.nodeType, namespaceURI, localName, attribs);
+	
 	if (this._node) {
 		this._node.XMLNode = this;
 	} 
@@ -559,13 +545,9 @@ XMLNode.prototype.isInHTMLDocument= function() {
 
 XMLNode.prototype.makeHTMLNode = function () {
 	if (this.nodeType == 1) {
-		var attribs = this._node.attributes;
-		this.createNS(this.namespaceURI, this.localName,attribs);
-		for (var i = 0; i < attribs.length; i++) {
-			this._node.setAttributeNS(attribs[i].namespaceURI,attribs[i].localName,attribs[i].value);
-		}
+		this.createNS(this.namespaceURI, this.localName, this._node.attributes);
 	} else if (this.nodeType == 3 ) {
-		this._node = document.createTextNode(this.data);
+		this.createNS(this.data);
 	}
 	
 	else if (this._node.nodeType == 9 ) { // Node.XMLDOCUMENT) {

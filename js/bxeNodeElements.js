@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeNodeElements.js,v 1.33 2003/12/05 00:51:53 chregu Exp $
+// $Id: bxeNodeElements.js,v 1.34 2003/12/05 01:24:42 chregu Exp $
 
 Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 	alert("Node.prototype.insertIntoHTMLDocument is deprecated");
@@ -490,42 +490,42 @@ Node.prototype.prepareForInsert = function(onlyChildren) {
 Node.prototype.makeHTMLNode = function () {
 	var _node;
 	if (this.nodeType == 1) {
-		var attribs = this.attributes;
-		_node = this.createNS(this.namespaceURI, this.localName,attribs);
-		for (var i = 0; i < attribs.length; i++) {
-			_node.setAttributeNS(attribs[i].namespaceURI,attribs[i].localName,attribs[i].value);
-		}
+		_node = this.createNS(this.namespaceURI, this.attributes);
 	} else if (this.nodeType == 3 ) {
-		_node = document.createTextNode(this.data);
+		_node = this.createNS(this.data);
 	}
-	
 	else if (this.nodeType == 9 ) { // Node.XMLDOCUMENT) {
 			_node = this.documentElement;
 	}
-		
 	return _node;	
 }
 
-Node.prototype.createNS = function (namespaceURI, localName, attribs) {
+Node.prototype.createNS = function ( namespaceURI, attribs ) {
+	return bxe_Node_createNS(this.nodeType, namespaceURI, this.localName, attribs);
+}
+
+
+function bxe_Node_createNS(nodeType, namespaceURI, localName, attribs) {
 	var htmlelementname;
 	var _node;
-	if (this.nodeType == 1) {
+	if (nodeType == 1) {
 		if (namespaceURI != XHTMLNS) {
 			htmlelementname = "span"
 			_node = document.createElement(htmlelementname);
 			_node.setAttribute("class", localName);
-			if (attribs) {
-				for (var i = 0; i< attribs.length; i++) {
-					this.setAttributeNS(attribs[i].namespaceURI, attribs[i].localName,attribs[i].value);
-				}
-			}
 		}
 		else {
-			_node = documentCreateXHTMLElement(this.localName.toLowerCase(), attribs);
+			_node = documentCreateXHTMLElement(localName.toLowerCase(), attribs);
+		}
+		if (attribs) {
+			for (var i = 0; i< attribs.length; i++) {
+				_node.setAttributeNS(attribs[i].namespaceURI, attribs[i].localName,attribs[i].value);
+			}
 		}
 	}
-	else if (this.nodeType == 3) {
+	else if (nodeType == 3) {
 		_node = document.createTextNode(namespaceURI);
 	}
 	return _node;
+	
 }
