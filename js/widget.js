@@ -580,6 +580,8 @@ function Widget_ContextMenu () {
 	this.Popup.position(0,0,"absolute");
 	this.Popup.ContextMenu = this;
 	this.subPopup = new Widget_MenuPopup();
+	this.EditAttributes = new Widget_ModalAttributeBox();
+	
 }
 
 Widget_ContextMenu.prototype = new Widget();
@@ -594,6 +596,7 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 	if (node.XMLNode.vdom.hasAttributes && this.EditAttributes) {
 		var menui = this.Popup.addMenuItem("Edit Attributes..", this.EditAttributes.popup);
 		menui.Modal = this.EditAttributes;
+	//	menui.MenuPopup._node = node;
 	}
 	var sel  = window.getSelection();
 	var cssr = sel.getEditableRange();
@@ -631,6 +634,13 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 			ele.addMenu(this.subPopup,function(e){
 				var sub = e.currentTarget.Widget.SubPopup;
 				sub.removeAllMenuItems();
+				var newNode = e.currentTarget.Widget.AppendToNode._node;
+				if (newNode.XMLNode.vdom.hasAttributes && e.currentTarget.Widget.EditAttribute) {
+						var menui = sub.addMenuItem("Edit Attributes..", sub.EditAttributes.popup);
+						menui.Modal = e.currentTarget.Widget.EditAttribute;
+						menui.MenuPopup._node = newNode;
+				}
+
 				sub.appendAllowedSiblings(e.currentTarget.Widget.AppendToNode._node);
 				eDOMEventCall("ContextPopup",e.currentTarget.Widget.AppendToNode._node,sub);
 			});
