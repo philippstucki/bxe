@@ -4,19 +4,14 @@ Document.prototype.loadSchema = function(file ,callback) {
 }
 
 Document.prototype.validateDocument = function() {
-	
 	if (!this.vdom) {
 		alert ("no Schema assigned to Document");
 		return false;
 	}
 	
 	//check root element
-	dump (this.childNodes.length);
-	
-	//FIXME: element 0 doesn't have to be the root node.
-	var root = this.childNodes[0];
-	dump(root.nodeName + " " + root.childNodes.length);
-	return root.isNodeValid(true);
+	vdomCurrentChild = this.documentElement.vdom.firstChild;
+	return this.documentElement.isNodeValid(true);
 	/*if (!this.vdom.isGlobalElement(root.nodeName)) {
 		alert("not globally defined");
 	}*/
@@ -26,7 +21,18 @@ Document.prototype.validateDocument = function() {
 Document.prototype.getVdom = function(name) {
 	return this._vdom.globalElements[name.toLowerCase()];
 }
+Document.prototype.__defineGetter__(
+	"vdom", function () {
+		return this._vdom;
+	}
+	)
 
+
+Document.prototype.__defineSetter__(
+	"vdom", function (value) {
+		this._vdom = value;
+	}
+	)
 
 XMLDocument.prototype.saveXML = function(snode)
 {

@@ -35,3 +35,5 @@ function BX_debug(object)
 	win.document.writeln(bla);
 	win.document.writeln("<hr>");
 }
+
+

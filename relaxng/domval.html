@@ -3,24 +3,34 @@
 <meta name="generator" content="HTML Tidy, see www.w3.org" />
 <title>DomVal test</title>
 
-<script src="./dom3/validation.js" type="text/javascript"> </script>
-<script src="./dom3/DocumentVDOM.js" type="text/javascript"> </script>
-<script src="./dom3/ElementVDOM.js" type="text/javascript"> </script>
-<script src="./dom3/DocumentVAL.js" type="text/javascript"> </script>
-<script src="./dom3/NodeVAL.js" type="text/javascript"> </script>
-<script src="./dom3/ElementVAL.js" type="text/javascript"> </script>
+<script src="./validation.js" type="text/javascript"> </script>
+<script src="./AttributeVDOM.js" type="text/javascript"> </script>
+<script src="./NodeVDOM.js" type="text/javascript"> </script>
+<script src="./DocumentVDOM.js" type="text/javascript"> </script>
+
+<script src="./ElementVDOM.js" type="text/javascript"> </script>
+<script src="./DocumentVAL.js" type="text/javascript"> </script>
+<script src="./NodeVAL.js" type="text/javascript"> </script>
+<script src="./ElementVAL.js" type="text/javascript"> </script>
+
+
+<script src="./RelaxNG.js" type="text/javascript"> </script>
+
 </head>
 <body>
 <script>
-document.loadSchema("./schema.xml", parsed);
+document.loadSchema("./relaxng.xml", parsed);
 
 function parsed () {
-alert(document.validateDocument());
+dump(document.vdom.getStructure());
+dump("validation resulted in " +document.validateDocument());
+
 }
 </script>
 
-<div onclick="alert(this.vdom)">hello world</div>
+<div onclick="alert(this.vdom)">hello world
+<ul><li>hallo</li></ul>
+</div>
 </body>
 </html>
-
 
