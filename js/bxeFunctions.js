@@ -1544,6 +1544,8 @@ function bxe_catch_alert_message(e) {
 }
 
 function bxe_exit(e) {
+	
+	bxe_saveOnPart(e);
 	bxe_lastSavedXML = bxe_getXmlDocument();
 	window.location = bxe_config.exitdestination;
 }
