@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.127 2003/12/18 11:19:34 chregu Exp $
+// $Id: bxeFunctions.js,v 1.128 2003/12/18 16:19:49 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -669,8 +669,9 @@ function bxe_appendNode(e) {
 	if (e.additionalInfo.node) {
 		var cb = bxe_getCallback(e.additionalInfo.node.localName, e.additionalInfo.node.namespaceURI);
 		if (cb ) {
-			bxe_doCallback(cb, aNode);
-			return;
+			if (bxe_doCallback(cb, aNode)) {
+				return;
+			}
 		}
 		
 		var newNode = e.additionalInfo.node.init();
@@ -1143,11 +1144,13 @@ function bxe_InsertTable() {
 }
 
 
-function bxe_InsertTableCallback() {
+function bxe_InsertTableCallback(node) {
 	
 	var sel = window.getSelection();
 
-
+	if (node && node.firstChild) {
+		return false;
+	}
 	if (bxe_checkForSourceMode(sel)) {
 		return false;
 	}
@@ -1374,8 +1377,19 @@ documentCreateXHTMLElement = function (elementName,attribs) {
 			for (var i = 0; i < attribs.length ;  i++) {
 				childNode.setAttributeNS(attribs[i].namespaceURI, attribs[i].localName,attribs[i].value);
 			}
-		}	
+		}
+		// hack for uni to make the pictures not look like inline objects...
+		/*if (elementName == "object") {
+			var _br = document.createElementNS(XHTMLNS,"br");
+			_br.setAttribute("_edom_internal_node","true");
+			newNode.appendChild(_br);
+		}*/
 		newNode.appendChild(childNode);
+		/*if (elementName == "object") {
+			var _br = document.createElementNS(XHTMLNS,"br");
+			_br.setAttribute("_edom_internal_node","true");
+			newNode.appendChild(_br);
+		}*/
 		newNode.InternalChildNode = childNode;
 		childNode.InternalParentNode = newNode;
 		newNode.eDOMaddEventListener("NodeAttributesModified",bxe_InternalChildNodesAttrChanged,false);
@@ -1494,7 +1508,7 @@ function bxe_doCallback(cb, node ) {
 		pop.focus();
 		
 	} else if (cb["type"] == "function") {
-		eval(cb["content"] +"()");
+		return eval(cb["content"] +"(node)");
 	}
 }
 		
