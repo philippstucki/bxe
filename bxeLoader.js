@@ -76,8 +76,8 @@ bxe_globals.prototype.loadXML = function(xmlfile) {
 	
 	var td = new BXE_TransportDriver_webdav();
 	function callback (e) {
-		this.td.Docu.xmldoc =  this.responseXML;
-		this.td.Docu.xmldoc.insertIntoHTMLDocument()
+		e.target.td.Docu.xmldoc =  e.target.responseXML;
+		e.target.td.Docu.xmldoc.insertIntoHTMLDocument()
 	}
 	td.Docu = this;
 	td.load(xmlfile,callback);
