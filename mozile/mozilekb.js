@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: mozilekb.js,v 1.28 2004/01/13 09:00:20 chregu Exp $
+// $Id: mozilekb.js,v 1.29 2004/01/23 14:20:29 chregu Exp $
 
 /* 
  * mozilekb V0.46
@@ -389,7 +389,7 @@ function nonctrlKeyPressHandler(event)
 		ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
 
 		// POST04: support concept of not splitting line if mozUserModify indicates writeText ...
-		if (cssr.top._SourceMode) {
+		if (cssr.top._SourceMode) {
 			ip.insertCharacter(10);
 		}
 		else {
