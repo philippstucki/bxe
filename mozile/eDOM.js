@@ -2179,8 +2179,12 @@ CSSLine.prototype.__defineGetter__(
 	{
 		var contentsRange = document.createRange();
 		contentsRange.selectNodeContents(this.lineParent);
+		/*
+		 * Not sure, if we really can just leave out that here... Let's try it (chregu)
+		 * Without it, it solves issues with block within block elements (object/images for example) 
 		contentsRange.setStart(this.firstInsertionPoint.ipNode, this.firstInsertionPoint.ipOffset);
 		contentsRange.setEnd(this.lastInsertionPoint.ipNode, this.lastInsertionPoint.ipOffset);
+		*/
 		return contentsRange.cloneContents();
 	}
 );
