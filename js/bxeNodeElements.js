@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeNodeElements.js,v 1.37 2004/01/19 16:41:47 chregu Exp $
+// $Id: bxeNodeElements.js,v 1.38 2004/02/05 11:20:14 chregu Exp $
 
 Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 	alert("Node.prototype.insertIntoHTMLDocument is deprecated");
@@ -66,7 +66,7 @@ Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 					var attribs = node.attributes;
 					for (var i = 0; i < attribs.length; i++) {
 						if (attribs[i].namespaceURI != "http://www.w3.org/2000/xmlns/") {
-						   newElement.setAttributeNode(attribs[i]);
+						   newElement.setAttributeNS(attribs[i].namespaceURI,attribs[i].localName,attribs[i].value);
 						}
 					}
 				}

@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLNode.js,v 1.42 2004/01/19 16:41:47 chregu Exp $
+// $Id: bxeXMLNode.js,v 1.43 2004/02/05 11:20:14 chregu Exp $
 
 function bxe_XMLNodeInit (nodein, localName, nodeType, autocreate) {
 	if (nodein.nodeType == 1 || typeof nodein == "string") {
@@ -689,7 +689,7 @@ XMLNodeElement.prototype.setAttribute = function(name,value) {
 }
 
 XMLNodeElement.prototype.setAttributeNode = function(node) {
-	return this._node.setAttributeNode(node);
+	return this._node.setAttributeNS(node.namespaceURI,node.localName, node.value);
 }
 
 

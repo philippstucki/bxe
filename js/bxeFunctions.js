@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.148 2004/01/26 17:15:06 chregu Exp $
+// $Id: bxeFunctions.js,v 1.149 2004/02/05 11:20:14 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -1608,7 +1608,7 @@ function bxe_InternalChildNodesAttrChanged(e) {
 	for (var i = 0; i < attribs.length ;  i++) {
 		var prefix = attribs[i].localName.substr(0,5);
 		if (prefix != "_edom" && prefix != "__bxe") {
-			newNode.setAttributeNode(attribs[i].cloneNode(true));
+			newNode.setAttributeNS(attribs[i].namespaceURI,attribs[i].localName,attribs[i].value);
 		}
 	}
 	node.replaceChild(newNode,node.InternalChildNode);
