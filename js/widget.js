@@ -434,12 +434,21 @@ function Widget_AboutBox() {
 	this.node.appendChild(textdiv );
 	textdiv.style.top = (height - 84 ) + "px";;
 	textdiv.style.position = "relative";
-	this.draw();
+	this.show();
 	
 }
- 
-
 Widget_AboutBox.prototype = new Widget();
+Widget_AboutBox.prototype.show = function () {
+
+	if (navigator.platform == "MacPPC") {
+		this.node.style.MozOpacity = 0.99;
+	} else {
+		this.node.style.style.MozOpacity = 1;
+	}
+	this.draw();
+}
+
+
 
 Widget_AboutBox.prototype.setText = function(text) {
 	this.TextNode.data = text;

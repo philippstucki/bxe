@@ -216,9 +216,6 @@ bxe_nsResolver.prototype.lookupNamespacePrefix = function (uri) {
 function widget_loaded() {
 	mozile_corescript_loaded++;
 	bxe_about_box = new Widget_AboutBox();
-	if (navigator.platform == "MacPPC") {
-		bxe_about_box.node.style.MozOpacity = 0.99;
-	}
 	bxe_about_box.draw();
 	bxe_about_box.setText("Loading files ...");
 	

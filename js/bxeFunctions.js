@@ -2,13 +2,13 @@ const BXENS = "http://bitfluxeditor.org/namespace";
 
 function __bxeSave(e) {
 	
-	/*var cssr = window.getSelection().getEditableRange();
-	if(!cssr)
-	{
-		alert("*mozileModify.js:mozileSave: this default implementation only works if the current selection is in an editable area");
-		return;
-	}*/
+	var td = new BXE_TransportDriver_webdav();
+	td.Docu = this;
+	td.Exit = e.additionalInfo.exit;
+	td.save(bxe_config.xmlfile,null,bxe_getXmlDocument());
+}
 
+function bxe_getXmlDocument() {
 	var areaNodes = bxe_getAllEditableAreas();
 	for (var i = 0; i < areaNodes.length; i++) {
 		if ((areaNodes[i]._SourceMode)) {
@@ -18,14 +18,8 @@ function __bxeSave(e) {
 		var xmldoc = areaNodes[i].convertToXMLDocFrag();
 		//xmldoc = areaNodes[i].XMLNode.insertIntoXMLDocument(xmldoc);
 	}
-
-	var td = new BXE_TransportDriver_webdav();
-	td.Docu = this;
-	td.Exit = e.additionalInfo.exit;
-	td.save(bxe_config.xmlfile,null,xmldoc.ownerDocument.saveXML(xmldoc.ownerDocument));
+	return xmldoc.ownerDocument.saveXML(xmldoc.ownerDocument);
 }
-
-
 
 /* Mode toggles */
 
@@ -328,7 +322,29 @@ function bxe_draw_widgets() {
 	menubar.addMenu("Edit",submenu);
 	
 	var submenu = new Array("Count Div", function(e) { alert(document.getElementsByTagName("div").length);})
+	submenu.push("Show XML Document",function(e) {alert(bxe_getXmlDocument());})
 	menubar.addMenu("Debug",submenu);
+	
+	
+	var submenu = new Array();
+	submenu.push("Help",function (e) { 
+		bla = window.open("http://wiki.bitfluxeditor.org","help","width=800,height=600,left=0,top=0");
+		bla.focus();
+	
+	});
+	submenu.push("Website",function (e) { 
+		bla = window.open("http://www.bitfluxeditor.org","help","width=800,height=600,left=0,top=0");
+		bla.focus();
+	
+	});
+	submenu.push("About Bitflux Editor",function(e) { 
+		bxe_about_box.setText("");
+		bxe_about_box.show();
+		
+	});
+	
+	menubar.addMenu("Help",submenu);
+	
 	menubar.draw();
 	
 	//make toolbar
