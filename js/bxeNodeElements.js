@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeNodeElements.js,v 1.39 2004/02/17 10:04:24 chregu Exp $
+// $Id: bxeNodeElements.js,v 1.40 2004/02/20 16:30:42 chregu Exp $
 
 Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 	alert("Node.prototype.insertIntoHTMLDocument is deprecated");
@@ -165,10 +165,12 @@ Element.prototype.getCStyle = function(style) {
 
 Element.prototype.SplitClasses = function() {
 	var newElement = null;
-	if (this.localName.toLowerCase() == "span" && (this.namespaceURI == null ) && this.getAttribute("class")) {
+	
+	if (this.hasAttribute("class") ) {
 		var classes = this.getClasses();
 		if (classes.length > 1) {
 			for (var i = classes.length - 1; i >= 0; i--) {
+				
 				if (newElement != null) {
 					var newSpan = document.createElement("span");
 					newSpan.setAttribute("class",classes[i]);
@@ -178,6 +180,7 @@ Element.prototype.SplitClasses = function() {
 					newElement = document.createElement("span");
 					newElement.setAttribute("class",classes[i]);
 				}
+				newElement.XMLNode.namespaceURI = this.XMLNode.namespaceURI;
 				
 			}
 			newSpan.appendAllChildren(this);
@@ -290,6 +293,10 @@ Node.prototype.updateXMLNode = function (force) {
 	}
 	if (this.nodeType == 3) {
 		this.normalize();
+	}
+	
+	if (this.nodeType== 1 && this.hasAttribute("class")) {
+		this.SplitClasses();
 	}
 	var prev = this.previousNotInternalSibling;
 	if (prev ) {
