@@ -60,7 +60,7 @@ function documentSaveXML(snode)
 	var strXML = objXMLSerializer.serializeToString(snode);
 	return strXML;
 }
-
+/* not needed anymore, AFAIK 
 Node.prototype.fixNamespaces = function () {
 	var walker = this.ownerDocument.createTreeWalker(
 		this,
@@ -80,7 +80,7 @@ Node.prototype.fixNamespaces = function () {
 	} while( node)
 	
 }
-
+*/
 
 function documentSaveChildrenXML(snode, withParentNS) {
 	var root;
