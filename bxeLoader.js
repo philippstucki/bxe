@@ -33,7 +33,7 @@ mozile_js_files.push("td/http.js");
 mozile_js_files.push("mozile/domlevel3.js");
 mozile_js_files.push("mozile/mozCE.js");
 mozile_js_files.push("mozile/mozIECE.js");
-mozile_js_files.push("mozile/mozileModify.js");
+//mozile_js_files.push("mozile/mozileModify.js");
 mozile_js_files.push("js/eDOMEvents.js");
 mozile_js_files.push("js/bxeFunctions.js");
 
@@ -162,7 +162,7 @@ function script_loaded() {
 
 function mozile_core_loaded() {
 	bxe_about_box.addText("Scripts loaded ...");
-	bxe_about_box.addText("Load Config ...");
+	bxe_about_box.addText("Load Config ");
 	try {
 		bxe_config = new bxeConfig(bxe_config.file, bxe_config.fromUrl, bxe_config.configArray);
 	} catch (e) {
@@ -192,7 +192,6 @@ function xml_loaded(xmldoc) {
 	document.eDOMaddEventListener("InsertImage",bxe_InsertImage,false);
 	document.eDOMaddEventListener("OrderedList",bxe_OrderedList,false);
 	document.eDOMaddEventListener("UnorderedList",bxe_UnorderedList,false);
-	document.eDOMaddEventListener("insertedBefore",bxe_insertedBefore,false);
 
 	document.eDOMaddEventListener("changeLinesContainer",bxe_changeLinesContainer,false);
 	document.eDOMaddEventListener("Exit",bxe_exit,false);
@@ -203,6 +202,8 @@ function xml_loaded(xmldoc) {
 	
 	document.eDOMaddEventListener("Undo",function(e) { bxe_not_yet_implemented()}, false);
 	document.eDOMaddEventListener("Redo",function(e) { bxe_not_yet_implemented()}, false);
+	document.eDOMaddEventListener("NodeInsertedParent",bxe_NodeInsertedParent, false);
+	document.eDOMaddEventListener("NodeInsertedBefore",bxe_NodeInsertedBefore,false);
 
 	
 	
