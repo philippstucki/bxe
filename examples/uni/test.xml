@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:lenya="http://apache.org/cocoon/lenya/page-envelope/1.0"
-      xmlns:dc="http://purl.org/dc/elements/1.1/"
-      xmlns:dcterms="http://purl.org/dc/terms/"
-      xmlns:unizh="http://unizh.ch/doctypes/elements/1.0"
-      unizh:columns="3"
->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:lenya="http://apache.org/cocoon/lenya/page-envelope/1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:unizh="http://unizh.ch/doctypes/elements/1.0" unizh:columns="3">
 	<lenya:meta>
                 <dc:title>Dokument- bzw. Seitentitel</dc:title>
                 <dc:description>Abstract</dc:description>
@@ -39,7 +33,7 @@
 		<p>Different text styles can be used: <b>bold</b> or <i>italic</i> or
                 <small>small</small></p>
                 <p>There is <sub>subcript</sub> and <sup>superscript</sup>.</p>
-		<p>Links can be set to <a href="http://www.unizh.ch/">external resources</a>
+		<p>Link<b>s can</b> be set to <a href="http://www.unizh.ch/">external resources</a>
                 as well as to <a href="/studium/mobilitaet/sokrates.html">internal
                 pages</a>.</p>
                 <p>There are also markups: <unizh:attention>warning</unizh:attention> and <cite>cite</cite></p>

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar xmlns:lenya="http://apache.org/cocoon/lenya/page-envelope/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:unizh="http://unizh.ch/doctypes/elements/1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" ns="http://www.w3.org/1999/xhtml" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<grammar xmlns:lenya="http://apache.org/cocoon/lenya/page-envelope/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:unizh="http://unizh.ch/doctypes/elements/1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://www.w3.org/1999/xhtml" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <start>
     <element name="html">
-      
+      <attribute name="unizh:columns">
+        <data type="integer"/>
+      </attribute>
       <element name="lenya:meta">
         <element name="dc:title">
           <text/>
+
         </element>
         <element name="dc:description">
           <data type="NCName"/>
@@ -15,6 +18,7 @@
         </element>
         <element name="dc:subject">
           <data type="NCName"/>
+
         </element>
         <element name="dc:publisher">
           <text/>
@@ -24,6 +28,7 @@
         </element>
         <element name="dcterms:issued">
           <text/>
+
         </element>
         <element name="dc:language">
           <data type="NCName"/>
@@ -32,18 +37,22 @@
           <text/>
         </element>
       </element>
-     
+      <optional>
+
         <element name="unizh:highlights">
           <oneOrMore>
             <element name="unizh:highlight">
+            <optional>
               <element name="unizh:highlight-title">
                 <oneOrMore>
                   <choice>
                     <text/>
                     <ref name="a"/>
                   </choice>
+
                 </oneOrMore>
               </element>
+              </optional>
               <choice>
                 <ref name="object"/>
                 <oneOrMore>
@@ -51,15 +60,17 @@
                 </oneOrMore>
               </choice>
             </element>
+
           </oneOrMore>
           <ref name="object"/>
         </element>
-    
+      </optional>
       <element name="body">
         <optional>
           <element name="unizh:parenttitle">
             <empty/>
           </element>
+
           <element name="unizh:anchor">
             <empty/>
           </element>
@@ -69,6 +80,7 @@
             <ref name="object"/>
             <ref name="p"/>
             <element name="lenya:asset">
+
               <attribute name="src">
                 <data type="NCName"/>
               </attribute>
@@ -78,18 +90,17 @@
             <element name="h2">
               <text/>
             </element>
+
             <element name="table">
               <attribute name="class">
-                <choice>
-                    <value>basic</value>
-                    <value>ornate</value>
-                 </choice>
+                <data type="NCName"/>
               </attribute>
               <optional>
                 <element name="caption">
                   <text/>
                 </element>
                 <oneOrMore>
+
                   <element name="col">
                     <optional>
                       <attribute name="align">
@@ -99,6 +110,7 @@
                   </element>
                 </oneOrMore>
               </optional>
+
               <oneOrMore>
                 <element name="tr">
                   <optional>
@@ -108,7 +120,8 @@
                   </optional>
                   <oneOrMore>
                     <element name="td">
-                      <data type="NCName"/>
+
+                    <text/>
                     </element>
                   </oneOrMore>
                 </element>
@@ -117,6 +130,7 @@
           </choice>
         </oneOrMore>
         <optional>
+
           <oneOrMore>
             <choice>
               <element name="h3">
@@ -126,36 +140,38 @@
                 <attribute name="class">
                   <data type="NCName"/>
                 </attribute>
+
                 <oneOrMore>
                   <ref name="li"/>
                 </oneOrMore>
               </element>
-            </choice>
-          </oneOrMore>
-          <element name="ol">
+              <element name="ol">
+            <attribute name="class">
+              <data type="NCName"/>
+
+            </attribute>
             <oneOrMore>
               <ref name="li"/>
             </oneOrMore>
-            <attribute name="class">
-              <data type="NCName"/>
-            </attribute>
-            </element>
+          </element>
+            </choice>
+          </oneOrMore>
+          
           <element name="unizh:index">
             <attribute name="abstracts">
               <data type="boolean"/>
             </attribute>
+
           </element>
         </optional>
       </element>
-      <attribute name="unizh:columns">
-        <data type="integer"/>
-      </attribute>
     </element>
   </start>
   <define name="a">
     <element name="a">
       <attribute name="href">
         <data type="anyURI"/>
+
       </attribute>
       <text/>
     </element>
@@ -165,6 +181,7 @@
       <oneOrMore>
         <choice>
           <text/>
+
           <ref name="a"/>
           <element name="unizh:attention">
             <data type="NCName"/>
@@ -174,6 +191,7 @@
           </element>
           <element name="cite">
             <data type="NCName"/>
+
           </element>
           <element name="i">
             <data type="NCName"/>
@@ -183,6 +201,7 @@
           </element>
           <element name="sub">
             <data type="NCName"/>
+
           </element>
           <element name="sup">
             <data type="NCName"/>
@@ -192,17 +211,23 @@
     </element>
   </define>
   <define name="object">
+
     <element name="object">
       <attribute name="data">
         <data type="NCName"/>
       </attribute>
+      <optional>
       <attribute name="height">
         <data type="integer"/>
       </attribute>
+      </optional>
       <attribute name="type"/>
+      <optional>
       <attribute name="width">
+
         <data type="integer"/>
       </attribute>
+      </optional>
       <text/>
     </element>
   </define>
@@ -210,5 +235,6 @@
     <element name="li">
       <text/>
     </element>
+
   </define>
 </grammar>
