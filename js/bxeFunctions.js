@@ -301,6 +301,74 @@ function bxe_NodeRemovedChildOnly (e) {
 
 	
 }
+function bxe_ContextPopup(e) {
+	var node = e.target.XMLNode;
+	var popup = e.additionalInfo;
+	if (node.localName == "td") {
+		
+		// merge right
+		popup.addSeparator();
+		
+		
+				//split
+		var menui = popup.addMenuItem("Split to the right", function(e) {
+				var widget = e.currentTarget.Widget;
+				var _par = widget.MenuPopup.MainNode._node.parentNode;
+				widget.MenuPopup.MainNode._node.TableCellSplit();
+				_par.updateXMLNode();
+			});
+		
+		var nextSibling = node.nextSibling;
+		while (nextSibling && nextSibling.nodeType != 1) {
+			nextSibling = nextSibling.nextSibling;
+		}
+		if (nextSibling && nextSibling.localName == "td") {
+			var menui = popup.addMenuItem("Merge to the right", function(e) {
+				var widget = e.currentTarget.Widget;
+				var _par = widget.MenuPopup.MainNode._node.parentNode;
+				widget.MenuPopup.MainNode._node.TableCellMergeRight();
+				_par.updateXMLNode();
+			});
+		}
+
+		
+		
+		popup.MainNode = node;
+	}
+}
+
+Element.prototype.TableCellMergeRight = function () {
+	var nextSibling = this.nextSibling;
+	while (nextSibling && nextSibling.nodeType != 1) {
+		nextSibling = nextSibling.nextSibling;
+	}
+	var child = nextSibling.firstChild;
+	while (child) {
+		this.appendChild(child);
+		child = child.nextSibling;
+	}
+	this.normalize();
+	nextSibling.parentNode.removeChild(nextSibling);
+	var colspan = this.getAttribute("colspan");
+	if (!colspan) {
+		colspan = 1;
+	}
+	this.setAttribute("colspan", colspan+1);
+}
+
+Element.prototype.TableCellSplit = function () {
+	
+	var cssr = window.getSelection().getEditableRange();
+	var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
+	ip.splitContainedLine();
+
+	var colspan = this.getAttribute("colspan");
+	if (colspan > 1) {
+		this.setAttribute("colspan", colspan-1);
+	}
+}
+
+
 
 function bxe_NodeChanged(e) {
 

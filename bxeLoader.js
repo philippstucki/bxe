@@ -211,13 +211,14 @@ function xml_loaded(xmldoc) {
 
 	//document.eDOMaddEventListener("NodeInsertedParent",bxe_NodeInsertedParent, false);
 	document.eDOMaddEventListener("NodeInsertedBefore",bxe_NodeInsertedBefore,false);
+	//document.eDOMaddEventListener("NodeRemovedChild",bxe_NodeRemovedChild,false);
 	/*document.eDOMaddEventListener("NodeChanged",bxe_NodeChanged,false);
-	document.eDOMaddEventListener("NodeRemovedChild",bxe_NodeRemovedChild,false);
+	
 	document.eDOMaddEventListener("NodeRemovedChildOnly",bxe_NodeRemovedChildOnly,false);
 	document.eDOMaddEventListener("NodeAppendedChild",bxe_NodeAppendedChild,false);
 */
 	
-	
+	document.eDOMaddEventListener("ContextPopup",bxe_ContextPopup,false);
 	bxe_context_menu = new Widget_ContextMenu();
 }
 

@@ -1379,8 +1379,8 @@ InsertionPoint.prototype.splitContainedLine = function()
 	if(line.container == this.top)
 		return; // exception later?
 
-	if(line.container == line.tableCellAncestor)
-		return; // exception later?
+	/*if(line.container == line.tableCellAncestor)
+		return; // exception later?*/
 
 	if(this.__cssWhitespace == "pre")
 	{

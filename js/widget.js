@@ -582,12 +582,10 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 				menui.AppendToNode = node.XMLNode;
 				menui.Cssr = cssr;
 			}
-
-			
 	} 
-
 	//this.Popup.insertAllowedChildren(node);
 	this.Popup.appendAllowedSiblings(node);
+	eDOMEventCall("ContextPopup",node, this.Popup);
 	this.Popup._node = node;
 	this.Popup.addSeparator();
 	node = node.XMLNode.parentNode;
@@ -601,7 +599,8 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 			ele.addMenu(this.subPopup,function(e){
 				var sub = e.currentTarget.Widget.SubPopup;
 				sub.removeAllMenuItems();
-				sub.appendAllowedSiblings(e.currentTarget.Widget.AppendToNode._node)
+				sub.appendAllowedSiblings(e.currentTarget.Widget.AppendToNode._node);
+				eDOMEventCall("ContextPopup",e.currentTarget.Widget.AppendToNode._node,sub);
 			});
 		} else {
 			ele.Disabled = true;
