@@ -209,7 +209,17 @@ function bxe_getXmlDomDocument() {
 	var areaNodes = bxe_getAllEditableAreas();
 	var xml;
 	if(areaNodes.length == 0) {
-		alert("No bxe_xpath definitions found in your layout (HTML) file.");
+		var widg = mozilla.getWidgetModalBox("Error");
+
+		   widg.addText( "" );
+                widg.addText( "" );
+                widg.addText( "" );
+                widg.addText( "No bxe_xpath found found in your Layout (HTML) file" );
+                widg.addText( "" );
+                widg.addText( "" );
+                widg.addText( "" );
+
+                widg.show((window.innerWidth- 500)/2,50, "fixed");
 		return false;
 	}
 		
