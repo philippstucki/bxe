@@ -502,7 +502,7 @@ Selection.prototype.paste = function()
 	}
 	if (content && content.data) {
 		var elementName = bxe_config.options['autoParaElementName'];
-		if (elementName && clipboard._system && content.data.search(/\n.+/) > -1) {
+		if (elementName && clipboard._system && content.data.search(/[\n\r][a-zA-Z0-9]+/) > -1) {
 			content = content.data;
 			content.replace(/&/g,"&amp;").replace(/</g,"&lt;");
 			var elementNamespace = bxe_config.options['autoParaElementNamespace']
