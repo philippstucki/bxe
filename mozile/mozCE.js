@@ -531,7 +531,7 @@ Selection.prototype.paste = function()
 Selection.prototype._createHiddenForm = function() {
 		var iframe = document.createElement("div");
 		iframe.setAttribute("ID","ClipboardIFrame");
-		iframe.setAttribute("style","  -moz-user-input: enabled; position: absolute; width: 0px; height: 0px; overflow: hidden; ");
+		iframe.setAttribute("style","  -moz-user-input: enabled; position: fixed; width: 0px; height: 0px; top: 0px; left: 0px; overflow: hidden; ");
 		iframe =  document.getElementsByTagName("body")[0].appendChild(iframe);
 		var input = document.createElement("textarea");
 		input.id =  'hiddenform';
@@ -608,12 +608,8 @@ Selection.prototype.pasteKeyDown = function() {
 	iframe._placeholder.removeAllChildren();
 	//store the range for later retrieval
 	
-	
 	var cssr = this.getEditableRange();
 
-	iframe.style.top =  document.defaultView.pageYOffset + "px";
-	iframe.style.left =  document.defaultView.pageXOffset + "px";
-	
 	iframe._cssr = cssr;
 	iframe._input.focus();
 }
