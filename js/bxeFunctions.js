@@ -200,7 +200,7 @@ function bxe_toggleSourceMode(e) {
 						if (prefix == "xmlns") {
 							xmlnode.removeAttributeNS(XMLNS,"xmlns");
 						} else {
-							xmlnode.removeAttribute("xmlns:"+prefix);
+							xmlnode.removeAttributeNS(XMLNS,"xmlns:"+prefix);
 						}
 					}
 				}

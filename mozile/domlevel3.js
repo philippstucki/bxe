@@ -54,11 +54,10 @@ function documentSaveXML(snode)
 		if (i == "xmlns") {
 			snode.setAttributeNS(XMLNS,"xmlns",ns[i]);
 		} else {
-			snode.setAttribute("xmlns:" + i , ns[i]);
+			snode.setAttributeNS(XMLNS,"xmlns:" + i , ns[i]);
 		}
 	}
 	var strXML = objXMLSerializer.serializeToString(snode);
-
 	return strXML;
 }
 
