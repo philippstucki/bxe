@@ -677,7 +677,9 @@ XMLNodeElement.prototype.setAttributeNode = function(node) {
 
 
 XMLNodeElement.prototype.setAttributeNS = function(namespace,name,value) {
-	return this._node.setAttributeNS(namespace,name, value);
+	if(name != "xmlns" && namespace != "http://www.w3.org/2000/xmlns/") { 
+		return this._node.setAttributeNS(namespace,name, value);
+	}
 }
 
 XMLNodeElement.prototype.getAttribute = function(name) {

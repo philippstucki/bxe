@@ -523,45 +523,7 @@ function bxe_toggleTextClass(e) {
 	sel = window.getSelection();
 	cssr = sel.getEditableRange();
 	
-	
-	var _node = cssr.commonAncestorContainer;
-	_node.updateXMLNode();
-	//make sure start and endcontainer are nodes
-	if (cssr.startContainer.nodeType == 3) {
-		var startContainer = cssr.startContainer.parentNode;
-	} else {
-		var startContainer = cssr.startContainer;
-	}
-	
-	if (cssr.endContainer.nodeType == 3) {
-		var endContainer = cssr.endContainer.parentNode;
-	} else {
-		var endContainer = cssr.endContainer;
-	}
-	
-	// if startContainer is after endContainer, make start = end (otherwise it won't stop)
-	if (startContainer.compareDocumentPosition(endContainer) & Node.DOCUMENT_POSITION_PRECEDING) {
-		startContainer = endContainer;
-	}
-	
-	//walk through all nodes from start to endContainer
-	var walker = document.createTreeWalker(
-		startContainer, NodeFilter.SHOW_ELEMENT,
-		null, 
-		true);
-	var node = startContainer;
-	
-	
-	do {
-		if (node.nodeType == 1) {
-			node.updateXMLNode();
-		} 
-		if (endContainer == node) {
-			break;
-		}
-		node =   walker.nextNode() 
-	} while(node)
-	
+	var _node = cssr.updateXMLNodes();
 	debug("isValid?" + _node.XMLNode.isNodeValid());
 	bxe_history_snapshot_async();
 }
@@ -1581,8 +1543,10 @@ function bxe_CleanInlineIntern(localName, namespaceUri) {
 
 	// now normalize text
 	cssr.commonAncestorContainer.parentElement.normalize();
+	var _node = cssr.updateXMLNodes();
 	sel.selectEditableRange(cssr);
-	sel.anchorNode.updateXMLNode();
+	
+	
 	if (doitagain > 1) {
 		bxe_CleanInlineIntern(localName,namespaceUri);
 	}

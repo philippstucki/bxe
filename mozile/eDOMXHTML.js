@@ -719,6 +719,50 @@ Range.prototype.clearTextLinks = function()
 	this.__restoreTextBoundaries();
 }
 
+
+Range.prototype.updateXMLNodes = function() {
+	
+		
+	var _node = this.commonAncestorContainer;
+	_node.updateXMLNode();
+	//make sure start and endcontainer are nodes
+	if (this.startContainer.nodeType == 3) {
+		var startContainer = this.startContainer.parentNode;
+	} else {
+		var startContainer = this.startContainer;
+	}
+	
+	if (this.endContainer.nodeType == 3) {
+		var endContainer = this.endContainer.parentNode;
+	} else {
+		var endContainer = this.endContainer;
+	}
+	
+	// if startContainer is after endContainer, make start = end (otherwise it won't stop)
+	if (startContainer.compareDocumentPosition(endContainer) & Node.DOCUMENT_POSITION_PRECEDING) {
+		startContainer = endContainer;
+	}
+	
+	//walk through all nodes from start to endContainer
+	var walker = document.createTreeWalker(
+		document.documentElement, NodeFilter.SHOW_ELEMENT,
+		null, 
+		true);
+	walker.currentNode = startContainer;
+	var node = walker.currentNode;
+	
+	do {
+		if (node.nodeType == 1) {
+			node.updateXMLNode();
+		} 
+		if (endContainer == node) {
+			break;
+		}
+		node =   walker.nextNode() 
+	} while(node)
+	return _node;
+	
+}
 /******************************************* Misc ***********************************************/
 
 /**
