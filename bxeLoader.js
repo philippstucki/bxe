@@ -260,7 +260,7 @@ function mozile_loaded() {
 
 function xml_loaded(e) {
 	bxe_about_box.addText("Load RelaxNG ...");
-	if (!(e.target.td.Docu.xmldoc.loadSchema(bxe_config.validationfile,validation_loaded))) {
+	if (!(bxe_config.validationfile && e.target.td.Docu.xmldoc.loadSchema(bxe_config.validationfile,validation_loaded))) {
 		bxe_about_box.addText("RelaxNG File was not found");
 	}
 	document.eDOMaddEventListener("toggleSourceMode",bxe_toggleSourceMode,false);
