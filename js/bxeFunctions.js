@@ -202,6 +202,12 @@ function bxe_history_undo() {
 function bxe_getXmlDomDocument() {
 	var areaNodes = bxe_getAllEditableAreas();
 	var xml;
+	if(areaNodes.length == 0) {
+		alert("No bxe_xpath definitions found in your layout (HTML) file.");
+		return false;
+	}
+		
+		
 	for (var i = 0; i < areaNodes.length; i++) {
 		if ((areaNodes[i]._SourceMode)) {
 			return false;
