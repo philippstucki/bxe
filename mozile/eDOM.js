@@ -1311,6 +1311,8 @@ InsertionPoint.prototype.deletePreviousInLine = function()
 	if((prevResult != InsertionPoint.SAME_LINE) && (nextResult != InsertionPoint.SAME_LINE))
 	{
 		var line = this.line.deleteContents();
+		line.container.updateXMLNode();
+		
 		this.set(line.firstInsertionPoint);
 		return true;	
 	}
@@ -1344,16 +1346,19 @@ InsertionPoint.prototype.deletePreviousInLine = function()
 	var cssr = documentCreateCSSTextRange(range, this.__top);
 
 	cssr.includeExclusiveParents(); 
-
 	// TMP: POST05: include exclusive shouldn't do a partial grab of one end or the other of a range but it does now!
 	if((cssr.startContainer == startip.ipNode) || (cssr.endContainer == this.ipNode))
 		keepRange.deleteContents();
 	else {
-		
 		//FIXME: HERE WILL THE NODE BE DELETED, MAKE  AN EVENT!!!!!!!!
 		var sC = cssr.startContainer;
 		cssr.deleteContents();
-		sC.parentNode.updateXMLNode();
+		if (sC.parentNode.userModifiable) {
+			sC.parentNode.updateXMLNode();
+		} else {
+			sC.updateXMLNode();
+		}
+		
 	}
 	
 

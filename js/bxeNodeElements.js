@@ -275,13 +275,24 @@ Node.prototype.__defineGetter__ (
 )
 
 Node.prototype.updateXMLNode = function () {
-	debug("updateXMLNode: " + this);
-	if (!this.xmlBridge) {
-		if ( !this.parentNode._XMLNode  ) {
-			return this.parentNode.updateXMLNode();
-		}
-	} else {
+	debug ("updateXMLNode " + this);
+	if (this.nodeType == 1 && !this.userModifiable) {
 		return;
+	}
+	if (this._XMLNode && this.XMLNode.xmlBridge) {
+		var firstChild = this.firstNotInternalChild;
+		if (firstChild) {
+			this.XMLNode.firstChild = firstChild.XMLNode;
+			return firstChild.updateXMLNode();}
+		else { 
+			this.XMLNode.firstChild = null;
+			return ;
+		}
+	}
+
+		
+	if (!this.parentNode._XMLNode) {
+		return this.parentNode.updateXMLNode();
 	}
 	if (this.nodeType == 3) {
 		this.normalize();
@@ -308,6 +319,7 @@ Node.prototype.updateXMLNode = function () {
 		this.XMLNode.nextSibling = null;
 	}
 	if (this.parentNode  && this.parentNode.XMLNode) {
+		
 		this.XMLNode.parentNode = this.parentNode.XMLNode;
 	}
 	if (!this.XMLNode.nextSibling) {
