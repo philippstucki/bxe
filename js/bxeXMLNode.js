@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLNode.js,v 1.30 2003/11/18 21:41:10 chregu Exp $
+// $Id: bxeXMLNode.js,v 1.31 2003/11/19 17:09:46 chregu Exp $
 
 
 function XMLNode  ( nodein, localName, nodeType, autocreate) {
@@ -106,7 +106,7 @@ XMLNode.prototype.init = function ( nodein, localName, nodeType, autocreate) {
 //XMLNode.prototype =  document.createElement("bxe");
 
 XMLNode.prototype.insertAfter = function(newNode, oldNode) {
-	
+
 	this.insertBefore(newNode,oldNode.nextSibling);
 }
 
@@ -120,7 +120,6 @@ XMLNode.prototype.insertBefore = function(newNode,oldNode) {
 
 XMLNode.prototype.insertBeforeIntern = function(newNode, oldNode) {
 	try {
-
 	newNode.unlink();
 	newNode.parentNode = this;
 	newNode.ownerDocument = this.ownerDocument;
@@ -184,11 +183,19 @@ XMLNode.prototype.unlinkChildren = function () {
 
 XMLNode.prototype.appendChild = function(newNode) {
 	//BX_debug(newNode);
+	
 	if (this._node.ownerDocument == document ) {
 		newNode.createNS(newNode.namespaceURI, newNode.localName, newNode.attributes);
 	}
-	newNode._node = this._node.appendChild(newNode._node);
-
+	
+	var child = newNode.firstChild;
+	while (child) {
+		newNode._node.appendChild(child._node);
+		child = child.nextSibling;
+	}
+	
+	newNode_node = this._node.appendChild(newNode._node);
+	newNode._node = newNode_node;
 	this.appendChildIntern(newNode);
 
 	return newNode;
