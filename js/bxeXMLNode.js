@@ -612,11 +612,16 @@ XMLNodeElement.prototype.setAttributeNS = function(namespace,name,value) {
 }
 
 XMLNodeElement.prototype.getAttribute = function(name) {
-	return this._node.setAttribute(name, value);
+	return this._node.getAttribute(name);
 }
 
 XMLNodeElement.prototype.getAttributeNS = function(namespace,name) {
 	return this._node.getAttributeNS(namespace,name);
 }
+
+XMLNodeElement.prototype.removeAttribute = function(name) {
+	return this._node.removeAttribute(name);
+}
+	
 	
 	
