@@ -127,6 +127,11 @@ function ctrlKeyPressHandler(event)
 			return false;
 		}
 	}
+	else if(String.fromCharCode(event.charCode).toLowerCase() == "b")
+	{
+		bxe_bench();
+		return true;
+	}
 	else if(String.fromCharCode(event.charCode).toLowerCase() == "x")
 	{
 		if (mozilla.__allowedNativeCalls) {
