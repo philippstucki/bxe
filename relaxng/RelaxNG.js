@@ -50,10 +50,10 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 	var endTimer = new Date();
 	dump ("Start parsing RNG " + (endTimer - startTimer)/1000 + " sec\n"); 
 	if (DebugOutput) {
-		dump(this.xmldoc.saveXML(this.xmldoc));
+		//dump(this.xmldoc.saveXML(this.xmldoc));
 	}	
 
-	dump(this.xmldoc.saveXML(this.xmldoc));
+	//dump(this.xmldoc.saveXML(this.xmldoc));
 	
 	var rootChildren = this.xmldoc.documentElement.childNodes;
 	
@@ -62,6 +62,7 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 			this.parseStart(rootChildren[i]);
 		}
 	}
+	dump ("End parsing RNG " + (new Date() - startTimer)/1000 + " sec\n"); 
 	return true;
 }
 
@@ -405,7 +406,7 @@ bxe_RelaxNG_nsResolver.prototype.parseNodeName = function(nodename) {
 	
 Node.prototype.__defineGetter__ ("hasRelaxNGNamespace", function() {
 	
-	if (this.namespaceURI == "http://relaxng.org/ns/structure/1.0") {
+	if (this.namespaceURI == RELAXNGNS) {
 		return true;
 	} else {
 		return false;
@@ -436,73 +437,78 @@ NodeVDOM.prototype.parseChildren = function(node) {
 	
 	
 	for (var i = 0; i < childNodes.length; i++) {
-		if (childNodes[i].nodeType != 1) { continue;}
-		if (childNodes[i].isRelaxNGElement("element")) {
-			var newElement = new ElementVDOM(childNodes[i]);
-			var nsParts = rng_nsResolver.parseNodeNameOnElement(childNodes[i]);
-			newElement.nodeName = nsParts.nodeName;
-			newElement.localName = nsParts.localName;
-			newElement.namespaceURI = nsParts.namespaceURI;
-			newElement.prefix = nsParts.prefix;
-			this.appendChild(newElement);
-			newElement.parseChildren();
+		
+		if (!(childNodes[i].nodeType == 1 && childNodes[i].hasRelaxNGNamespace)) {continue;}
+		switch (childNodes[i].localName) {
+			case "element": 
+				var newElement = new ElementVDOM(childNodes[i]);
+				var nsParts = rng_nsResolver.parseNodeNameOnElement(childNodes[i]);
+				newElement.nodeName = nsParts.nodeName;
+				newElement.localName = nsParts.localName;
+				newElement.namespaceURI = nsParts.namespaceURI;
+				newElement.prefix = nsParts.prefix;
+				this.appendChild(newElement);
+				newElement.parseChildren();
+				break;
 			
 		//} else if (childNodes[i].isRelaxNGElement("ref")  && !childNodes[i].getAttribute("name").match(/\.attlist/)) {
-		} else if (childNodes[i].isRelaxNGElement("ref") ) {
+			case "ref":
 			
-			//FIXME this can be done smarter... cache the defines.
-			var xp = "/rng:grammar/rng:define[@name = '" + childNodes[i].getAttribute("name") + "']"
-			var defineChild = this.node.ownerDocument.documentElement.getXPathFirst(xp);
-			//debug("ref " + xp + " " + defineChild); 
-			
-			if (defineChild) {
-				//FIXME:...
-				if (!defineChild.isParsed) {
-					var newDefine = new DefineVDOM(defineChild);
-					defineChild.isParsed = true;
-					defineChild.vdom = newDefine;
-					newDefine.parseChildren(defineChild);
-					/* if (newDefine.lastChild) {
-						newDefine.lastChild.nextSibling = newDefine;
-					} */
-					
-				} 
-				var newRef = new RefVDOM(childNodes[i]);
-				newRef.DefineVDOM = defineChild.vdom;
-				this.appendChild(newRef);
-			}
-		} 
-
-		else if (childNodes[i].isRelaxNGElement("oneOrMore")) {
-			newOneOrMore = new OneOrMoreVDOM(childNodes[i]);
-			this.appendChild(newOneOrMore)
-			newOneOrMore.parseChildren(childNodes[i]);
-		} else if (childNodes[i].isRelaxNGElement("text")) {
-			this.appendChild(new TextVDOM(childNodes[i]));
-		} else if (childNodes[i].isRelaxNGElement("zeroOrMore")) {
-			newOneOrMore = new OneOrMoreVDOM(childNodes[i]);
-			this.appendChild(newOneOrMore);
-			newOneOrMore.appendChild(new EmptyVDOM());
-			newOneOrMore.parseChildren(childNodes[i]);
-			
-		} else if (childNodes[i].isRelaxNGElement("attribute")) {
-			this.addAttributeNode( new AttributeVDOM(childNodes[i]), "optional");
-
-		} else if (childNodes[i].isRelaxNGElement("optional")) {
-			newChoice = new ChoiceVDOM(childNodes[i]);
-			this.appendChild(newChoice);
-			newChoice.appendChild(new EmptyVDOM());
-			newChoice.parseChildren();
-		}
-		else if (childNodes[i].isRelaxNGElement("choice")) {
-			newChoice = new ChoiceVDOM(childNodes[i]);
-			this.appendChild(newChoice);
-			newChoice.parseChildren();
-		}
-		else if (childNodes[i].isRelaxNGElement("interleave")) {
-			var newInterleave = new InterleaveVDOM(childNodes[i]);
-			this.appendChild(newInterleave);
-			newInterleave.parseChildren();
+				//FIXME this can be done smarter... cache the defines.
+				var xp = "/rng:grammar/rng:define[@name = '" + childNodes[i].getAttribute("name") + "']"
+				var defineChild = this.node.ownerDocument.documentElement.getXPathFirst(xp);
+				//debug("ref " + xp + " " + defineChild); 
+				
+				if (defineChild) {
+					//FIXME:...
+					if (!defineChild.isParsed) {
+						var newDefine = new DefineVDOM(defineChild);
+						defineChild.isParsed = true;
+						defineChild.vdom = newDefine;
+						newDefine.parseChildren(defineChild);
+						/* if (newDefine.lastChild) {
+							newDefine.lastChild.nextSibling = newDefine;
+						} */
+						
+					} 
+					var newRef = new RefVDOM(childNodes[i]);
+					newRef.DefineVDOM = defineChild.vdom;
+					this.appendChild(newRef);
+				}
+				break;
+			case "oneOrMore":
+				newOneOrMore = new OneOrMoreVDOM(childNodes[i]);
+				this.appendChild(newOneOrMore)
+				newOneOrMore.parseChildren(childNodes[i]);
+				break;
+			case "text":
+				this.appendChild(new TextVDOM(childNodes[i]));
+				break;
+			case "zeroOrMore":
+				newOneOrMore = new OneOrMoreVDOM(childNodes[i]);
+				this.appendChild(newOneOrMore);
+				newOneOrMore.appendChild(new EmptyVDOM());
+				newOneOrMore.parseChildren(childNodes[i]);
+				break;
+			case "attribute":
+				this.addAttributeNode( new AttributeVDOM(childNodes[i]), "optional");
+				break;
+			case "optional":
+				newChoice = new ChoiceVDOM(childNodes[i]);
+				this.appendChild(newChoice);
+				newChoice.appendChild(new EmptyVDOM());
+				newChoice.parseChildren();
+				break;
+			case "choice":
+				newChoice = new ChoiceVDOM(childNodes[i]);
+				this.appendChild(newChoice);
+				newChoice.parseChildren();
+				break;
+			case "interleave":
+				var newInterleave = new InterleaveVDOM(childNodes[i]);
+				this.appendChild(newInterleave);
+				newInterleave.parseChildren();
+				break;
 		}
 	}
 }

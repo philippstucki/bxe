@@ -834,7 +834,8 @@ Widget_ModalBox.prototype.show = function(x,y, position) {
 					returnValues[elem[i].name] = elem[i].value;
 				}
 			}
-				
+			var sel = window.getSelection();
+			sel.selectEditableRange(Widget.cssr);
 			if (Widget.callback) {
 				Widget.callback(returnValues);
 			}
@@ -853,6 +854,7 @@ Widget_ModalBox.prototype.show = function(x,y, position) {
 			this.hasTable.parentNode.appendChild(cancel);
 		}
 		this.hasTable.parentNode.appendChild(subm);
+		this.cssr = window.getSelection().getEditableRange();
 		subm.focus();
 	}
 	if (!position) { position = "absolute";};

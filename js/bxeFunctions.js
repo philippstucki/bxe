@@ -153,6 +153,8 @@ function bxe_getRelaxNGDocument() {
 //	return areaNodes[0].XMLNode.ownerDocument.buildXML();
 }
 
+
+
 /* Mode toggles */
 
 function bxe_toggleTagMode(e) {
@@ -723,6 +725,16 @@ function BX_debug(object)
     win.document.writeln("<hr>");
 }
 
+function BX_showInWindow(string)
+{
+    var win = window.open("","debug");
+
+    win.document.innerHTML = "";
+
+    win.document.writeln("<pre>");
+    win.document.writeln(string.replace(/</g,"&lt;"));
+}
+
 function bxe_about_box_fade_out (e) {
 	
 	var mozO = bxe_about_box.node.getCStyle("-moz-opacity");
@@ -753,9 +765,11 @@ function bxe_draw_widgets() {
 	var submenu2 = new Array("Undo",bxe_not_yet_implemented,"Redo",bxe_not_yet_implemented);
 	menubar.addMenu("Edit",submenu2);
 	
-	var submenu3 = new Array("Count Div", function(e) { alert(document.getElementsByTagName("div").length);})
-	submenu3.push("Show XML Document",function(e) {alert(bxe_getXmlDocument());})
-	submenu3.push("Validate with xmllint",function(e) {	var foo = new BXE_TransportDriver_relaxng();foo.check();});
+	var submenu3 = new Array();//"Count Div", function(e) { alert(document.getElementsByTagName("div").length);})
+	submenu3.push("Show XML Document",function(e) {BX_showInWindow(bxe_getXmlDocument());})
+	submenu3.push("Show RNG Document",function(e) {BX_showInWindow(bxe_getRelaxNGDocument());})
+	
+	//submenu3.push("Validate with xmllint",function(e) {	var foo = new BXE_TransportDriver_relaxng();foo.check();});
 
 	menubar.addMenu("Debug",submenu3);
 	
@@ -1003,14 +1017,15 @@ function bxe_InsertTable() {
 	}
 	
 	var mod = mozilla.getWidgetModalBox("Create Table", function(values) {
-		var te = documentCreateTable(values.rows, values.cols);
-		if(!te)
+		var te = documentCreateTable(values["rows"], values["cols"]);
+		if(!te) {
 			alert("Can't create table: invalid data");
-		else
+		}
+		else {
 			window.getSelection().insertNode(te);
-		
-		te.setAttribute("class","ornate");
-		te.updateXMLNode();
+			te.setAttribute("class","ornate");
+			te.updateXMLNode();
+		}
 	});
 	mod.addItem("rows",2,"textfield","number of rows");
 	mod.addItem("cols",2,"textfield","number of cols");

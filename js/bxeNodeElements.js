@@ -291,7 +291,7 @@ Node.prototype.updateXMLNode = function (force) {
 	}
 
 		
-	if (!this.parentNode._XMLNode ) {
+	if (this.parentNode && !this.parentNode._XMLNode ) {
 		return this.parentNode.updateXMLNode(force);
 	}
 	if (this.nodeType == 3) {
@@ -323,10 +323,10 @@ Node.prototype.updateXMLNode = function (force) {
 		
 		this.XMLNode.parentNode = this.parentNode.XMLNode;
 	}
-	if (!this.XMLNode.nextSibling) {
+	if (!this.XMLNode.nextSibling && this.XMLNode.parentNode) {
 		this.XMLNode.parentNode.lastChild = this.XMLNode;
 	}
-	if (!this.XMLNode.previousSibling) {
+	if (!this.XMLNode.previousSibling && this.XMLNode.parentNode) {
 		this.XMLNode.parentNode.firstChild = this.XMLNode;
 	}
 	this.XMLNode._node = this
