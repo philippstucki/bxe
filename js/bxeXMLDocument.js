@@ -297,7 +297,11 @@ XMLNode.prototype.buildXML = function () {
 		
 		node._sernode = child;
 		if (node.parentNode && node.parentNode._sernode) {
-			node.parentNode._sernode.appendChild(child);
+			try {
+				node.parentNode._sernode.appendChild(child);
+			} catch(e) {
+				debug (child + " could not be appended to " + node.parentNode);
+			}
 		}
 		node = walker.nextNode();
 	}
