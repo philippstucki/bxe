@@ -1205,22 +1205,10 @@ function bxe_updateXPath(e) {
 			} else {
 				bxe_status_bar.buildXPath(sel.anchorNode);
 			}
-			var lines = cssr.lines;
+			var line = cssr.firstLine;
 			bxe_format_list.removeAllItems();
-			// try to find a container, if lines did not return one
-			/* not useful, 'cause changeLinesContainer doesn't work either...
-			if (!lines[0].container) {
-				var _n = cssr.startContainer;
-				while (_n && _n.nodeType == 1 && _n.getCStyle("display") == "inline" && _n  != cssr.top) {
-					
-					_n = _n.parentNode;
-				}
-				lines[0].container = _n;
-			}
-			*/
-			if (lines[0] && lines[0].container  ) {
-				/*		bxe_format_list.appendItem(lines[0].container.XMLNode.localName,lines[0].container.XMLNode.localName);*/
-				var thisNode = lines[0].container.XMLNode;
+			if (line && line.container  ) {
+				var thisNode = line.container.XMLNode;
 				if (thisNode.xmlBridge) {
 					var pref = "";
 					if (thisNode.prefix) {

@@ -3212,6 +3212,16 @@ Range.prototype.__defineGetter__(
 	}
 );
 
+Range.prototype.__defineGetter__(
+	"firstLine",
+	function()
+	{
+		var startip = this.firstInsertionPoint;
+		return documentCreateCSSLine(startip);
+	}
+);
+
+
 Range.prototype.containsInsertionPoint = function(ipToTest)
 {
 	var testRange = this.cloneRange();
