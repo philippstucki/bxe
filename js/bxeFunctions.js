@@ -453,7 +453,12 @@ function bxe_InsertLink() {
 
 
 function bxe_catch_alert(e ) {
-	var mes = "ERROR in initialising Bitflux Editor:\n"+e.message +"\n";
+	
+	alert(bxe_catch_alert_message);
+}
+
+function bxe_catch_alert_message(e) {
+	var mes = "ERROR in Bitflux Editor:\n"+e.message +"\n";
 	try
 	{
 		if (e.filename) {
@@ -475,7 +480,7 @@ function bxe_catch_alert(e ) {
 	
 	mes += "Type: " + e.name + "\n";
 	mes += "Stack:" + e.stack + "\n";
-	alert(mes);
+	return mes;
 }
 
 function bxe_exit(e) {

@@ -86,7 +86,7 @@ XMLDocument.prototype.transformToXPathMode = function(xslfile) {
 		try {
 			processor.importStylesheet(newDocument);
 		} catch(e) {
-			alert("Something went wrong during importing the XSLT document.\n" + newDocument.saveXML(newDocument));
+			alert("Something went wrong during importing the XSLT document.\n" + bxe_catch_alert_message(e) + "\n" + newDocument.saveXML(newDocument));
 		}
 		var xmldoc = processor.transformToFragment(xsltransformdoc.xsldoc.xmldoc,document);
 		var bxe_area = document.getElementById("bxe_area");
