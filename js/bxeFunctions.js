@@ -158,17 +158,27 @@ function toggleSourceMode_bxe(e) {
 		var xmldoc = editableArea.convertToXMLDocFrag();
 		editableArea.removeAllChildren();
 		editableArea.setStyle("white-space","-moz-pre-wrap");
-		editableArea.appendChild(document.createTextNode(document.saveChildrenXML(xmldoc,true)));
+		var xmlstr = document.saveChildrenXML(xmldoc,true);
+		editableArea.appendChild(document.createTextNode(xmlstr.str));
+		editableArea.XMLNode.prefix = xmlstr.rootPrefix;
 		editableArea._SourceMode = true;
 		editableArea.AreaInfo.SourceModeMenu.Checked = true;
 		editableArea.AreaInfo.NormalModeMenu.Checked = false;
-	} else { 
-		var innerHTML = '<'+editableArea.XMLNode.localName;
-		if (editableArea.XMLNode.namespaceURI != null) {
-			innerHTML += ' xmlns="' + editableArea.XMLNode.namespaceURI +'"';
+	} else {
+		var rootNodeName = editableArea.XMLNode.localName;
+		if (editableArea.XMLNode.prefix != null) {
+			rootNodeName = editableArea.XMLNode.prefix +":"+rootNodeName;
 		}
-		innerHTML += '>'+editableArea.getContent()+'</'+editableArea.XMLNode.localName+'>';
-		alert ("innerHTML : " + innerHTML + "\n");
+		var innerHTML = '<'+rootNodeName;
+		if (editableArea.XMLNode.namespaceURI != null) {
+			innerHTML += ' xmlns'
+			if (editableArea.XMLNode.prefix != null) {
+				innerHTML += ":" + editableArea.XMLNode.prefix ;
+			}
+			innerHTML += '="' + editableArea.XMLNode.namespaceURI +'"';
+		}
+		innerHTML += '>'+editableArea.getContent()+'</'+rootNodeName +'>';
+		
 		var innerhtmlValue = documentLoadXML( innerHTML);
 		if (innerhtmlValue) {
 			editableArea.removeAllChildren();
