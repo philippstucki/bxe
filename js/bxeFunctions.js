@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.151 2004/02/20 13:44:52 chregu Exp $
+// $Id: bxeFunctions.js,v 1.152 2004/03/10 14:00:28 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -1152,6 +1152,13 @@ function bxe_UnorderedList() {
 		if (li.nodeName == "li") {
 			li.XMLNode.namespaceURI = XHTMLNS;
 		}
+		var attr = li.XMLNode.attributes;
+		for (var i in attr) {
+			if (! li.XMLNode.isAllowedAttribute(attr[i].nodeName)) {
+				li.XMLNode.removeAttribute(attr[i].nodeName);
+			}
+		}
+
 		li = li.nextSibling;
 	}
 	lines[0].container.parentNode.setAttribute("class","type1");
@@ -1172,6 +1179,12 @@ function bxe_OrderedList() {
 	while (li ) {
 		if (li.nodeName == "li") {
 			li.XMLNode.namespaceURI = XHTMLNS;
+		}
+		var attr = li.XMLNode.attributes;
+		for (var i in attr) {
+			if (! li.XMLNode.isAllowedAttribute(attr[i].nodeName)) {
+				li.XMLNode.removeAttribute(attr[i].nodeName);
+			}
 		}
 		li = li.nextSibling;
 	}
