@@ -44,7 +44,48 @@ XMLDocument.prototype.insertIntoHTMLDocument = function() {
 	bxe_draw_widgets();
 }
 
+XMLDocument.prototype.checkParserError = function()
+{
+	if(this.documentElement && this.documentElement.nodeName=="parsererror")
+	{
+		var alerttext = "Parse Error: \n \n";
+		alerttext += this.documentElement.firstChild.data +"\n\n";
+		alerttext += "Sourcetext:\n\n";
+		alerttext += this.documentElement.childNodes[1].firstChild.data;
+		
+		return (alerttext);
+	}
+	return true;
+}
 
+XMLDocument.prototype.transformToXPathMode = function(xslfile) {
+	var xsldoc = document.implementation.createDocument("", "", null);
+	xsldoc.addEventListener("load", onload_xsl, false);
+	xsldoc.xmldoc = this;
+	xsldoc.load(xslfile);
+
+	function onload_xsl(e) {
+		xsldoc = e.currentTarget;
+		var xsltransformdoc = document.implementation.createDocument("", "", null);
+		xsltransformdoc.addEventListener("load", onload_xsltransform, false);
+		xsltransformdoc.xsldoc = xsldoc;
+		xsltransformdoc.load("xsl/transformxsl.xsl");
+	}
+	
+	function onload_xsltransform (e) {
+		var processor = new XSLTProcessor();
+		xsltransformdoc = e.currentTarget;
+		processor.importStylesheet(xsltransformdoc);
+		var newDocument = processor.transformToDocument(xsltransformdoc.xsldoc);
+		var processor = new XSLTProcessor();
+		processor.importStylesheet(newDocument);
+		var xmldoc = processor.transformToFragment(xsltransformdoc.xsldoc.xmldoc,document);
+		document.getElementsByTagName("body")[0].appendChild(xmldoc);
+		xsltransformdoc.xsldoc.xmldoc.insertIntoHTMLDocument();
+		
+	}
+	
+}
 
 
 

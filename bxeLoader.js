@@ -78,7 +78,11 @@ bxe_globals.prototype.loadXML = function(xmlfile) {
 	var td = new BXE_TransportDriver_webdav();
 	function callback (e) {
 		e.target.td.Docu.xmldoc =  e.target.responseXML;
-		e.target.td.Docu.xmldoc.insertIntoHTMLDocument()
+		if (bxe_config.xslfile) {
+			e.target.td.Docu.xmldoc.transformToXPathMode(bxe_config.xslfile)
+		} else {
+			e.target.td.Docu.xmldoc.insertIntoHTMLDocument();
+		}
 	}
 	td.Docu = this;
 	td.load(xmlfile,callback);
@@ -251,11 +255,6 @@ function config_loaded(bxe_config_in) {
 	bxe_globals = new bxe_globals();
 	bxe_config = bxe_config_in;
 	bxe_globals.loadXML(bxe_config.xmlfile);
-//	document.addEventListener("click",onClick,false);
-	bla = document.createElement("div");
-	bla.setAttribute("name","bxe_AreaHolder");
-	bla.appendChild(document.createTextNode("blabla"));
-	document.getElementsByTagName("body")[0].appendChild(bla);
 }
 
 
