@@ -11,11 +11,53 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: table.js,v 1.5 2003/09/15 08:10:36 chregu Exp $
+// $Id: table.js,v 1.6 2003/09/15 09:05:42 chregu Exp $
 
 
 HTMLTableCellElement.prototype.TableRemoveRow = function() {
 	this.parentNode.parentNode.removeChild(this.parentNode);
+}
+
+HTMLTableCellElement.prototype.TableRemoveCol = function() {
+	var pos = this.findPosition();
+	var table = this.parentNode.parentNode;
+	var colpos = 1;
+	var row = table.firstChild;
+	var colToBeRemoved = null;
+	while (row) {
+		if (row.nodeType == 1) {
+			
+			if ( row.localName.toLowerCase() == "tr") {
+				var cell = row.firstChild;
+				var nextpos = 1;
+				while (cell) {
+					if (cell.nodeType == 1 && cell.localName.toLowerCase() == "td") {
+						debug (nextpos + " " + pos);
+						if (nextpos >= pos) {
+							row.removeChild(cell);
+							break;
+						}
+						if (cell.hasAttribute("colspan")) {
+							nextpos += parseInt( cell.getAttribute("colspan"));
+						} else {
+							nextpos++;
+						}
+					}
+					cell = cell.nextSibling;
+				}
+			} else if ( row.localName.toLowerCase() == "col") {
+				if (colpos == pos) {
+					colToBeRemoved = row;
+					
+				}
+				colpos++;
+			}
+		}
+		row = row.nextSibling;
+	}
+	if (colToBeRemoved) {
+		table.removeChild(colToBeRemoved);
+	}
 }
 
 HTMLTableCellElement.prototype.TableAppendRow = function () {
@@ -47,12 +89,9 @@ HTMLTableCellElement.prototype.TableAppendCol = function () {
 						} else {
 							nextpos++;
 						}
-						
-						
 					}
 					cell = cell.nextSibling;
 				}
-				
 			} else if ( row.localName.toLowerCase() == "col") {
 				dump (colpos + " ==  " + pos + "\n");
 				if (colpos == pos) {

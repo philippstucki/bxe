@@ -368,6 +368,13 @@ function bxe_ContextPopup(e) {
 			_par.updateXMLNode();
 		});
 		
+		var menui = popup.addMenuItem("Remove Col", function(e) {
+			var widget = e.currentTarget.Widget;
+			var _par = widget.MenuPopup.MainNode._node.parentNode.parentNode;
+			widget.MenuPopup.MainNode._node.TableRemoveCol();
+			_par.updateXMLNode();
+		});
+		
 		
 		popup.MainNode = node;
 	}
