@@ -368,8 +368,7 @@ function validation_loaded(vdom) {
 	var vali = bxe_config.xmldoc.XMLNode.validateDocument();
 	if (!vali) {
 		bxe_about_box.addText("Document is *not* valid.");
-		//alert(vali.getErrorMessagesAsText());
-		bxe_disableEditablePage();
+		bxe_toggleAllToSourceMode();
 	}
 	else {
 		bxe_about_box.addText("Document is valid.");

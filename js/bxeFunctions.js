@@ -343,6 +343,16 @@ function createTagNameAttributes(startNode, startHere) {
 	}
 }
 
+function bxe_toggleAllToSourceMode() {
+	var nodes = bxe_getAllEditableAreas();
+	for (var i = 0; i < nodes.length; i++) {
+		var e = new Object();
+		e.target =  nodes[i];
+		bxe_toggleSourceMode(e);
+	}
+	
+}
+
 function bxe_toggleSourceMode(e) {
 	try {
 	var editableArea = e.target;
