@@ -257,7 +257,7 @@ function bxe_changeLinesContainer(e) {
 		newContainer[i].XMLNode = new XMLNode( nodeParts[1], nodeParts[0], newContainer[i].nodeType);
 		newContainer[i].updateXMLNode();
 	}
-	bxe_updateXPath();
+	bxe_delayedUpdateXPath();
 }
 
 
@@ -391,8 +391,11 @@ function bxe_draw_widgets() {
 	toolbar.draw();
 
 	bxe_status_bar = new Widget_StatusBar();
-	document.addEventListener("click",MouseClickEvent,false);
-
+	var ea = bxe_getAllEditableAreas();
+	for (var i = 0; i < ea.length; i++) {
+		
+	ea[i].addEventListener("click",MouseClickEvent,false);
+	}
 
 	// if not content editable and ptb is enabled then hide the toolbar (watch out
 	// for selection within the toolbar itself though!)
