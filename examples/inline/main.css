@@ -328,4 +328,24 @@ a.navigationactive:visited {
 /* added words */
 .diff ins { background: #9f9; }
 
+/* about box css stuff is here, 'cause we load the editor css only later */
+.AboutBox {
+  border: outset 1px black;;
+  background-color: #ff6600;
+  background-image: url("../../images/bxelogo.png");
+  background-repeat: no-repeat;
+  background-position: 8px 5px;
+  font-family: Verdana,Arial,Helvetica,sans-serif;
+  font-size: 12px;
+  padding-left: 8px;
+  padding-top: 40px;
+  -moz-opacity: 1;
+}
+
+.AboutBox div {
+  
+    height: 18px;
+    overflow: hidden;
+    padding-top: 0px;
+}
 
