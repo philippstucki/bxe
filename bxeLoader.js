@@ -18,7 +18,7 @@
 * ***** END LICENSE BLOCK ***** */
 
 const BXE_VERSION = "0.1alpha";
-const BXE_BUILD = "200310040330"
+const BXE_BUILD = "200310050330"
 
 var DebugOutput = true;
 
