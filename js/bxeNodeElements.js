@@ -198,7 +198,7 @@ Node.prototype.__defineSetter__(
 		this._XMLNode = node;
 	}
 );
-
+/*
 Node.prototype.getXPathString = function() {
 	
 	var prevSibling = this;
@@ -222,7 +222,7 @@ Node.prototype.getXPathString = function() {
 	}
 	return xpathstring;
 }
-
+*/
 Element.prototype.getCStyle = function(style) {
 	return document.defaultView.getComputedStyle(this, null).getPropertyValue(style);
 }
