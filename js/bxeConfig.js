@@ -42,6 +42,9 @@ bxeConfig.prototype.getButtons = function() {
 	// get dimensions
 	var result = this.doc.evaluate("/config/buttons/dimension", this.doc, null, 0, null);
 	node = result.iterateNext();
+	if (!node) {
+		alert("no button definitions found in config.xml");
+	}
 	tmpArray.push(node.getAttribute("width"));
 	tmpArray.push(node.getAttribute("height"));
 	tmpArray.push(node.getAttribute("buttonwidth"));
