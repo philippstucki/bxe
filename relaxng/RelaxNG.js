@@ -1,14 +1,12 @@
 
 
 DocumentVDOM.prototype.parseRelaxNG = function () {
-	//check if it's a schema file
-	//parse all global elements and create an ElementVDOM object
-	var rootChildren = this.xmldoc.documentElement.childNodes;
 	
 	//do includes
 	this.parseIncludes();
 
-	debug(this.xmldoc.saveXML(this.xmldoc));
+	var rootChildren = this.xmldoc.documentElement.childNodes;
+	
 	for (var i = 0; i < rootChildren.length; i++) {
 		if (rootChildren[i].isRelaxNGElement("start")) {
 			this.parseStart(rootChildren[i]);
@@ -18,14 +16,16 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 }
 
 DocumentVDOM.prototype.parseIncludes = function() {
-	rootChild = this.xmldoc.documentElement.firstChild;
+	var rootChild = this.xmldoc.documentElement.firstChild;
 	var alreadyNext;
 	while (rootChild) {
 		alreadyNext = false;
 		if (rootChild.isRelaxNGElement("include")) {
 			var td = new mozileTransportDriver("http");
 			debug (rootChild.getAttribute("href"));
-			td.load(rootChild.getAttribute("href"),null, false);
+			bxe_about_box.addText(rootChild.getAttribute("href") + " " );
+			td.load(rootChild.getAttribute("href"), null, false);
+			
 			if (td.document.documentElement.isRelaxNGElement("grammar")) {
 				var child = td.document.documentElement.firstChild;
 				var insertionNode = rootChild.nextSibling;
