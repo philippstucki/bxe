@@ -782,15 +782,35 @@ function bxe_InsertTable() {
 }
 
 function bxe_InsertLink() {
+	
 	if(window.getSelection().isCollapsed) // must have a selection or don't prompt
 		return;
+	
+	var mod = mozilla.getWidgetModalBox("Enter a URL:", function(values) {
+		var href = values["href"];
+		if(href == null) // null href means prompt canceled - BUG FIX FROM Karl Guertin
+			return;
+		if(href != "") 
+			window.getSelection().linkText(href);
+		else
+			window.getSelection().clearTextLinks();
+		
+		var sel = window.getSelection();
+		sel.anchorNode.parentNode.updateXMLNode();
+	}
+		
+		
+		);
+		
+	mod.addItem("href","","textfield","Enter a URL:");
+	mod.show(100,100);
+	
+	
+	return;
+	
+	
 	var href = prompt("Enter a URL:", "");
-	if(href == null) // null href means prompt canceled - BUG FIX FROM Karl Guertin
-		return;
-	if(href != "") 
-		window.getSelection().linkText(href);
-	else
-		window.getSelection().clearTextLinks();
+	
 
 	var sel = window.getSelection();
 	sel.anchorNode.parentNode.updateXMLNode();

@@ -264,6 +264,8 @@ function Widget_Globals () {
 	
 }
 
+
+
 Widget_Globals.prototype.addHideOnClick = function (widget,id) {
 	if (!this.HideOnClick) {
 		this.HideOnClick = new Array();
@@ -346,6 +348,15 @@ Moz.prototype.getWidgetGlobals = function () {
 	}
 	this.WidgetGlobals = new Widget_Globals();
 	return this.WidgetGlobals;
+}
+
+Moz.prototype.getWidgetModalBox = function (title, callback) {
+	if (this.ModalBox) {
+		this.ModalBox.reset(title,callback);
+	} else {
+		this.ModalBox = new Widget_ModalBox(title,callback);
+	}
+	return this.ModalBox;
 }
 
 function Widget_ToolBar () {
@@ -549,7 +560,7 @@ Widget_StatusBar.prototype.buildPopup = function (node) {
 		this.Popup.removeAllMenuItems();
 		this.Popup.initTitle(node.XMLNode.localName);
 		if (node.XMLNode.attributes.length > 0 ) {
-			var menui = this.Popup.addMenuItem("Edit Attributes..", this.EditAttributes.show);
+			var menui = this.Popup.addMenuItem("Edit Attributes..", this.EditAttributes.popup);
 			menui.Modal = this.EditAttributes;
 		}
 		if (node.XMLNode.isInHTMLDocument()) {
@@ -579,7 +590,7 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 	this.Popup.removeAllMenuItems();
 	this.Popup.initTitle(node.XMLNode.localName);
 	if (node.XMLNode.attributes.length > 0 && this.EditAttributes) {
-		var menui = this.Popup.addMenuItem("Edit Attributes..", this.EditAttributes.show);
+		var menui = this.Popup.addMenuItem("Edit Attributes..", this.EditAttributes.popup);
 		menui.Modal = this.EditAttributes;
 	}
 	var sel  = window.getSelection();
@@ -634,11 +645,6 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 }
 
 
-function Widget_ModalBox () {
-	this.node = this.initNode("div","ModalBox");
-	this.Display = "block";
-	
-}
 
 Widget_MenuPopup.prototype.appendAllowedSiblings = function( node) {
 	var ac = node.XMLNode.parentNode.allowedChildren;
@@ -663,6 +669,131 @@ Widget_MenuPopup.prototype.appendAllowedSiblings = function( node) {
 
 Widget_ModalBox.prototype = new Widget();
 
+function Widget_ModalBox (title, callback) {
+	this.setup(title,callback);
+}
+
+Widget_ModalBox.prototype.setup = function (title, callback ) {
+	this.node = this.initNode("div","ModalBox");
+	this.Display = "block";
+	this.node.appendToBody();
+	if (title) {
+		this.initTitle(title);
+	}
+	this.initPane();
+	this.reset(title, callback);
+}
+
+Widget_ModalBox.prototype.reset = function (title, callback) {
+	if (this.PaneNode.hasChildNodes()) {
+		this.PaneNode.removeAllChildren();
+	}
+	this.hasTable = false;
+	this.hasForm = false;
+	this.callback = callback;
+	if (title) {
+		this.setTitle(title);
+	}
+}
+
+Widget_ModalBox.prototype.addItem = function (name, value, type, description, options) {
+	switch (type) {
+		case "textfield":
+			var td = this.addFormEntry(name, description);
+			var inputfield = document.createElement("input");
+			inputfield.value = value;
+			inputfield.name = name;
+			td.appendChild(inputfield);
+		break;
+		
+		case "select":
+			var td = this.addFormEntry(name, description);
+			var inputfield = document.createElement("select");
+			inputfield.setAttribute("name", name);
+			var choosefield;
+			for (var j in options) {
+				choosefield = document.createElement("option");
+				choosefield.appendChild(document.createTextNode(options[j]));
+				choosefield.setAttribute("value", options[j]);
+				
+				if (options[j] == value) {
+					choosefield.setAttribute("selected","selected");
+				}
+				inputfield.appendChild(choosefield);
+			}
+			td.appendChild(inputfield);
+		
+		break;
+		
+		default:
+			td.appendChild(document.createTextNode("type " + type + " not defined"));
+	}
+}
+
+Widget_ModalBox.prototype.createTable = function() {
+	if (!this.hasTable) {
+		var form = document.createElement("form");
+		form.Widget = this;
+		var table = document.createElement("table");
+		this.PaneNode.appendChild(form);
+		form.appendChild(table);
+		this.hasTable = table;
+	}
+	return this.hasTable;
+}
+
+Widget_ModalBox.prototype.addFormEntry = function(title, descr) {
+	var table = this.createTable();
+	var tr = document.createElement("tr");
+	table.appendChild(tr);
+	var td = document.createElement("td");
+	if (!descr) { descr = title;}
+	td.appendChild(document.createTextNode(descr));
+	tr.appendChild(td);
+	var tdt = document.createElement("td");
+	tr.appendChild(tdt);
+	return tdt;
+}
+
+Widget_ModalBox.prototype.show = function(x,y) {
+	if (this.hasTable) {
+		var subm = document.createElement("input");
+		subm.setAttribute("type","submit");
+		subm.name="__submit";
+		subm.setAttribute("value","OK");
+		this.hasTable.parentNode.addEventListener("submit", function(e) {
+			var Widget = e.target.Widget;
+			Widget.hide();
+			bxe_registerKeyHandlers();
+			var elem = e.target.elements;
+			var returnValues = new Array();
+			for (var i =0; i < elem.length; i++ in elem) {
+				if (elem[i].name.substr(0,2) != "__") {
+					returnValues[elem[i].name] = elem[i].value;
+				}
+			}
+				
+			if (Widget.callback) {
+				Widget.callback(returnValues);
+			}
+			e.preventDefault();
+			e.stopPropagation();
+		}, false);
+		var cancel = document.createElement("input");
+		cancel.setAttribute("type","reset");
+		cancel.setAttribute("value","Cancel");
+		cancel.name="__cancel";
+		this.hasTable.parentNode.addEventListener("reset", function(e) { 
+			bxe_registerKeyHandlers(); 
+			e.target.Widget.hide();
+		}, false);
+		this.hasTable.parentNode.appendChild(subm);
+		this.hasTable.parentNode.appendChild(cancel);
+	}
+	this.position(x,y ,"absolute");
+	this.draw();
+	bxe_deregisterKeyHandlers();
+}
 Widget_ModalBox.prototype.initTitle = function(title) {
 	var titeldiv = document.createElement("div");
 	titeldiv.setAttribute("class","ModalBoxTitle");
@@ -682,14 +813,8 @@ Widget_ModalBox.prototype.setTitle = function(text) {
 	this.TitleNode.firstChild.data = text;
 	
 }
-function Widget_ModalAttributeBox(node) {
-	
-	this.node = this.initNode("div","ModalBox");
-	this.Display = "block";
-	this.node.appendToBody();
-	this.position(100,100,"absolute");
-	this.initTitle("Edit Attributes");
-	this.initPane();
+function Widget_ModalAttributeBox() {
+	this.setup("Edit Attributes");
 }
 
 Widget_ModalAttributeBox.prototype = new Widget_ModalBox();
@@ -698,76 +823,39 @@ Widget_ModalAttributeBox.prototype.setNode = function() {
 	this.htmlnode = node;
 }
 
-Widget_ModalAttributeBox.prototype.show = function(e) {
+Widget_ModalAttributeBox.prototype.popup = function(e) {
 	
 	var box = e.target.Widget.Modal; 
 	var xmlnode = e.target.Widget.MenuPopup._node.XMLNode;
-//	box.position(e.pageX,e.pageY,"absolute");
+	box.reset("Edit Attributes of " + xmlnode.localName, function(values) { 
+		this.setAttributes(values);
+	}
+	);
+	box.RefXMLNode = xmlnode;
 	box.drawAttributes(xmlnode);
-
-	box.setTitle("Edit Attributes of " + xmlnode.localName );
-	box.position(e.pageX ,e.pageY ,"absolute");
-	box.draw();
-	bxe_deregisterKeyHandlers();
-	//target.position(e.target.offsetParent.offsetLeft +e.target.offsetLeft , e.target.offsetParent.offsetTop + e.target.offsetTop - e.target.offsetHeight  + 5,"absolute");
+	box.show(e.pageX ,e.pageY ,"absolute");
 }
 
 Widget_ModalAttributeBox.prototype.drawAttributes = function(xmlnode) {
 	var attr = xmlnode.vdom.attributes;
 	var text = "";
-	this.PaneNode.removeAllChildren();
-	var table = document.createElement("table");
-	this.PaneNode.appendChild(table);
 	for (var i in attr) {
-		var tr = document.createElement("tr");
-		table.appendChild(tr);
-		var td = document.createElement("td")
-		td.appendChild(document.createTextNode(attr[i].name));
-		tr.appendChild(td);
-		var tdt = document.createElement("td");
 		if (attr[i].dataType == "choice") {
-			var inputfield = document.createElement("select");
-			var choosefield;
-			for (var j in attr[i].choices) {
-				choosefield = document.createElement("option");
-				choosefield.appendChild(document.createTextNode(attr[i].choices[j]));
-				choosefield.setAttribute("value", attr[i].choices[j]);
-				if (attr[i].choices[j] == xmlnode.getAttribute(attr[i].name)) {
-					choosefield.setAttribute("selected","selected");
-				}
-				inputfield.appendChild(choosefield);
-			}
+			this.addItem(attr[i].name,xmlnode.getAttribute(attr[i].name),"select",null,attr[i].choices);
+			
 		} else {
-			var inputfield = document.createElement("input");
-			inputfield.value = xmlnode.getAttribute(attr[i].name);
+			
+			this.addItem(attr[i].name,xmlnode.getAttribute(attr[i].name),"textfield");
 		}
-		tdt.appendChild(inputfield);
-		tr.appendChild(tdt);
 		
 	}
-	var subm = document.createElement("input");
-	subm.setAttribute("type","submit");
-	subm.setAttribute("value","OK");
-	subm.onclick = function(e) {
-		var Widget = e.target.parentNode.parentNode.Widget;
-		Widget.setAttributes(xmlnode);
-		e.target.parentNode.parentNode.style.display = "none";
-		bxe_registerKeyHandlers();
-	}
-	var cancel = document.createElement("input");
-	cancel.setAttribute("type","submit");
-	cancel.setAttribute("value","Cancel");
-	cancel.onclick = function(e) { bxe_registerKeyHandlers(); e.target.parentNode.parentNode.style.display = "none";}
-	this.PaneNode.appendChild(subm);
-	this.PaneNode.appendChild(cancel);
-	//alert(text);
 }
 
-Widget_ModalAttributeBox.prototype.setAttributes = function(xmlnode) {
-	var trs = this.PaneNode.getElementsByTagName("tr");
-	for (var i = 0; i < trs.length; i++) {
-		attrName = trs[i].firstChild.firstChild.data;
-		attrValue = trs[i].firstChild.nextSibling.firstChild.value;
+Widget_ModalAttributeBox.prototype.setAttributes = function(values) {
+	var xmlnode = this.RefXMLNode;
+	for (var attrName in values) {
+		
+		attrValue = values[attrName];
 		if (attrValue) {
 			xmlnode.setAttribute(attrName, attrValue);
 		} else {
