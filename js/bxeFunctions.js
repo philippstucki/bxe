@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.121 2003/12/01 22:24:21 chregu Exp $
+// $Id: bxeFunctions.js,v 1.122 2003/12/01 22:47:28 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -1127,16 +1127,16 @@ function bxe_checkIsAllowedChild(namespaceURI, localName, sel, noAlert) {
 function bxe_InsertTable() {
 	var sel = window.getSelection();
 	var object = documentCreateXHTMLElement("table");
-	sel.insertNode(object);
+	//sel.insertNode(object);
+	window.bxe_ContextNode = BXE_SELECTION;
+	bxe_InsertTableCallback();
 }
 
 
 function bxe_InsertTableCallback() {
 	
 	var sel = window.getSelection();
-	if (!bxe_checkIsAllowedChild(XHTMLNS,"table",sel)) {
-		return false;
-	}
+
 
 	if (bxe_checkForSourceMode(sel)) {
 		return false;
@@ -1148,8 +1148,16 @@ function bxe_InsertTableCallback() {
 			alert("Can't create table: invalid data");
 		}
 		else if (window.bxe_ContextNode == BXE_SELECTION) {
-			window.getSelection().insertNodeRaw(te);
 			te.setAttribute("class","ornate");
+
+			var sel = window.getSelection(); 	
+			if (!bxe_checkIsAllowedChild(XHTMLNS,"table",sel, true)) {
+				var cssr = sel.getEditableRange();
+				ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
+				ip.splitXHTMLLine()
+				cssr.selectInsertionPoint(ip);
+			}
+			sel.insertNodeRaw(te);
 			te.updateXMLNode();
 		} else if (window.bxe_ContextNode){
 			te.setAttribute("class","ornate");
