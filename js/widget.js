@@ -832,7 +832,7 @@ Widget_ModalBox.prototype.reset = function (title, callback) {
 	}
 }
 
-Widget_ModalBox.prototype.addItem = function (name, value, type, description, options) {
+Widget_ModalBox.prototype.addItem = function (name, value, type, description, options, useKeyAsDisplayName) {
 	this.doCancel = true;
 	switch (type) {
 		case "textfield":
@@ -850,7 +850,12 @@ Widget_ModalBox.prototype.addItem = function (name, value, type, description, op
 			var choosefield;
 			for (var j in options) {
 				choosefield = document.createElement("option");
-				choosefield.appendChild(document.createTextNode(options[j]));
+				
+				if ( useKeyAsDisplayName) {
+					choosefield.appendChild(document.createTextNode(j));
+				} else {
+					choosefield.appendChild(document.createTextNode(options[j]));
+				}
 				choosefield.setAttribute("value", options[j]);
 				
 				if (options[j] == value) {
