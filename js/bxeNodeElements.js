@@ -171,7 +171,22 @@ Node.prototype.convertToXMLNode = function(xmldoc) {
 
 
 
-
+Node.prototype.getNamespaceDefinitions = function () {
+	
+	var node = this;
+	var attr;
+	var namespaces = new Array();
+	while (node.nodeType == 1 ) {
+		attr = node.attributes;
+		for (var i = 0; i < attr.length; i++) {
+			if (attr[i].namespaceURI == XMLNS && !(namespaces[attr[i].localName])) {
+				namespaces[attr[i].localName] = attr[i].value;
+			}
+		}
+		node = node.parentNode;
+	}
+	return namespaces;
+}
 
 
 

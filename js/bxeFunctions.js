@@ -1,4 +1,5 @@
 const BXENS = "http://bitfluxeditor.org/namespace";
+const XMLNS = "http://www.w3.org/2000/xmlns/";
 
 function __bxeSave(e) {
 	
@@ -158,12 +159,13 @@ function bxe_toggleSourceMode(e) {
 			rootNodeName = editableArea.XMLNode.prefix +":"+rootNodeName;
 		}
 		var innerHTML = '<'+rootNodeName;
-		if (editableArea.XMLNode.namespaceURI != null) {
-			innerHTML += ' xmlns'
-			if (editableArea.XMLNode.prefix != null) {
-				innerHTML += ":" + editableArea.XMLNode.prefix ;
+		ns = editableArea.XMLNode.xmlBridge.getNamespaceDefinitions();
+		for (var i in ns ) {
+			if  (i == "xmlns") {
+				innerHTML += ' xmlns="'+ ns[i] + '"';
+			} else {
+				innerHTML += ' xmlns:' + i + '="' + ns[i] +'"';
 			}
-			innerHTML += '="' + editableArea.XMLNode.namespaceURI +'"';
 		}
 		innerHTML += '>'+editableArea.getContent()+'</'+rootNodeName +'>';
 		
