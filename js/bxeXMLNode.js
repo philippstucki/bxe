@@ -74,11 +74,9 @@ XMLNode.prototype.init = function ( nodein, localName, nodeType, autocreate) {
 					this.localName = this._node.nodeName.toLowerCase();
 				} 
 			} else {
-				var classes = this._node.getClasses();
-				if (classes.length > 0) {
-					for (i = classes.length - 1; i >= 0; i--) {
-						this.localName = classes[i];
-					}
+				var classe = this._node.getClass();
+				if (classe) {
+					this.localName = classe;
 				} else {
 					this.localName = this._node.localName;
 				}

@@ -325,6 +325,7 @@ Element.prototype.setClass = function(className) {
 <span class="class1 class2">
 */
 Element.prototype.addClass = function(className) {
+	alert ("Element.prototype.addClass is deprecated. And this method should not be called anymore \n Please report to chregu@bitflux.ch about that.");
 	if (!this.hasClass(className)) {
 		var oldClass = this.getAttribute("class");
 		if (oldClass) { oldClass += " "} 
@@ -339,6 +340,7 @@ Element.prototype.addClass = function(className) {
 <span class="class1">
 */
 Element.prototype.removeClass = function(className) {
+	alert ("Element.prototype.removeClass is deprecated. And this method should not be called anymore \n Please report to chregu@bitflux.ch about that.");
 	var classes = this.getClasses();
 	var newClasses = new Array();
 	for (var i = 0; i < classes.length; i++) {
@@ -356,6 +358,8 @@ Element.prototype.removeClass = function(className) {
 
 /* checks if a class is in the classAttribute */
 Element.prototype.hasClass = function(className) {
+	alert ("Element.prototype.hasClass is deprecated. And this method should not be called anymore \n Please report to chregu@bitflux.ch about that.");
+	
 	var classes = this.getClasses();
 	for (var i = 0; i < classes.length; i++) {
 		if (classes[i] == className) {
@@ -366,6 +370,7 @@ Element.prototype.hasClass = function(className) {
 }
 
 Element.prototype.hasClassOrIsElement = function(className) {
+	alert ("Element.prototype.hasClassOrIsElement is deprecated. And this method should not be called anymore \n Please report to chregu@bitflux.ch about that.");
 	if (this.namespaceURI == XHTMLNS && this.localName == className) {
 		return true;
 	} else {
@@ -377,6 +382,7 @@ Element.prototype.hasClassOrIsElement = function(className) {
 /* returns all classes as an array or an empty
 array if there are none */
 Element.prototype.getClasses = function() {
+	alert ("Element.prototype.getClasses is deprecated. And this method should not be called anymore \n Please report to chregu@bitflux.ch about that."); 
 	var classes = this.getAttribute("class");
 	if (classes) {
 		return this.getAttribute("class").split(" ");
@@ -384,6 +390,10 @@ Element.prototype.getClasses = function() {
 		return new Array();
 	}
 }	
+
+Element.prototype.getClass = function() {
+	return this.getAttribute("class");
+}
 
 /********************************* XHTML specific line handling *******************/
 

@@ -253,11 +253,8 @@ Selection.prototype.toggleTextClass = function(styleClass, namespaceURI)
 	if(!cssr)
 		return;
 
-	if(cssr.hasClass(styleClass)) {
-		cssr.styleText(styleClass,  false, true, namespaceURI);
-	}
-	else
-		cssr.styleText(styleClass, true, true, namespaceURI);
+
+	cssr.styleText(styleClass, true, true, namespaceURI);
 
 	this.selectEditableRange(cssr);
 }

@@ -100,7 +100,8 @@ Element.prototype.getCStyle = function(style) {
 
 Element.prototype.SplitClasses = function() {
 	var newElement = null;
-	
+	alert ("Element.prototype.SplitClasses is deprecated. And this method should not be called anymore \n Please report to chregu@bitflux.ch about that.");
+
 	if (this.hasAttribute("class") ) {
 		var classes = this.getClasses();
 		if (classes.length > 1) {
