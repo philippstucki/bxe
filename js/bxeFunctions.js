@@ -421,6 +421,7 @@ function bxe_ContextMenuEvent(e) {
 	{
 		return true;
 	}
+	
 	var no ;
 	if (cssr.startContainer.nodeType == Node.TEXT_NODE) {
 		no = cssr.startContainer.parentNode;
@@ -473,7 +474,7 @@ function bxe_InsertLink() {
 
 function bxe_catch_alert(e ) {
 	
-	alert(bxe_catch_alert_message);
+	alert(bxe_catch_alert_message(e));
 }
 
 function bxe_catch_alert_message(e) {

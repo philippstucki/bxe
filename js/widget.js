@@ -556,22 +556,27 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 	var sel  = window.getSelection();
 	var cssr = sel.getEditableRange();
 	//var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
-	var ac = node.XMLNode.allowedChildren;
 	if (!(sel.isCollapsed)) {
-		for (i = 0; i < ac.length; i++) {
-			var menui = this.Popup.addMenuItem(ac[i], function(e) { 
-				var widget = e.currentTarget.Widget;
-				var sel = window.getSelection();
-				sel.removeAllRanges();
-				var rng = widget.Cssr.cloneRange();
-				sel.addRange(rng);
-				eDOMEventCall("toggleTextClass",document,{"localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI})
-			});
-			menui.Cssr = cssr;
-			menui.InsertLocalName = ac[i];
-			menui.InsertNamespaceURI;
-		}
-	}
+			var ac = node.XMLNode._xmlnode.allowedChildren;
+			for (i = 0; i < ac.length; i++) {
+				var menui =this.Popup.addMenuItem( ac[i].nodeName, function(e) { 
+					var widget = e.currentTarget.Widget;
+					var sel = window.getSelection();
+					sel.removeAllRanges();
+					var rng = widget.Cssr.cloneRange();
+					sel.addRange(rng);
+					eDOMEventCall("toggleTextClass",document,{"localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI})
+				});
+				menui.InsertLocalName = ac[i].localName;
+				menui.InsertNamespaceURI = ac[i].namespaceURI;
+				menui.AppendToNode = node.XMLNode;
+				menui.Cssr = cssr;
+			}
+
+			
+	} 
+
+	//this.Popup.insertAllowedChildren(node);
 	this.Popup.appendAllowedSiblings(node);
 	this.Popup._node = node;
 	this.Popup.addSeparator();
@@ -627,7 +632,6 @@ Widget_MenuPopup.prototype.appendAllowedSiblings = function( node) {
 			menui.AppendToNode = node.XMLNode;
 		}
 }
-
 
 Widget_ModalBox.prototype = new Widget();
 
