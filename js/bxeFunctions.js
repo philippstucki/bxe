@@ -947,6 +947,16 @@ documentCreateXHTMLElement = function (elementName,attribs) {
 				}
 			}
 			break;
+		case "img":
+			htmlelementname = "span";
+			childNode = document.createElementNS(XHTMLNS,"img");
+			if (attribs) {
+				
+				for (var i = 0; i < attribs.length ;  i++) {
+					childNode.setAttributeNode(attribs[i].cloneNode(true));
+				}
+			}
+			break;	
 		default:
 			htmlelementname = elementName;
 	}
