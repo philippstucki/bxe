@@ -48,7 +48,7 @@ var bxe_about_box = null;
 var bxe_context_menu = null;
 
 function bxe_start(config_file,fromUrl) {
-	
+
 	/*if (! (BX_checkUnsupportedBrowsers())) {
 		return false;
 	}*/
@@ -214,6 +214,9 @@ bxe_nsResolver.prototype.lookupNamespacePrefix = function (uri) {
 function widget_loaded() {
 	mozile_corescript_loaded++;
 	bxe_about_box = new Widget_AboutBox();
+	if (navigator.platform == "MacPPC") {
+		bxe_about_box.node.style.MozOpacity = 0.99;
+	}
 	bxe_about_box.draw();
 	bxe_about_box.setText("Loading files ...");
 	
