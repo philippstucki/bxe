@@ -238,12 +238,9 @@ table.beauty  {
 }
 
 [bxe_xpath] {
-	width:80%; 
 	min-height:10px; 
-	
-	margin-top:0px;
-	margin-bottom: 10px;
-	padding: 2px;
+	padding-left: 1px;
+    padding-right: 1px;
 	-moz-user-modify: read-write !important;
 	-moz-user-input: enabled  !important;
 	-moz-user-select: normal  !important;
