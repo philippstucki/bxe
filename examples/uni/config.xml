@@ -57,6 +57,7 @@
     <options> 
     <option name="autoParaElementName">p</option>
     <option name="autoParaElementNamespace">http://www.w3.org/1999/xhtml</option>
+    <option name="showSplashScreen">falsre</option>
     </options>
 <!-- here we define the buttons for the top button bar -->
     <buttons>
