@@ -229,8 +229,10 @@ function bxe_toggleTextClass(e) {
 	sel.toggleTextClass(e.additionalInfo.localName);
 	sel = window.getSelection();
 	var _node = sel.anchorNode.parentNode;
-	_node.XMLNode.namespaceURI = e.additionalInfo.namespaceURI;
+	/*_node.XMLNode.namespaceURI = e.additionalInfo.namespaceURI;
 	_node.XMLNode = new XMLNode(  e.additionalInfo.namespaceURI,   e.additionalInfo.localName, 1);
+	*/
+	
 	_node.parentNode.updateXMLNode();
 }
 
