@@ -366,7 +366,14 @@ function nonctrlKeyPressHandler(event)
 			ip.insertCharacter(10);
 		}
 		else {
+			td = false;
+			if (ip.line.container == ip.line.tableCellAncestor) {
+				td = true
+			}
 			ip.splitXHTMLLine(); // add logic to split off say a "P" after a Heading element: if at end line
+			if (td) {
+				ip.line.tableCellAncestor.updateXMLNode();
+			}
 		}
 		cssr.selectInsertionPoint(ip);
 		sel.removeAllRanges();

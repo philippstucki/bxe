@@ -64,7 +64,7 @@ var eDOM_bxe_mode = true;
 var startTimer = new Date();
 
 function bxe_start(config_file,fromUrl, configArray) {
-
+	
 	/*if (! (BX_checkUnsupportedBrowsers())) {
 		return false;
 	}*/
@@ -191,6 +191,8 @@ function mozile_core_loaded() {
 }
 
 function mozile_loaded() {
+	defaultContainerName = "p";
+
 	bxe_about_box.addText("Load XML ...");
 	bxe_load_xml(bxe_config.xmlfile);
 	
