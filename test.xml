@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<root >
+<div id="xhtml" xmlns="http://www.w3.org/1999/xhtml" >
+<h1>das ist ein titel</h1>
+
+<p>und <span class="bold italic">hier</span> kommt ein <b id="bla">fetter</b> text</p>
+<p>para2</p>
+</div>
+<div id="nonxhtml" xmlns="http://something">
+<header>header</header>
+<para><bold>bold</bold> nicht bold</para>
+
+</div>
+<foo id='bar'>
+hello world<bold> fett </bold> <foo:italic xmlns:foo="bar">italic</foo:italic>
+</foo>
+</root>
+
