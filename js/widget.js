@@ -1035,22 +1035,38 @@ Widget_ModalAttributeBox.prototype.drawAttributes = function(xmlnode) {
 	
 	for (var i in attr) {
 		if (!bxe_config.dontShowInAttributeDialog[attr[i].name]) {
-			var text = attr[i].name;
-			if (!attr[i].optional) {
-				text = text + " *";
-			}
-			if (! (attr[i].name == "class" && xmlnode.getAttribute(attr[i].name) == xmlnode.localName)) {
-				if (attr[i].dataType == "choice") {
-					this.addItem(text,xmlnode.getAttribute(attr[i].name),"select",null,attr[i].choices);
 			
+			if (! (attr[i].name == "class" && xmlnode.getAttribute(attr[i].name) == xmlnode.localName)) {
+				if (i == "__bxe_choices") {
+					for (var j in attr[i]) {
+						for (var k in attr[i][j]) {
+							this.addAttributeItem(attr[i][j][k],xmlnode.getAttribute(attr[i][j][k].name),true);
+						}
+					}
 				} else {
-					this.addItem(text,xmlnode.getAttribute(attr[i].name),"textfield");
+					this.addAttributeItem(attr[i],xmlnode.getAttribute(attr[i].name));
 				}
 			}
-
 		}
 		
 	}
+}
+
+Widget_ModalAttributeBox.prototype.addAttributeItem = function (attr, value,choice) {
+	var text = attr.name;
+	if (choice) {
+		text = text + " +";
+	}
+	else if (!attr.optional) {
+		text = text + " *";
+	}
+	if (attr.dataType == "choice") {
+		this.addItem(text,value,"select",null,attr.choices);
+			
+	} else {
+		this.addItem(text,value,"textfield");
+	}
+	
 }
 
 Widget_ModalAttributeBox.prototype.setAttributes = function(values) {
