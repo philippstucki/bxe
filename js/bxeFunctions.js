@@ -1149,15 +1149,15 @@ function bxe_draw_widgets() {
 	
 	//make toolbar
 	
-	var toolbar = new Widget_ToolBar();
+	bxe_toolbar = new Widget_ToolBar();
 	bxe_format_list = new Widget_MenuList("m",function(e) {eDOMEventCall("changeLinesContainer",document,this.value)});
 
-	toolbar.addItem(bxe_format_list);
+	bxe_toolbar.addItem(bxe_format_list);
 	
-	toolbar.addButtons(bxe_config.getButtons());
+	bxe_toolbar.addButtons(bxe_config.getButtons());
 	
 	
-	toolbar.draw();
+	bxe_toolbar.draw();
 
 	bxe_status_bar = new Widget_StatusBar();
 	var ea = bxe_getAllEditableAreas();
@@ -1893,8 +1893,15 @@ function bxe_insertContent_async(node,replaceNode, options) {
 	if (replaceNode == BXE_SELECTION) {
 		var sel = window.getSelection();
 		var  _currentNode = docfrag.lastChild;
+		while (_currentNode && _currentNode.nodeType == 3) {
+			_currentNode = _currentNode.previousSibling;
+		}
+		if (!_currentNode) {
+			_currentNode = docfrag.lastChild;
+		}
 		var _node = _currentNode.prepareForInsert();
 		if (options & BXE_SPLIT_IF_INLINE) {
+			
 			if (!bxe_checkIsAllowedChild(_node.XMLNode.namespaceURI,_node.XMLNode.localName,sel, true)) {
 				var cssr = sel.getEditableRange();
 				ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
