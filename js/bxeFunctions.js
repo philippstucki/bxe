@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.118 2003/12/01 09:57:42 chregu Exp $
+// $Id: bxeFunctions.js,v 1.119 2003/12/01 10:26:11 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -1123,6 +1123,13 @@ function bxe_checkIsAllowedChild(namespaceURI, localName, sel, noAlert) {
 }
 
 function bxe_InsertTable() {
+	var sel = window.getSelection();
+	var object = documentCreateXHTMLElement("table");
+	sel.insertNode(object);
+}
+
+
+function bxe_InsertTableCallback() {
 	
 	var sel = window.getSelection();
 	if (!bxe_checkIsAllowedChild(XHTMLNS,"table",sel)) {
@@ -1138,10 +1145,15 @@ function bxe_InsertTable() {
 		if(!te) {
 			alert("Can't create table: invalid data");
 		}
-		else {
-			window.getSelection().insertNode(te);
+		else if (window.bxe_ContextNode == BXE_SELECTION) {
+			window.getSelection().insertNodeRaw(te);
 			te.setAttribute("class","ornate");
 			te.updateXMLNode();
+		} else if (window.bxe_ContextNode){
+			te.setAttribute("class","ornate");
+			var newNode = te.init();
+			window.bxe_ContextNode.parentNode.insertAfter(newNode, window.bxe_ContextNode);
+			debug("valid? : " + newNode.isNodeValid());
 		}
 	});
 	mod.addItem("rows",2,"textfield","number of rows");
@@ -1405,7 +1417,6 @@ function bxe_insertContent(node,replaceNode) {
 	} else if (replaceNode) {
 		
 		var newNode = docfrag.firstChild.init();
-		
 		replaceNode.parentNode.insertAfter(newNode,replaceNode);
 		newNode._node.updateXMLNode();
 		debug("valid? : " + newNode.isNodeValid());
@@ -1447,12 +1458,15 @@ function bxe_getCallback (nodeName, namespaceURI) {
 }
 
 function bxe_doCallback(cb, node ) {
+	window.bxe_ContextNode = node;
 	if (cb["type"] == "popup") {
-		window.bxe_ContextNode = node;
+		
 		
 		var pop = window.open(cb["content"],"popup","width=500,height=600");
 		pop.focus();
 		
+	} else if (cb["type"] == "function") {
+		eval(cb["content"] +"()");
 	}
 }
 		
