@@ -464,6 +464,9 @@ function Widget_ToolBarButton (id,namespaceURI) {
 		this.node.addEventListener("click", function(e) { eval(buttons[id]['data']+"(e)") }, false);
 	} else if (buttons[id]['type'] == "insertElement" || buttons[id]['type'] == "InsertElement") {
 			this.node.addEventListener("click",function(e) { var sel = window.getSelection();
+			if (bxe_checkForSourceMode(sel)) {
+				return false;
+			}
 			var object = bxe_Node_createNS(1, e.target.ElementNamespaceURI, buttons[id]['data']);
 			sel.insertNode(object);}, false);
 	} else if (buttons[id]['type'] == "event") {
