@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: widget.js,v 1.63 2003/12/01 08:08:16 chregu Exp $
+// $Id: widget.js,v 1.64 2003/12/01 08:34:29 chregu Exp $
 
 function Widget () {}
 
@@ -699,6 +699,9 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 				eDOMEventCall("ContextPopup",newNode,sub);
 				sub.appendAllowedSiblings(e.currentTarget.Widget.AppendToNode._node);
 			});
+			ele.node._node = node;
+			ele.node.addEventListener("mouseover",Widget_XPathMouseOver,false);
+			ele.node.addEventListener("mouseout",Widget_XPathMouseOut,false);
 		} 
 		node = node.parentNode;
 	} 
