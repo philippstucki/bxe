@@ -20,25 +20,18 @@
   display: none;
   border: 1px dotted black;
   width: 520px;
+  background-color: white;
 
 }
-.kupu-drawer {
-  position: absolute;
-  display: none;
-  border: solid 1px gray;
- /* border-top: solid 10px #c0c0c0;
-  background-color: ButtonFace;
- */ 
-  height: 340px;
-  width: 520px;
-  z-index: 2;
-  
-  border: 1px dotted black
-}
+
 
 div#kupu-drawerheader, div#kupu-dialogbuttons { 
-  font-family: sans-serif;
   background-color: #aa3300;
+  font-size: 12px;
+}
+
+div#kupu-drawerheader form {
+    margin-bottom: 0px;
 }
 
 input#kupu-searchbox {
@@ -50,15 +43,11 @@ input#kupu-searchbox {
 }
 
 div#kupu-dialogbuttons {
-  position: fixed;
   padding-left: 300px;  
   padding-top: 6px;
   padding-bottom: 6px;
   background-color:   #ff6600;
-  border: 1px dotted black;
-  width: 218px;
-  left: 0px;
-  top: 320px;
+  width: 220px;
 }
 
 div#kupu-dialogbuttons button {
@@ -76,12 +65,13 @@ div#kupu-panels td {
   font-family: sans-serif;
   font-size: 12px;
   vertical-align: top;
-  border: 1px dotted black;
-  background-color:     #ff6600;
+  /*border: 1px dotted black;*/
+  background-color: #ff6600;
 }
 
 div#kupu-panel table  {
     width: 520px;
+    background-color: blue;
 }
 
 

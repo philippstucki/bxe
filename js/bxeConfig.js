@@ -155,13 +155,26 @@ bxeConfig.prototype.getButtons = function() {
 bxeConfig.prototype.getPlugins = function () {
 	if (!this.plugins) {
 		this.plugins = new Array();
+		this.pluginOptions = new Array();
 		var head = document.getElementsByTagName("head")[0];
 		var result = this.doc.evaluate("/config/plugins/plugin", this.doc, null, 0, null);
 		while (node = result.iterateNext()) {
-			this.plugins.push(node.getAttribute("name")); 
+			this.plugins.push(node.getAttribute("name"));
+			this.pluginOptions[node.getAttribute("name")] = new Array();
+			var options = this.doc.evaluate("option", node, null, 0, null);
+			while (onode = options.iterateNext()) {
+				this.pluginOptions[node.getAttribute("name")][onode.getAttribute("name")] = onode.firstChild.data;
+			}
 		}
 	}
 	return this.plugins;
+}
+
+bxeConfig.prototype.getPluginOptions = function(plugin) {
+	if (!this.plugins) {
+		this.getPlugins();
+	}
+	return this.pluginOptions[plugin];
 }
 
 bxeConfig.prototype.getContentMultiple = function (xpath)

@@ -254,7 +254,7 @@ function bxe_init_plugins () {
 	if (ps.length > 0) {
 		for (var i = 0; i < ps.length; i++) {
 			var p = eval ("new Bxe" + ps[i]);
-			p.init();
+			p.init(bxe_config.getPluginOptions(ps[i]));
 		}
 	}
 	bxe_about_box.addText("Plugins initialized");

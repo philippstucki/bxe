@@ -5,10 +5,19 @@ function BxeDrawer() {
 		ar.push("css/kupudrawerstyles.css");
 		return ar;
 	}
-	this.init = function() {
+	this.init = function(options) {
+		var body = document.getElementsByTagName("body")[0];
+		var div = document.createElement("div");
+		div.setAttribute("id","kupu-librarydrawer");
+		body.appendChild(div);
+		var librariesURI = "kupu/kupudrawers/demolibraries.xml"; 
+		if (options["librariesURI"]) {
+			librariesURI = options["librariesURI"];
+			
+		}
 		drawertool = new DrawerTool();
 		var imagetool = new ImageToolBxe();
-		var imagedrawer = new ImageDrawer(imagetool, mozile_root_dir +"/kupu/kupudrawers/imagedrawer.xsl", mozile_root_dir +"kupu/kupudrawers/demolibraries.xml", "kupu/kupudrawers/demolibrary1.xml");
+		var imagedrawer = new ImageDrawer(imagetool, mozile_root_dir +"/kupu/kupudrawers/imagedrawer.xsl", librariesURI, "kupu/kupudrawers/demolibrary1.xml");
 		
 		drawertool.registerDrawer('imagedrawer', imagedrawer);
 		
@@ -16,6 +25,7 @@ function BxeDrawer() {
 		imagedrawer.editor.getBrowserName = function () {
 			return "Mozilla";
 		}
+		
 	}
 	
 	this.getScripts = function() {
