@@ -795,11 +795,7 @@ function bxe_InsertLink() {
 		window.getSelection().clearTextLinks();
 
 	var sel = window.getSelection();
-	var aNode = sel.anchorNode.parentNode;
-	aNode.XMLNode.namespaceURI = XHTMLNS;
-	aNode.onclick = function(e) {e.preventDefault(); }
-	aNode.onmousedown = function(e) {e.preventDefault(); }
-	aNode.onmouseup = function(e) {e.preventDefault(); }
+	sel.anchorNode.parentNode.updateXMLNode();
 }
 
 
@@ -921,6 +917,47 @@ bxe_nsResolver.prototype.lookupNamespacePrefix = function (uri) {
 		return this.metaTagNSResolverUri[uri];
 	}
 	return null;
+}
+// replaces the function from mozile...
+documentCreateXHTMLElement = function (elementName,attribs) {
+	var newNode;
+	var childNode;
+	switch( elementName) {
+		case "a":
+			htmlelementname = "span";
+			break;
+		case "object":
+			htmlelementname = "span";
+			childNode = document.createElementNS(XHTMLNS,"img");
+			
+			if (attribs) {
+				
+				for (var i = 0; i < attribs.length ;  i++) {
+					switch (attribs[i].localName ) {
+						case "data":
+							childNode.setAttribute("src",attribs[i].value);
+							break;
+						case "width":
+							childNode.setAttribute("width",attribs[i].value);
+							break;
+						case "height":
+							childNode.setAttribute("height",attribs[i].value);
+							break;
+					}
+				}
+			}
+			break;
+		default:
+			htmlelementname = elementName;
+	}
+	newNode = document.createElementNS(XHTMLNS,htmlelementname);
+	if (elementName != htmlelementname) {
+		newNode.setAttribute("class", elementName);
+	}
+	if (childNode) {
+		newNode.appendChild(childNode);
+	}
+	return newNode;
 }
 
 

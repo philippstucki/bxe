@@ -401,7 +401,7 @@ XMLNode.prototype.getBeforeAndAfterString = function () {
 	return new Array(before,after);
 	
 }
-XMLNode.prototype.createNS = function (namespaceURI, localName) {
+XMLNode.prototype.createNS = function (namespaceURI, localName, attribs) {
 	var htmlelementname;
 	if (this.nodeType == 1) {
 		if (namespaceURI != XHTMLNS) {
@@ -410,19 +410,7 @@ XMLNode.prototype.createNS = function (namespaceURI, localName) {
 			this._node.setAttribute("class", localName);
 		}
 		else {
-			if (this.localName == "a") {
-				htmlelementname = "span";
-			} else {
-				htmlelementname = this.localName;
-			}
-			try {
-				this._node = document.createElement(htmlelementname);
-				if (this.localName != htmlelementname) {
-					this._node.setAttribute("class", localName);
-				}
-			}
-			catch(e) {alert("you can't insert '" + htmlelementname + "' as an elementname");} 
-			
+			this._node = documentCreateXHTMLElement(this.localName.toLowerCase(),attribs);
 		}
 		this.localName = localName;
 		this.namespaceURI = namespaceURI;
@@ -505,7 +493,7 @@ XMLNode.prototype.makeHTMLNode = function () {
 	//dump("here " + " " + this.data + " " +this.nodeType + " " +this.localName+"");
 	if (this.nodeType == 1) {
 		var attribs = this._node.attributes;
-		this.createNS(this.namespaceURI, this.localName);
+		this.createNS(this.namespaceURI, this.localName,attribs);
 		for (var i = 0; i < attribs.length; i++) {
 			this._node.setAttributeNS(attribs[i].namespaceURI,attribs[i].localName,attribs[i].value);
 		}
