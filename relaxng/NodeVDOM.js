@@ -7,7 +7,26 @@ NodeVDOM = function(node) {
 
 
 NodeVDOM.prototype.getVdomForChild = function (child ) {
-
+	var ctxt = new ContextVDOM(child.parentNode,this);
+	ctxt.node = child;
+	var vdom = this.firstChild;
+	while (vdom) {
+		dump (child.nodeName + " = " + vdom.nodeName + "\n");
+		if (vdom.isValid(ctxt)) {
+			dump ("here\n");
+			return vdom;
+		}
+		vdom = vdom.nextSibling;
+	}
+/*	while (vdom) {
+		dump(ctxt.vdom.nodeName + " = " + child.nodeName);
+		if (ctxt.vdom.nodeName == child.nodeName) {
+			dump (" there ");
+			return vdom;
+		}
+		vdom = ctxt.nextVDOM();
+	}*/
+	return null;
 }
 
 NodeVDOM.prototype.allowedElements = function() {

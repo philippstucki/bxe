@@ -11,11 +11,7 @@ Document.prototype.validateDocument = function() {
 	
 	//check root element
 	vdomCurrentChild = this.documentElement.vdom.firstChild;
-	return this.documentElement.isNodeValid(true);
-	/*if (!this.vdom.isGlobalElement(root.nodeName)) {
-		alert("not globally defined");
-	}*/
-	return true;
+	return this.documentElement._isNodeValid(true);
 }
 
 Document.prototype.getVdom = function(name) {

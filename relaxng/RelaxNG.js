@@ -16,13 +16,18 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 
 DocumentVDOM.prototype.parseStart = function(node) {
 	var startChildren = node.childNodes;
+	rng_nsResolver = new bxe_RelaxNG_nsResolver(this.xmldoc.documentElement);
 	
 	for (var i = 0; i < startChildren.length; i++) {
 		if (startChildren[i].isRelaxNGElement("element")) {
 			var startElement = new ElementVDOM(startChildren[i]);
 			this.firstChild = startElement;
 			startElement.parentNode = this;
-			startElement.nodeName = startChildren[i].getAttribute("name");
+			var nsParts = rng_nsResolver.parseNodeName(startChildren[i].getAttribute("name"));
+			startElement.nodeName = nsParts.nodeName;
+			startElement.localName = nsParts.localName;
+			startElement.namespaceURI = nsParts.namespaceURI;
+			startElement.prefix = nsParts.prefix;
 			startElement.canBeRoot = true;
 			startElement.nextSibling = null;
 			startElement.previousSibling = null;
@@ -36,6 +41,44 @@ DocumentVDOM.prototype.parseStart = function(node) {
 }
 
 
+function bxe_RelaxNG_nsResolver(node) {
+	var rootAttr = node.attributes;
+	this.defaultNamespace = null;
+	this.namespaces = new Array();
+	for(var i = 0; i < rootAttr.length; i++) {
+		if (rootAttr[i].namespaceURI == "http://www.w3.org/2000/xmlns/") {
+			this.namespaces[rootAttr[i].localName] = rootAttr[i].value;
+		} else if (rootAttr[i].localName == "ns") {
+			this.defaultNamespace= rootAttr[i].value;
+		}
+	}
+}
+bxe_RelaxNG_nsResolver.prototype.lookupNamespaceURI = function(prefix) {
+	if (this.namespaces[prefix]) {
+		return this.namespaces[prefix];
+	}
+	return null;
+}
+
+bxe_RelaxNG_nsResolver.prototype.parseNodeName = function(nodename) {
+	var spli = nodename.split(":");
+	var ret = new Object;
+	ret.nodeName = nodename;
+	
+	if (spli[1]) {
+		ret.localName = spli[1];
+		ret.namespaceURI = this.lookupNamespaceURI(spli[0]);
+		ret.prefix = spli[0];
+	} else {
+		ret.localName = spli[0];
+		ret.namespaceURI = this.defaultNamespace;
+		ret.prefix = "";
+	}
+	return ret;
+	
+}
+	
+	
 Node.prototype.__defineGetter__ ("hasRelaxNGNamespace", function() {
 	
 	if (this.namespaceURI == "http://relaxng.org/ns/structure/1.0") {
@@ -64,7 +107,11 @@ NodeVDOM.prototype.parseChildren = function(node) {
 	for (var i = 0; i < childNodes.length; i++) {
 		if (childNodes[i].isRelaxNGElement("element")) {
 			var newElement = new ElementVDOM(childNodes[i]);
-			newElement.nodeName = childNodes[i].getAttribute("name");
+			var nsParts = rng_nsResolver.parseNodeName(childNodes[i].getAttribute("name"));
+			newElement.nodeName = nsParts.nodeName;
+			newElement.localName = nsParts.localName;
+			newElement.namespaceURI = nsParts.namespaceURI;
+			newElement.prefix = nsParts.prefix;
 			this.appendChild(newElement);
 			newElement.parseChildren();
 			
@@ -187,7 +234,7 @@ OneOrMoreVDOM.prototype.allowedElements = function() {
 	
 	while (child) {
 		var subac = child.allowedElements();
-		if (typeof subac == "string") {
+		if (subac.nodeName) {
 			ac.push(subac);
 		} else {
 			for (var i = 0; i < subac.length; i++) {
@@ -206,7 +253,7 @@ ChoiceVDOM.prototype.allowedElements = function() {
 	
 	while (child) {
 		var subac = child.allowedElements();
-		if (typeof subac == "string") {
+		if (subac.nodeName) {
 			ac.push(subac);
 		} else if (subac) {
 			for (var i = 0; i < subac.length; i++) {
@@ -221,8 +268,13 @@ ChoiceVDOM.prototype.allowedElements = function() {
 }
 
 ElementVDOM.prototype.allowedElements = function() {
-	return this.nodeName;
+	var nodeName = "" ;
+	if (this.prefix) {
+		nodeName = this.prefix +":";
+	}
+	return {"nodeName":nodeName + this.localName, "namespaceURI": this.namespaceURI, "localName": this.localName};
 }
+
 ElementVDOM.prototype.__defineSetter__("nodeName", function(name) {
 	var html = true;
 	if (html) {
