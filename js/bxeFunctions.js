@@ -59,7 +59,8 @@ function __bxeSave(e) {
 		
 		if (e.isError) {
 			var widg = mozilla.getWidgetModalBox("Saving");
-			widg.addText("Document couldn't be saved\n"+e.statusText);
+			widg.addText("Document couldn't be saved");
+			widg.addText(e.statusText,true);
 			widg.show((window.innerWidth- 500)/2,50, "fixed");
 			return;
 		}

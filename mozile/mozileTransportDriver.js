@@ -1,4 +1,4 @@
-// $Id: mozileTransportDriver.js,v 1.6 2003/11/18 21:41:10 chregu Exp $
+// $Id$
 
 function mozileTransportDriver (container) {
 	this.container = eval(" new mozileTransportDriver_"+container);
@@ -52,7 +52,7 @@ mozileTransportDriver.prototype.parseResponseXML = function(responseXML, status)
 			alerttext = parserErrorNode.firstChild.data;
 			var sourceNode = parserErrorNode.getElementsByTagName("sourcetext")[0];
 			if (sourceNode) {
-				alerttext += "\n" + sourceNode.firstChild.data;
+				alerttext += "<pre>\n" + sourceNode.firstChild.data + "\n</pre>";
 			}
 			alerttext+= strXML;
 		}

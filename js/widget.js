@@ -922,7 +922,7 @@ Widget_ModalBox.prototype.addFormEntry = function(title, descr) {
 	return tdt;
 }
 
-Widget_ModalBox.prototype.addText = function(text) {
+Widget_ModalBox.prototype.addText = function(text,html) {
 	var table = this.createTable();
 	var tr = document.createElement("tr");
 	table.appendChild(tr);
@@ -931,7 +931,12 @@ Widget_ModalBox.prototype.addText = function(text) {
 	if (text.length>1000) {
 		text=text.substring(0,1000)+" ...";
 	}
-	td.appendChild(document.createTextNode(text));
+	if (html) {
+		td.innerHTML = text;
+	} else {
+		td.appendChild(document.createTextNode(text));
+	}
+	
 	tr.appendChild(td);
 }
 
