@@ -329,6 +329,7 @@ function bxe_about_box_fade_out (e) {
 		window.setTimeout(bxe_about_box_fade_out, 100);
 	} else {
 		bxe_about_box.node.style.display = "none";
+		window.status = null;
 	}
 }
 

@@ -460,6 +460,7 @@ Widget_AboutBox.prototype.addText = function(text) {
 	if ( this.TextNode.data.length  > 120) {
 		this.TextNode.data = "..." + this.TextNode.data.substr(this.TextNode.data.length - 120);
 	}
+	window.status = this.TextNode.data;
 }
 
 
