@@ -946,8 +946,25 @@ documentCreateXHTMLElement = function (elementName,attribs) {
 	}
 	if (childNode) {
 		newNode.appendChild(childNode);
+		newNode.InternalChildNode = childNode;
+		newNode.eDOMaddEventListener("NodeAttributesModified",bxe_InternalChildNodesAttrChanged,false);
+	
 	}
 	return newNode;
+}
+
+function bxe_InternalChildNodesAttrChanged(e) {
+	var node = e.target;
+	var attribs = node.attributes;
+	//we have to replace the old internalnode, redrawing of new object-sources seem not to work...
+	var newNode = document.createElementNS(node.InternalChildNode.namespaceURI, node.InternalChildNode.localName);
+	for (var i = 0; i < attribs.length ;  i++) {
+		newNode.setAttributeNode(attribs[i].cloneNode(true));
+	}
+	node.replaceChild(newNode,node.InternalChildNode);
+	node.InternalChildNode = newNode;
+	
+	
 }
 
 

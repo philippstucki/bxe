@@ -760,6 +760,7 @@ Widget_ModalAttributeBox.prototype.setAttributes = function(xmlnode) {
 			xmlnode.removeAttribute(attrName);
 		}
 	}
+	eDOMEventCall("NodeAttributesModified",xmlnode._node);
 }
 function Widget_XPathMouseOver (e) {
 	//dump (e.currentTarget._htmlnode + "\n");
