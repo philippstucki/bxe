@@ -10,9 +10,8 @@ function __bxeSave(e) {
 		td.Exit = null;
 	}
 	var xmlstr = bxe_getXmlDocument()
-	alert(xmlstr);
 	
-	//td.save(bxe_config.xmlfile,null,xmlstr);
+	td.save(bxe_config.xmlfile,null,xmlstr);
 }
 
 function bxe_getXmlDocument() {
