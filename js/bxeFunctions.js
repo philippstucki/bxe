@@ -175,12 +175,20 @@ function bxe_toggleSourceMode(e) {
 		
 		var innerhtmlValue = documentLoadXML( innerHTML);
 		if (innerhtmlValue) {
+			editableArea.XMLNode._xmlnode.removeAllChildren();
+			editableArea.XMLNode._xmlnode.appendAllChildren(innerhtmlValue.firstChild);
 			editableArea.removeAllChildren();
+			/*
+			
 			innerhtmlValue.documentElement.insertIntoHTMLDocument(editableArea,true);
+			*/
+			editableArea.XMLNode._xmlnode.insertIntoHTMLDocument(editableArea,true);
 			editableArea.setStyle("white-space",null);
+			editableArea.XMLNode._xmlnode.parentNode.isNodeValid(true);
 			editableArea._SourceMode = false;
 			editableArea.AreaInfo.SourceModeMenu.Checked = false;
 			editableArea.AreaInfo.NormalModeMenu.Checked = true;
+			
 		}
 	}
 	}
@@ -190,9 +198,15 @@ function bxe_toggleSourceMode(e) {
 
 function bxe_toggleTextClass(e) {
 	var sel = window.getSelection();
-	var parent = sel.anchorNode.parentNode;
+	
 	sel.toggleTextClass(e.additionalInfo.localName);
-	dump("is valid" +parent.isNodeValid());
+	var sel = window.getSelection();
+	var _node = sel.anchorNode.parentNode;
+	while (!(_node.XMLNode && _node.XMLNode._xmlnode)) {
+		_node = _node.parentNode;
+	}
+	_node.XMLNode._htmlnode.convertToXMLDocFrag();
+	dump("is valid" +_node.XMLNode._xmlnode.isNodeValid(true));
 }
 
 function bxe_changeLinesContainer(e) {

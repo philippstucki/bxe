@@ -2,7 +2,6 @@
 
 Node.prototype.isNodeValid = function(deep, wFValidityCheckLevel ) {
 	
-	
 	if (this._isNodeValid(deep,wFValidityCheckLevel).isError) {
 		return false; 
 	} else {
@@ -31,7 +30,6 @@ Node.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 	var ctxt = new ContextVDOM(this,this.vdom);
 	if (ctxt.node) {
 	do {
-		dump("*** CHECK FOR " + ctxt.node.nodeName + "***\n");
 		//dump( ctxt.vdom.nodeName + "\n");
 		if (ctxt.node.nodeType == "3" && ctxt.node.isWhitespaceOnly) {
 			continue;

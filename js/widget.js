@@ -524,7 +524,7 @@ Widget_ContextMenu.prototype.show = function(e,node) {
 Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 	this.Popup.removeAllMenuItems();
 	this.Popup.initTitle(node.XMLNode.localName);
-	if (node.XMLNode.attributes.length > 0 ) {
+	if (node.XMLNode.attributes.length > 0 && this.EditAttributes) {
 		var menui = this.Popup.addMenuItem("Edit Attributes..", this.EditAttributes.show);
 		menui.Modal = this.EditAttributes;
 	}

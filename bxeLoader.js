@@ -261,7 +261,7 @@ function xml_loaded(e) {
 	document.eDOMaddEventListener("DocumentSave",__bxeSave,false);
 	document.eDOMaddEventListener("ToggleTextClass",bxe_toggleTextClass,false);
 	document.eDOMaddEventListener("InsertLink",bxe_InsertLink,false);
-		document.eDOMaddEventListener("InsertTable",bxe_InsertTable,false);
+	document.eDOMaddEventListener("InsertTable",bxe_InsertTable,false);
 	document.eDOMaddEventListener("InsertImage",bxe_InsertImage,false);
 	document.eDOMaddEventListener("OrderedList",bxe_UnorderedList,false);
 	document.eDOMaddEventListener("UnorderedList",bxe_OrderedList,false);
