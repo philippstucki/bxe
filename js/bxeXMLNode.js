@@ -52,7 +52,7 @@ XMLNode.prototype.init = function ( nodein, localName, nodeType, autocreate) {
 			if (this._node.hasAttribute("__bxe_ns")) {
 				this.namespaceURI = this._node.getAttribute("__bxe_ns");
 			}
-		} else {
+		} else {
 			this.localName = this._node.nodeName;
 		}
 	} 
@@ -140,7 +140,7 @@ XMLNode.prototype.appendChild = function(newNode) {
 	return newNode;
 }
 
-XMLNode.prototype.appendChildIntern = function (newNode) {
+XMLNode.prototype.appendChildIntern = function (newNode) {
 	newNode.parentNode = this;
 	if (this.firstChild == null) {
 
@@ -167,7 +167,7 @@ XMLNode.prototype.setContent = function (text) {
 }
 
 XMLNode.prototype.removeChild = function (child) {
-	if (child._node.parentNode == this._node) {
+	if (child._node.parentNode == this._node) {
 		this._node.removeChild(child._node);
 	}
 	child.unlink();
@@ -297,7 +297,7 @@ XMLNode.prototype.__defineGetter__(
 	"nodeName",
 	function()
 	{
-		if (this._nodeName) {
+		if (this._nodeName) {
 			return this._nodeName;
 		} else {
 			return this.localName;

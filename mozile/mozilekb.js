@@ -343,7 +343,7 @@ function nonctrlKeyPressHandler(event)
 
 	// UP/DOWN (event.DOM_VK_UP/DOWN)
 
-	if (event.keyCode == 38 || event.keyCode == 40) {
+	if (event.keyCode == 38 || event.keyCode == 40) {
 		bxe_delayedUpdateXPath();
 		return false;
 	}
