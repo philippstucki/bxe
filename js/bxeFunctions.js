@@ -1776,7 +1776,7 @@ function bxe_doCallback(cb, node ) {
 	if (cb["type"] == "popup") {
 		
 		
-		var pop = window.open(cb["content"],"popup","width=600,height=600,resizable=yes");
+		var pop = window.open(cb["content"],"popup","width=600,height=600,resizable=yes,scrollbars=auto");
 		pop.focus();
 		
 	} else if (cb["type"] == "function") {
