@@ -11,12 +11,11 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeLoader.js,v 1.249 2004/03/05 02:30:04 chregu Exp $
+// $Id: bxeLoader.js,v 1.250 2004/03/10 10:24:33 chregu Exp $
 
-const BXE_VERSION = "0.9.4-dev";
-const BXE_BUILD = "200403050330"
+var BXE_VERSION = "0.9.4-dev";
+var BXE_BUILD = "200403050330"
 
-const E_FATAL = 1;
 
 if (window.location.protocol == "file:" || window.location.host.match(/localhost.*/)) {
 	var DebugOutput = false;
@@ -65,9 +64,9 @@ function bxe_start(config_file,fromUrl, configArray) {
 	/*if (! (BX_checkUnsupportedBrowsers())) {
 		return false;
 	}*/
-	
 	if((navigator.product == 'Gecko') && (navigator.userAgent.indexOf("Safari") == -1))
 	{
+		
 		// navigator.productSub > '20020801' (test to see what the date should be)
 		
 		// POST04: if document.documentElement != HTML then ... or no "head" ...
@@ -112,7 +111,10 @@ function bxe_start(config_file,fromUrl, configArray) {
 		else {
 			alert("*** ALERT: MozileLoader only works in (X)HTML - load Mozile JS explicitly in XML files");
 		}
+	} else {
+		alert ("Bitflux Editor only works with Mozilla/Firefox on any platform. \nCurrently we recommend Mozilla 1.6 or Firefox 0.8. \nBut Mozilla >= 1.4 should work as well.");
 	}
+	
 	
 }
 
@@ -238,8 +240,8 @@ function xml_loaded(xmldoc) {
 	
 	document.eDOMaddEventListener("ContextPopup",bxe_ContextPopup,false);
 	document.addEventListener("contextmenu",bxe_ContextMenuEvent, false);
-	
 	bxe_context_menu = new Widget_ContextMenu();
+	
 }
 
 function validation_loaded(vdom) {
