@@ -534,26 +534,28 @@ function bxe_NodeChanged(e) {
 		
 	oldNode.unlink();
 	
-
 }
 
 function bxe_NodeInsertedBefore(e) {
 	try {
-	var oldNode = e.target.XMLNode;
-	var newNode = e.additionalInfo;
-	debug ("foo " + oldNode._node + oldNode._node.saveXML(oldNode._node));
-	debug("foo " + oldNode + oldNode.localName + newNode); 
-	newNode.XMLNode =  new XMLNode(newNode);
-	oldNode.parentNode.insertBeforeIntern(newNode.XMLNode, oldNode);
-	if (newNode.firstChild ) {
-		newNode.updateXMLNode();
+		var oldNode = e.target.XMLNode;
+		var newNode = e.additionalInfo;
+		newNode.XMLNode =  new XMLNode(newNode);
+		if (oldNode.parentNode) {
+			oldNode.parentNode.insertBeforeIntern(newNode.XMLNode, oldNode);
+		}
+		if (newNode.firstChild ) {
+			newNode.updateXMLNode();
+		}
+		if (oldNode.firstChild ) {
+			oldNode.unlinkChildren();
+			oldNode._node.updateXMLNode();
+		}
 	}
-	if (oldNode.firstChild ) {
-		oldNode.unlinkChildren();
-		oldNode._node.updateXMLNode();
+	catch(e) { 
+		bxe_catch_alert(e);
 	}
-	}
-	catch(e) {bxe_catch_alert(e);}
+	
 
 }
 
