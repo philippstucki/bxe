@@ -11,6 +11,10 @@ function __bxeSave(e) {
 
 	var areaNodes = bxe_getAllEditableAreas();
 	for (var i = 0; i < areaNodes.length; i++) {
+		if ((areaNodes[i]._SourceMode)) {
+			alert("Editable areas must not be in SourceMode while saving. Please switch it");
+			return false;
+		}
 		var xmldoc = areaNodes[i].convertToXMLDocFrag();
 		//xmldoc = areaNodes[i].XMLNode.insertIntoXMLDocument(xmldoc);
 	}
