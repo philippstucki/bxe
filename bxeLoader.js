@@ -39,16 +39,48 @@
 */
 
 
-
+const XHTMLNS = "http://www.w3.org/1999/xhtml";
 const BXE_VERSION = "0.1alpha"
 mozile_js_files = new Array();
+
 mozile_js_files.push("mozile/mozWrappers.js");
-mozile_js_files.push("mozile/eDOM.js");
 mozile_js_files.push("js/widget.js");
+
+mozile_js_files.push("mozile/eDOM.js");
 mozile_js_files.push("js/bxeConfig.js");
 mozile_js_files.push("mozile/eDOMXHTML.js");
 mozile_js_files.push("js/bxeNodeElements.js");
 mozile_js_files.push("js/bxeXMLDocument.js");
+mozile_js_files.push("td/http.js");
+mozile_js_files.push("mozile/domlevel3.js");
+mozile_js_files.push("mozile/mozCE.js");
+mozile_js_files.push("mozile/mozIECE.js");
+mozile_js_files.push("mozile/mozileModify.js");
+mozile_js_files.push("js/eDOMEvents.js");
+
+
+//mozile_js_files.push("xsltTransformer.js");
+
+
+mozile_js_files.push("js/bxeFunctions.js");
+/*
+mozile_js_files.push("mozile/mozWrappers.js");
+mozile_js_files.push("js/widget.js");
+mozile_js_files.push("mozile/eDOM.js");
+mozile_js_files.push("mozile/eDOMXHTML.js");
+mozile_js_files.push("mozile/mozileModify.js");
+mozile_js_files.push("mozile/domlevel3.js");
+mozile_js_files.push("mozile/mozCE.js");
+mozile_js_files.push("mozile/mozIECE.js");
+mozile_js_files.push("js/bxeConfig.js");
+mozile_js_files.push("td/http.js");
+mozile_js_files.push("js/bxeXMLDocument.js");
+
+*/
+/*
+mozile_js_files.push("mozile/eDOMXHTML.js");
+mozile_js_files.push("js/bxeNodeElements.js");
+
 mozile_js_files.push("mozile/domlevel3.js");
 mozile_js_files.push("mozile/mozCE.js");
 mozile_js_files.push("mozile/mozIECE.js");
@@ -58,15 +90,15 @@ mozile_js_files.push("mozile/mozileModify.js");
 mozile_js_files.push("js/eDOMEvents.js");
 mozile_js_files.push("js/jsdav.js");
 mozile_js_files.push("td/webdav.js");
-mozile_js_files.push("td/http.js");
+*/
 //mozile_js_files.push("xsltTransformer.js");
 
 
-mozile_js_files.push("js/bxeFunctions.js");
+
 
 var mozile_root_dir = "./";
-var mozile_js_files_loaded = 0;
-
+var mozile_corescript_loaded = 0;
+var mozile_script_loaded = 0;
 // some global vars, no need to change them
 
 var bxe_config = new Object();
@@ -110,7 +142,7 @@ function bxe_start(config_file,fromUrl) {
 				if (mozile_js_files[i] == "js/widget.js") {
 					scr.onload = widget_loaded;
 				} else {
-					scr.onload = script_loaded;
+					scr.onload = corescript_loaded;
 				}
 				scr.setAttribute("src", src);
 				
@@ -235,41 +267,78 @@ bxe_nsResolver.prototype.lookupNamespacePrefix = function (uri) {
 
 
 function widget_loaded() {
+	mozile_corescript_loaded++;
 	bxe_about_box = new Widget_AboutBox();
 	bxe_about_box.draw();
 	bxe_about_box.setText("Loading files ...");
 	
 }
 
-function script_loaded() {
-	mozile_js_files_loaded++;
-	if ( mozile_js_files.length == mozile_js_files_loaded + 1) {
-		mozile_loaded();
+function corescript_loaded() {
+	mozile_corescript_loaded++;
+	if ( mozile_js_files.length == mozile_corescript_loaded) {
+		mozile_core_loaded();
 	} else {
 		if (bxe_about_box) {
-			bxe_about_box.addText(mozile_js_files_loaded );
+			bxe_about_box.addText(mozile_corescript_loaded );
 		}
 	}
 }
 
-function mozile_loaded() {
+function script_loaded() {
+	mozile_script_loaded++;
+	if ( bxe_config.scriptfiles.length == mozile_script_loaded ) {
+		mozile_loaded();
+	} else {
+		bxe_about_box.addText(mozile_script_loaded );
+	}
+}
+
+function mozile_core_loaded() {
 	bxe_about_box.addText("Scripts loaded ...");
+	bxe_about_box.addText("Load Config ...");
+	bxe_config = new bxeConfig(bxe_config.file, bxe_config.fromUrl);
+}
+
+function mozile_loaded() {
+	bxe_about_box.addText("Load XML ...");
+	bxe_globals = new bxe_globals();
+	bxe_globals.loadXML(bxe_config.xmlfile);
+
+	
+}
+
+function xml_loaded() {
 	document.eDOMaddEventListener("toggleSourceMode",toggleSourceMode_bxe,false);
 	document.eDOMaddEventListener("toggleTagMode",toggleTagMode_bxe,false);
 	document.eDOMaddEventListener("toggleNormalMode",toggleNormalMode_bxe,false);
 	document.eDOMaddEventListener("DocumentSave",__bxeSave,false);
 	document.eDOMaddEventListener("ToggleTextClass",toggleTextClass_bxe,false);
 	document.eDOMaddEventListener("changeLinesContainer",changeLinesContainer_bxe,false);
-	bxe_about_box.addText("Load Config ...");
-	bxe_config = new bxeConfig(bxe_config.file, bxe_config.fromUrl);
 }
-
 function config_loaded(bxe_config_in) {
 	
-	bxe_about_box.addText("Load XML ...");
-	bxe_globals = new bxe_globals();
 	bxe_config = bxe_config_in;
-	bxe_globals.loadXML(bxe_config.xmlfile);
+	var head = document.getElementsByTagName("head")[0];
+	for (var i=0; i < bxe_config.cssfiles.length; i++) 
+	{
+		var scr = document.createElementNS(XHTMLNS,"link");
+		scr.setAttribute("type","text/css");
+		scr.setAttribute("rel","stylesheet");
+		scr.setAttribute("href",bxe_config.cssfiles[i]);
+		head.appendChild(scr);
+	}
+	
+	for (var i=0; i < bxe_config.scriptfiles.length; i++) 
+	{
+		var scr = document.createElementNS("http://www.w3.org/1999/xhtml","script");
+		var src = mozile_root_dir + bxe_config.scriptfiles[i];
+		scr.onload = script_loaded;
+		scr.setAttribute("src", src);
+		scr.setAttribute("language","JavaScript");
+		head.appendChild(scr);
+	}
+
 }
 
 

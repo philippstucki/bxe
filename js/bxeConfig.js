@@ -21,6 +21,8 @@ bxeConfig.parseConfig = function  (e) {
 	
 	bxe_config.xmlfile = bxe_config.getContent("/config/files/input/file[@name='BX_xmlfile']");
 	bxe_config.xslfile = bxe_config.getContent("/config/files/input/file[@name='BX_xslfile']");
+	bxe_config.cssfiles = bxe_config.getContentMultiple("/config/files/css/file");
+	bxe_config.scriptfiles = bxe_config.getContentMultiple("/config/files/scripts/file");
 	config_loaded(bxe_config);
 }
 

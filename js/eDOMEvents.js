@@ -48,8 +48,6 @@ eDOMEvent.prototype.setTarget = function (target) {
 }
 
 function eDOMEventCall(eventType, target, addInfo) {
-	dump("eDOMEevntCall: " + eventType + " " + target +"\n");
-	dump("eDOMEevntCallParent: " + target.parentNode +"\n");
 
 	var e = new eDOMEvent();
 	if (addInfo) {
