@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: ElementVAL.js,v 1.18 2004/01/18 23:25:36 chregu Exp $
+// $Id: ElementVAL.js,v 1.19 2004/02/20 11:25:52 chregu Exp $
 
 
 XMLNodeElement.prototype.__defineGetter__(
@@ -180,8 +180,12 @@ XMLNodeElement.prototype.__defineGetter__ ("canHaveText",
 XMLNodeElement.prototype.isAllowedChild = function(namespaceURI, localName) {
 	
 	var ac = this.allowedChildren;
+	if (typeof namespaceURI == "undefined") {
+		namespaceURI = "";
+	}
 	if (ac) {
 	for (var i = 0; i < ac.length; i++) {
+		dump("."+ ac[i].namespaceURI+". ." + ac[i].localName + "\n");
 		if (ac[i].localName == localName && ac[i].namespaceURI == namespaceURI) {
 			return true;
 		}
