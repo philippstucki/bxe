@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLDocument.js,v 1.34 2004/02/06 11:02:37 chregu Exp $
+// $Id: bxeXMLDocument.js,v 1.35 2004/02/20 15:08:46 chregu Exp $
 
 
 XMLDocument.prototype.init = function (startNode) {
@@ -161,6 +161,13 @@ XMLDocument.prototype.importXHTMLDocument = function(xhtmlfile) {
 		bxe_area.removeAllChildren();
 		bxe_area.appendAllChildren(new_body);
 		xhtmldoc.xmldoc.insertIntoHTMLDocument();
+		var links =  xhtmldoc.getElementsByTagName("link");
+		
+		var head = document.getElementsByTagName("head")[0];
+		for (var i = 0; i < links.length; i++) {
+			head.appendChild(document.importNode(links[i],true));
+		}
+			
 		xml_loaded(xhtmldoc.xmldoc);
 	}
 	
