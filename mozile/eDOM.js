@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: eDOM.js,v 1.20 2003/12/17 18:24:35 chregu Exp $
+// $Id$
 
 /**********************************************************************************
  * eDOM.js V0.5: editor or extended DOM
@@ -2650,12 +2650,18 @@ ContainedLine.prototype.normalizeWhitespace = function()
 	var range = document.createRange();
 	range.selectNode(this.container.lastChild);
 	range.setStart(this.__lastInsertionPoint.ipNode, this.__lastInsertionPoint.ipOffset);
-	range.deleteContents();
-
+//fix by chregu, it deleted to much, when span/object was in the node
+//only delete contents, if there really is no content..
+	if (range.toString().replace(/\s*/g,"").length == 0) {
+		range.deleteContents();
+	}
 	// then normalize start
 	range.selectNode(this.container.firstChild);
 	range.setEnd(this.__firstInsertionPoint.ipNode, this.__firstInsertionPoint.ipOffset);
-	range.deleteContents();
+	// the same fix by chregu as 5 lines above
+	if (range.toString().replace(/\s*/g,"").length == 0) { 
+		range.deleteContents();
+	}
 	this.__firstInsertionPoint.ipOffset = 0;
 
 	// set end after deletion of start - covers complication when start and end are in same node
