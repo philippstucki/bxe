@@ -16,6 +16,12 @@
       <ref name="NMTOKENS.datatype"/>
     </attribute>
   </optional>
+  
+    <optional>
+    <attribute name="solla">
+      <ref name="NMTOKENS.datatype"/>
+    </attribute>
+  </optional>
 </define>
 
 <define name="title.attrib">

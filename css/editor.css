@@ -272,7 +272,8 @@ table.beauty  {
 }
 
 .bold, .b {
-    font-weight: bold;
+    /*font-weight: bold;*/
+    color: red;
 }
 
 .nonxhtml {
@@ -280,7 +281,8 @@ table.beauty  {
 }
     
 .italic, .i {
-    font-style: italic;
+    /*font-style: italic;*/
+    color: green;
 }
 
 .H2 {

@@ -17,6 +17,15 @@ xx xxx xxx, Version 1.1.0
 
 xx December 2004 Version 1.0.0
 
+- Fixed horizontal scrolling on paste (r983)
+
+29 November 2004 Version 1.0.0RC2
+
+- Removed "Document Saved" popup and moved message to statusbar (r952)
+- Rewrote Inline Style applying/removing code. should work better now (r967)
+- Fixed making list in table cells (r958)
+- Fixed editing class attribute on newly inserted XHTML nodes (r950)
+- Fixed cleaning nested inline tags (r945)
 - Fixed problem with xml comments within an editable node (r942)
 - Fixed problem with <span> elements during copy&paste (r936)
 - Fixed jumping around of page during paste (r933)
