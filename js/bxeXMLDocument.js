@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLDocument.js,v 1.31 2003/11/18 21:41:10 chregu Exp $
+// $Id: bxeXMLDocument.js,v 1.32 2003/12/05 00:51:53 chregu Exp $
 
 
 XMLDocument.prototype.init = function (startNode) {
@@ -24,73 +24,6 @@ XMLDocument.prototype.init = function (startNode) {
 	
 	return startNode.init();
 }
-
-Node.prototype.init = function() {
-	var walker = this.ownerDocument.createTreeWalker(
-		this,NodeFilter.SHOW_ALL,
-	{
-		acceptNode : function(node) {			
-			return NodeFilter.FILTER_ACCEPT;
-		}
-	}
-	, true);
-
-	var node = this;
-	var firstChild = false;
-
-	do  {
-		if (node.nodeType == 1) {
-			node.XMLNode = new XMLNodeElement(node);
-		} else {
-			node.XMLNode = new XMLNode(node);
-		}
-		node = walker.nextNode();
-	}  while(node );
-	
-	walker.currentNode = this;
-	if (this == this.ownerDocument.documentElement) {
-		this.ownerDocument.XMLNode.documentElement = this.ownerDocument.documentElement.XMLNode;
-        this.ownerDocument.documentElement.XMLNode.parentNode = this.ownerDocument.XMLNode;
-	} else {
-	}
-	
-	node = walker.currentNode;
-	do  {
-
-		x = node.XMLNode;
-		x.ownerDocument = this.ownerDocument.XMLNode;
-		if (node.parentNode) {
-			x.parentNode = node.parentNode.XMLNode;
-		}
-		if (node.previousSibling) {
-			x.previousSibling = node.previousSibling.XMLNode;
-		}
-		if (node.nextSibling) {
-			x.nextSibling = node.nextSibling.XMLNode;
-		}
-		if (node.firstChild) {
-			x.firstChild = node.firstChild.XMLNode;
-		}
-		if (node.lastChild) {
-			x.lastChild = node.lastChild.XMLNode;
-		}
-		x.nodeType = node.nodeType;
-		x.prefix = node.prefix;
-		node = walker.nextNode();
-	}  while(node );
-	return this.XMLNode;
-/*	var xw = new XMLNodeWalker(this.documentElement.XMLNode.firstChild);
-	node = xw.currentNode;
-	while (node) {
-		
-		dump(node + node.localName + "\n");
-		node = xw.nextNode();
-		
-	}*/
-	
-	
-}
-
 
 XMLDocument.prototype.insertIntoHTMLDocument = function(htmlnode) {
 

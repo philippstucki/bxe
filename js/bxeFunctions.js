@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.123 2003/12/03 18:13:33 chregu Exp $
+// $Id: bxeFunctions.js,v 1.124 2003/12/05 00:51:53 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -1430,7 +1430,8 @@ function bxe_insertContent(node,replaceNode) {
 	}
 	if (replaceNode == BXE_SELECTION) {
 		var sel = window.getSelection();
-		sel.insertNodeRaw(docfrag.firstChild);
+		var _node = docfrag.firstChild.prepareForInsert();
+		sel.insertNodeRaw(_node);
 	} else if (replaceNode) {
 		
 		var newNode = docfrag.firstChild.init();

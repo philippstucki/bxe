@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLNode.js,v 1.35 2003/12/04 20:47:59 chregu Exp $
+// $Id: bxeXMLNode.js,v 1.36 2003/12/05 00:51:53 chregu Exp $
 
 
 function XMLNode  ( nodein, localName, nodeType, autocreate) {
@@ -436,6 +436,7 @@ XMLNode.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 	return firstChild;
 }
 
+
 XMLNode.prototype.getBeforeAndAfterString = function () {
 	var nodeName = "";
 	if (this.prefix) {
@@ -484,8 +485,7 @@ XMLNode.prototype.createNS = function (namespaceURI, localName, attribs) {
 	}
 	if (this._node) {
 		this._node.XMLNode = this;
-	} else {
-	}
+	} 
 }
 
 XMLNode.prototype.getXPathString = function() {

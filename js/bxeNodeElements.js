@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeNodeElements.js,v 1.32 2003/12/01 01:28:44 chregu Exp $
+// $Id: bxeNodeElements.js,v 1.33 2003/12/05 00:51:53 chregu Exp $
 
 Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 	alert("Node.prototype.insertIntoHTMLDocument is deprecated");
@@ -374,3 +374,158 @@ Node.prototype.getXPathFirst = function(xpath) {
 }
 
 
+Node.prototype.init = function() {
+	var walker = this.ownerDocument.createTreeWalker(
+		this,NodeFilter.SHOW_ALL,
+	{
+		acceptNode : function(node) {			
+			return NodeFilter.FILTER_ACCEPT;
+		}
+	}
+	, true);
+
+	var node = this;
+	var firstChild = false;
+
+	do  {
+		if (node.nodeType == 1) {
+			node.XMLNode = new XMLNodeElement(node);
+		} else {
+			node.XMLNode = new XMLNode(node);
+		}
+		node = walker.nextNode();
+	}  while(node );
+	
+	walker.currentNode = this;
+	if (this == this.ownerDocument.documentElement) {
+		this.ownerDocument.XMLNode.documentElement = this.ownerDocument.documentElement.XMLNode;
+        this.ownerDocument.documentElement.XMLNode.parentNode = this.ownerDocument.XMLNode;
+	} else {
+	}
+	
+	node = walker.currentNode;
+	do  {
+
+		x = node.XMLNode;
+		x.ownerDocument = this.ownerDocument.XMLNode;
+		if (node.parentNode) {
+			x.parentNode = node.parentNode.XMLNode;
+		}
+		if (node.previousSibling) {
+			x.previousSibling = node.previousSibling.XMLNode;
+		}
+		if (node.nextSibling) {
+			x.nextSibling = node.nextSibling.XMLNode;
+		}
+		if (node.firstChild) {
+			x.firstChild = node.firstChild.XMLNode;
+		}
+		if (node.lastChild) {
+			x.lastChild = node.lastChild.XMLNode;
+		}
+		x.nodeType = node.nodeType;
+		x.prefix = node.prefix;
+		node = walker.nextNode();
+	}  while(node );
+	return this.XMLNode;
+}
+
+/* mmmh, the same as in insertIntoHTML methods of XMLNode
+    not that smart to have both ways...
+	but    
+	 node.prepareForInsert();
+	 node.updateXML();
+	seems to work quite well for this here.
+	
+	Maybe some stuff from XMLNode, could use this here..
+*/
+
+Node.prototype.prepareForInsert = function(onlyChildren) {
+	var walker = document.createTreeWalker(
+	 this,NodeFilter.SHOW_ALL,
+	{
+		acceptNode : function(node) {
+			
+			return NodeFilter.FILTER_ACCEPT;
+		}
+	}
+	, true);
+	var node;
+	if(onlyChildren) {
+		node = walker.nextNode();
+	} else {
+		node = this;
+		
+	}
+	var firstChild = false;
+	do  {
+			var newNode;
+			if (node.nodeType == 1 ) {
+				newNode = node.makeHTMLNode()
+		/*		if (! node.hasChildNodes() && !(node.namespaceURI == XHTMLNS && node.localName == "img")) {
+						var xmlstring = node.getBeforeAndAfterString(false,true);
+						
+						newNode.setAttribute("_edom_tagnameopen", xmlstring[0]);
+				}*/
+			} else {
+				newNode = node.makeHTMLNode();
+			}
+			if (node.nodeType == 3) {
+				newNode = node.makeHTMLNode();
+			}
+			if (!firstChild) {
+				firstChild = newNode;
+			}
+			if (node.parentNode && node.parentNode.newNode) {
+				node.parentNode.newNode.appendChild(newNode);
+			}
+			node.newNode = newNode;
+
+			node = walker.nextNode();
+			
+	}  while(node );
+	return firstChild;
+}
+
+Node.prototype.makeHTMLNode = function () {
+	var _node;
+	if (this.nodeType == 1) {
+		var attribs = this.attributes;
+		_node = this.createNS(this.namespaceURI, this.localName,attribs);
+		for (var i = 0; i < attribs.length; i++) {
+			_node.setAttributeNS(attribs[i].namespaceURI,attribs[i].localName,attribs[i].value);
+		}
+	} else if (this.nodeType == 3 ) {
+		_node = document.createTextNode(this.data);
+	}
+	
+	else if (this.nodeType == 9 ) { // Node.XMLDOCUMENT) {
+			_node = this.documentElement;
+	}
+		
+	return _node;	
+}
+
+Node.prototype.createNS = function (namespaceURI, localName, attribs) {
+	var htmlelementname;
+	var _node;
+	if (this.nodeType == 1) {
+		if (namespaceURI != XHTMLNS) {
+			htmlelementname = "span"
+			_node = document.createElement(htmlelementname);
+			_node.setAttribute("class", localName);
+			if (attribs) {
+				for (var i = 0; i< attribs.length; i++) {
+					this.setAttributeNS(attribs[i].namespaceURI, attribs[i].localName,attribs[i].value);
+				}
+			}
+		}
+		else {
+			_node = documentCreateXHTMLElement(this.localName.toLowerCase(), attribs);
+		}
+	}
+	else if (this.nodeType == 3) {
+		_node = document.createTextNode(namespaceURI);
+	}
+	return _node;
+}
