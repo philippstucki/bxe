@@ -134,12 +134,18 @@ function bxe_start(config_file,fromUrl, configArray) {
 }
 
 function bxe_saveOnPart(evt) { 
+	
 	var xmlstr = bxe_getXmlDocument();
 	if (bxe_editable_page && xmlstr && xmlstr != bxe_lastSavedXML) {
-		if (confirm('You have unsaved changes. Do you want to save before leaving the page?\n Click Cancel for leaving the page and not saving \n Click Ok for leaving the page and saving')) {
+		if (evt.type == 'beforeunload') {
+			return "You have unsaved changes.\n Click cancel to return to the document.\n Click OK to really leave to page.";
+		}
+		else if (!confirm('You have unsaved changes.\n Are you sure you want to leave to page unsaved?\n Click OK for leaving the page and *NOT* saving \n Click Cancel for leaving the page and saving')) {
 			eDOMEventCall("DocumentSave",document);
 		}
+		
 	}
+	
 }
 
 
