@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLNode.js,v 1.34 2003/12/01 09:42:41 chregu Exp $
+// $Id: bxeXMLNode.js,v 1.35 2003/12/04 20:47:59 chregu Exp $
 
 
 function XMLNode  ( nodein, localName, nodeType, autocreate) {
@@ -466,18 +466,18 @@ XMLNode.prototype.createNS = function (namespaceURI, localName, attribs) {
 			htmlelementname = "span"
 			this._node = document.createElement(htmlelementname);
 			this._node.setAttribute("class", localName);
+			if (attribs) {
+				for (var i = 0; i< attribs.length; i++) {
+					this.setAttributeNS(attribs[i].namespaceURI, attribs[i].localName,attribs[i].value);
+				}
+			}
 		}
 		else {
-			this._node = documentCreateXHTMLElement(this.localName.toLowerCase());
+			this._node = documentCreateXHTMLElement(this.localName.toLowerCase(), attribs);
 		}
 		this.localName = localName;
 		this.namespaceURI = namespaceURI;
-		if (attribs) {
-			for (var i = 0; i< attribs.length; i++) {
-				this.setAttributeNS(attribs[i].namespaceURI, attribs[i].localName,attribs[i].value);
-			}
-			
-		}
+		
 	}
 	else if (this.nodeType == 3) {
 		this._node = document.createTextNode(namespaceURI);
