@@ -135,6 +135,7 @@ XMLDocument.prototype.checkParserError = function()
 }
 
 XMLDocument.prototype.transformToXPathMode = function(xslfile) {
+	bxe_about_box.addText("Load XSLT ...");
 	var xsldoc = document.implementation.createDocument("", "", null);
 	xsldoc.addEventListener("load", onload_xsl, false);
 	xsldoc.xmldoc = this;
@@ -145,6 +146,7 @@ XMLDocument.prototype.transformToXPathMode = function(xslfile) {
 	}
 
 	function onload_xsl(e) {
+		bxe_about_box.addText("XSLT loaded...");
 		xsldoc = e.currentTarget;
 		var xsltransformdoc = document.implementation.createDocument("", "", null);
 		xsltransformdoc.addEventListener("load", onload_xsltransform, false);
@@ -179,6 +181,21 @@ XMLDocument.prototype.transformToXPathMode = function(xslfile) {
 
 
 XMLDocument.prototype.importXHTMLDocument = function(xhtmlfile) {
+	
+	function onload_xhtml(e) {
+		var xhtmldoc = e.currentTarget;
+		
+		bxe_about_box.addText("XHTML loaded...");
+		var bxe_area = document.getElementsByTagName("body")[0];
+		var new_body = document.importNode(xhtmldoc.getElementsByTagName("body")[0],true);
+		bxe_about_box.node = new_body.appendChild(bxe_about_box.node);
+		bxe_area.removeAllChildren();
+		bxe_area.appendAllChildren(new_body);
+		xhtmldoc.xmldoc.insertIntoHTMLDocument();
+		xml_loaded(xhtmldoc.xmldoc);
+	}
+	
+	bxe_about_box.addText("Import external XHTML ...");
 	var xhtmldoc = document.implementation.createDocument("", "", null);
 	xhtmldoc.addEventListener("load", onload_xhtml, false);
 	xhtmldoc.xmldoc = this;
@@ -187,15 +204,7 @@ XMLDocument.prototype.importXHTMLDocument = function(xhtmlfile) {
 	} catch(e) {
 		alert("The xhtmlfile: '" + xhtmlfile + "' was not found");
 	}
-	function onload_xhtml(e) {
-		xhtmldoc = e.currentTarget;
-		var bxe_area = document.getElementsByTagName("body")[0];
-		bxe_area.removeAllChildren();
-		bxe_area.appendAllChildren(document.importNode(xhtmldoc.getElementsByTagName("body")[0],true));
-		//bxe_area.parentNode.replaceChildren(document.importNode(xhtmldoc.getElementsByTagName("body")[0],true),bxe_area);
-		xhtmldoc.xmldoc.insertIntoHTMLDocument();
-		xml_loaded(xhtmldoc.xmldoc);
-	}
+
 	
 }
 
