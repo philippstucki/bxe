@@ -405,12 +405,26 @@ function bxe_updateXPath() {
 	var lines = cssr.lines();
 	bxe_format_list.removeAllItems();
 	
+	function nodeSort(a,b) {
+		if (a.nodeName > b.nodeName) {
+			return 1;
+		} else {
+			return -1;
+		}
+	}
 	if (lines[0] && lines[0].container) {
-		bxe_format_list.appendItem(lines[0].container.XMLNode.localName,lines[0].container.XMLNode.localName);
+/*		bxe_format_list.appendItem(lines[0].container.XMLNode.localName,lines[0].container.XMLNode.localName);*/
 		var ac = lines[0].container.XMLNode.parentNode._xmlnode.allowedChildren;
-		ac.sort();
+		ac.sort(nodeSort);
+		var menuitem;
+		var thisLocalName = lines[0].container.XMLNode.localName;
+		var thisNamespaceURI = lines[0].container.XMLNode.namespaceURI
 		for (i = 0; i < ac.length; i++) {
-			bxe_format_list.appendItem(ac[i].nodeName, ac[i].localName + "=" + ac[i].namespaceURI);
+				
+			menuitem = bxe_format_list.appendItem(ac[i].nodeName, ac[i].localName + "=" + ac[i].namespaceURI);
+			if (ac[i].localName == thisLocalName &&  ac[i].namespaceURI == thisNamespaceURI) {
+				menuitem.selected=true;
+			}
 		}
 	} else {
 		bxe_format_list.appendItem("no block found","");

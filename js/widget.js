@@ -381,6 +381,7 @@ Widget_MenuList.prototype.appendItem = function(label, value) {
 	option.text = label;
 	option.value = value
 	this.node.appendChild(option);
+	return option;
 }
 	
 
@@ -623,7 +624,7 @@ Widget_MenuPopup.prototype.appendAllowedSiblings = function( node) {
 	}
 	ac.sort(nodeSort);
 	for (i = 0; i < ac.length; i++) {
-			var menui =this.addMenuItem("Append " + ac[i].nodeName, function(e) { 
+			var menui = this.addMenuItem("Append " + ac[i].nodeName, function(e) { 
 				var widget = e.currentTarget.Widget;
 				eDOMEventCall("appendNode",document,{"appendToNode": widget.AppendToNode, "localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI})
 			});
