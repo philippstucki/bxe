@@ -474,6 +474,7 @@ function bxe_toggleTextClass(e) {
 	}
 	//search, if we are already in this mode for anchorNode
 	var node = sel.anchorNode.parentNode.XMLNode;
+	
 	while (node) {
 		if (node.localName == e.additionalInfo.localName && node.namespaceURI == e.additionalInfo.namespaceURI) {
 			return bxe_CleanInlineIntern(e.additionalInfo.localName,e.additionalInfo.namespaceURI);
@@ -481,17 +482,19 @@ function bxe_toggleTextClass(e) {
 		node = node.parentNode;
 	}
 	
-	if (sel.anchorNode != sel.focusNode) {
+	/*if (sel.anchorNode != sel.focusNode) {
 		//Do the same for the endnode
 		
 		var node = sel.focusNode.parentNode.XMLNode;
+		dump(" **** \n " + sel.focusNode.data + "\n***\n");
 		while (node) {
 			if (node.localName == e.additionalInfo.localName && node.namespaceURI == e.additionalInfo.namespaceURI) {
+				dump ("cleanInline2\n");
 				return bxe_CleanInlineIntern(e.additionalInfo.localName,e.additionalInfo.namespaceURI);
 			}
 			node = node.parentNode;
 		}
-	}
+	}*/
 	
 	if (!bxe_checkIsAllowedChild( e.additionalInfo.namespaceURI,e.additionalInfo.localName,sel)) {
 		return false;
