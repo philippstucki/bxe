@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: http.js,v 1.1 2003/07/30 07:49:32 chregu Exp $
+// $Id: http.js,v 1.2 2003/08/14 06:42:48 chregu Exp $
 /**
 * @file
 * Implements the http TransportDriver 
@@ -39,12 +39,10 @@ function BXE_TransportDriver_http (parent)
 	* Parent Object
 	*
 	* This is normally the BXE_loader class
-	* this has to be implemented with xbBrowser some day:
 	* @type Object
 	*/
 	//check doku, if we can access parent otherwise
 	this.parent = parent;
-	
 	
 }
 
@@ -67,6 +65,7 @@ BXE_TransportDriver_http.prototype.load = function(filename,callback) {
 		docu.onload = this.parent.xmlloaded;  // set the callback when we are done loading
 	}
 	docu.load(filename);
+	docu.td = this;
 	return docu;
 	
 }

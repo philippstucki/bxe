@@ -38,13 +38,14 @@
  *   - load IE toolbar
  */
  
-var bxe_xmlfile = "test.xml";
+var bxe_config = null;
 
 const BXE_VERSION = "0.1alpha"
 mozile_js_files = new Array();
 mozile_js_files.push("mozile/mozWrappers.js");
 mozile_js_files.push("mozile/eDOM.js");
 mozile_js_files.push("js/widget.js");
+mozile_js_files.push("js/bxeConfig.js");
 mozile_js_files.push("mozile/eDOMXHTML.js");
 mozile_js_files.push("js/bxeNodeElements.js");
 mozile_js_files.push("js/bxeXMLDocument.js");
@@ -57,7 +58,7 @@ mozile_js_files.push("mozile/mozileModify.js");
 mozile_js_files.push("js/eDOMEvents.js");
 mozile_js_files.push("js/jsdav.js");
 mozile_js_files.push("td/webdav.js");
-
+mozile_js_files.push("td/http.js");
 //mozile_js_files.push("xsltTransformer.js");
 
 
@@ -238,16 +239,24 @@ function mozile_loaded() {
 	document.eDOMaddEventListener("DocumentSave",__bxeSave,false);
 	document.eDOMaddEventListener("ToggleTextClass",toggleTextClass_bxe,false);
 	document.eDOMaddEventListener("changeLinesContainer",changeLinesContainer_bxe,false);
+	bxe_about_box.addText("Load Config ...");
+	var bxe_config = new bxeConfig("inc/config.xml");
+	
+
+}
+
+function config_loaded(bxe_config_in) {
+	
 	bxe_about_box.addText("Load XML ...");
 	bxe_globals = new bxe_globals();
-	bxe_globals.loadXML(bxe_xmlfile);
+	bxe_config = bxe_config_in;
+	bxe_globals.loadXML(bxe_config.xmlfile);
 //	document.addEventListener("click",onClick,false);
 	bla = document.createElement("div");
 	bla.setAttribute("name","bxe_AreaHolder");
 	bla.appendChild(document.createTextNode("blabla"));
 	document.getElementsByTagName("body")[0].appendChild(bla);
 }
-
 
 
 

@@ -43,3 +43,8 @@ XMLDocument.prototype.insertIntoHTMLDocument = function() {
 	
 	bxe_draw_widgets();
 }
+
+
+
+
+

@@ -11,7 +11,6 @@ function __bxeSave(e) {
 
 	var areaNodes = bxe_getAllEditableAreas();
 	for (var i = 0; i < areaNodes.length; i++) {
-		
 		var xmldoc = areaNodes[i].convertToXMLDocFrag();
 		//xmldoc = areaNodes[i].XMLNode.insertIntoXMLDocument(xmldoc);
 	}
@@ -22,7 +21,7 @@ function __bxeSave(e) {
 		this.td.Docu.xmldoc.insertIntoHTMLDocument()
 	}
 	td.Docu = this;
-	td.save(bxe_xmlfile,null,xmldoc.ownerDocument.saveXML(xmldoc.ownerDocument));
+	td.save(bxe_config.xmlfile,null,xmldoc.ownerDocument.saveXML(xmldoc.ownerDocument));
 }
 
 
