@@ -162,7 +162,7 @@ function toggleTagMode(e) {
 				node.setAttribute("_tagnameopen",_tagnameOpen);
 				node.setAttribute("_tagnameclose",_tagnameClose);
 			}
-			node = =   walker.nextNode();
+			node =  walker.nextNode();
 		}
 		x = document.styleSheets[0];
 		x.insertRule('#' + editableArea.id + ' *:before {content: "<" attr(_tagnameOpen)  ">"; margin-left: 2px; margin-right: 2px; font: 9px Geneva, Verdana, sans-serif; padding: 0px 1px 0 px 1px; border: 1px solid black; background: #888;  color: #FFF;}',x.cssRules.length);
