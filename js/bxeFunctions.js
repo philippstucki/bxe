@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.132 2003/12/22 13:34:30 chregu Exp $
+// $Id: bxeFunctions.js,v 1.133 2004/01/06 13:26:53 michi Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -1525,7 +1525,7 @@ function bxe_doCallback(cb, node ) {
 	if (cb["type"] == "popup") {
 		
 		
-		var pop = window.open(cb["content"],"popup","width=500,height=600");
+		var pop = window.open(cb["content"],"popup","width=600,height=600");
 		pop.focus();
 		
 	} else if (cb["type"] == "function") {
