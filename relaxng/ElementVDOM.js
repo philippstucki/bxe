@@ -14,7 +14,7 @@ function ElementVDOM(node) {
 
 ElementVDOM.prototype = new NodeVDOM();
 
-ElementVDOM.prototype.addAllowedChild = function(node) {
+ElementVDOM.prototype.addAllowedChild = function(node) {
 	this._allowedChildren[node.name] = node;
 }
 

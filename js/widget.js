@@ -253,7 +253,7 @@ Widget_Globals_doHideOnClick = function(e) {
 	var glob = mozilla.getWidgetGlobals();
 	document.removeEventListener("click", Widget_Globals_doHideOnClick ,false);
 	document.removeEventListener("contextmenu", Widget_Globals_doHideOnClick ,true);
-	if( glob.HideOnClick && glob.HideOnClick.length > 0) {
+	if( glob.HideOnClick && glob.HideOnClick.length > 0) {
 		var newHideOnClick = new Array();
 		var widget = null;
 		while (widget = glob.HideOnClick.pop()) 
