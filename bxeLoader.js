@@ -59,7 +59,7 @@ var bxe_context_menu = null;
 var bxe_delayedUpdate = false;
 var eDOM_bxe_mode = true; 
 var bxe_editable_page = true;
-
+var bxe_lastSavedXML = null;
 var startTimer = new Date();
 
 function bxe_start(config_file,fromUrl, configArray) {
@@ -122,11 +122,29 @@ function bxe_start(config_file,fromUrl, configArray) {
 	
 }
 
+function bxe_saveOnPart(evt) { 
+	var xmlstr = bxe_getXmlDocument();
+	if (xmlstr != bxe_lastSavedXML) {
+		if (confirm('You have unsaved changes. Do you want to save before leaving the page?\n Click Cancel for leaving the page and not saving \n Click Ok for leaving the page and saving')) {
+			eDOMEventCall("DocumentSave",document);
+		}
+	}
+}
+
+
 function bxe_checkSupportedBrowsers() {
 	var mozillaRvVersion = navigator.userAgent.match(/rv:([[0-9a-z\.]*)/)[1];
 	var mozillaRvVersionInt = parseFloat(mozillaRvVersion);
 	if (mozillaRvVersionInt >= 1.4) {
+		//register beforeOnload handler
+        if (mozillaRvVersionInt > 1.6) {
+			window.onbeforeunload = bxe_saveOnPart;
+        } else {
+            window.addEventListener( 'unload', bxe_saveOnPart, false);
+        };
 		return true;
+		
+		
 	}
 	return false;
 }
@@ -213,6 +231,8 @@ function mozile_loaded() {
 	defaultContainerName = "p";
 	bxe_load_plugins();
 	bxe_about_box.addText("Load XML ...");
+	
+	
 	bxe_load_xml(bxe_config.xmlfile);
 	//k_init();
 }
@@ -331,6 +351,7 @@ function validation_loaded(vdom) {
 	}
 	else {
 		bxe_about_box.addText("Document is valid.");
+		bxe_lastSaveXml = bxe_getXmlDocument();
 		
 	}
 	var endTimer = new Date();

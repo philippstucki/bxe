@@ -53,6 +53,7 @@ function __bxeSave(e) {
 			widg.show((window.innerWidth- 500)/2,50, "fixed");
 			return;
 		}
+		bxe_lastSavedXML = bxe_getXmlDocument();
 		widg.addText( "" );
 		widg.addText( "" );
 		widg.addText( "" );
