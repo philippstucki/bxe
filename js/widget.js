@@ -676,7 +676,8 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 	var sel  = window.getSelection();
 	var cssr = sel.getEditableRange();
 	//var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
-	if (!(sel.isCollapsed) && !(node.XMLNode.localName == "object" && node.XMLNode.namespaceURI == XHTMLNS)) {
+	var selNode = cssr.startContainer.XMLNode;
+	if (!(sel.isCollapsed) && !  ((node.XMLNode.localName == "object" && node.XMLNode.namespaceURI == XHTMLNS) || (selNode.localName=="object" && selNode.namespaceURI == XHTMLNS))) {
 			var ac = node.XMLNode.allowedChildren;
 			ac.sort(bxe_nodeSort);
 			for (i = 0; i < ac.length; i++) {
