@@ -1,7 +1,11 @@
-function  bxeConfig (filename) {
+function  bxeConfig (filename,fromUrl) {
 	
 	var td = new BXE_TransportDriver_http();
 	td.Docu = this;
+	this.parseUrlParams();
+	if (fromUrl) {
+		filename = this.urlParams[filename];
+	}
 	td.load(filename,bxeConfig.parseConfig);
 	td.bxeConfig = this;
 	return true;
@@ -14,7 +18,7 @@ bxeConfig.parseConfig = function  (e) {
 	if (checkParser != true) {
 		alert(checkParser);
 	}
-	bxe_config.parseUrlParams();
+	
 	bxe_config.xmlfile = bxe_config.getContent("/config/files/input/file[@name='BX_xmlfile']");
 	bxe_config.xslfile = bxe_config.getContent("/config/files/input/file[@name='BX_xslfile']");
 	config_loaded(bxe_config);

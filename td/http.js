@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: http.js,v 1.2 2003/08/14 06:42:48 chregu Exp $
+// $Id: http.js,v 1.3 2003/08/14 10:41:10 chregu Exp $
 /**
 * @file
 * Implements the http TransportDriver 
@@ -64,7 +64,12 @@ BXE_TransportDriver_http.prototype.load = function(filename,callback) {
 		// the docu.loader aboive... have to check, how it's done in JS correctly
 		docu.onload = this.parent.xmlloaded;  // set the callback when we are done loading
 	}
+	try {
 	docu.load(filename);
+	}
+	catch (e) {
+		alert("File " + filename + " could not be loaded:\n" + e.message);
+	}
 	docu.td = this;
 	return docu;
 	

@@ -1,44 +1,44 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * Licensed under Version: MPL 1.1/GPL 2.0/LGPL 2.1
- * Full Terms at http://mozile.mozdev.org/license.html
- *
- * Software distributed under the License is distributed on an "AS IS" basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
- *
- * The Original Code is Playsophy code.
- *
- * The Initial Developer of the Original Code is Playsophy
- * Portions created by the Initial Developer are Copyright (C) 2002-2003
- * the Initial Developer. All Rights Reserved.
- *
- * Contributor(s):
- *
- * ***** END LICENSE BLOCK ***** */
+* Licensed under Version: MPL 1.1/GPL 2.0/LGPL 2.1
+* Full Terms at http://mozile.mozdev.org/license.html
+*
+* Software distributed under the License is distributed on an "AS IS" basis,
+* WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+* for the specific language governing rights and limitations under the
+* License.
+*
+* The Original Code is Playsophy code.
+*
+* The Initial Developer of the Original Code is Playsophy
+* Portions created by the Initial Developer are Copyright (C) 2002-2003
+* the Initial Developer. All Rights Reserved.
+*
+* Contributor(s):
+*
+* ***** END LICENSE BLOCK ***** */
 
 /*
- * mozileLoader V0.46
- *
- * Loads mozile for a page if in a Geiko browser. This is the only javascript
- * file that a user needs to explicitly include in a page. This shields Mozile
- * from IE. Ultimately it would only load Mozile if it wasn't already loaded
- * locally - though perhaps it would always load "mozileModify" or "per page"
- * customization mechanism.
- *
- * Method: http://devedge.netscape.com/viewsource/2002/browser-detection/
- *
- * POST04:
- * - if mozile installed => only load mozileModify.js?
- * - make work for more than XHTML (document.documentElement insert?)/ use name spaces?
- * - distinguish old Geiko browsers (once tested to see which have 
- * problems)
- * - if IE:
- *   - put up msg to upgrade to Geiko based browser
- *   - load IE toolbar
- */
- 
-var bxe_config = null;
+* mozileLoader V0.46
+*
+* Loads mozile for a page if in a Geiko browser. This is the only javascript
+* file that a user needs to explicitly include in a page. This shields Mozile
+* from IE. Ultimately it would only load Mozile if it wasn't already loaded
+* locally - though perhaps it would always load "mozileModify" or "per page"
+* customization mechanism.
+*
+* Method: http://devedge.netscape.com/viewsource/2002/browser-detection/
+*
+* POST04:
+* - if mozile installed => only load mozileModify.js?
+* - make work for more than XHTML (document.documentElement insert?)/ use name spaces?
+* - distinguish old Geiko browsers (once tested to see which have 
+* problems)
+* - if IE:
+*   - put up msg to upgrade to Geiko based browser
+*   - load IE toolbar
+*/
+
+
 
 const BXE_VERSION = "0.1alpha"
 mozile_js_files = new Array();
@@ -65,10 +65,71 @@ mozile_js_files.push("td/http.js");
 mozile_js_files.push("js/bxeFunctions.js");
 
 var mozile_root_dir = "./";
+var mozile_js_files_loaded = 0;
+
+// some global vars, no need to change them
+
+var bxe_config = new Object();
+var bxe_about_box = null;
+
+function bxe_start(config_file,fromUrl) {
+	
+	/*if (! (BX_checkUnsupportedBrowsers())) {
+		return false;
+	}*/
+	
+	if((navigator.product == 'Gecko') && (navigator.userAgent.indexOf("Safari") == -1))
+	{
+		// navigator.productSub > '20020801' (test to see what the date should be)
+		
+		// POST04: if document.documentElement != HTML then ... or no "head" ...
+		var head = document.getElementsByTagName("head")[0];
+		bxe_config.file = config_file;
+		bxe_config.fromUrl = fromUrl;
+		if(head)
+		{
+			// get the location of this script and reuse it for the others
+			for(var i=0; i<head.childNodes.length; i++)
+			{
+				var mozileLoaderRE = /(.*)bxeLoader.js$/;
+				if(head.childNodes[i].localName == "SCRIPT")
+				{
+					var src = head.childNodes[i].src;
+					var result = mozileLoaderRE.exec(src);
+					if(result)
+					{
+						mozile_root_dir = result[1];
+						break;
+					}
+				}
+			}
+			for (var i=0; i < mozile_js_files.length; i++) 
+			{
+				var scr = document.createElementNS("http://www.w3.org/1999/xhtml","script");
+				var src = mozile_root_dir + mozile_js_files[i];
+				if (mozile_js_files[i] == "js/widget.js") {
+					scr.onload = widget_loaded;
+				} else {
+					scr.onload = script_loaded;
+				}
+				scr.setAttribute("src", src);
+				
+				scr.setAttribute("language","JavaScript");
+				head.appendChild(scr);
+			}
+			//when last include src is loaded, call onload handler
+			
+		}
+		else {
+			alert("*** ALERT: MozileLoader only works in XHTML - load Mozile JS explicitly in XML files");
+		}
+	}
+	
+}
 
 // Detect Gecko but exclude Safari (for now); for now, only support XHTML
 
-var bxe_about_box = null;
+
 
 function bxe_globals() {}
 
@@ -86,7 +147,7 @@ bxe_globals.prototype.loadXML = function(xmlfile) {
 	}
 	td.Docu = this;
 	td.load(xmlfile,callback);
-
+	
 	return true;
 }
 
@@ -98,8 +159,8 @@ function bxe_nsResolver (node) {
 	//this.htmlDocNSResolver = null;
 	this.xmlDocNSResolver = null;
 	this.node = node;
-
-
+	
+	
 }
 
 bxe_nsResolver.prototype.lookupNamespaceURI = function (prefix) {
@@ -120,8 +181,8 @@ bxe_nsResolver.prototype.lookupNamespaceURI = function (prefix) {
 		return this.metaTagNSResolver[prefix];
 	}
 	/* there are no namespaces in even xhtml documents (or mozilla discards them somehow or i made a stupid mistake
-	  therefore no NS-lookup in document. */
-	  /*
+	therefore no NS-lookup in document. */
+	/*
 	if (! this.htmlDocNSResolver) {
 		this.htmlDocNSResolver = document.createNSResolver(document.documentElement);
 	}
@@ -145,13 +206,13 @@ bxe_nsResolver.prototype.lookupNamespaceURI = function (prefix) {
 	if (prefix == "bxe") {
 		return BXENS;
 	}
-		
+	
 	//prefix not found
 	return null;
 }
 
 bxe_nsResolver.prototype.lookupNamespacePrefix = function (uri) {
-
+	
 	if (!this.metaTagNSResolverUri) {
 		var metas = document.getElementsByName("bxeNS");
 		this.metaTagNSResolverUri = new Array();
@@ -172,56 +233,12 @@ bxe_nsResolver.prototype.lookupNamespacePrefix = function (uri) {
 
 
 
-if((navigator.product == 'Gecko') && (navigator.userAgent.indexOf("Safari") == -1))
-{
-	// navigator.productSub > '20020801' (test to see what the date should be)
 
-	// POST04: if document.documentElement != HTML then ... or no "head" ...
-	var head = document.getElementsByTagName("head")[0];
-
-	if(head)
-	{
-		// get the location of this script and reuse it for the others
-		for(var i=0; i<head.childNodes.length; i++)
-		{
-			var mozileLoaderRE = /(.*)mozileLoader.js$/;
-			if(head.childNodes[i].localName == "SCRIPT")
-			{
-				var src = head.childNodes[i].src;
-				var result = mozileLoaderRE.exec(src);
-				if(result)
-				{
-					mozile_root_dir = result[1];
-					break;
-				}
-			}
-		}
-		mozile_js_files_loaded = 0;
-		for (var i=0; i < mozile_js_files.length; i++) 
-		{
-			var scr = document.createElementNS("http://www.w3.org/1999/xhtml","script");
-			var src = mozile_root_dir + mozile_js_files[i];
-			if (mozile_js_files[i] == "js/widget.js") {
-				scr.onload = widget_loaded;
-			} else {
-				scr.onload = script_loaded;
-			}
-			scr.setAttribute("src", src);
-			
-			scr.setAttribute("language","JavaScript");
-			head.appendChild(scr);
-		}
-		//when last include src is loaded, call onload handler
-		
-	}
-	else
-		alert("*** ALERT: MozileLoader only works in XHTML - load Mozile JS explicitly in XML files");
-}
 function widget_loaded() {
 	bxe_about_box = new Widget_AboutBox();
 	bxe_about_box.draw();
 	bxe_about_box.setText("Loading files ...");
-
+	
 }
 
 function script_loaded() {
@@ -244,9 +261,7 @@ function mozile_loaded() {
 	document.eDOMaddEventListener("ToggleTextClass",toggleTextClass_bxe,false);
 	document.eDOMaddEventListener("changeLinesContainer",changeLinesContainer_bxe,false);
 	bxe_about_box.addText("Load Config ...");
-	var bxe_config = new bxeConfig("inc/config.xml");
-	
-
+	bxe_config = new bxeConfig(bxe_config.file, bxe_config.fromUrl);
 }
 
 function config_loaded(bxe_config_in) {
@@ -262,5 +277,5 @@ function config_loaded(bxe_config_in) {
 function bxe_not_yet_implemented() {
 	alert("not yet implemented");
 }
-	
+
 
