@@ -831,6 +831,7 @@ function bxe_appendChildNode(e) {
 
 
 function bxe_changeLinesContainer(e) {
+	bxe_history_snapshot();
 	var nodeParts = e.additionalInfo.split("=");
 	if (nodeParts.length < 2 ) {
 		nodeParts[1] = null;
@@ -844,6 +845,9 @@ function bxe_changeLinesContainer(e) {
 			
 		} catch(e) {alert(newContainer[i] + " can't be updateXMLNode()'ed\n" + e);
 		}
+	}
+	if (!newContainer[0].XMLNode.parentNode.isNodeValid()) {
+		bxe_history_undo();
 	}
 	bxe_delayedUpdateXPath();
 }
