@@ -1704,6 +1704,7 @@ function bxe_insertContent_async(node,replaceNode, options) {
 	} else {
 		docfrag = node;
 	}
+	var oldStyleInsertion = false;
 	if (replaceNode == BXE_SELECTION) {
 		var sel = window.getSelection();
 		var _node = docfrag.firstChild.prepareForInsert();
@@ -1713,9 +1714,10 @@ function bxe_insertContent_async(node,replaceNode, options) {
 				ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
 				ip.splitXHTMLLine()
 				cssr.selectInsertionPoint(ip);
+				oldStyleInsertion = true;
 			}
 		}
-		sel.insertNodeRaw(_node);
+		sel.insertNodeRaw(_node,oldStyleInsertion);
 		_node.updateXMLNode();
 		return _node;
 	} else if (replaceNode) {
