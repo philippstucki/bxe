@@ -18,6 +18,17 @@ ElementVDOM.prototype.addAllowedChild = function(node) {
 	this._allowedChildren[node.name] = node;
 }
 
+ElementVDOM.prototype.__defineGetter__ ( 
+	"hasAttributes",
+	function() {
+		for (var i in this.attributes) {
+			return true;
+		}
+		return false;
+		
+	}
+);
+
 ElementVDOM.prototype.isValid = function(ctxt) {
 //dump(ctxt.node.nodeType + " " + ctxt.node.localName+" == "+this.localName+" && "+ctxt.node.namespaceURI+" == "+this.namespaceURI+"\n");
 	if (ctxt.node.localName == this.localName && ctxt.node.namespaceURI == this.namespaceURI) {
