@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar ns="http://www.w3.org/1999/xhtml" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <start>
+    <element name="html">
+      <element name="head">
+        <oneOrMore>
+          <choice>
+            <element name="meta">
+              <attribute name="content"/>
+              <attribute name="name">
+                <data type="NCName"/>
+              </attribute>
+            </element>
+            <element name="title">
+              <empty/>
+            </element>
+            <element name="script">
+              <optional>
+                <attribute name="language">
+                  <data type="NCName"/>
+                </attribute>
+              </optional>
+              <optional>
+                <attribute name="src"/>
+              </optional>
+              <attribute name="type"/>
+              <attribute>
+                <name ns="http://www.w3.org/XML/1998/namespace">space</name>
+                <data type="NCName"/>
+              </attribute>
+              <text/>
+            </element>
+          </choice>
+        </oneOrMore>
+      </element>
+      <element name="body">
+      <oneOrMore>
+      <choice>
+       <element name="script">
+        </element>
+        <element name="br">
+          <attribute name="clear">
+            <data type="NCName"/>
+          </attribute>
+        </element>
+        <ref name="a"/>
+        <oneOrMore>
+          <ref name="p"/>
+        </oneOrMore>
+        <element name="div">
+          <attribute name="id">
+            <data type="NCName"/>
+          </attribute>
+          <oneOrMore>
+            <choice>
+            <text/>
+              <ref name="p"/>
+              <element name="ul">
+                <oneOrMore>
+                  <element name="li">
+                    <oneOrMore>
+                      <choice>
+                        <text/>
+                        <ref name="span"/>
+                        <element name="code">
+                          <data type="NCName"/>
+                        </element>
+                      </choice>
+                    </oneOrMore>
+                  </element>
+                </oneOrMore>
+              </element>
+            </choice>
+          </oneOrMore>
+        </element>
+        </choice>
+      </oneOrMore>
+      </element>
+      
+    </element>
+  </start>
+  <define name="a">
+    <element name="a">
+      <attribute name="href">
+        <data type="anyURI"/>
+      </attribute>
+      <attribute name="shape">
+        <data type="NCName"/>
+      </attribute>
+      <text/>
+    </element>
+  </define>
+  <define name="p">
+    <element name="p">
+      <oneOrMore>
+        <choice>
+          <text/>
+          <ref name="a"/>
+          <ref name="span"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="span">
+    <element name="span">
+      <attribute name="style">
+        <data type="anyURI"/>
+      </attribute>
+      <text/>
+    </element>
+  </define>
+</grammar>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <xs:element name="html">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="head"/>
+        <xs:element ref="body"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="head">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="link"/>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element ref="meta"/>
+          <xs:element ref="script"/>
+          <xs:element ref="title"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="link">
+    <xs:complexType>
+      <xs:attribute name="href" use="required" type="xs:NCName"/>
+      <xs:attribute name="rel" use="required" type="xs:NCName"/>
+      <xs:attribute name="type" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="meta">
+    <xs:complexType>
+      <xs:attribute name="content" use="required"/>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="script">
+    <xs:complexType mixed="true">
+      <xs:attribute name="language" type="xs:NCName"/>
+      <xs:attribute name="src"/>
+      <xs:attribute name="type" use="required"/>
+      <xs:attribute ref="xml:space" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="title">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="body">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="br"/>
+        <xs:element ref="a"/>
+        <xs:element maxOccurs="unbounded" ref="p"/>
+        <xs:element ref="div"/>
+        <xs:element ref="script"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="br">
+    <xs:complexType>
+      <xs:attribute name="clear" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="div">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element ref="p"/>
+        <xs:element ref="ul"/>
+      </xs:choice>
+      <xs:attribute name="id" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ul">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="li"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="li">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="span"/>
+        <xs:element ref="code"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="code" type="xs:NCName"/>
+  <xs:element name="script" type="xs:NCName"/>
+  <xs:element name="a">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href" use="required" type="xs:anyURI"/>
+      <xs:attribute name="shape" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="p">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="a"/>
+        <xs:element ref="span"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="span">
+    <xs:complexType mixed="true">
+      <xs:attribute name="style" use="required" type="xs:anyURI"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
