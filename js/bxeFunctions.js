@@ -145,10 +145,8 @@ function bxe_toggleSourceMode(e) {
 	}
 	if (!editableArea._SourceMode) {
 		var xmldoc = editableArea.convertToXMLDocFrag();
-
 		editableArea.removeAllChildren();
 		editableArea.setStyle("white-space","-moz-pre-wrap");
-		
 		var xmlstr = document.saveChildrenXML(xmldoc,true);
 		editableArea.appendChild(document.createTextNode(xmlstr.str));
 		editableArea.XMLNode.prefix = xmlstr.rootPrefix;
@@ -225,13 +223,7 @@ function bxe_toggleTextClass(e) {
 	_node.parentNode.updateXMLNode();
 }
 
-
-function bxe_NodeInsertedParent(e) {
-	alert("document wide");
-	
-}
-
-function bxe_NodeInsertedBefore(e) {
+function bxe_insertedBefore(e) {
 	try {
 	var oldNode = e.target.XMLNode;
 	var newNode = e.additionalInfo;
@@ -433,6 +425,8 @@ function MouseClickEvent(e) {
 	
 	
 	var target = e.target.parentElement;
+	
+	
 	if(target.userModifiable) {
 		return bxe_updateXPath();
 	}
@@ -513,25 +507,11 @@ function bxe_ContextMenuEvent(e) {
 }
 
 function bxe_UnorderedList() {
-	function callback(e) {
-		alert("function event");
-	}
-	document.eDOMaddEventListener("NodeInsertedParent",callback,false);
-	window.getSelection().toggleListLines("ul", "ol");
-	document.eDOMremoveEventListener("NodeInsertedParent",callback,false);
-	/*var sel = window.getSelection();
-	var cssr = sel.getEditableRange();
-	if (cssr) {
-		var lines = cssr.lines();
-		var newContainer = lines[0].container.parentNode;
-		newContainer.XMLNode.init(newContainer);
-		newContainer.updateXMLNode();
-	}*/
-	bxe_updateXPath();
+	window.getSelection().toggleListLines("OL", "UL");
 }
 
 function bxe_OrderedList() {
-	window.getSelection().toggleListLines("ol", "ul");
+	window.getSelection().toggleListLines("UL", "OL");
 }
 
 function bxe_InsertImage() {
