@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: mozCE.js,v 1.16 2003/12/01 22:24:21 chregu Exp $
+// $Id: mozCE.js,v 1.17 2004/01/09 10:03:42 chregu Exp $
 
 /* 
  * mozCE V0.5
@@ -420,6 +420,8 @@ Selection.prototype.insertNodeRaw = function (node) {
 	while(! _upNode._XMLNode) {
 		_upNode = _upNode.parentNode;
 	}
+	
+	
 	_upNode.updateXMLNode();
 
 	

@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeNodeElements.js,v 1.35 2003/12/18 15:51:50 chregu Exp $
+// $Id: bxeNodeElements.js,v 1.36 2004/01/09 10:03:42 chregu Exp $
 
 Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 	alert("Node.prototype.insertIntoHTMLDocument is deprecated");
@@ -463,6 +463,7 @@ Node.prototype.prepareForInsert = function(onlyChildren) {
 	var firstChild = false;
 	do  {
 			var newNode;
+			
 			if (node.nodeType == 1 ) {
 				newNode = node.makeHTMLNode()
 		/*		if (! node.hasChildNodes() && !(node.namespaceURI == XHTMLNS && node.localName == "img")) {
@@ -493,6 +494,7 @@ Node.prototype.prepareForInsert = function(onlyChildren) {
 Node.prototype.makeHTMLNode = function () {
 	var _node;
 	if (this.nodeType == 1) {
+		dump (this.localName + " " + this.namespaceURI  + "\n");
 		_node = this.createNS(this.namespaceURI, this.attributes);
 	} else if (this.nodeType == 3 ) {
 		_node = this.createNS(this.data);
@@ -516,6 +518,7 @@ function bxe_Node_createNS(nodeType, namespaceURI, localName, attribs) {
 			htmlelementname = "span"
 			_node = document.createElement(htmlelementname);
 			_node.setAttribute("class", localName);
+			_node.setAttribute("__bxe_ns",namespaceURI);
 		}
 		else {
 			_node = documentCreateXHTMLElement(localName.toLowerCase(), attribs);

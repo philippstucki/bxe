@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.133 2004/01/06 13:26:53 michi Exp $
+// $Id: bxeFunctions.js,v 1.134 2004/01/09 10:03:42 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -19,6 +19,7 @@ const XMLNS = "http://www.w3.org/2000/xmlns/";
 
 const BXE_SELECTION = 1;
 const BXE_APPEND = 2;
+const BXE_SPLIT_IF_INLINE = 1;
 
 var bxe_snapshots = new Array();
 var bxe_snapshots_position = 0;
@@ -1100,6 +1101,20 @@ function bxe_InsertObject() {
 	sel.insertNode(object);
 }
 
+function bxe_InsertAsset() {
+	
+	var sel = window.getSelection();
+	var object = document.createElementNS("http://apache.org/cocoon/lenya/page-envelope/1.0","assset");
+	var cb = bxe_getCallback("asset","http://apache.org/cocoon/lenya/page-envelope/1.0");
+	if (cb ) {
+		bxe_doCallback(cb, object);
+	} 
+	else {
+	
+		sel.insertNode(object);
+	}
+}
+
 function bxe_InsertImage() {
 	
 	var sel = window.getSelection();
@@ -1466,7 +1481,7 @@ function bxe_deregisterKeyHandlers() {
 	document.removeEventListener("keyup", keyUpHandler, true);
 }
 
-function bxe_insertContent(node,replaceNode) {
+function bxe_insertContent(node,replaceNode, options) {
 	var docfrag;
 	if (typeof node == "string") {
 		docfrag = node.convertToXML()
@@ -1476,10 +1491,21 @@ function bxe_insertContent(node,replaceNode) {
 	if (replaceNode == BXE_SELECTION) {
 		var sel = window.getSelection();
 		var _node = docfrag.firstChild.prepareForInsert();
+		if (options & BXE_SPLIT_IF_INLINE) {
+			if (!bxe_checkIsAllowedChild(_node.namespaceURI,_node.localName,sel, true)) {
+				var cssr = sel.getEditableRange();
+				ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
+				ip.splitXHTMLLine()
+				cssr.selectInsertionPoint(ip);
+			}
+		}
 		sel.insertNodeRaw(_node);
+		_node.updateXMLNode();
 	} else if (replaceNode) {
 		
 		var newNode = docfrag.firstChild.init();
+
+		
 		replaceNode.parentNode.insertAfter(newNode,replaceNode);
 		newNode._node.updateXMLNode();
 		debug("valid? : " + newNode.isNodeValid());
