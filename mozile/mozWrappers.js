@@ -151,12 +151,14 @@ function MozClipboard(nativeSupport)
 	//setup privileged support
 	if (nativeSupport) {
 		this.nativeSupport = true;
+		this._system = true;
 	// enable xpconnect
 	netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
 	// create an object for accessing the native clipboard
 	this.clip = Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);
 	} else {
 		this.nativeSupport = false;
+		this._system = false;
 	}
 
 }
@@ -242,11 +244,16 @@ MozClipboard.prototype.getData = function(dataFlavor)
  */
 MozClipboard.prototype.setData = function(data, dataFlavor)
 {
+	if (typeof data == "string") {
+		data = document.createTextNode(data);
+		this._clipboard = data;
+		this._clipboardText = data.data;
+	} else {
 	//copy the selection to the internal clipboard
-	this._clipboard = data.cloneContents();
+		this._clipboard = data.cloneContents();
 	//to allow easier comparing of system and internal clipboard, store the plaintext in this variable
-	this._clipboardText = data.toString();
-	
+		this._clipboardText = data.toString();
+	}
 	//if nativeSupport, add the content to the system clipboard
 	if (this.nativeSupport) {
 		data = data.toString();

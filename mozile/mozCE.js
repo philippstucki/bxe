@@ -491,9 +491,12 @@ Selection.prototype.paste = function()
 {
 	var clipboard = mozilla.getClipboard();
 	var content = clipboard.getData(MozClipboard.TEXT_FLAVOR);
+	if (content.nodeType == 11 && content.firstChild.nodeType == 3 && content.childNodes.length == 1) {
+		content.data = content.firstChild.data;
+	}
 	if (content && content.data) {
 		
-		if (content.data.search(/\n.+/) > -1) {
+		if (clipboard._system && content.data.search(/\n.+/) > -1) {
 			content = content.data;
 			content.replace(/&/g,"&amp;").replace(/</g,"&lt;");
 			var elementName = bxe_config.options['autoParaElementName'];
@@ -520,7 +523,7 @@ Selection.prototype.paste = function()
 Selection.prototype._createHiddenForm = function() {
 		var iframe = document.createElement("div");
 		iframe.setAttribute("ID","ClipboardIFrame");
-		iframe.setAttribute("style"," -moz-user-select: normal; -moz-user-input: enabled; position: absolute; width: 0px; height: 0px; position: hidden; overflow: hidden; top: 0px; left: 0px;");
+		iframe.setAttribute("style","  -moz-user-input: enabled; position: absolute; width: 0px; height: 0px; overflow: hidden; top: 0px; left: 0px;");
 		iframe =  document.getElementsByTagName("body")[0].appendChild(iframe);
 		var input = document.createElement("textarea");
 		input.setAttribute("style","height: 3000px;");
@@ -541,6 +544,8 @@ Selection.prototype.copyKeyDown = function() {
 	
 	//copy the selection into the internal clipboard
 	this.copy();
+	
+	//clipboard._clipboardText.replace(/[\n\r]+/," ");
 	//check if hidden form already exists
 	var iframe = document.getElementById("ClipboardIFrame");
 	if (!iframe) {
@@ -575,6 +580,9 @@ Selection.prototype.copyKeyUp = function() {
 	
 	var iframe = document.getElementById("ClipboardIFrame");
 	this.selectEditableRange(iframe._cssr);
+/*	var clipboard = mozilla.getClipboard();
+	clipboard._clipboardText = clipboard._clipboardText.replace(/[\r\n]/g," ");
+*/
 }
 
 /**
@@ -615,10 +623,12 @@ Selection.prototype.pasteKeyUp = function () {
 	//put the data of the placeholder span in the internal clipboard, if it's different
 	// than the content in the internal clipboard (then we assume, it's newer..)
 	var clipboard = mozilla.getClipboard();
+	clipboard._system = false;
 	if (!clipboard._clipboardText) {
 		clipboard.setData(rng);
+		clipboard._system = true;
 	}
-	else if (rng.toString().replace(/\n/," ") != clipboard._clipboardText.replace(/\n/," ")) {
+	else if (rng.toString().replace(/[\n\r\s]+/g," ") != clipboard._clipboardText.replace(/[\n\r\s]+/g," ")) {
 		var promptText = "Internal and System-Clipboard are differing: \n\n";
 		promptText += "System   (Cancel): '" + rng.toString() +"'\n\n";
 		promptText += "Internal   (OK)  : '" + clipboard._clipboardText + "'\n\n";
@@ -631,6 +641,7 @@ Selection.prototype.pasteKeyUp = function () {
 		
 		if(!internal) {
 			clipboard.setData(rng);
+			clipboard._system = true;
 		}
 	}
 	//restore the selection
@@ -661,7 +672,7 @@ Selection.prototype.copy = function()
 		return; 
 
 	// data to save - render as text (temporary thing - move to html later)
-	var text = cssr.toString();
+	//var text = cssr.toString().replace(/\n/g," ");
 
 	var clipboard = mozilla.getClipboard();
 
