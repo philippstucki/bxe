@@ -36,11 +36,19 @@ bxeConfig.parseConfig = function  (e) {
 	bxe_config.scriptfiles = bxe_config.getContentMultiple("/config/files/scripts/file");
 	var dSIC = bxe_config.doc.evaluate("/config/context[@type='dontShow']/element", bxe_config.doc, null, 0, null); 
 	
-	var tmpArray;
 	bxe_config.dontShowInContext = new Array();
 	node = dSIC.iterateNext();
 	while (node) {
 		bxe_config.dontShowInContext[node.getAttribute("ns")+":"+node.getAttribute("name")] = true;
+		node = dSIC.iterateNext();
+	}
+	
+	var dSIC = bxe_config.doc.evaluate("/config/context[@type='dontShow']/attribute", bxe_config.doc, null, 0, null); 
+	
+	bxe_config.dontShowInAttributeDialog = new Array();
+	node = dSIC.iterateNext();
+	while (node) {
+		bxe_config.dontShowInAttributeDialog[node.getAttribute("name")] = true;
 		node = dSIC.iterateNext();
 	}
 	

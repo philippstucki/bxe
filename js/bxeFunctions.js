@@ -578,13 +578,13 @@ function bxe_appendNode(e) {
 		} else {
 			debug ("check can Have Text");
 			var cHT  =  newNode.canHaveText;
-			debug("can Have Text? " + cHT);
-			if (cHT) {
-				newNode.setContent("#" + e.additionalInfo.localName + " ");
+			if (cHT ) {
+				if (!e.additionalInfo.noPlaceholderText) {
+					newNode.setContent("#" + e.additionalInfo.localName + " ");
+				}
 			} else {
 				var ac = newNode.allowedChildren;
 				if (ac.length == 1)  {
-					debug("automatically append new Node " + ac[0].nodeName);
 					eDOMEventCall("appendChildNode",document,{"appendToNode": newNode, "localName":ac[0].nodeName,"namespaceURI":ac[0].namespaceURI});
 				} else if (ac.length > 1) {
 					bxe_context_menu.buildElementChooserPopup(newNode,ac);
@@ -620,10 +620,11 @@ function bxe_appendChildNode(e) {
 		if (cb ) {
 			bxe_doCallback(cb, newNode);
 		} else {
-			debug ("check can Have Text");
 			var cHT  =  newNode.canHaveText;
 			if (cHT) {
-				newNode.setContent("#" + e.additionalInfo.localName + " ");
+				if (!e.additionalInfo.noPlaceholderText) {
+					newNode.setContent("#" + e.additionalInfo.localName + " ");
+				}
 			} else {
 				var ac = newNode.allowedChildren;
 				dump("..."+ac.length);
@@ -945,6 +946,18 @@ function bxe_OrderedList() {
 	var lines = window.getSelection().toggleListLines("ol", "ul");
 	lines[0].container.updateXMLNode();
 	bxe_updateXPath();
+}
+
+function bxe_InsertObject() {
+	var sel = window.getSelection();
+	var cssr = sel.getEditableRange();
+	var lines = cssr.lines;
+	var nextSib = lines[0].container;
+	if (nextSib) { 
+		eDOMEventCall("appendNode",document,{"appendToNode":nextSib.XMLNode, "localName": "p", "namespaceURI": XHTMLNS, "noPlaceholderText" : true})
+		eDOMEventCall("appendChildNode",document,{"appendToNode":nextSib.nextSibling.XMLNode, "localName": "object", "namespaceURI": XHTMLNS})
+		
+	}
 }
 
 function bxe_InsertImage() {

@@ -905,11 +905,13 @@ Widget_ModalAttributeBox.prototype.drawAttributes = function(xmlnode) {
 	
 	var text = "";
 	for (var i in attr) {
-		if (attr[i].dataType == "choice") {
-			this.addItem(attr[i].name,xmlnode.getAttribute(attr[i].name),"select",null,attr[i].choices);
+		if (!bxe_config.dontShowInAttributeDialog[attr[i].name]) { 
+			if (attr[i].dataType == "choice") {
+				this.addItem(attr[i].name,xmlnode.getAttribute(attr[i].name),"select",null,attr[i].choices);
 			
-		} else {
-			this.addItem(attr[i].name,xmlnode.getAttribute(attr[i].name),"textfield");
+			} else {
+				this.addItem(attr[i].name,xmlnode.getAttribute(attr[i].name),"textfield");
+			}
 		}
 		
 	}
