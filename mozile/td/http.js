@@ -39,7 +39,26 @@ mozileTransportDriver_http.prototype.load = function(filename, td, async) {
 	catch (e) {
 		reqObj.isError = true;
 		reqObj.status = 404;
-		reqObj.statusText = filename + " could not be loaded\n" + e.message;
+		var mes = filename + " could not be loaded\n" + e.message + "\n";
+		try
+		{
+			if (e.filename) {
+				mes += "In File: " + e.filename +"\n";
+			} else {
+				mes += "In File: " + e.fileName +"\n";
+			}
+			
+		}
+		catch (e)
+		{
+			mes += "In File: " + e.fileName +"\n";
+		}
+		try
+		{
+			mes += "Linenumber: " + e.lineNumber + "\n";
+		}
+		catch(e) {}
+		reqObj.statusText = mes;
 		if (td.loadCallback) {
 			td.loadCallback(reqObj);
 		} else {
