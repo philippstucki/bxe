@@ -347,7 +347,6 @@ Element.prototype.removeClass = function(className) {
 Element.prototype.hasClass = function(className) {
 	var classes = this.getClasses();
 	for (var i = 0; i < classes.length; i++) {
-		dump("Ele.hasClass " + classes[i] + "\n");
 		if (classes[i] == className) {
 			return true;
 		}
@@ -522,7 +521,6 @@ Range.prototype.styleText = function(styleName, styleValue, isClass, namespaceUR
 			if(textContainer.childNodes.length > 1 || (textContainer.childNodes.length == 1 && textContainer.getCStyle("display") != "inline"))
 			{
 				var styleHolder;
-
 				// spans are special: we don't embed spans in a span - we put spans around all 
 				// the text nodes in the span
 				// note: assume not span within a span so we only have a series of text nodes
@@ -552,11 +550,12 @@ Range.prototype.styleText = function(styleName, styleValue, isClass, namespaceUR
 				else
 				{
 					//only works reliable for xhtml stuff right now..
-					
 					if (isClass && styleName) {
 						if (namespaceURI != XHTMLNS) {
-							var _node = new XMLNodeElement(namespaceURI,styleName,1,true)
+							var _node = new XMLNodeElement(namespaceURI,styleName,1,true);
 							var styleHolder = _node._node;
+							//remove _XMLNode, otherwise updateXMLNode gets confused later
+							styleHolder._XMLNode = null;
 						} else {
 							var styleHolder = documentCreateXHTMLElement(styleName);
 						}
@@ -564,6 +563,8 @@ Range.prototype.styleText = function(styleName, styleValue, isClass, namespaceUR
 						if (namespaceURI != XHTMLNS) {
 							var _node = new XMLNodeElement(namespaceURI,styleName,1,true)
 							var styleHolder = _node._node;
+							//remove _XMLNode, otherwise updateXMLNode gets confused later
+							styleHolder._XMLNode = null;
 						} else {
 							var styleHolder = documentCreateXHTMLElement("span");
 						}
