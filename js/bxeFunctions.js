@@ -1226,14 +1226,24 @@ function bxe_InsertObject() {
 }
 
 function bxe_InsertAsset() {
-	
+	//this code is quite lenya specific....
+	// especially the unizh: check
 	var sel = window.getSelection();
 	
 	if (bxe_checkForSourceMode(sel)) {
 		return false;
 	}
+	
 	var cssr = sel.getEditableRange();
-	if (!bxe_checkIsAllowedChild("http://apache.org/cocoon/lenya/page-envelope/1.0","asset",sel, true) && !bxe_checkIsAllowedChildOfNode("http://apache.org/cocoon/lenya/page-envelope/1.0","asset",cssr.startContainer.parentNode.parentNode, true)) {
+	var pN = cssr.startContainer.parentNode;
+	//FIXME: unizh code should be outsourced...
+	if ((pN.XMLNode.localName == "highlight-title" && pN.XMLNode.namespaceURI == "http://unizh.ch/doctypes/elements/1.0") ||
+	(pN.XMLNode.localName == "asset" && pN.XMLNode.namespaceURI == "http://apache.org/cocoon/lenya/page-envelope/1.0")) {
+		alert("Asset is not allowed here");
+		return false;
+	}
+	
+	if (!bxe_checkIsAllowedChild("http://apache.org/cocoon/lenya/page-envelope/1.0","asset",sel, true) && !bxe_checkIsAllowedChildOfNode("http://apache.org/cocoon/lenya/page-envelope/1.0","asset",pN.parentNode, true)) {
 		alert ("Asset is not allowed here");
 		return false;
 	}
