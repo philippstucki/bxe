@@ -196,7 +196,7 @@ function bxe_toggleSourceMode(e) {
 		}
 	}
 	}
-	catch (e) {alert(e);}
+	catch (e) {bxe_catch_alert(e);}
 
 }
 
@@ -399,4 +399,31 @@ function bxe_InsertLink() {
 		window.getSelection().linkText(href);
 	else
 		window.getSelection().clearTextLinks();
+}
+
+
+function bxe_catch_alert(e ) {
+	var mes = "ERROR in initialising Bitflux Editor:\n"+e.message +"\n";
+	try
+	{
+		if (e.filename) {
+			mes += "In File: " + e.filename +"\n";
+		} else {
+			mes += "In File: " + e.fileName +"\n";
+		}
+		
+	}
+	catch (e)
+	{
+		mes += "In File: " + e.fileName +"\n";
+	}
+	try
+	{
+		mes += "Linenumber: " + e.lineNumber + "\n";
+	}
+	catch(e) {}
+	
+	mes += "Type: " + e.name + "\n";
+	mes += "Stack:" + e.stack + "\n";
+	alert(mes);
 }

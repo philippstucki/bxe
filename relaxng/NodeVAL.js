@@ -16,7 +16,7 @@ Attr.prototype._isNodeValid = function(wFValidityCheckLevel ) {
 
 Node.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 	// if it's a root node.
-	if(this.parentNode.nodeType == 9) {
+	if(this.parentNode && this.parentNode.nodeType == 9) {
 		if (!this.vdom.canBeRoot) {
 			alert("root element is not allowed to be root");
 			return false;

@@ -52,6 +52,7 @@ Node.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 					
 				newElement.XMLNode.namespaceURI = node.namespaceURI;
 				var newNode = parentN.appendChild(newElement);
+				newNode.setAttribute("__bxe_ns",node.namespaceURI);
 			} else {
 				var newNode = parentN.appendChild(document.importNode(node,true));
 			}
