@@ -1560,12 +1560,21 @@ InsertionPoint.prototype.insertNode = function(node)
 	}
 	if(node.nodeType == 11) // Node.DOCUMENT_FRAGMENT)
 	{
-		var i = node.childNodes.length;
 		var child = node.firstChild;
 		while(child) { 
 			var oldChild = child; 
-			child = child.nextSibling; 
-			this.insertNode(oldChild); 
+			child = child.nextSibling;
+			dump(oldChild.nodeType + " " + oldChild.nodeName + " " + oldChild.data+ "\n")
+			if (oldChild.nodeType == Node.TEXT_NODE) {
+				this.insertNode(oldChild);
+			} else {
+				this.insertNode(oldChild);
+				var _ip = oldChild.lastInsertionPoint(this.top);
+				this.set(_ip);
+				//ugly ugly ugly, try to find a better solution later
+				this.forwardOne();
+				this.backOne();
+			}
 		} 
 	}
 	
