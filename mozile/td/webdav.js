@@ -5,6 +5,8 @@ function mozileTransportDriver_webdav() {
 
 mozileTransportDriver_webdav.prototype.load = function (filename, td) {
 	this.p.request.td = td;
+	//backup Massnahme (sometimes td get's lost with the request...)
+	bxe_config.td = td;
 	this.p.request.onload = this.loadCallback;
 	this.p.GET(filename);
 }
@@ -19,6 +21,11 @@ mozileTransportDriver_webdav.prototype.loadCallback = function (e) {
 	
 	var p = e.currentTarget;
 	var td = p.td;
+	//backup Massnahme (sometimes td get's lost with the request...)
+	if (!td) {
+		td = bxe_config.td;
+	}
+	
 	var reqObj = new Object();
 	// if there's no element called parsererror...
 	if (p.responseXML.getElementsByTagNameNS("http://www.mozilla.org/newlayout/xml/parsererror.xml","parsererror").length == 0) {
