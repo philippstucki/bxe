@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.144 2004/01/19 02:06:30 chregu Exp $
+// $Id: bxeFunctions.js,v 1.145 2004/01/19 09:48:32 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -933,12 +933,10 @@ function bxe_draw_widgets() {
 	var submenu2 = new Array("Undo",function() {eDOMEventCall("Undo",document);},"Redo",function () {eDOMEventCall("Redo",document)});
 	menubar.addMenu("Edit",submenu2);
 	
-	var submenu3 = new Array();//"Count Div", function(e) { alert(document.getElementsByTagName("div").length);})
+	var submenu3 = new Array();
 	submenu3.push("Show XML Document",function(e) {BX_showInWindow(bxe_getXmlDocument());})
 	submenu3.push("Show RNG Document",function(e) {BX_showInWindow(bxe_getRelaxNGDocument());})
 	
-	//submenu3.push("Validate with xmllint",function(e) {	var foo = new BXE_TransportDriver_relaxng();foo.check();});
-
 	menubar.addMenu("Debug",submenu3);
 	
 	
