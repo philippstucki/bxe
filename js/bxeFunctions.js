@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.125 2003/12/05 01:24:42 chregu Exp $
+// $Id: bxeFunctions.js,v 1.126 2003/12/17 15:16:59 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -995,11 +995,14 @@ function bxe_updateXPath(e) {
 					var ac = thisNode.parentNode.allowedChildren;
 					var menuitem;
 					var thisLocalName = thisNode.localName;
-					var thisNamespaceURI = thisNode.namespaceURI
+					var thisNamespaceURI = thisNode.namespaceURI;
+					
 					for (i = 0; i < ac.length; i++) {
-						menuitem = bxe_format_list.appendItem(ac[i].nodeName, ac[i].localName + "=" + ac[i].namespaceURI);
-						if (ac[i].localName == thisLocalName &&  ac[i].namespaceURI == thisNamespaceURI) {
-							menuitem.selected=true;
+						if (!bxe_config.dontShowInContext[ac[i].namespaceURI + ":" +ac[i].localName] && ac[i].nodeType != 3 && ac[i].vdom.canHaveChildren)  {
+							menuitem = bxe_format_list.appendItem(ac[i].nodeName, ac[i].localName + "=" + ac[i].namespaceURI);
+							if (ac[i].localName == thisLocalName &&  ac[i].namespaceURI == thisNamespaceURI) {
+								menuitem.selected=true;
+							}
 						}
 					}
 				}
