@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.139 2004/01/14 11:47:24 chregu Exp $
+// $Id: bxeFunctions.js,v 1.140 2004/01/14 12:06:12 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -1228,6 +1228,68 @@ function bxe_InsertTableCallback(node) {
 	mod.show(100,50, "fixed");
 	
 }
+
+function bxe_CleanInline(e) {
+	
+	var sel = window.getSelection();
+	if (bxe_checkForSourceMode(sel)) {
+		return false;
+	}
+	
+	var cssr = sel.getEditableRange();
+	if(cssr.collapsed)
+		return;
+ 
+	// go through all text nodes in the range and link to them unless already set to cssr link
+	var textNodes = cssr.textNodes;
+	for(i=0; i<textNodes.length; i++)
+	{		
+		// figure out cssr and then it's on to efficiency before subroutines ... ex of sub ... 
+		// try text nodes returning one node ie/ node itself! could cut down on normalize calls ...
+		var textContainer = textNodes[i].parentNode;
+		//if(textContainer.nodeNamed("span") && textContainer.getAttribute("class") == "a" )	{
+			if (textContainer.getCStyle("display") == "inline") {
+			if(textContainer.childNodes.length > 1)
+			{
+				var siblingHolder;
+
+				// leave any nodes before or after cssr one with their own copy of the container
+				if(textNodes[i].previousSibling)
+				{
+					var siblingHolder = textContainer.cloneNode(false);
+					textContainer.parentNode.insertBefore(siblingHolder, textContainer);
+					siblingHolder.appendChild(textNodes[i].previousSibling);	
+				}
+
+				if(textNodes[i].nextSibling)
+				{
+					var siblingHolder = textContainer.cloneNode(false);
+					if(textContainer.nextSibling)
+						textContainer.parentNode.insertBefore(siblingHolder, textContainer.nextSibling);
+					else 
+						textContainer.parentNode.appendChild(siblingHolder);
+					siblingHolder.appendChild(textNodes[i].nextSibling);	
+				}
+			}
+
+			// rename it to span and remove its href. If span is empty then delete span
+
+			textContainer.parentNode.removeChildOnly(textContainer);
+		}
+	}
+
+	// normalize A elements 
+	var normalizeRange = document.createRange();
+	normalizeRange.selectNode(cssr.commonAncestorContainer);
+	normalizeRange.normalizeElements("span");
+	normalizeRange.detach();
+
+	// now normalize text
+	cssr.commonAncestorContainer.parentElement.normalize();
+	sel.selectEditableRange(cssr);
+	sel.anchorNode.updateXMLNode();
+}
+
 
 function bxe_DeleteLink(e) {
 	var sel = window.getSelection();
