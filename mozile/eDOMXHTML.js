@@ -399,8 +399,13 @@ InsertionPoint.prototype.splitXHTMLLine = function()
 		var ip = line.insertionPointAt(lineOffset);
 		this.set(ip);
 	}
+	else if ((line.container == this.top)) {
+		//don't do anything, if we're on top
+		return true;
+	}
 	else if((line.container == this.top) || (line.container == line.tableCellAncestor))
 	{
+		
 		var lineOffset = this.lineOffset;
 		line = line.setContainer(documentCreateXHTMLElement(defaultContainerName), false);
 		var ip = line.insertionPointAt(lineOffset);
