@@ -37,15 +37,21 @@ function  bxeConfig (filename,fromUrl, configArray) {
 
 	
 bxeConfig.parseConfig = function  (e) {
+	
 	if (e.isError) {
 		alert("Error loading config file \n"+e.statusText);
 		return false;
+	} 
+	if (e.document.documentElement.nodeName != "config") {
+		alert("doesn't look like a BXE config file.\n Here's the full output:\n "+ e.document.saveXML(e.document));
+		return false;
 	}
+		
 		
 	bxe_about_box.addText("Config Loaded");
 	var bxe_config = e.td.bxeConfig;
 	bxe_config.doc = e.document;
-
+	
 	bxe_config.xmlfile = bxe_config.getContent("/config/files/input/file[@name='BX_xmlfile']");
 	bxe_config.xslfile = bxe_config.getContent("/config/files/input/file[@name='BX_xslfile']");
 	bxe_config.xhtmlfile = bxe_config.getContent("/config/files/input/file[@name='BX_xhtmlfile']");
