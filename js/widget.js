@@ -694,27 +694,41 @@ Widget_ModalAttributeBox.prototype.show = function(e) {
 
 	box.setTitle("Edit Attributes of " + xmlnode.localName );
 	box.draw();
-	box.position(e.pageX ,e.pageY -  box.node.offsetHeight,"absolute");
+	box.position(e.pageX ,e.pageY ,"absolute");
 	box.draw();
 	//target.position(e.target.offsetParent.offsetLeft +e.target.offsetLeft , e.target.offsetParent.offsetTop + e.target.offsetTop - e.target.offsetHeight  + 5,"absolute");
 }
 
 Widget_ModalAttributeBox.prototype.drawAttributes = function(xmlnode) {
-	var attr = xmlnode.attributes;
+	var attr = xmlnode.vdom.attributes;
 	var text = "";
 	this.PaneNode.removeAllChildren();
 	var table = document.createElement("table");
 	this.PaneNode.appendChild(table);
-	for (var i = 0; i < attr.length; i++) {
+	for (var i in attr) {
 		var tr = document.createElement("tr");
 		table.appendChild(tr);
 		var td = document.createElement("td")
-		td.appendChild(document.createTextNode(attr[i].localName));
+		td.appendChild(document.createTextNode(attr[i].name));
 		tr.appendChild(td);
 		var tdt = document.createElement("td");
-		var textfield = document.createElement("input");
-		textfield.value = attr[i].value;
-		tdt.appendChild(textfield);
+		if (attr[i].dataType == "choice") {
+			var inputfield = document.createElement("select");
+			var choosefield;
+			for (var j in attr[i].choices) {
+				choosefield = document.createElement("option");
+				choosefield.appendChild(document.createTextNode(attr[i].choices[j]));
+				choosefield.setAttribute("value", attr[i].choices[j]);
+				if (attr[i].choices[j] == xmlnode.getAttribute(attr[i].name)) {
+					choosefield.setAttribute("selected","selected");
+				}
+				inputfield.appendChild(choosefield);
+			}
+		} else {
+			var inputfield = document.createElement("input");
+			inputfield.value = xmlnode.getAttribute(attr[i].name);
+		}
+		tdt.appendChild(inputfield);
 		tr.appendChild(tdt);
 		
 	}
@@ -740,7 +754,11 @@ Widget_ModalAttributeBox.prototype.setAttributes = function(xmlnode) {
 	for (var i = 0; i < trs.length; i++) {
 		attrName = trs[i].firstChild.firstChild.data;
 		attrValue = trs[i].firstChild.nextSibling.firstChild.value;
-		xmlnode.setAttribute(attrName, attrValue);
+		if (attrValue) {
+			xmlnode.setAttribute(attrName, attrValue);
+		} else {
+			xmlnode.removeAttribute(attrName);
+		}
 	}
 }
 function Widget_XPathMouseOver (e) {

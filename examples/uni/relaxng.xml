@@ -93,8 +93,13 @@
 
             <element name="table">
               <attribute name="class">
-                <data type="NCName"/>
+                <choice>
+                    <value>ornate</value>
+                    <value>simple</value>
+                </choice>
               </attribute>
+             
+              
               <optional>
                 <element name="caption">
                   <text/>
