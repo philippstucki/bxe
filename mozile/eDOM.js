@@ -1348,8 +1348,14 @@ InsertionPoint.prototype.deletePreviousInLine = function()
 	// TMP: POST05: include exclusive shouldn't do a partial grab of one end or the other of a range but it does now!
 	if((cssr.startContainer == startip.ipNode) || (cssr.endContainer == this.ipNode))
 		keepRange.deleteContents();
-	else
+	else {
+		
+		//FIXME: HERE WILL THE NODE BE DELETED, MAKE  AN EVENT!!!!!!!!
+		var sC = cssr.startContainer;
 		cssr.deleteContents();
+		sC.parentNode.updateXMLNode();
+	}
+	
 
 	this.__top.normalize();
 
