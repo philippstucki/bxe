@@ -409,6 +409,7 @@ function bxe_toggleSourceMode(e) {
 			if ( ! valid) {
 				bxe_toggleSourceMode(e);
 			}
+			bxe_updateXPath(editableArea);
 			
 		}
 	}
