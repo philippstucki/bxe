@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeXMLNode.js,v 1.37 2003/12/05 01:24:42 chregu Exp $
+// $Id: bxeXMLNode.js,v 1.38 2003/12/19 13:14:54 chregu Exp $
 
 
 function XMLNode  ( nodein, localName, nodeType, autocreate) {
@@ -112,8 +112,13 @@ XMLNode.prototype.insertAfter = function(newNode, oldNode) {
 
 XMLNode.prototype.insertBefore = function(newNode,oldNode) {
 	newNode = this.appendChild(newNode);
-	newNode._node = this._node.insertBefore(newNode._node,oldNode._node);
+	if (oldNode) {
+		newNode._node = this._node.insertBefore(newNode._node,oldNode._node);
+	} else {
+		newNode._node=this._node.insertBefore(newNode._node,null);
+	}
 	this.insertBeforeIntern(newNode,oldNode);
+
 	newNode._node.XMLNode = newNode;
 
 }
