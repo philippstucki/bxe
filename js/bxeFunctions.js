@@ -30,6 +30,15 @@ function bxe_getXmlDocument() {
 //	return areaNodes[0].XMLNode.ownerDocument.buildXML();
 }
 
+function bxe_getRelaxNGDocument() {
+	
+	var areaNodes = bxe_getAllEditableAreas();
+	var xml = areaNodes[0].XMLNode.ownerDocument._vdom.xmldoc;
+	return xml.saveXML(xml);
+
+//	return areaNodes[0].XMLNode.ownerDocument.buildXML();
+}
+
 /* Mode toggles */
 
 function bxe_toggleTagMode(e) {
@@ -345,6 +354,8 @@ function bxe_draw_widgets() {
 	
 	var submenu3 = new Array("Count Div", function(e) { alert(document.getElementsByTagName("div").length);})
 	submenu3.push("Show XML Document",function(e) {alert(bxe_getXmlDocument());})
+	submenu3.push("Validate with xmllint",function(e) {	var foo = new BXE_TransportDriver_relaxng();foo.check();});
+
 	menubar.addMenu("Debug",submenu3);
 	
 	
