@@ -37,7 +37,7 @@
                 as well as to <a href="/studium/mobilitaet/sokrates.html">internal
                 pages</a>.</p>
                 <p>There are also markups: <unizh:attention>warning</unizh:attention> and <cite>cite</cite></p>
-		<object data="../../images/bxe.png" type="image/gif" width="152" height="160">
+		<object data="../../images/bxe.png" type="image/png" width="125" height="16">
                 Caption of the image (a special caption element is not necessary)
 		</object>
 		<lenya:asset src="anmeldeformular.pdf" type="application/pdf">Anmeldeformular für den Sommerkurs</lenya:asset>

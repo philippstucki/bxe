@@ -226,7 +226,13 @@
         <data type="integer"/>
       </attribute>
       </optional>
-      <attribute name="type"/>
+      <attribute name="type">
+        <choice>
+            <value>image/gif</value>
+            <value>image/jpeg</value>
+            <value>image/png</value>
+            </choice>
+            </attribute>
       <optional>
       <attribute name="width">
 
