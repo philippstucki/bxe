@@ -11,10 +11,10 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeLoader.js,v 1.259 2004/04/19 01:30:05 chregu Exp $
+// $Id$
 
 var BXE_VERSION = "0.9.4-dev";
-var BXE_BUILD = "200404290330"
+var BXE_BUILD = "200404300330"
 var bxe_notSupportedText = "Bitflux Editor only works with Mozilla >= 1.4 / Firefox on any platform. \nCurrently we recommend Mozilla 1.6 or Firefox 0.8.";
 
 if (window.location.protocol == "file:" || window.location.host.match(/localhost.*/)) {
