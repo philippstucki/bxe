@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeLoader.js,v 1.189 2004/01/14 09:19:58 chregu Exp $
+// $Id: bxeLoader.js,v 1.190 2004/01/14 11:47:24 chregu Exp $
 
 const BXE_VERSION = "0.2";
 const BXE_BUILD = "200401141019"
@@ -209,6 +209,7 @@ function xml_loaded(xmldoc) {
 	document.eDOMaddEventListener("appendNode",bxe_appendNode,false);
 	document.eDOMaddEventListener("appendChildNode",bxe_appendChildNode,false);
 	document.eDOMaddEventListener("InsertLink",bxe_InsertLink,false);
+	document.eDOMaddEventListener("DeleteLink",bxe_DeleteLink,false);
 	document.eDOMaddEventListener("InsertTable",bxe_InsertTable,false);
 	document.eDOMaddEventListener("InsertImage",bxe_InsertObject,false);
 	document.eDOMaddEventListener("InsertAsset",bxe_InsertAsset,false);
