@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.128 2003/12/18 16:19:49 chregu Exp $
+// $Id: bxeFunctions.js,v 1.129 2003/12/18 17:29:50 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -43,11 +43,22 @@ function __bxeSave(e) {
 	var xmlstr =xml.saveXML(xml);
 	
 	function callback (e) {
+		var widg = mozilla.getWidgetModalBox("Saving");
+		
 		if (e.isError) {
-			alert("Document couldn't be saved\n"+e.statusText);
+			widg.addText("Document couldn't be saved\n"+e.statusText);
+			widg.show((window.innerWidth- 500)/2,50, "fixed");
 			return;
 		}
-		alert("Document Saved");
+		widg.addText( "" );
+		widg.addText( "" );
+		widg.addText( "" );
+		widg.addText( "Document saved" );
+		widg.addText( "" );
+		widg.addText( "" );
+		widg.addText( "" );
+		
+		widg.show((window.innerWidth- 500)/2,50, "fixed");
 		if (e.td.Exit) {
 			eDOMEventCall("Exit",document);
 		}
