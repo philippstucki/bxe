@@ -22,8 +22,7 @@ $xmlfile = realpath($_GET['XML']);
     files..
 */
 $basedir = dirname(dirname(__FILE__));
-error_log($basedir);
-error_log($xmlfile);
+
 if (strpos($xmlfile,$basedir) !== 0) {
     die("you are not allowed to read/write this file (".$_GET['XML'].")");
 }
