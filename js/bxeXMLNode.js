@@ -130,11 +130,13 @@ XMLNode.prototype.unlinkChildren = function () {
 
 XMLNode.prototype.appendChild = function(newNode) {
 	//BX_debug(newNode);
-	this.appendChildIntern(newNode);
-	newNode._node = this._node.appendChild(newNode._node);
 	if (this._node.ownerDocument == document ) {
 		newNode.createNS(newNode.namespaceURI, newNode.localName, newNode.nodeType);
 	}
+	newNode._node = this._node.appendChild(newNode._node);
+
+	this.appendChildIntern(newNode);
+
 	return newNode;
 }
 
