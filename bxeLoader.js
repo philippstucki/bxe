@@ -211,7 +211,6 @@ function bxe_load_xml (xmlfile) {
 
 function widget_loaded(e) {
 	bxe_about_box = new Widget_AboutBox();
-	bxe_about_box.draw();
 	bxe_about_box.setText("Loading files ...");
 	corescript_loaded(e);
 	
@@ -219,9 +218,7 @@ function widget_loaded(e) {
 
 function corescript_loaded(e) {
 	mozile_corescript_loaded++;
-	debug("from core script " + mozile_corescript_loaded + " of " + mozile_js_files.length  + "loaded: " + e.currentTarget.src);
 	if ( mozile_js_files.length == mozile_corescript_loaded) {
-		debug("call mozile_core_loaded()");
 		mozile_core_loaded();
 	} else {
 		if (bxe_about_box) {
@@ -242,7 +239,6 @@ function bxe_plugin_script_loaded(e) {
 
 function script_loaded(e) {
 	mozile_script_loaded++;
-	debug("from config script " + mozile_script_loaded + " loaded: " + e.currentTarget.src );
 	if ( bxe_config.scriptfiles.length == mozile_script_loaded ) {
 		mozile_loaded();
 	} else {
@@ -258,6 +254,7 @@ function mozile_core_loaded() {
 	} catch (e) {
 		bxe_catch_alert(e);
 	}
+	bxe_about_box.show(false, bxe_config.options['showSplashScreen']);
 }
 
 function mozile_loaded() {

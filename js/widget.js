@@ -491,7 +491,7 @@ Element.prototype.appendToBody = function() {
 	document.getElementsByTagName("body")[0].appendChild(this);
 }
 
-function Widget_AboutBox() {
+function Widget_AboutBox( ) {
 	var width = "400";
 	var height = "180";
 	this.node = this.initNode("div","AboutBox");
@@ -519,23 +519,22 @@ function Widget_AboutBox() {
 	//var textdiv = document.createElement("div");
 	var textdiv = document.getElementById("AboutBoxScroller")
 	this.TextNode = document.getElementById("AboutBoxScroller").firstChild;
-	/*textdiv.appendChild(this.TextNode);
-	this.node.appendChild(textdiv );
-	textdiv.style.top = (height - 150 ) + "px";;
-	textdiv.style.position = "relative";*/
+
 	textdiv.style.paddingTop = "20px";
-	this.node.style.overflow = "visible";
-	this.show();
+	
 	
 }
 Widget_AboutBox.prototype = new Widget();
-Widget_AboutBox.prototype.show = function (okButton) {
-
-	this.node.style.MozOpacity = 1;
-	if (okButton) { 
-		document.getElementById('okButton').style.display = "table-row";
+Widget_AboutBox.prototype.show = function (okButton, showSplash) {
+	this.showSplash = showSplash;
+	if (showSplash != "false") {
+		this.node.style.overflow = "visible";
+		this.node.style.MozOpacity = 1;
+		if (okButton) { 
+			document.getElementById('okButton').style.display = "table-row";
+		}
+		this.draw();
 	}
-	this.draw();
 }
 
 
@@ -548,12 +547,12 @@ Widget_AboutBox.prototype.setText = function(text) {
 }
 
 Widget_AboutBox.prototype.addText = function(text) {
-	var id = "Widget_AboutBox.addText";
 	this.TextNode.data =this.TextNode.data + " " + text;
-	if ( this.TextNode.data.length  > 120) {
-		this.TextNode.data = "..." + this.TextNode.data.substr(this.TextNode.data.length - 120);
+		if (this.showSplash != "false") {
+		if ( this.TextNode.data.length  > 120) {
+			this.TextNode.data = "..." + this.TextNode.data.substr(this.TextNode.data.length - 120);
+		}
 	}
-	debug(text);
 	window.status = this.TextNode.data;
 }
 
