@@ -52,6 +52,9 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 	if (DebugOutput) {
 		dump(this.xmldoc.saveXML(this.xmldoc));
 	}	
+
+	dump(this.xmldoc.saveXML(this.xmldoc));
+	
 	var rootChildren = this.xmldoc.documentElement.childNodes;
 	
 	for (var i = 0; i < rootChildren.length; i++) {
@@ -108,6 +111,21 @@ DocumentVDOM.prototype.dereferenceAttributes = function() {
 			}
 			defNodes[j].parentNode.removeChild(defNodes[j]);
 	}
+	
+	// group  is currently not supported.. removeit
+	var xp = "/rng:grammer//rng:group";
+	var defRes= this.xmldoc.documentElement.getXPathResult(xp);
+	var defNode = defRes.iterateNext();
+	var defNodes = new Array();
+	while (defNode) {
+			defNodes.push(defNode);
+			defNode = defRes.iterateNext();
+	}
+	
+	for (j in defNodes) {
+		defNodes[j].parentNode.removeChild(defNodes[j]);
+	}
+	
 	
 	return true;
 	/*

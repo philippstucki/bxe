@@ -25,7 +25,7 @@ const E_FATAL = 1;
 if (window.location.protocol == "file:" || window.location.host.match(/localhost.*/)) {
 	var DebugOutput = false;
 } else {
-	var DebugOutput = true;
+	var DebugOutput = false;
 }
 
 mozile_js_files = new Array();

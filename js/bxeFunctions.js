@@ -14,6 +14,9 @@ function __bxeSave(e) {
 		td.Exit = null;
 	}
 	var xml = bxe_getXmlDomDocument();
+	if (!xml) {
+		alert("Editable areas must not be in SourceMode while saving. Please switch it");
+	}
 	if (!(xml.XMLNode.validateDocument())) 
 	{
 		return false;
@@ -71,6 +74,7 @@ function bxe_bench() {
 function bxe_history_snapshot() {
 	
 	var xmlstr = bxe_getXmlDocument();
+	if (!xmlstr) { return false;}
 	bxe_snapshots[bxe_snapshots_position] = xmlstr;
 	bxe_snapshots_position++;
 	while (bxe_snapshots.length > bxe_snapshots_position) {
@@ -90,6 +94,7 @@ function bxe_history_snapshot() {
 function bxe_history_undo() {
 	if (bxe_snapshots_position >= 0) {
 		var currXmlStr = bxe_getXmlDocument();
+		if (!currXmlStr) {alert ("Undo/Redo does not work in source edit mode"); return false;} 
 		bxe_snapshots_position--;
 		var xmlstr = bxe_snapshots[bxe_snapshots_position];
 		while(currXmlStr == xmlstr && bxe_snapshots_position > 0 ) {
@@ -118,7 +123,6 @@ function bxe_getXmlDomDocument() {
 	var xml;
 	for (var i = 0; i < areaNodes.length; i++) {
 		if ((areaNodes[i]._SourceMode)) {
-			alert("Editable areas must not be in SourceMode while saving. Please switch it");
 			return false;
 		}
 		//xmldoc = areaNodes[i].XMLNode.insertIntoXMLDocument(xmldoc);
@@ -132,6 +136,7 @@ function bxe_getXmlDomDocument() {
 function bxe_getXmlDocument() {
 	
 	var xml = bxe_getXmlDomDocument();
+	if (!xml ) { return xml; }
 	return xml.saveXML(xml);
 
 //	return areaNodes[0].XMLNode.ownerDocument.buildXML();
@@ -253,6 +258,8 @@ function bxe_toggleSourceMode(e) {
 		editableArea._SourceMode = true;
 		editableArea.AreaInfo.SourceModeMenu.Checked = true;
 		editableArea.AreaInfo.NormalModeMenu.Checked = false;
+		bxe_updateXPath(editableArea);
+		
 	} else {
 		var rootNodeName = editableArea.XMLNode.localName;
 		if (editableArea.XMLNode.prefix != null) {
@@ -839,42 +846,42 @@ function bxe_updateXPath() {
 	var sel = window.getSelection();
 	var cssr = sel.getEditableRange();
 	if (cssr) {
-		bxe_status_bar.buildXPath(sel.anchorNode);
-		var lines = cssr.lines;
-		bxe_format_list.removeAllItems();
-		
-		function nodeSort(a,b) {
-			if (a.nodeName > b.nodeName) {
-				return 1;
-			} else {
-				return -1;
-			}
-		}
-		if (lines[0] && lines[0].container) {
-			/*		bxe_format_list.appendItem(lines[0].container.XMLNode.localName,lines[0].container.XMLNode.localName);*/
-			var thisNode = lines[0].container.XMLNode;
-			if (thisNode.xmlBridge) {
-				var pref = "";
-				if (thisNode.prefix) {
-					pref = thisNode.prefix + ":";
-				}
-				menuitem = bxe_format_list.appendItem(pref + thisNode.nodeName, thisNode.localName + "=" + thisNode.namespaceURI);
-			} else 
-			{
-				var ac = thisNode.parentNode.allowedChildren;
-				ac.sort(nodeSort);
-				var menuitem;
-				var thisLocalName = thisNode.localName;
-				var thisNamespaceURI = thisNode.namespaceURI
-				for (i = 0; i < ac.length; i++) {
-					menuitem = bxe_format_list.appendItem(ac[i].nodeName, ac[i].localName + "=" + ac[i].namespaceURI);
-					if (ac[i].localName == thisLocalName &&  ac[i].namespaceURI == thisNamespaceURI) {
-						menuitem.selected=true;
+		if (cssr.top._SourceMode) {
+			//clear list
+			bxe_format_list.removeAllItems();
+			bxe_format_list.appendItem("-Source Mode-","");
+			bxe_status_bar.buildXPath(cssr.top);
+
+		} else {
+			bxe_status_bar.buildXPath(sel.anchorNode);
+			var lines = cssr.lines;
+			bxe_format_list.removeAllItems();
+	
+			if (lines[0] && lines[0].container) {
+				/*		bxe_format_list.appendItem(lines[0].container.XMLNode.localName,lines[0].container.XMLNode.localName);*/
+				var thisNode = lines[0].container.XMLNode;
+				if (thisNode.xmlBridge) {
+					var pref = "";
+					if (thisNode.prefix) {
+						pref = thisNode.prefix + ":";
+					}
+					menuitem = bxe_format_list.appendItem(pref + thisNode.nodeName, thisNode.localName + "=" + thisNode.namespaceURI);
+				} else {
+					var ac = thisNode.parentNode.allowedChildren;
+					ac.sort(bxe_nodeSort);
+					var menuitem;
+					var thisLocalName = thisNode.localName;
+					var thisNamespaceURI = thisNode.namespaceURI
+					for (i = 0; i < ac.length; i++) {
+						menuitem = bxe_format_list.appendItem(ac[i].nodeName, ac[i].localName + "=" + ac[i].namespaceURI);
+						if (ac[i].localName == thisLocalName &&  ac[i].namespaceURI == thisNamespaceURI) {
+							menuitem.selected=true;
+						}
 					}
 				}
+			} else {
+				bxe_format_list.appendItem("no block found","");
 			}
-		} else {
-			bxe_format_list.appendItem("no block found","");
 		}
 	}
 }

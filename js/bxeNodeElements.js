@@ -276,7 +276,6 @@ Node.prototype.__defineGetter__ (
 )
 
 Node.prototype.updateXMLNode = function (force) {
-	debug ("updateXMLNode " + this);
 	if (this.nodeType == 1 && !this.userModifiable && this.hasChildren) {
 		return;
 	}

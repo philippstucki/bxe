@@ -530,6 +530,11 @@ Widget_StatusBar.prototype.positionize = function (e) {
 }
 
 Widget_StatusBar.prototype.buildXPath = function (node) {
+	if (!node) {
+		this.node.removeAllChildren();
+		return true;
+	}
+	
 	if (node.nodeType == Node.TEXT_NODE) {
 		node = node.parentNode;
 	}
@@ -580,7 +585,7 @@ function Widget_ContextMenu () {
 	this.Popup.position(0,0,"absolute");
 	this.Popup.ContextMenu = this;
 	this.subPopup = new Widget_MenuPopup();
-	this.EditAttributes = new Widget_ModalAttributeBox();
+	this.Popup.EditAttributes = new Widget_ModalAttributeBox();
 	
 }
 
@@ -615,11 +620,12 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 
 	this.Popup.removeAllMenuItems();
 	this.Popup.initTitle(node.XMLNode.localName);
-	if (node.XMLNode.vdom.hasAttributes && this.EditAttributes) {
-		var menui = this.Popup.addMenuItem("Edit Attributes..", this.EditAttributes.popup);
-		menui.Modal = this.EditAttributes;
-	//	menui.MenuPopup._node = node;
-	}
+	/* currently not working
+	if (node.XMLNode.vdom.hasAttributes && this.Popup.EditAttributes) {
+		var menui = this.Popup.addMenuItem("Edit Attributes..", this.Popup.EditAttributes.popup);
+		menui.Modal = this.Popup.EditAttributes;
+		menui.MenuPopup._node = node;
+	}*/
 	var sel  = window.getSelection();
 	var cssr = sel.getEditableRange();
 	//var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
@@ -661,7 +667,7 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 				var newNode = e.currentTarget.Widget.AppendToNode._node;
 				if (newNode.XMLNode.vdom.hasAttributes && e.currentTarget.Widget.EditAttribute) {
 						var menui = sub.addMenuItem("Edit Attributes..", sub.EditAttributes.popup);
-						menui.Modal = e.currentTarget.Widget.EditAttribute;
+						menui.Modal = e.currentTarget.Widget.EditAttributes;
 						menui.MenuPopup._node = newNode;
 				}
 
