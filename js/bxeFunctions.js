@@ -624,7 +624,7 @@ function bxe_ContextPopup(e) {
 		
 	});
 	popup.addSeparator();
-	if (node.localName == "td") {
+	if (node.localName == "td" || node.localName == "th") {
 		
 		// merge right
 	//	popup.addSeparator();
@@ -653,7 +653,7 @@ function bxe_ContextPopup(e) {
 		while (nextSibling && nextSibling.nodeType != 1) {
 			nextSibling = nextSibling.nextSibling;
 		}
-		if (nextSibling && nextSibling.localName == "td") {
+		if (nextSibling && (nextSibling.localName == "td" || nextSibling.localName == "th")) {
 			var menui = popup.addMenuItem("Merge right", function(e) {
 				var widget = e.currentTarget.Widget;
 				var _par = widget.MenuPopup.MainNode._node.parentNode;
