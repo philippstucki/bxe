@@ -11,7 +11,9 @@ XMLNodeDocument.prototype.validateDocument = function() {
 	
 	//check root element
 	//var vdomCurrentChild = this.documentElement.vdom.firstChild;
-	return this.documentElement._isNodeValid(true);
+	var c =  this.documentElement.isNodeValid(true);
+	
+	return c;
 }
 
 XMLNodeDocument.prototype.getVdom = function(name) {

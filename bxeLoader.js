@@ -236,7 +236,7 @@ function validation_loaded(vdom) {
 	bxe_about_box.addText("Validation Loaded ...");
 
 	var vali = bxe_config.xmldoc.XMLNode.validateDocument();
-	if (vali.isError) {
+	if (!vali) {
 		bxe_about_box.addText("Document is *not* valid.");
 		//alert(vali.getErrorMessagesAsText());
 	}

@@ -307,7 +307,10 @@ table.beauty  {
   color: #FFF;
 }
 
-
+[__bxe_invalid=true] {
+    
+    background-color: red;
+}
 
 [__bxe_highlight=true] {
     

@@ -2,8 +2,16 @@
 
 XMLNode.prototype.isNodeValid = function(deep, wFValidityCheckLevel ) {
 	
-	if (this._isNodeValid(deep,wFValidityCheckLevel).isError) {
-		return false; 
+	var c  = this._isNodeValid(deep,wFValidityCheckLevel);
+	
+	if (c.isError) {
+		c.dumpErrorMessages();
+		
+		for (i in c.errormsg) {
+			c.errormsg[i]["node"]._node.setAttribute("__bxe_invalid","true");
+		}
+		alert(c.getErrorMessagesAsText());
+		return false;
 	} else {
 		return true;
 	}
@@ -62,11 +70,11 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 					ctxt.setErrorMessage(ctxt.node.localName +"("+ctxt.node.namespaceURI+ ")"+ " is not allowed as child of  " + this.localName +"("+this.namespaceURI+ ")");
 				}
 		}
+		
 	} while (ctxt.next())
-	}
-	if (ctxt.isError) {
-		ctxt.dumpErrorMessages();
-	} 
+
+	
+		}
 	return ctxt;
 	
 }
@@ -98,7 +106,10 @@ ContextVDOM.prototype.setErrorMessage = function(text) {
 		this.errormsg = new Array();
 	}
 	this.isError = true;
-	this.errormsg.push(text);
+	var tmpArr = new Array();
+	tmpArr["text"] = text;
+	tmpArr["node"] = this.node;
+	this.errormsg.push(tmpArr);
 }
 
 ContextVDOM.prototype.addErrorMessages = function(msgs) {
@@ -109,7 +120,7 @@ ContextVDOM.prototype.addErrorMessages = function(msgs) {
 ContextVDOM.prototype.getErrorMessagesAsText = function() {
 	var out = "";
 	for (i in this.errormsg) {
-		out += this.errormsg[i] + "\n";
+		out += this.errormsg[i]["text"] + "\n";
 	}
 	return out;
 }

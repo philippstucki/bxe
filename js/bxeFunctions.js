@@ -46,7 +46,11 @@ function bxe_history_undo() {
 	xmldoc.init();
 	xmldoc.insertIntoHTMLDocument();
 	bxe_config.xmldoc.XMLNode.vdom = vdom;
+	debug ("foo");
+	try {
 	bxe_config.xmldoc.XMLNode.validateDocument();
+	} catch(e) {bxe_catch_alert(e);}
+	debug ("bar");
 }
 
 function bxe_getXmlDocument() {
@@ -222,7 +226,7 @@ function bxe_toggleSourceMode(e) {
 			
 			editableArea.XMLNode.insertIntoHTMLDocument(editableArea,true);
 			editableArea.XMLNode.xmlBridge = xmlnode;
-			dump("valid? " +editableArea.XMLNode.isNodeValid() + "\n");
+			dump("valid? " +editableArea.XMLNode.isNodeValid(true) + "\n");
 			editableArea._SourceMode = false;
 			editableArea.AreaInfo.SourceModeMenu.Checked = false;
 			editableArea.AreaInfo.NormalModeMenu.Checked = true;
@@ -249,6 +253,7 @@ function bxe_toggleTextClass(e) {
 	sel = window.getSelection();
 	var _node = sel.anchorNode.parentNode;
 	_node.updateXMLNode();
+	debug("isValid?" + _node.parentNode.XMLNode.isNodeValid());
 }
 
 
