@@ -266,7 +266,23 @@ function nonctrlKeyPressHandler(event)
 	// BACKSPACE AND DELETE (DOM_VK_BACK_SPACE, DOM_VK_DELETE)
 	if((event.keyCode == 8) || (event.keyCode == 46)) {
 		var backspace = (event.keyCode == 46);
-		window.getSelection().deleteSelection(backspace);
+		if (!sel.isCollapsed && sel.anchorNode.nodeType == 3 && sel.anchorOffset == 0) {
+			var n = sel.focusNode;
+			var o = sel.focusOffset;
+			sel.collapse(sel.anchorNode,1)
+			sel.extend(n,o);
+			sel.deleteSelection(backspace);
+			sel = window.getSelection();
+			sel.deleteSelection(false);
+			sel.anchorNode.updateXMLNode();
+			
+			
+		} else if (sel.isCollapsed) {
+			sel.deleteSelection(backspace);
+		} else {
+			sel.deleteSelection(backspace);
+			sel.anchorNode.updateXMLNode();
+		}
 		return true;
 	}
 

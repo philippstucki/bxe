@@ -2670,7 +2670,12 @@ ContainedLine.prototype.deleteLine = function()
 {
 	var rangeToDelete = document.createRange();		
 	rangeToDelete.selectNode(this.topMostContainer);
+
+	eDOMEventCall("NodeBeforeDelete",this.topMostContainer);
 	rangeToDelete.deleteContents();
+
+
+	
 }
 
 /**
@@ -2698,8 +2703,10 @@ ContainedLine.prototype.appendContent = function(contents)
 		this.__lineRange.deleteContents();
 
 	// then append contents that are assumed to be only text or inline elements and assumed to be normalized for whitespace
+	ret = contents.firstChild;
 	this.container.appendChild(contents);
-
+	
+	eDOMEventCall("NodePositionChanged",ret);
 	// give back "join" point
 	return this.lastInsertionPoint.clone();
 }
