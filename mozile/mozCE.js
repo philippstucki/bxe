@@ -502,9 +502,9 @@ Selection.prototype.paste = function()
 	}
 	if (content && content.data) {
 		var elementName = bxe_config.options['autoParaElementName'];
-		if (elementName && clipboard._system && content.data.search(/[\n\r][a-zA-Z0-9]+/) > -1) {
+		if (elementName && clipboard._system && content.data.search(/[\n\r]./) > -1) {
 			content = content.data;
-			content.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+			content = content.replace(/&/g,"&amp;").replace(/</g,"&lt;");
 			var elementNamespace = bxe_config.options['autoParaElementNamespace']
 			var elementName_start = elementName;
 			if (elementNamespace) {
@@ -631,15 +631,26 @@ Selection.prototype.pasteKeyUp = function () {
 	//put the data of the placeholder span in the internal clipboard, if it's different
 	// than the content in the internal clipboard (then we assume, it's newer..)
 	var clipboard = mozilla.getClipboard();
-	clipboard._system = false;
+	
 	if (!clipboard._clipboardText) {
 		clipboard.setData(rng);
 		clipboard._system = true;
 	}
 	else if (rng.toString().replace(/[\n\r\s]+/g," ") != clipboard._clipboardText.replace(/[\n\r\s]+/g," ")) {
 		var promptText = "Internal and System-Clipboard are differing: \n\n";
-		promptText += "System   (Cancel): '" + rng.toString() +"'\n\n";
-		promptText += "Internal   (OK)  : '" + clipboard._clipboardText + "'\n\n";
+		var _sysString = rng.toString();
+		var _intString = clipboard._clipboardText;
+		if (_sysString.length > 200) {
+			_sysString = _sysString.substr(0,200) + " \n<too long, rest snipped>";
+		}
+		if (_intString.length > 200) {
+			_intString = _intString.substr(0,200) + " \n<too long, rest snipped> ";
+		}
+		promptText += "******************\n";
+		promptText += "System   (Cancel): \n'" + _sysString  +"'\n\n";
+		promptText += "******************\n";
+		promptText += "Internal   (OK)  : \n'" + _intString  + "'\n\n";
+		promptText += "******************\n";
 		promptText += "If you want to use the Internal, click OK, otherwise (using System) Cancel\n";
 		//this try/catch is here, because we had some problems with confirm and absolutely unrelated errors
 		
@@ -650,6 +661,8 @@ Selection.prototype.pasteKeyUp = function () {
 		if(!internal) {
 			clipboard.setData(rng);
 			clipboard._system = true;
+		} else {
+			clipboard._system = false;
 		}
 	}
 	//restore the selection
@@ -683,7 +696,7 @@ Selection.prototype.copy = function()
 	//var text = cssr.toString().replace(/\n/g," ");
 
 	var clipboard = mozilla.getClipboard();
-
+	clipboard._system = false;
 	// clipboard.setData(deletedFragment.saveXML(), "text/html"); // go back to this once, paste supports html paste!
 	clipboard.setData(cssr,MozClipboard.TEXT_FLAVOR);
 }
