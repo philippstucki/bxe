@@ -660,6 +660,7 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 
 Widget_MenuPopup.prototype.appendAllowedSiblings = function( node) {
 	var ac = node.XMLNode.parentNode.allowedChildren;
+	
 	function nodeSort(a,b) {
 		if (a.nodeName > b.nodeName) {
 			return 1;
@@ -667,7 +668,9 @@ Widget_MenuPopup.prototype.appendAllowedSiblings = function( node) {
 			return -1;
 		}
 	}
+	
 	ac.sort(nodeSort);
+	
 	for (i = 0; i < ac.length; i++) {
 			var menui = this.addMenuItem("Append " + ac[i].nodeName, function(e) { 
 				var widget = e.currentTarget.Widget;
@@ -789,7 +792,7 @@ Widget_ModalBox.prototype.show = function(x,y, position) {
 		subm.name="__submit";
 		subm.setAttribute("value","OK");
 		this.hasTable.parentNode.addEventListener("submit", function(e) {
-			var Widget = e.target.Widget;
+			var Widget = e.currentTarget.Widget;
 			Widget.hide();
 			bxe_registerKeyHandlers();
 			var elem = e.target.elements;
@@ -818,6 +821,7 @@ Widget_ModalBox.prototype.show = function(x,y, position) {
 			this.hasTable.parentNode.appendChild(cancel);
 		}
 		this.hasTable.parentNode.appendChild(subm);
+		subm.focus();
 	}
 	if (!position) { position = "absolute";};
 	this.position(x,y, position);

@@ -5,13 +5,14 @@ XMLNodeElement.prototype.__defineGetter__(
 "allowedChildren", function() {
 	
 	// everything which isn't an Element, can't have children
+	debug("get allowed children for " + this.nodeName);
 	var ctxt = new ContextVDOM(this,this.vdom);
 	var ac = new Array();
 	var subac = null;
 	try{
 		if (ctxt.node ) {
 			do {
-				subac = ctxt.vdom.allowedElements();
+				subac = ctxt.vdom.allowedElements(ctxt);
 				
 				if (subac && subac.nodeName) {
 					ac.push(subac);
@@ -22,10 +23,12 @@ XMLNodeElement.prototype.__defineGetter__(
 				}
 			} while (ctxt.nextVDOM())
 		}
+		debug("end get allowed Children for " + this.nodeName);
 		return ac;
 	} catch(e){
 		/*bxe_catch_alert(e);
 		alert(ctxt.vdom.nodeName);*/
+		debug("end with catch get allowed Children for " + this.nodeName);
 		return new Array()
 	}
 }

@@ -11,7 +11,7 @@ NodeVDOM.prototype.getVdomForChild = function (child ) {
 	return child._vdom;
 }
 
-NodeVDOM.prototype.allowedElements = function() {
+NodeVDOM.prototype.allowedElements = function(ctxt) {
 	return this.localName;
 }
 

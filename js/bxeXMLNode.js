@@ -59,6 +59,9 @@ XMLNode.prototype.init = function ( nodein, localName, nodeType, autocreate) {
 				this.setAttributeNS(attribs[i].namespaceURI,attribs[i].localName,attribs[i].value);
 			}
 			
+		} else if (this._node.nodeType == 3){
+			this.localName = "#text";
+			this.nodeName = "#text";
 		} else {
 			this.localName = this._node.nodeName;
 		}

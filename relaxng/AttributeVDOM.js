@@ -1,4 +1,5 @@
 function AttributeVDOM(node, option) {
+	this.type = "RELAXNG_ATTRIBUTE";
 	this.name = node.getAttribute("name");
 	this.dataType = "NCName";
 	if (option == "optional") {

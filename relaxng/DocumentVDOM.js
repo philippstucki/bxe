@@ -42,9 +42,15 @@ DocumentVDOM.prototype.loadSchema = function(file, callback) {
 	//set a reference to the DocumentVDOM, so we can access it in the callback
 	this.xmldoc.DocumentVDOM = this;
 	this.filename = file;
-	var dir = bxe_getDirPart(window.location.toString());
-	this.directory =  bxe_getDirPart(dir + file);
+
+	if (file.substring(0,1) == "/") {
+		this.directory = bxe_getDirPart(file);
+	} else {
+		var dir = bxe_getDirPart(window.location.toString());
+		this.directory =  bxe_getDirPart(dir + file);
+	}
 	// load schema file
+	debug("blabla");
 	try {
 		this.xmldoc.load(file);
 	} catch (e) {

@@ -38,10 +38,21 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 		// TODO: test if this node is valid, we do only check childrens for the moment..	
 		}
 	}
-	var ctxt = new ContextVDOM(this,this.vdom);
+	debug ("_isNodeValid " + this.nodeName );
+	try {
+		debug ("just before new ContextVDOM (NodeVAL.js line 43");
+		var ctxt = new ContextVDOM(this,this.vdom);
+	
+	} catch (e) { bxe_catch_alert(e); debug ("couldn't make new context..");}
+//	debug ("after new ContextVDOM " + ctxt.node.nodeName);
 	if (ctxt.node) {
 	do {
-		//dump( ctxt.vdom.nodeName + "\n");
+		//debug ("node " + ctxt.node.nodeName);;
+		if (ctxt.vdom) {
+			//debug(" vdom " +ctxt.vdom.nodeName);
+			//debug (" " + ctxt.vdom.name);
+		}
+		
 		if (ctxt.node.nodeType == "3" && ctxt.node.isWhitespaceOnly) {
 			continue;
 		} 	
@@ -55,7 +66,10 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 		
 		if (  ctxt.isValid()) {
 			if(ctxt.node.hasChildNodes() && deep) {
+				
+				debug("*****Go deeper " + ctxt.node.nodeName);
 				var retctxt = ctxt.node._isNodeValid(deep,  wFValidityCheckLevel )
+				debug("*****back deeper " + ctxt.node.nodeName);
 				if (retctxt.isError) {
 					ctxt.addErrorMessages(retctxt.errormsg);
 				}
@@ -68,13 +82,12 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 		} else {
 				if (ctxt.node.parentNode.isAllowedChild(ctxt.node)) {
 					ctxt.setErrorMessage(ctxt.node.localName +"("+ctxt.node.namespaceURI+ ") is not allowed at this position as child of  " + this.localName );
-				
 				}
 				else {
 					ctxt.setErrorMessage(ctxt.node.localName +"("+ctxt.node.namespaceURI+ ")"+ " is not allowed as child of  " + this.localName +"("+this.namespaceURI+ ")");
 				}
 		}
-		
+		//debug ("---------");
 	} while (ctxt.next())
 
 	
@@ -82,25 +95,38 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 	return ctxt;
 	
 }
-
+ctxtcounter = 0;
 function ContextVDOM (node,vdom) {
 	this.node = node.firstChild;
+	this.nr = ctxtcounter++;
+	debug (node.nodeName);
+	debug (vdom.nodeName);
+	this.isError = false;
+	this.errormsg = new Array();
+	this.refs = new Array();
+
 	if (typeof vdom.firstChild != "undefined") {
-		this.vdom = vdom.firstChild;
+		this.vdom = vdom.getFirstChild(this);
 	} else {
 		this.vdom = null;
 	}
-	this.isError = false;
-	this.errormsg = new Array();
+	
 	
 }
 
 ContextVDOM.prototype.next = function() {
-	
+	debug ("ctxt.next " + typeof this.node +  " " + this.node.nodeName);
+	debug ("data " + this.node._node);
 	if (this.node.nextSibling) {
+		
 		this.node = this.node.nextSibling;
+		if (this.node.nodeName == "null") {
+			debug("ctxt.next next.nodeName is null...");
+			return this.next();
+		}
 		return this.node;
 	} else {
+		debug ("no next sibling...");
 		return null;
 	}
 }
@@ -134,14 +160,24 @@ ContextVDOM.prototype.dumpErrorMessages = function() {
 }
 
 ContextVDOM.prototype.nextVDOM = function() {
-	
-	if (this.vdom.nextSibling) {
+	var startVdom =this.vdom;
+	var nextSib = this.vdom.getNextSibling(this);
+	if (nextSib) {
+		debug("nextVDOM " + nextSib.nodeName);
 		
-		this.vdom = this.vdom.nextSibling;
-		return this.vdom;
-	} else {
+		debug("... " +  nextSib.name);
+		debug("=> " + this.node.nodeName);
+		this.vdom = nextSib;
+	} /*else if (this.vdom.parentNode && this.vdom.parentNode.nodeName == "RELAXNG_DEFINE") {
+		debug ("nextVDOM parent DEFINE " + this.vdom.nodeName + this.vdom.parentNode.name);
+		return null;
+	} */else {
+		debug("nextVDOM == null");
 		return null;
 	}
+
+
+	return this.vdom;
 }
 
 ContextVDOM.prototype.isValid = function() {
@@ -158,6 +194,21 @@ ContextVDOM.prototype.isValid = function() {
 			return true;
 		}
 	}
+}
+
+
+ContextVDOM.prototype.setVDOM = function(vdom, refsPosition) {
+	if (refsPosition && this.refs.length >  0 ) {
+		debug("//////// setVDOM " + vdom.nodeName);
+		debug("////////         " + this.refs[this.refs.length -1].name);
+		while (this.refs.length > refsPosition) {
+			var bla = this.refs.pop();
+			debug ("this.refs.pop" + bla.name);
+			 
+		}
+		debug("last refs " + this.refs[this.refs.length -1].name);
+	}
+	this.vdom = vdom;
 }
 
 XMLNode.prototype.__defineGetter__(
