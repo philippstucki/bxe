@@ -281,7 +281,7 @@ function bxe_draw_widgets() {
 	// make menubar
 	var menubar = new Widget_MenuBar();
 	var img = document.createElement("img");
-	img.setAttribute("src","bxe.png");
+	img.setAttribute("src","images/bxe.png");
 	
 	//imgspan.appendChild(img);
 	img.setAttribute("align","right");

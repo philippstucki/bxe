@@ -43,7 +43,7 @@ function Widget_AreaInfo (areaNode) {
 	this.node = this.initNode("span","AreaInfoPointer");
 
 	var img = this.node.appendChild(document.createElement("img"));
-	img.src = "triangle.png";
+	img.src = "images/triangle.png";
 	if (areaNode.display == "block") {
 		this.Display = 'block';
 	} else {
@@ -200,7 +200,7 @@ Widget_MenuItem.prototype.__defineGetter__(
 
 Widget_MenuItem.prototype.addMenu = function (menu) {
 	var img = this.node.appendChild(document.createElement("img"));
-	img.src = "triangle.png";
+	img.src = "images/triangle.png";
 	img.setAttribute("align","right");
 	this.node.insertBefore(img,this.node.firstChild);
 	this.SubMenu = menu;
@@ -619,7 +619,7 @@ function Widget_XPathMouseOut (e) {
 	
 // image should be in the same directory as this file. This file is in mozile_root_dir. The loader
 // sets this constant.
-/*const buttonImgLoc = mozile_root_dir + "/buttons.png";
+/*const buttonImgLoc = mozile_root_dir + "/images/buttons.png";
 var preloadthebutton = new Image();
 preloadthebutton.src = buttonImgLoc;
 */

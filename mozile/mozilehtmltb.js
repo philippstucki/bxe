@@ -39,7 +39,7 @@
 
 // image should be in the same directory as this file. This file is in mozile_root_dir. The loader
 // sets this constant.
-const buttonImgLoc = mozile_root_dir + "/buttons.png";
+const buttonImgLoc = mozile_root_dir + "/images/buttons.png";
 var preloadthebutton = new Image();
 preloadthebutton.src = buttonImgLoc;
 
