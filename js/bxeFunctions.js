@@ -1020,15 +1020,8 @@ function BX_showInWindow(string)
 }
 
 function bxe_about_box_fade_out (e) {
-	
-	var mozO = bxe_about_box.node.getCStyle("-moz-opacity");
-	/* if (mozO > 0.1) {
-		bxe_about_box.node.style.MozOpacity = mozO - 0.1;
-		window.setTimeout(bxe_about_box_fade_out, 100);
-	} else {*/
-		bxe_about_box.node.style.display = "none";
-		window.status = null;
-	//}
+	bxe_about_box.node.style.display = "none";
+	window.status = null;
 }
 
 function bxe_draw_widgets() {
