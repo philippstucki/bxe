@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"  >
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:bxe="http://bitfluxeditor.org/namespace"  >
 <head>
 
 <meta name="bxeNS" content="xhtml=http://www.w3.org/1999/xhtml"/>
-
+<meta name="bxeNS" content="lenya=http://apache.org/cocoon/lenya/document/1.0"/>
+<meta name="bxeNS" content="dc=http://dc.org/2003/" />
+<meta name="bxeNS" content="unizh=http://unizh.ch/2003/" />
 
 <link rel="stylesheet" href="editor.css" type="text/css" />
 
@@ -27,11 +29,11 @@ var bxe_xml = "test.xml";
     
     </span><br />
     -->
-    <div id="foobar2" bxe_xpath="/root/xhtml:div">
+    <div id="foobar2" bxe_xpath="/unizh:content-document/xhtml:body">
     
     </div>
     
-      <div id="foobar3" bxe_xpath="/root/*[@id = 'bar']" >
+      <div id="foobar3" bxe:xpath="/root/*[@id = 'bar']" >
     
     </div>
     <h1>h1 test</h1>

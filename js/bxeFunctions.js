@@ -1,3 +1,5 @@
+const BXENS = "http://bitfluxeditor.org/namespace";
+
 function __bxeSave(e) {
 	
 	var cssr = window.getSelection().getEditableRange();
@@ -166,7 +168,7 @@ function toggleSourceMode_bxe(e) {
 			innerHTML += ' xmlns="' + editableArea.XMLNode.namespaceURI +'"';
 		}
 		innerHTML += '>'+editableArea.getContent()+'</'+editableArea.XMLNode.localName+'>';
-		dump ("innerHTML : " + innerHTML + "\n");
+		alert ("innerHTML : " + innerHTML + "\n");
 		var innerhtmlValue = documentLoadXML( innerHTML);
 		if (innerhtmlValue) {
 			editableArea.removeAllChildren();
@@ -214,8 +216,8 @@ function changeLinesContainer_bxe(e) {
 /* area mode stuff */
 
 function bxe_getAllEditableAreas() {
-	
-	var result = document.evaluate("/html/body//*[@bxe_xpath]", document.documentElement,null, 0, null);
+	var nsResolver = new bxe_nsResolver(document.documentElement);
+	var result = document.evaluate("/html/body//*[@bxe_xpath]", document.documentElement,nsResolver, 0, null);
 	var node = null;
 	var nodes = new Array();
 	while (node = result.iterateNext()) {

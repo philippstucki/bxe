@@ -40,25 +40,24 @@
  
  const BXE_VERSION = "0.1alpha"
 mozile_js_files = new Array();
-mozile_js_files.push("mozWrappers.js");
-mozile_js_files.push("eDOM.js");
+mozile_js_files.push("mozile/mozWrappers.js");
+mozile_js_files.push("mozile/eDOM.js");
 mozile_js_files.push("jsdav.js");
 mozile_js_files.push("td/webdav.js");
 mozile_js_files.push("widget.js");
 
 
-mozile_js_files.push("eDOMXHTML.js");
+mozile_js_files.push("mozile/eDOMXHTML.js");
 mozile_js_files.push("bxeNodeElements.js");
 
 mozile_js_files.push("bxeXMLDocument.js");
 
-mozile_js_files.push("domlevel3.js");
-mozile_js_files.push("mozCE.js");
-mozile_js_files.push("mozIECE.js");
-mozile_js_files.push("mozilekb.js");
+mozile_js_files.push("mozile/domlevel3.js");
+mozile_js_files.push("mozile/mozCE.js");
+mozile_js_files.push("mozile/mozIECE.js");
+mozile_js_files.push("mozile/mozilekb.js");
 mozile_js_files.push("bxehtmltb.js");
-mozile_js_files.push("mozileModify.js");
-mozile_js_files.push("mozClipboard.js");
+mozile_js_files.push("mozile/mozileModify.js");
 mozile_js_files.push("eDOMEvents.js");
 mozile_js_files.push("xsltTransformer.js");
 
@@ -112,7 +111,6 @@ bxe_nsResolver.prototype.lookupNamespaceURI = function (prefix) {
 			}
 		}
 	}
-	
 	//check if the prefix was there and return it
 	if (this.metaTagNSResolver[prefix]) {
 		return this.metaTagNSResolver[prefix];
@@ -139,6 +137,11 @@ bxe_nsResolver.prototype.lookupNamespaceURI = function (prefix) {
 	if (url) {
 		return url;
 	}
+	// if still not found and we want the bxe prefix.. return that
+	if (prefix == "bxe") {
+		return BXENS;
+	}
+		
 	//prefix not found
 	return null;
 }

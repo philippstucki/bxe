@@ -255,7 +255,7 @@ Widget_Globals_doHideOnClick = function(e) {
 Widget_MenuBar = function () {
 	this.node = this.initNode("div","MenuBar");
 	document.getElementsByTagName("body")[0].appendChild(this.node);
-	this.position(0,0,"absolute");
+	this.position(0,0,"fixed");
 	this.draw();
 }
 
@@ -430,7 +430,7 @@ function Widget_StatusBar () {
 	this.Display  = "block";
 	this.buildXPath(bxe_globals.xmldoc.documentElement);
 	
-	this.draw();
+	this.draw();	
 }
 
 
@@ -444,7 +444,7 @@ Widget_StatusBar.prototype.positionize = function (e) {
 	} else {
 		target = this;
 	}
-	target.position(0,window.innerHeight - 20,"absolute");
+	target.position(0,window.innerHeight - 20,"fixed");
 }
 
 Widget_StatusBar.prototype.buildXPath = function (node) {
