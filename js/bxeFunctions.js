@@ -1075,7 +1075,7 @@ function bxe_checkIsAllowedChild (namespaceURI, localName, sel, noAlert) {
 	} else {
 		parentnode = cssr.startContainer;
 	}
-	if (parentnode.XMLNode.isAllowedChild(namespaceURI, localName)) {
+	if (localName == null | parentnode.XMLNode.isAllowedChild(namespaceURI, localName) ) {
 		return true;
 	} else {
 		if (!noAlert) {

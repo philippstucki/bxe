@@ -281,7 +281,7 @@ __outdentListItem = function(listItem)
 			// first line in list item is bounded by list-item on one side and isn't empty: put into "div"!
 			if((linesInList[0].lineType == CSSLine.BOUNDED_LINE) && !linesInList[0].startBoundary && !linesInList[0].emptyLine)
 				linesInList[0] = linesInList[0].setContainer(documentCreateXHTMLElement(defaultContainerName), true);
-
+			var lastNo = linesInList.length - 1 ;
 			if((linesInList[lastNo].lineType == CSSLine.BOUNDED_LINE) && !linesInList[lastNo].endBoundary && !linesInList[lastNo].emptyLine)
 				linesInList[lastNo] = linesInList[lastNo].setContainer(documentCreateXHTMLElement(defaultContainerName), true);
 		}
