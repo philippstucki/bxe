@@ -1,4 +1,21 @@
-xx July 2004, Version 0.9.5
+26 October 2004, Version 0.9.6
+
+- Added missing xhtml namespace (firefox 1.0 fix)
+- Added ExternalXhtmlReplaceBodyChildren option for not replacing body children, when loading external XHTML files
+- Added more checks to throw correct warning when in source mode
+- Added Config-Options for Image-, Link- and Assetdrawer 
+- Added better handling of empty table cells
+- Improved validation on attributes
+- Fixed location of status bar, if there's a y-scrollbar 
+- Fixed issues with  elements without namespace (by patrick)
+- Fixed some redo/undo issues
+- Fixed problems with inline elements ('Bold' ersetzt td-Element durch strong-Element)
+- Fixed paste over multiple paragrpah problems
+- Fixed issue with backspace key and actually going back one in browser history
+- Removed <br> from Contextmenu
+- Improved exit function, so that it actually saves to content on request
+
+07 July 2004, Version 0.9.5
 
 - Added warning message on exit, if document was changed and not saved.
 - Added PHP example for loading/saving file.
@@ -26,3 +43,6 @@ xx July 2004, Version 0.9.5
 - Fixed selection, insertion and copy/paste issues
 - Made popupwindows resizable
 - Updated inlineXHTML config.xml (by Michael Rolli)
+
+
+
