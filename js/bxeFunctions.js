@@ -1,7 +1,9 @@
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
 
-var snapshots = new Array();
+var bxe_snapshots = new Array();
+var bxe_snapshots_position = 0;
+const BXE_SNAPSHOT_LENGTH = 5;
 function __bxeSave(e) {
 	
 	var td = new mozileTransportDriver("webdav");
@@ -31,26 +33,69 @@ function __bxeSave(e) {
 	td.save(url, xmlstr, callback);
 }
 
+function bench(func, string,iter) {
+	
+	
+	var start = new Date();
+	for (var i = 0; i< iter; i++) {
+		func();
+	}
+	var end = new Date();
+	
+
+	debug ("Benchmark " + string);
+//	debug ("Start " + start.getTime());
+//	debug ("End   " + end.getTime() );
+	debug ("Total " +(end-start) + " / " +  iter + " = " + (end-start)/iter); 
+}
+
+function bxe_bench() {
+	
+	bench(function() {xmlstr = bxe_getXmlDocument()}, "getXML", 2);
+}
 function bxe_history_snapshot() {
 	
-	snapshots.push(bxe_getXmlDocument());
-	debug("history length: "  + snapshots.length);
+	var xmlstr = bxe_getXmlDocument();
+	bxe_snapshots[bxe_snapshots_position] = xmlstr;
+	bxe_snapshots_position++;
+	while (bxe_snapshots.length > bxe_snapshots_position) {
+		bxe_snapshots.pop();
+	}
+	if (bxe_snapshots.length >  BXE_SNAPSHOT_LENGTH ) {
+		bxe_snapshots.shift();
+		bxe_snapshots_position--;
+	}
+	for (var i = 0; i < bxe_snapshots.length; i++) {
+	}
+	debug("history length: "  + bxe_snapshots.length);
+	
+	
 }
 
 function bxe_history_undo() {
-	var xmlstr = snapshots.pop();
-	var BX_parser = new DOMParser();
-	var xmldoc = BX_parser.parseFromString(xmlstr,"text/xml");
-	var vdom = bxe_config.xmldoc.XMLNode.vdom;
-	bxe_config.xmldoc = xmldoc;
-	xmldoc.init();
-	xmldoc.insertIntoHTMLDocument();
-	bxe_config.xmldoc.XMLNode.vdom = vdom;
-	debug ("foo");
-	try {
-	bxe_config.xmldoc.XMLNode.validateDocument();
+	if (bxe_snapshots_position >= 0) {
+		var currXmlStr = bxe_getXmlDocument();
+		bxe_snapshots_position--;
+		var xmlstr = bxe_snapshots[bxe_snapshots_position];
+		while(currXmlStr == xmlstr && bxe_snapshots_position > 0 ) {
+			bxe_snapshots_position--;
+			xmlstr = bxe_snapshots[bxe_snapshots_position];
+		}
+		if (bxe_snapshots_position < 0) {
+			bxe_snapshots_position = 0;
+			return false;
+		}
+		var BX_parser = new DOMParser();
+		var xmldoc = BX_parser.parseFromString(xmlstr,"text/xml");
+		var vdom = bxe_config.xmldoc.XMLNode.vdom;
+		bxe_config.xmldoc = xmldoc;
+		xmldoc.init();
+		xmldoc.insertIntoHTMLDocument();
+		bxe_config.xmldoc.XMLNode.vdom = vdom;
+		try {
+			bxe_config.xmldoc.XMLNode.validateDocument();
 	} catch(e) {bxe_catch_alert(e);}
-	debug ("bar");
+	} 
 }
 
 function bxe_getXmlDocument() {

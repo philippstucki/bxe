@@ -259,6 +259,7 @@ XMLNodeDocument.prototype.buildXML = function() {
 }
 
 XMLNode.prototype.buildXML = function () {
+	debug("buildXML " + this.localName)
 	var nsResolver = new bxe_nsResolver(this.ownerDocument.documentElement);
 	
 	var walker = new XMLNodeWalker(this);

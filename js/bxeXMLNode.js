@@ -272,12 +272,13 @@ XMLNode.prototype.__defineSetter__(
 		}
 	}
 );
-
+// FIXME: slow part for buildXML!!
+//anonymous: 279-284, 573 call(s), 225.34ms total, 0.18ms min, 20.36ms max, 0.39ms avg
 XMLNode.prototype.__defineGetter__( 
 	"namespaceURI",
 	function()
 	{
-		if (this._node && this._node.nodeType == 1 &&  this.isInHTMLDocument() && this._node.hasAttribute("__bxe_ns")) {
+		if (this._node && this._node.nodeType == 1 &&   this._node.hasAttribute("__bxe_ns")) {
 			return this._node.getAttribute("__bxe_ns");
 		}
 		return this._namespaceURI;
@@ -500,7 +501,8 @@ XMLNodeWalker.prototype.nextNode = function() {
 	return null;
 	
 }
-
+// FIXME: slow part for buildXML!!
+//anonymous: 504-506, 573 call(s), 62.68ms total, 0.05ms min, 9.81ms max, 0.11ms avg
 XMLNode.prototype.isInHTMLDocument= function() {
 	return (this._node.ownerDocument == document)
 }
@@ -596,6 +598,8 @@ XMLNodeElement.prototype.hasAttributes = function() {
 	}
 	return false;
 }
+// FIXME: slow part for buildXML!!
+//anonymous: 603-619, 156 call(s), 185.67ms total, 0.37ms min, 10.46ms max, 1.19ms avg
 
 XMLNodeElement.prototype.__defineGetter__( 
 	"attributes",
@@ -611,7 +615,8 @@ XMLNodeElement.prototype.__defineGetter__(
 		}
 		var attributes = new Array();
 		for (var i = 0; i < attribs.length; i++) {
-			if (attribs[i].localName.substr(0,5) != "_edom" && attribs[i].localName.substr(0,5) != "__bxe" && attribs[i].namespaceURI != "http://www.w3.org/2000/xmlns/" && !(this.namespaceURI != XHTMLNS && attribs[i].localName == "class"))  {
+			var prefix = attribs[i].localName.substr(0,5);
+			if (prefix != "_edom" && prefix != "__bxe" && attribs[i].namespaceURI != "http://www.w3.org/2000/xmlns/" && !(this.namespaceURI != XHTMLNS && attribs[i].localName == "class"))  {
 				attributes.push(attribs[i]);
 			}
 		}
