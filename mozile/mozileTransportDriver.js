@@ -22,6 +22,7 @@ mozileTransportDriver.prototype.save = function (filename, content, callback) {
 mozileTransportDriver.prototype.loadCallback = function (reqObj) {
 	reqObj.td = this;
 	reqObj.filename = this.filename;
+	this.document = reqObj.document;
 	if (this.userLoadCallback) { 
 		this.userLoadCallback(reqObj);
 	}
