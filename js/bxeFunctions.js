@@ -1317,6 +1317,8 @@ function bxe_InsertTableCallback(node) {
 				cssr.selectInsertionPoint(ip);
 			}
 			sel.insertNodeRaw(te, true);
+			sel.insertNodeRaw(document.createTextNode("\n"));
+			te.parentNode.insertBefore(document.createTextNode("\n"),te);
 			te.updateXMLNode();
 		} else if (window.bxe_ContextNode){
 			te.setAttribute("class", bxe_config.options[OPTION_DEFAULTTABLECLASS]);

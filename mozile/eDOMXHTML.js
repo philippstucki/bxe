@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: eDOMXHTML.js,v 1.11 2004/02/20 13:44:52 chregu Exp $
+// $Id$
 
 /**********************************************************************************
  * eDOMXHTML.js V0.5
@@ -863,16 +863,21 @@ function documentCreateTable(noRows, noColumns)
 		return null; // go to exception
 
 	var te = documentCreateXHTMLElement("table");
+	te.appendChild(document.createTextNode("\n"));
 	for(var i=0; i<noRows; i++)
 	{
 		var tre = documentCreateXHTMLElement("tr");
 		te.appendChild(tre);
+		tre.appendChild(document.createTextNode("\n"));
 		for(var j=0; j<noColumns;j++)
 		{
+			tre.appendChild(document.createTextNode("  "));
 			var tde = documentCreateXHTMLElement("td");
 			tde.appendChild(document.createTextNode(STRING_NBSP)); // POST05: CHANGE TO BR TOKEN 
 			tre.appendChild(tde);
+			tre.appendChild(document.createTextNode("\n"));
 		}
+		te.appendChild(document.createTextNode("\n"));
 	}
 	return te;
 }
