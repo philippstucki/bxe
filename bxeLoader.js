@@ -284,11 +284,14 @@ function xml_loaded(xmldoc) {
 function validation_loaded(vdom) {
 	bxe_about_box.addText("Validation Loaded ...");
 	//dump(bxe_config.xmldoc.vdom.getStructure());
-	if (bxe_config.xmldoc.validateDocument()) {
-		bxe_about_box.addText("Document is valid.");
+	var vali = bxe_config.xmldoc.validateDocument();
+	if (vali.isError) {
+		bxe_about_box.addText("Document is *not* valid.");
+		//alert(vali.getErrorMessagesAsText());
 	}
 	else {
-		bxe_about_box.addText("Document is *not* valid.");
+		bxe_about_box.addText("Document is valid.");
+		
 	}
 }
 

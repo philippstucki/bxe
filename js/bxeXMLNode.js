@@ -2,6 +2,7 @@ function XMLNode  (htmlnode) {
 	this.localName = null;
 	this.namespaceURI = null;
 	this.prefix = null;
+	if (htmlnode) {
 	this.nodeType = htmlnode.nodeType;
 	this._htmlnode = htmlnode;
 	if (htmlnode) {
@@ -20,6 +21,34 @@ function XMLNode  (htmlnode) {
 		
 		//this.namespaceURI = htmlnode.XMLNode.namespaceURI;
 	}
+	}
+}
+
+XMLNode.prototype.insertAfter = function(newNode, oldNode) {
+	this._htmlnode.insertBefore(newNode._htmlnode,oldNode._htmlnode.nextSibling);
+}
+
+XMLNode.prototype.setContent = function (text) {
+	this._htmlnode.removeAllChildren();
+	this._htmlnode.appendChild(document.createTextNode(text));
+}
+
+XMLNode.prototype.createNS = function (namespaceURI, localName) {
+
+	if (namespaceURI != XHTMLNS) {
+		htmlelementname = "span"
+		this._htmlnode = document.createElement(htmlelementname);
+		this._htmlnode.setAttribute("class", localName);
+	
+	}
+	else {
+		htmlelementname = localName;
+		this._htmlnode = document.createElement(htmlelementname);
+		
+	}
+	this._htmlnode.setAttribute("__bxe_ns", namespaceURI);
+	this.localName = localName;
+	this.namespaceURI = namespaceURI;
 }
 
 XMLNode.prototype.setNode = function(xmlnode) {
@@ -65,10 +94,23 @@ XMLNode.prototype.setAttribute = function(name, value) {
 }
 
 XMLNode.prototype.__defineGetter__( 
+	"allowedChildren",
+	function()
+	{
+		return this._xmlnode.vdom.allowedChildren;
+	}
+);
+
+
+XMLNode.prototype.__defineGetter__( 
 	"attributes",
 	function()
 	{
-		return this._xmlnode.attributes;
+		if (this._xmlnode) {
+			return this._xmlnode.attributes;
+		} else {
+			return this._htmlnode.attributes;
+		}
 	}
 );
 

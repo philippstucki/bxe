@@ -207,24 +207,21 @@ function bxe_toggleTextClass(e) {
 function bxe_appendNode(e) {
 	var aNode = e.additionalInfo.appendToNode;
 	
+	var newNode = new XMLNode() ;
 	
-	var newNode  = document.createElement(e.additionalInfo.localName);
-	newNode.appendChild(document.createTextNode("#"+e.additionalInfo.localName + " "));
+	newNode.createNS(e.additionalInfo.namespaceURI, e.additionalInfo.localName);
 	
-	aNode.parentNode._htmlnode.insertBefore(newNode,aNode._htmlnode.nextSibling);
-	var _node = newNode;
-	while (!(_node.XMLNode && _node.XMLNode._xmlnode)) {
-		_node = _node.parentNode;
-	}
-	_node.XMLNode._htmlnode.convertToXMLDocFrag();
-	_node.XMLNode._xmlnode.insertIntoHTMLDocument(_node.XMLNode._htmlnode);
+	aNode.parentNode.insertAfter(newNode,aNode);
+	
+	newNode.setContent("#" + e.additionalInfo.localName + " ");
 	var sel = window.getSelection();
 	sel.removeAllRanges();
 	var rng = document.createRange();
-	rng.setStart(newNode.firstChild,1);
-	rng.setEnd(newNode.firstChild,newNode.firstChild.data.length-1);
-	dump(e.additionalInfo.localName + " is valid " +_node.XMLNode._xmlnode.isNodeValid(true));
+	rng.setStart(newNode._htmlnode.firstChild,1);
+	rng.setEnd(newNode._htmlnode.firstChild,newNode._htmlnode.firstChild.data.length-1);
+	//dump(e.additionalInfo.localName + " is valid " +_node.XMLNode._xmlnode.isNodeValid(true));
 	sel.addRange(rng);
+	
 }
 
 function bxe_changeLinesContainer(e) {
