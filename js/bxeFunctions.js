@@ -379,7 +379,7 @@ HTMLTableCellElement.prototype.TableAppendCol = function () {
 					if (cell.nodeType == 1 && cell.localName.toLowerCase() == "td") {
 						if (nextpos >= pos) {
 							var newtd = document.createElementNS(XHTMLNS,"td");
-							newtd.appendChild(document.createTextNode(pos));
+							newtd.appendChild(document.createTextNode(STRING_NBSP));
 							row.insertBefore(newtd,cell.nextSibling);
 							break;
 						}
@@ -856,10 +856,20 @@ function bxe_InsertImage() {
 	var img = documentCreateXHTMLElement("img");
 	img.src = imgref; // any way to tell if it is valid?
 	window.getSelection().insertNode(img);
+	
 }
 
 function bxe_InsertTable() {
-	bxe_table_insert();
+	var rowno = prompt("number of rows");
+	var colno = prompt("number of columns");
+	var te = documentCreateTable(rowno, colno);
+	if(!te)
+		alert("Can't create table: invalid data");
+	else
+		window.getSelection().insertNode(te);
+	
+	te.setAttribute("class","ornate");
+	te.updateXMLNode();
 }
 
 function bxe_InsertLink() {
