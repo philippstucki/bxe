@@ -2557,8 +2557,11 @@ ContainedLine.prototype.__defineGetter__(
  */
 ContainedLine.prototype.setContainer = function(newContainer, replace)
 {
+	/* 
+	 * looks like this causes more harm than good (chregu)
 	if(this.topLine) // always insert/not replace if the line is a top line
-		replace = false;
+	replace = false;
+	*/
 
 	// replace current container
 	if(replace) {
