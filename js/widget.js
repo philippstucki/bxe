@@ -386,7 +386,7 @@ Element.prototype.appendToBody = function() {
 
 function Widget_AboutBox() {
 	var width = "400";
-	var height = "200";
+	var height = "180";
 	this.node = this.initNode("div","AboutBox");
 	this.Display = "block";
 	this.node.appendToBody();
@@ -394,11 +394,12 @@ function Widget_AboutBox() {
 	this.node.style.height = height + "px";
 	this.position((window.innerWidth- width)/2,(window.innerHeight-height)/3,"absolute");
 	this.node.onclick = function(e) { this.style.display = 'none';}
+	var abouttext = this.node.innerHTML ="<a href='http://bitfluxeditor.org' target='_new'>http://bitfluxeditor.org</a> <br/> Version: " + BXE_VERSION;
 	var textdiv = document.createElement("div");
 	this.TextNode = document.createTextNode(" ");
 	textdiv.appendChild(this.TextNode);
 	this.node.appendChild(textdiv );
-	textdiv.style.top = (height - 20) + "px";;
+	textdiv.style.top = (height - 50 ) + "px";;
 	textdiv.style.position = "relative";
 	this.draw();
 	
@@ -417,6 +418,8 @@ Widget_AboutBox.prototype.addText = function(text) {
 		this.TextNode.data = "..." + this.TextNode.data.substr(this.TextNode.data.length - 60);
 	}
 }
+
+
 	
 // image should be in the same directory as this file. This file is in mozile_root_dir. The loader
 // sets this constant.

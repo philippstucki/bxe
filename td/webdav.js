@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: webdav.js,v 1.1 2003/07/30 07:49:32 chregu Exp $
+// $Id: webdav.js,v 1.2 2003/07/30 13:54:41 chregu Exp $
 /**
 * @file
 * Implements the http TransportDriver 
@@ -60,7 +60,7 @@ BXE_TransportDriver_webdav.prototype.load = function(filename,callback) {
 		// the docu.loader aboive... have to check, how it's done in JS correctly
 		this.p.request.onload = this.parent.xmlloaded;  // set the callback when we are done loading
 	}
-	
+	this.p.td = this;
 	this.p.GET(filename);
 	
 	//return docu;

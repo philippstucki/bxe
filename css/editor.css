@@ -97,14 +97,17 @@
   background-image: url("bxelogo.gif");
   background-repeat: no-repeat;
   background-position: 8px 5px;
+  font-family: Verdana,Arial,Helvetica,sans-serif;
+  font-size: 12px;
+  padding-left: 8px;
+  padding-top: 40px;
 }
 
 .AboutBox div {
-    font-family: Verdana,Arial,Helvetica,sans-serif;
-    font-size: 12px;
-    margin-left: 6px;
+  
     height: 18px;
     overflow: hidden;
+    padding-top: 0px;
 }
     
 select {
