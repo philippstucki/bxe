@@ -496,6 +496,7 @@ Selection.prototype.paste = function()
 		node.normalize();
 		
 	}
+	bxe_history_snapshot_async();
 	return node;
 	
 }

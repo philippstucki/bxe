@@ -469,10 +469,11 @@ function bxe_toggleTextClass(e) {
 	
 	var _node = cssr.commonAncestorContainer;
 	_node.updateXMLNode();
+	
 	cssr.startContainer.updateXMLNode();
 	cssr.endContainer.updateXMLNode();
 	debug("isValid?" + _node.XMLNode.isNodeValid());
-
+	bxe_history_snapshot_async();
 }
 
 
@@ -855,6 +856,7 @@ function bxe_changeLinesContainer(e) {
 	if (!newContainer[0].XMLNode.parentNode.isNodeValid()) {
 		bxe_history_undo();
 	}
+	bxe_history_snapshot_async();
 	bxe_delayedUpdateXPath();
 }
 
