@@ -55,11 +55,13 @@ var mozile_script_loaded = 0;
 var bxe_config = new Object();
 var bxe_about_box = null;
 var bxe_format_list = null;
+var bxe_toolbar = null;
 var bxe_context_menu = null;
 var bxe_delayedUpdate = false;
 var eDOM_bxe_mode = true; 
 var bxe_editable_page = true;
 var bxe_lastSavedXML = null;
+
 var startTimer = new Date();
 
 function bxe_start(config_file,fromUrl, configArray) {
@@ -222,7 +224,7 @@ function corescript_loaded(e) {
 
 function bxe_plugin_script_loaded(e) {
 	bxe_plugin_script_loaded_counter++;
-	if ( bxe_plugin_scripts.length == bxe_plugin_script_loaded_counter ) {
+	if ( bxe_plugin_scripts.length <= bxe_plugin_script_loaded_counter ) {
 		bxe_init_plugins();
 	} else {
 		//bxe_about_box.addText(bxe_plugin_script_loaded_counter );
@@ -291,12 +293,17 @@ function bxe_load_plugins() {
 			
 		}
 		// load scripts
-		for (var i = 0; i < bxe_plugin_scripts.length; i++) {
+		if (bxe_plugin_scripts.length == 0) {
+			bxe_plugin_script_loaded_counter--;
+			bxe_plugin_script_loaded();
+		} else {
+			for (var i = 0; i < bxe_plugin_scripts.length; i++) {
 				var scr = document.createElementNS("http://www.w3.org/1999/xhtml","script");
 				scr.setAttribute("src", bxe_plugin_scripts[i]);
 				scr.setAttribute("language","JavaScript");
 				scr.onload = bxe_plugin_script_loaded;
 				head.appendChild(scr);
+			}
 		}
 	}
 	
