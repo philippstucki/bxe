@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- $Id: config.xml,v 1.2 2003/08/28 10:20:17 chregu Exp $ -->
+<!-- $Id: config.xml,v 1.3 2003/08/28 12:41:33 chregu Exp $ -->
 <config>
     <files>
     <!-- the following file definitions are presumably the most important
@@ -53,6 +53,7 @@
         <input>
             <!-- The XML-document with the actual data -->
             <file name="BX_xmlfile">inline.xml</file>
+            <file name="BX_validationfile">relaxng.xml</file> 
         </input>
 
         <output>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar ns="" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <start>
+    <element name="iba">
+      <element name="tree">
+        <oneOrMore>
+          <element name="Section">
+            <attribute name="ID">
+              <data type="NCName"/>
+            </attribute>
+            <ref name="title"/>
+            <ref name="ID"/>
+            <element name="uri">
+              <data type="NCName"/>
+            </element>
+            <element name="foreignsectionid">
+              <data type="integer"/>
+            </element>
+            <oneOrMore>
+              <choice>
+                <element name="button">
+                  <data type="integer"/>
+                </element>
+                <element name="fulluri">
+                  <data type="NCName"/>
+                </element>
+              </choice>
+            </oneOrMore>
+            <element name="level">
+              <data type="integer"/>
+            </element>
+            <element name="l">
+              <data type="integer"/>
+            </element>
+            <element name="r">
+              <data type="integer"/>
+            </element>
+          </element>
+        </oneOrMore>
+      </element>
+      <element name="page">
+        <element name="Article">
+          <attribute name="ID">
+            <data type="NCName"/>
+          </attribute>
+          <ref name="ID"/>
+          <element name="main">
+            <element name="section">
+              <oneOrMore>
+                <element name="para">
+                  <oneOrMore>
+                    <choice>
+                      <text/>
+                      <element name="ulink">
+                        <attribute name="url"/>
+                        <data type="NCName"/>
+                      </element>
+                    </choice>
+                  </oneOrMore>
+                </element>
+              </oneOrMore>
+            </element>
+          </element>
+          <ref name="title"/>
+          <element name="lang">
+            <data type="NCName"/>
+          </element>
+        </element>
+      </element>
+    </element>
+  </start>
+  <define name="title">
+    <element name="title">
+      <oneOrMore>
+        <choice>
+          <text/>
+          <element name="de">
+            <data type="NCName"/>
+          </element>
+          <element name="en">
+            <data type="NCName"/>
+          </element>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="ID">
+    <element name="ID">
+      <data type="integer"/>
+    </element>
+  </define>
+</grammar>
