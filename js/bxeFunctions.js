@@ -199,11 +199,14 @@ function bxe_toggleTextClass(e) {
 	sel.toggleTextClass(e.additionalInfo.localName);
 	sel = window.getSelection();
 	var _node = sel.anchorNode.parentNode;
+	_node.XMLNode.namespaceURI = e.additionalInfo.namespaceURI;
+	
 	while (!(_node.XMLNode && _node.XMLNode._xmlnode)) {
 		_node = _node.parentNode;
 	}
-	_node.XMLNode._htmlnode.convertToXMLDocFrag();
-	dump("is valid" +_node.XMLNode._xmlnode.isNodeValid(true));
+	//_node.XMLNode._htmlnode.convertToXMLDocFrag();
+	
+	//dump("is valid" +_node.XMLNode._xmlnode.isNodeValid(true));
 }
 
 function bxe_appendNode(e) {

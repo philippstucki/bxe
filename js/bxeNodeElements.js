@@ -145,7 +145,10 @@ Node.prototype.convertToXMLNode = function(xmldoc) {
 		if (this.hasAttributes()) {
 			var attribs = this.attributes;
 			for (i = 0; i < attribs.length; i++) {
-				if (!(this.XMLNode.namespaceURI != XHTMLNS && attribs[i].localName == "class")) {
+				if ( attribs[i].localName == "class" && this.XMLNode.namespaceURI == XHTMLNS  && attribs[i].value == newElement.localName) {
+					continue;
+				}
+				else if (!(this.XMLNode.namespaceURI != XHTMLNS && attribs[i].localName == "class" ) ) {
 					if (attribs[i].localName.substr(0,5) != "_edom" && attribs[i].localName.substr(0,5) != "__bxe") {
 						newElement.setAttributeNode(attribs[i]);
 					}

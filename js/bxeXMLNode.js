@@ -104,6 +104,28 @@ XMLNode.prototype.__defineGetter__(
 	}
 );
 
+XMLNode.prototype.__defineSetter__( 
+	"namespaceURI",
+	function(value)
+	{
+		this._namespaceURI = value;
+		if (this._htmlnode && this._htmlnode.nodeType == 1 ) {
+			this._htmlnode.setAttribute("__bxe_ns",value);
+		}
+	}
+);
+
+XMLNode.prototype.__defineGetter__( 
+	"namespaceURI",
+	function()
+	{
+		if (this._htmlnode && this._htmlnode.nodeType == 1 &&  this._htmlnode.hasAttribute("__bxe_ns")) {
+			return this._htmlnode.getAttribute("__bxe_ns");
+		}
+		return this._namespaceURI;
+	}
+);
+
 
 XMLNode.prototype.__defineGetter__( 
 	"attributes",
