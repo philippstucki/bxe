@@ -79,7 +79,6 @@ XMLDocument.prototype.insertIntoHTMLDocument = function(htmlnode) {
 	var nodes = bxe_getAllEditableAreas();
 	var bxe_areaHolder;
 	for (var i = 0; i < nodes.length; i++) {
-
 		nodes[i].removeAllChildren();
 		var xpath = nodes[i].getAttribute("bxe_xpath");
 		var xmlresult = this.evaluate(xpath, this.documentElement, nsResolver, 0, null);
@@ -101,17 +100,20 @@ XMLDocument.prototype.insertIntoHTMLDocument = function(htmlnode) {
 			xmlnode = xmlresult.iterateNext();
 		}
 		for (var j = 0; j < xmlresults.length; j++) {
+			//dump ("result node type " + xmlresults[j].nodeType + xmlresults[j].nodeName+ "\n");
+			xmlresults[j].XMLNode.xmlBridge = xmlresults[j]; 
+			var menu = new Widget_AreaInfo(nodes[i]);
+			bxe_alignAreaNode(menu,nodes[i]);
+			nodes[i].AreaInfo = menu;
+			menu.editableArea = nodes[i];
+			
 			if (xmlresults[j].nodeType == 1) {
 				var fc = xmlresults[j].XMLNode.insertIntoHTMLDocument(nodes[i],true);
 				
 			} else {
 				xmlresults[j].XMLNode.insertIntoHTMLDocument(nodes[i],false);
 			}
-			xmlresults[j].XMLNode.xmlBridge = xmlresults[j]; 
-			var menu = new Widget_AreaInfo(nodes[i]);
-			bxe_alignAreaNode(menu,nodes[i]);
-			nodes[i].AreaInfo = menu;
-			menu.editableArea = nodes[i];
+			menu.MenuPopup.setTitle(xmlresults[j].XMLNode.getXPathString());
 			
 		}
 		
@@ -267,7 +269,9 @@ XMLNode.prototype.buildXML = function () {
 	while (node) {
 		if (node.nodeType == 1 && node.localName != 0){
 			child = xmldoc.createElementNS(node.namespaceURI, node.localName);
-			child.prefix = nsResolver.lookupNamespacePrefix(node.namespaceURI);
+			if (node.namespaceURI  != XHTMLNS) {
+				child.prefix = nsResolver.lookupNamespacePrefix(node.namespaceURI);
+			}
 			attribs = node.attributes;
 			for (var i = 0; i< attribs.length; i++) {
 				child.setAttributeNode(attribs[i]);
