@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: mozilekb.js,v 1.26 2004/01/12 16:30:00 chregu Exp $
+// $Id: mozilekb.js,v 1.27 2004/01/13 05:32:41 chregu Exp $
 
 /* 
  * mozilekb V0.46
@@ -394,6 +394,7 @@ function nonctrlKeyPressHandler(event)
 					ip.line.tableCellAncestor.updateXMLNode();
 				}
 			}
+			bxe_history_snapshot_async();
 		}
 		cssr.selectInsertionPoint(ip);
 		sel.removeAllRanges();

@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.134 2004/01/09 10:03:42 chregu Exp $
+// $Id: bxeFunctions.js,v 1.135 2004/01/13 05:32:41 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -102,8 +102,13 @@ function bxe_bench() {
 	
 	bench(function() {xmlstr = bxe_getXmlDocument()}, "getXML", 2);
 }
+
+function bxe_history_snapshot_async()  {
+	window.setTimeout("bxe_history_snapshot()",1);
+}
+
+
 function bxe_history_snapshot() {
-	
 	var xmlstr = bxe_getXmlDocument();
 	if (!xmlstr) { return false;}
 	bxe_snapshots[bxe_snapshots_position] = xmlstr;
@@ -115,8 +120,7 @@ function bxe_history_snapshot() {
 		bxe_snapshots.shift();
 		bxe_snapshots_position--;
 	}
-	for (var i = 0; i < bxe_snapshots.length; i++) {
-	}
+
 	debug("history length: "  + bxe_snapshots.length);
 	
 	
@@ -134,6 +138,7 @@ function bxe_history_undo() {
 			bxe_snapshots_position--;
 			xmlstr = bxe_snapshots[bxe_snapshots_position];
 		}
+		
 		if (bxe_snapshots_position < 0) {
 			bxe_snapshots_position = 0;
 			return false;
@@ -149,6 +154,8 @@ function bxe_history_undo() {
 			bxe_config.xmldoc.XMLNode.validateDocument();
 	} catch(e) {bxe_catch_alert(e);}
 	} 
+	bxe_snapshots[bxe_snapshots_position]== xmlstr;
+	bxe_snapshots_position++;
 }
 
 function bxe_getXmlDomDocument() {
