@@ -1,14 +1,17 @@
 function  bxeConfig (filename,fromUrl, configArray) {
 	
 	var td = new BXE_TransportDriver_http();
-	td.Docu = this;
+	//td.Docu = this;
 	this.parseUrlParams();
 	this.configParams = configArray;
 	if (fromUrl) {
 		filename = this.urlParams[filename];
 	}
+	bxe_about_box.addText(" (" + filename + ") ...");
 	td.bxeConfig = this;
-	td.load(filename,bxeConfig.parseConfig);
+	try {
+		td.load(filename, bxeConfig.parseConfig);
+	} catch(e) { bxe_catch_alert(e);}
 	return true;
 }
 
@@ -130,7 +133,12 @@ bxeConfig.prototype.getContent= function (xpath)
 {
     var result = this.doc.evaluate(xpath, this.doc, null, 0, null);
     var node = result.iterateNext();
-    return this.translateUrl(node);
+
+	if (!node) {
+		return null;
+	} else {
+		return this.translateUrl(node);
+	}
 }
 
 
