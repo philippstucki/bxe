@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.141 2004/01/15 11:18:57 chregu Exp $
+// $Id: bxeFunctions.js,v 1.142 2004/01/15 13:52:15 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -23,6 +23,7 @@ const BXE_SPLIT_IF_INLINE = 1;
 
 var bxe_snapshots = new Array();
 var bxe_snapshots_position = 0;
+var bxe_snapshots_last = 0;
 const BXE_SNAPSHOT_LENGTH = 5;
 function __bxeSave(e) {
 	
@@ -111,29 +112,34 @@ function bxe_history_snapshot_async()  {
 function bxe_history_snapshot() {
 	var xmlstr = bxe_getXmlDocument();
 	if (!xmlstr) { return false;}
-	bxe_snapshots[bxe_snapshots_position] = xmlstr;
 	bxe_snapshots_position++;
-	while (bxe_snapshots.length > bxe_snapshots_position) {
-		bxe_snapshots.pop();
+	bxe_snapshots_last = bxe_snapshots_position;
+	bxe_snapshots[bxe_snapshots_position] = xmlstr;
+	var i = bxe_snapshots_last + 1;
+	while (bxe_snapshots[i]) {
+		bxe_snapshots[i] = null;
+		i++;
 	}
 	if (bxe_snapshots.length >  BXE_SNAPSHOT_LENGTH ) {
-		bxe_snapshots.shift();
-		bxe_snapshots_position--;
+		var _temp = new Array();
+		
+		for (var i = bxe_snapshots_last; i >= bxe_snapshots_last - BXE_SNAPSHOT_LENGTH; i--) {
+			_temp[i] = bxe_snapshots[i];
+		}
+		bxe_snapshots = _temp;
 	}
-
-	debug("history length: "  + bxe_snapshots.length);
-	
-	
+	return (xmlstr);
 }
 
 function bxe_history_redo() {
-	if (bxe_snapshots_position >= 0 && bxe_snapshots[bxe_snapshots_position]) {
+	
+	if (bxe_snapshots_position >= 0 && bxe_snapshots[( bxe_snapshots_position + 1)]) {
 		var currXmlStr = bxe_getXmlDocument();
+		bxe_snapshots_position++;
 		var xmlstr = bxe_snapshots[bxe_snapshots_position];
-		
-		while(currXmlStr == xmlstr && bxe_snapshots[bxe_snapshots_position + 1]) {
+		if (currXmlStr == xmlstr && bxe_snapshots[bxe_snapshots_position + 1]) {
 			bxe_snapshots_position++;
-			xmlstr = bxe_snapshots[bxe_snapshots_position];
+			var xmlstr = bxe_snapshots[bxe_snapshots_position];
 		}
 		var BX_parser = new DOMParser();
 		var xmldoc = BX_parser.parseFromString(xmlstr,"text/xml");
@@ -144,22 +150,29 @@ function bxe_history_redo() {
 		bxe_config.xmldoc.XMLNode.vdom = vdom;
 		try {
 			bxe_config.xmldoc.XMLNode.validateDocument();
-			bxe_snapshots_position++;
-		} catch(e) {bxe_catch_alert(e);
+		} catch(e) {
+			bxe_catch_alert(e);
 		}
 		
 	}
 	
 }
 function bxe_history_undo() {
+	
 	if (bxe_snapshots_position >= 0) {
-		var currXmlStr = bxe_getXmlDocument();
-		if (!currXmlStr) {alert ("Undo/Redo does not work in source edit mode"); return false;} 
-		bxe_snapshots_position--;
-		var xmlstr = bxe_snapshots[bxe_snapshots_position];
-		while(currXmlStr == xmlstr && bxe_snapshots_position > 0 ) {
+		if (bxe_snapshots_position == bxe_snapshots_last) {
+			var currXmlStr = bxe_history_snapshot();
 			bxe_snapshots_position--;
+		} else {
+			var currXmlStr = bxe_getXmlDocument();
+		}
+		
+		if (!currXmlStr) {alert ("Undo/Redo does not work in source edit mode"); return false;} 
+		var xmlstr = bxe_snapshots[bxe_snapshots_position];
+		bxe_snapshots_position--;
+		while(currXmlStr == xmlstr && bxe_snapshots[bxe_snapshots_position ] ) {
 			xmlstr = bxe_snapshots[bxe_snapshots_position];
+			bxe_snapshots_position--;
 		}
 		
 		if (bxe_snapshots_position < 0) {
@@ -167,18 +180,22 @@ function bxe_history_undo() {
 			return false;
 		}
 		var BX_parser = new DOMParser();
-		var xmldoc = BX_parser.parseFromString(xmlstr,"text/xml");
-		var vdom = bxe_config.xmldoc.XMLNode.vdom;
-		bxe_config.xmldoc = xmldoc;
+		if (xmlstr) {
+			var xmldoc = BX_parser.parseFromString(xmlstr,"text/xml");
+			var vdom = bxe_config.xmldoc.XMLNode.vdom;
+			bxe_config.xmldoc = xmldoc;
 		xmldoc.init();
 		xmldoc.insertIntoHTMLDocument();
 		bxe_config.xmldoc.XMLNode.vdom = vdom;
 		try {
 			bxe_config.xmldoc.XMLNode.validateDocument();
-	} catch(e) {bxe_catch_alert(e);}
+		} catch(e) {
+			bxe_catch_alert(e);
+		}
+		}
 	} 
-	bxe_snapshots[bxe_snapshots_position]== xmlstr;
-	bxe_snapshots_position++;
+	/*bxe_snapshots[bxe_snapshots_position] == xmlstr;
+	bxe_snapshots_position++;*/
 }
 
 function bxe_getXmlDomDocument() {

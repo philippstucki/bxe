@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: RelaxNG.js,v 1.38 2004/01/13 05:04:06 chregu Exp $
+// $Id: RelaxNG.js,v 1.39 2004/01/15 13:52:15 chregu Exp $
 
 
 const RELAXNGNS= "http://relaxng.org/ns/structure/1.0";
@@ -736,7 +736,6 @@ InterleaveVDOM.prototype.isValid = function(ctxt) {
 	
 	var refsPosition = ctxt.refs.length;
 	var child = this.getFirstChild(ctxt);
-	dump ("Interleave.isValid: " + ctxt.node.nodeName + "\n");
 	var hasEmpty = false;
 	while (child) {
 		debug("Interleave.child: " + child.nodeName);
