@@ -896,6 +896,7 @@ Widget_ModalAttributeBox.prototype.popup = function(e) {
 
 Widget_ModalAttributeBox.prototype.drawAttributes = function(xmlnode) {
 	var attr = xmlnode.vdom.attributes;
+	
 	var text = "";
 	for (var i in attr) {
 		if (attr[i].dataType == "choice") {
@@ -909,7 +910,7 @@ Widget_ModalAttributeBox.prototype.drawAttributes = function(xmlnode) {
 }
 
 Widget_ModalAttributeBox.prototype.setAttributes = function(values) {
-	var xmlnode = this.RefXMLNode;
+	var xmlnode = this.RefXMLNode
 	for (var attrName in values) {
 		
 		attrValue = values[attrName];

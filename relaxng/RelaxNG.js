@@ -9,10 +9,10 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 	bxe_config.DocumentVDOM = this;
 	
 	//do includes
-	var endTimer = new Date();
-	dump ("Total Start Time: " + (endTimer - startTimer)/1000 + " sec\n"); 
+	dump ("Start parseIncludes " + (new Date()- startTimer)/1000 + " sec\n"); 
 	this.parseIncludes();
-	
+	dump ("Start derefAttributes " + (new Date() - startTimer)/1000 + " sec\n"); 
+	this.dereferenceAttributes();
 	debug("start remove whitespace");
 	
 	//delete all whitespace nodes
@@ -48,9 +48,9 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 	
 	debug("end remove whitespace");
 	var endTimer = new Date();
-	dump ("Total Start Time: " + (endTimer - startTimer)/1000 + " sec\n"); 
+	dump ("Start parsing RNG " + (endTimer - startTimer)/1000 + " sec\n"); 
 	if (DebugOutput) {
-		debug(this.xmldoc.saveXML(this.xmldoc));
+		dump(this.xmldoc.saveXML(this.xmldoc));
 	}	
 	var rootChildren = this.xmldoc.documentElement.childNodes;
 	
@@ -60,6 +60,98 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 		}
 	}
 	return true;
+}
+
+DocumentVDOM.prototype.dereferenceAttributes = function() {
+	
+	
+	//kill all interleave/optional/attribute ...
+	var xp = "/rng:grammar//rng:interleave[rng:optional/rng:attribute]"
+	var defRes= this.xmldoc.documentElement.getXPathResult(xp);
+	var defNode = defRes.iterateNext();
+	var defNodes = new Array();
+	while (defNode) {
+			defNodes.push(defNode);
+			defNode = defRes.iterateNext();
+	}
+	
+	for (j in defNodes) {
+		var child = defNodes[j].firstChild;
+			while (child) {
+				var nextSib = child.nextSibling;
+				defNodes[j].parentNode.insertBefore(child,defNodes[j]);
+				child = nextSib;
+			}
+			defNodes[j].parentNode.removeChild(defNodes[j]);
+	}
+	// optional/attribute ...
+	var xp = "/rng:grammar//rng:optional[rng:attribute]"
+	var defRes= this.xmldoc.documentElement.getXPathResult(xp);
+	var defNode = defRes.iterateNext();
+	var defNodes = new Array();
+	while (defNode) {
+			defNodes.push(defNode);
+			defNode = defRes.iterateNext();
+	}
+	
+	for (j in defNodes) {
+		var child = defNodes[j].firstChild;
+			while (child) {
+				var nextSib = child.nextSibling;
+				if (child.nodeType == 1) {
+					child.setAttribute("type","optional");
+				}
+				
+				defNodes[j].parentNode.insertBefore(child,defNodes[j]);
+				//ugly hack..
+				child = nextSib;
+			}
+			defNodes[j].parentNode.removeChild(defNodes[j]);
+	}
+	
+	return true;
+	/*
+	var xp = "/rng:grammar/rng:define[rng:attribute or rng:interleave/rng:optional/rng:attribute or rng:optional/rng:attribute]"
+	var defRes= this.xmldoc.documentElement.getXPathResult(xp);
+	var defNode = defRes.iterateNext();
+	if (!defNode) {
+		debug ("no more define/attribute stuff");
+		return true;
+	}
+	var defNodes = new Array();
+	while (defNode) {
+			defNodes.push(defNode);
+			defNode = defRes.iterateNext();
+	
+	
+	for (j in defNodes) {
+		debug("defNode " +  defNodes[j].getAttribute("name"));
+		xp = "/rng:grammar//rng:ref[@name = '" + defNodes[j].getAttribute("name") + "']";
+		var refRes = this.xmldoc.documentElement.getXPathResult(xp);
+		var refNodes = new Array();
+		var refNode = refRes.iterateNext();
+		while (refNode) {
+			refNodes.push(refNode);
+			refNode = refRes.iterateNext();
+		}
+		for (i in refNodes) {
+			debug(" refNode " +  refNodes[i].getAttribute("name"));
+			var newNode = defNodes[j].cloneNode(true);
+			var child = newNode.firstChild;
+			while (child) {
+				var nextSib = child.nextSibling;
+				refNodes[i].parentNode.insertBefore(child,refNodes[i]);
+				child = nextSib;
+			}
+			//refNodes[i].parentNode.replaceChild(defNodes[j].cloneNode(true),refNodes[i]);
+			refNodes[i].parentNode.removeChild(refNodes[i]);
+		}
+		
+		defNodes[j].parentNode.removeChild(defNodes[j]);
+	}
+	debug ("next run of dereferenceAttributes");
+	this.dereferenceAttributes();
+	*/
 }
 
 DocumentVDOM.prototype.parseIncludes = function() {
@@ -337,7 +429,9 @@ NodeVDOM.prototype.parseChildren = function(node) {
 			this.appendChild(newElement);
 			newElement.parseChildren();
 			
-		} else if (childNodes[i].isRelaxNGElement("ref") && !childNodes[i].getAttribute("name").match(/\.attlist/)) {
+		//} else if (childNodes[i].isRelaxNGElement("ref")  && !childNodes[i].getAttribute("name").match(/\.attlist/)) {
+		} else if (childNodes[i].isRelaxNGElement("ref") ) {
+			
 			//FIXME this can be done smarter... cache the defines.
 			var xp = "/rng:grammar/rng:define[@name = '" + childNodes[i].getAttribute("name") + "']"
 			var defineChild = this.node.ownerDocument.documentElement.getXPathFirst(xp);
@@ -374,13 +468,8 @@ NodeVDOM.prototype.parseChildren = function(node) {
 			newOneOrMore.parseChildren(childNodes[i]);
 			
 		} else if (childNodes[i].isRelaxNGElement("attribute")) {
-			var AttrNode = new AttributeVDOM(childNodes[i]);
-			if (this.node.localName == "optional") {
-				this.parentNode.addAttributeNode(AttrNode, "optional");
-			} else {
-				this.addAttributeNode(AttrNode, "optional");
-			}
-			
+			this.addAttributeNode( new AttributeVDOM(childNodes[i]), "optional");
+
 		} else if (childNodes[i].isRelaxNGElement("optional")) {
 			newChoice = new ChoiceVDOM(childNodes[i]);
 			this.appendChild(newChoice);
@@ -408,7 +497,6 @@ function RefVDOM(node) {
 	this.type = "RELAXNG_REF";
 	this.nodeName = "RELAXNG_REF";
 	this.name = node.getAttribute("name");
-	this.attributes = new Array();
 }
 
 RefVDOM.prototype.isValid = function(ctxt) {
@@ -443,11 +531,8 @@ RefVDOM.prototype.getFirstChild = function (ctxt) {
 	var firstChild = this.DefineVDOM;
 	if (firstChild && firstChild.firstChild) {
 		ctxt.refs.push(this);
-		debug("getFirstChild refs push: " + ctxt.nr + " " + this.name + ctxt.refs.length);
 		return firstChild.getFirstChild(ctxt);
 	} else {
-		debug("No FirstChild in DefineVDOM of RefVDOM " + this.name);
-		
 		return this.getNextSibling(ctxt);
 	}
 }
@@ -549,7 +634,7 @@ function DefineVDOM(node) {
 	this.node = node;
 	this.type = "RELAXNG_DEFINE";
 	this.nodeName = "RELAXNG_DEFINE";
-	this.attributes = new Array();
+	this._attributes = new Array();
 	this.name = node.getAttribute("name");
 }
 
@@ -604,7 +689,6 @@ function ChoiceVDOM(node) {
 	this.node = node;
 	this.type = "RELAXNG_CHOICE";
 	this.nodeName = "RELAXNG_CHOICE";
-	this.attributes = new Array();
 }
 
 InterleaveVDOM.prototype = new NodeVDOM();
@@ -663,7 +747,6 @@ function InterleaveVDOM(node) {
 	this.node = node;
 	this.type = "RELAXNG_INTERLEAVE";
 	this.nodeName = "RELAXNG_INTERLEAVE";
-	this.attributes = new Array();
 }
 
 
@@ -831,6 +914,8 @@ function()
 	}
 }
 );
+
+
 
 
 

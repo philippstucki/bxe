@@ -2,7 +2,7 @@ function NodeVDOM (node) {
 	this.node = node;
 	this.minOccurs = null;
 	this.maxOccurs = null;
-	this.attributes = new Array();
+	
 };
 
 
@@ -39,7 +39,4 @@ NodeVDOM.prototype.isValid = function(node) {
 	return true;
 }
 	
-NodeVDOM.prototype.addAttributeNode = function(attribute) {
-	
-	this.attributes[attribute.name] = attribute;
-}
+
