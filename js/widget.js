@@ -43,7 +43,7 @@ function Widget_AreaInfo (areaNode) {
 	this.node = this.initNode("span","AreaInfoPointer");
 
 	var img = this.node.appendChild(document.createElement("img"));
-	img.src = "images/triangle.png";
+	img.src = mozile_root_dir + "images/triangle.png";
 	if (areaNode.display == "block") {
 		this.Display = 'block';
 	} else {
@@ -200,7 +200,7 @@ Widget_MenuItem.prototype.__defineGetter__(
 
 Widget_MenuItem.prototype.addMenu = function (menu) {
 	var img = this.node.appendChild(document.createElement("img"));
-	img.src = "images/triangle.png";
+	img.src = mozile_root_dir+ "images/triangle.png";
 	img.setAttribute("align","right");
 	this.node.insertBefore(img,this.node.firstChild);
 	this.SubMenu = menu;
