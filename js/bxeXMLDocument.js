@@ -86,6 +86,6 @@ XMLDocument.prototype.insertIntoHTMLDocument = function() {
 	toolbar.draw();
 	
 	
-window.setTimeout(function(e) {bxe_about_box.node.style.display = "none"}, 1000);
+	window.setTimeout(bxe_about_box_fade_out, 1000);
 	
 }
