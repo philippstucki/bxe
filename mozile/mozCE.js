@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: mozCE.js,v 1.13 2003/11/18 21:41:10 chregu Exp $
+// $Id: mozCE.js,v 1.14 2003/11/19 17:53:34 chregu Exp $
 
 /* 
  * mozCE V0.5
@@ -402,7 +402,7 @@ Selection.prototype.insertNode = function(node)
 {
 	var cssr = this.getEditableRange();
 	var checkNode = node;
-	if (node.nodeType == 11 ) {
+	if (node.nodeType == 11 ) {
 		checkNode = node.firstChild;
 	}
 	if (checkNode && checkNode.XMLNode) {

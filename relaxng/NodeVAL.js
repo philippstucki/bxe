@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: NodeVAL.js,v 1.25 2003/11/18 21:41:10 chregu Exp $
+// $Id: NodeVAL.js,v 1.26 2003/11/19 17:53:34 chregu Exp $
 
 const BXE_VALID_NOMESSAGE = 1;
 
@@ -136,9 +136,10 @@ function ContextVDOM (node,vdom) {
 }
 
 ContextVDOM.prototype.next = function() {
-	debug ("ctxt.next " + typeof this.node +  " " + this.node.nodeName);
+/*	debug ("ctxt.next " + typeof this.node +  " " + this.node.nodeName);
 	debug ("ctxt.VDOM " + this.vdom.nodeName +  " " + this.vdom.name);
 	debug ("data " + this.node._node);
+	*/
 	if (this.node.nextSibling) {
 		
 		this.node = this.node.nextSibling;
@@ -239,9 +240,10 @@ XMLNode.prototype.__defineGetter__(
 					alert(" Document has root node named " + this.localName + "\n RelaxNG expects  " +this.ownerDocument.vdom.firstChild.nodeName);
 					this._vdom = null;
 				}
-			} else {
+			} else if (this.parentNode.vdom) {
 				this._vdom = this.parentNode.vdom.getVdomForChild(this);
-				 
+			} else {
+				return null;
 			}
 		}
 		return this._vdom;

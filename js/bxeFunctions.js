@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.111 2003/11/19 17:09:46 chregu Exp $
+// $Id: bxeFunctions.js,v 1.112 2003/11/19 17:53:34 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -153,7 +153,7 @@ function bxe_getXmlDomDocument() {
 function bxe_getXmlDocument() {
 	
 	var xml = bxe_getXmlDomDocument();
-	if (!xml ) { return xml; }
+	if (!xml ) { return xml;}
 	return xml.saveXML(xml);
 
 //	return areaNodes[0].XMLNode.ownerDocument.buildXML();
@@ -465,7 +465,7 @@ function bxe_ContextPopup(e) {
 	try {
 	var node = e.target.XMLNode;
 	var popup = e.additionalInfo;
-	if (node.vdom.hasAttributes ) {
+	if (node.vdom && node.vdom.hasAttributes ) {
 		
 		var menui = popup.addMenuItem("Edit Attributes..", mozilla.getWidgetGlobals().EditAttributes.popup);
 		menui.MenuPopup._node = node._node;
@@ -637,7 +637,10 @@ function bxe_appendNode(e) {
 		var newNode = e.additionalInfo.node.init();
 
 		aNode.parentNode.insertAfter(newNode,aNode);
+		newNode._node.updateXMLNode();
+
 		debug("valid? : " + newNode.isNodeValid());
+		
 		
 		//aNode.parentNode.insertBeforeIntern(newNode,aNode.nextSibling);
 		//newNode.insertIntoHTMLDocument(aNode._node);
@@ -1097,7 +1100,7 @@ function bxe_checkIsAllowedChild (namespaceURI, localName, sel, noAlert) {
 	} else {
 		parentnode = cssr.startContainer;
 	}
-	if (localName == null | parentnode.XMLNode.isAllowedChild(namespaceURI, localName) ) {
+	if (localName == null | parentnode.XMLNode.isAllowedChild(namespaceURI, localName) ) {
 		return true;
 	} else {
 		if (!noAlert) {
