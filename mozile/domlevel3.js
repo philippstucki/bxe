@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: domlevel3.js,v 1.12 2004/02/26 15:54:27 chregu Exp $
+// $Id: domlevel3.js,v 1.13 2004/03/31 05:55:50 chregu Exp $
 
 /*************************************************************************************************************
  * domlevel3 V0.5
@@ -105,7 +105,7 @@ function documentSaveChildrenXML(snode, withParentNS) {
 	var parser = new DOMParser();
 	var xmldoc = parser.parseFromString(source,"text/xml");
 	if (xmldoc.documentElement.nodeName == "parsererror") {
-		alert("XML source has an parse error \n" + xmldoc.documentElement.getContent());
+		alert("XML source has a parse error \n" + xmldoc.documentElement.getContent());
 		return false;
 	} else {
 		return xmldoc;
