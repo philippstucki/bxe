@@ -3,9 +3,11 @@ function mozileTransportDriver (container) {
 }
 
 mozileTransportDriver.prototype.load = function (filename, callback) {
+	var id = "mozileTransportDriver.load";
 	this.callback = this.loadCallback;
 	this.userLoadCallback = callback;
 	this.filename = filename;
+	debug ("load " + filename, { "evalArguments":true});
 	this.container.load(filename, this);
 }
 
@@ -13,6 +15,7 @@ mozileTransportDriver.prototype.save = function (filename, content, callback) {
 	this.callback = this.saveCallback;
 	this.userSaveCallback = callback;
 	this.filename = filename;
+	debug ("save " + filename,  { "evalArguments":true});
 	this.container.save(filename, content, this);
 }
 
@@ -84,3 +87,4 @@ mozileTransportDriver.prototype.parseResponseText = function(responseText, statu
 	}
 	return reqObj;
 }
+
