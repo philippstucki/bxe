@@ -338,6 +338,10 @@ function bxe_toggleTextClass(e) {
 		alert("You're in Source Mode. Not possible to use this button");
 		return false;
 	}
+	if (!bxe_checkIsAllowedChild( e.additionalInfo.namespaceURI,e.additionalInfo.localName,sel)) {
+		return false;
+	}
+
 	sel.toggleTextClass(e.additionalInfo.localName);
 	sel = window.getSelection();
 	var _node = sel.anchorNode.parentNode;
