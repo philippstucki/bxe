@@ -273,10 +273,8 @@ debug = function (text, options) {
 	
 	if (DebugOutput) {
 		
-		//BX_debug(this);
-		fn =  JsUtil_getCaller(debug);
-		// Extract function name and argument list
-		;
+		fn =  bxe_getCaller(debug);
+
 		dump( fn.getName() +  ": " + text + "\n");
 		if (options) {
 			
@@ -352,12 +350,12 @@ Function.prototype.getName = function () {
 		return "anonymous function";
 	}
 }
-function JsUtil_getCaller( fn )
+function bxe_getCaller( fn )
 {
 	switch( typeof( fn ))
 	{
 		case "undefined":
-			return JsUtil_getCaller( JsUtil_getCaller );
+			return bxe_getCaller( bxe_getCaller );
 			
 		case "function":
 			if( fn.caller )
