@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: mozWrappers.js,v 1.5 2003/11/18 21:41:10 chregu Exp $
+// $Id$
 
 /*
  * mozWrapper.js v0.46
@@ -182,7 +182,11 @@ MozClipboard.prototype.getData = function(dataFlavor)
 {
 	// if no native support, just return the internal clipboard (it's a document fragment, usually)
 	if (!this.nativeSupport) {
-		return this._clipboard.cloneNode(true);
+		if (this._clipboard) {
+			return this._clipboard.cloneNode(true);
+		} else {
+			return document.createTextNode("");
+		}
 		// otherwise check the system clipboard and use that, if it has different data
 	} else {
 		

@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: mozilekb.js,v 1.32 2004/03/31 06:38:14 chregu Exp $
+// $Id$
 
 /* 
  * mozilekb V0.46
@@ -410,6 +410,7 @@ function nonctrlKeyPressHandler(event)
 				if (_par.XMLNode.isAllowedChild(XHTMLNS,"br")) {
 					var secondTextNode = ip.ipNode.splitText(ip.ipOffset);
 					ip.ipNode.parentNode.insertBefore(documentCreateXHTMLElement("br"), secondTextNode);
+					ip.forwardOne();
 					_par.updateXMLNode();
 				}
 			}
