@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: domlevel3.js,v 1.11 2003/11/18 21:41:10 chregu Exp $
+// $Id: domlevel3.js,v 1.12 2004/02/26 15:54:27 chregu Exp $
 
 /*************************************************************************************************************
  * domlevel3 V0.5
@@ -59,30 +59,11 @@ function documentSaveXML(snode)
 			snode.setAttributeNS(XMLNS,"xmlns:" + i , ns[i]);
 		}
 	}
-	var strXML = objXMLSerializer.serializeToString(snode);
-	return strXML;
-}
-/* not needed anymore, AFAIK 
-Node.prototype.fixNamespaces = function () {
-	var walker = this.ownerDocument.createTreeWalker(
-		this,
-		NodeFilter.SHOW_ELEMENT,
-		{
-			acceptNode : function(node) {
-				return NodeFilter.FILTER_ACCEPT;
-			}
-		}
-		, true);
-	var nsResolver = new bxe_nsResolver(this.ownerDocument.documentElement);
-	node = this;
-	do {
-		//dump(node.localName + " " + nsResolver.lookupNamespacePrefix(node.namespaceURI) +"\n");
-		node.prefix = nsResolver.lookupNamespacePrefix(node.namespaceURI);
-		node = walker.nextNode()
-	} while( node)
 	
+	strXML = objXMLSerializer.serializeToString(snode);
+	return strXML.replace(/^(<\?xml[^>]*) encoding="[^"]+"([^>]*\?>)/,'$1 encoding="UTF-8" $2');
 }
-*/
+
 
 function documentSaveChildrenXML(snode, withParentNS) {
 	var root;
