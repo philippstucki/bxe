@@ -62,7 +62,11 @@ XMLDocument.prototype.transformToXPathMode = function(xslfile) {
 	var xsldoc = document.implementation.createDocument("", "", null);
 	xsldoc.addEventListener("load", onload_xsl, false);
 	xsldoc.xmldoc = this;
-	xsldoc.load(xslfile);
+	try {
+		xsldoc.load(xslfile);
+	} catch(e) {
+		alert("The xslfile: '" + xslfile + "' was not found");
+	}
 
 	function onload_xsl(e) {
 		xsldoc = e.currentTarget;
