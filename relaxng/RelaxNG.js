@@ -184,13 +184,13 @@ OneOrMoreVDOM.prototype.isValid = function(ctxt) {
 ElementVDOM.prototype.__defineSetter__("nodeName", function(name) {
 	var html = true;
 	if (html) {
-		this._nodeName = name.toUpperCase();
+		this._xmlnodeName = name.toUpperCase();
 	}
 }
 )
 
 ElementVDOM.prototype.__defineGetter__("nodeName", function(name) {
-	return this._nodeName;
+	return this._xmlnodeName;
 }
 )
 

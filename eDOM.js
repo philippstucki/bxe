@@ -128,6 +128,18 @@ Element.prototype.removeAllChildren = function() {
 }
 
 /**
+ * Removes all children of an Element
+ */
+Element.prototype.appendAllChildren = function(node) {
+	var child = node.firstChild;
+	while (child) {
+		var oldchild = child;
+		child = child.nextSibling;
+		this.appendChild(oldchild);
+	}
+}
+
+/**
  * Get content of all text nodes of an element (idea stolen from libxml2)
  */
 Element.prototype.getContent = function() {
@@ -458,6 +470,26 @@ Element.prototype.setStyle = function(styleName, styleValue)
 
 	this.style.setProperty(styleName, currentStyleValue + units, "");
 }
+/**
+ * Remove redundant inline classes - those classes inherited already from the parent of an element
+ *
+ */
+
+Element.prototype.removeRedundantInlineClasses = function()
+{
+	var thisClasses = this.getClasses();
+	var parentClasses = this.parentNode.getClasses();
+	dump ("----# " + this.parentNode + parentClasses+"\n");
+	for (var i = 0; i < thisClasses.length; i++) {
+		dump (thisClasses[i] + "\n");
+		for (var j = 0; j < parentClasses.length; j++) {
+			dump ("  " + parentClasses[j] + "\n");
+			if (parentClasses[j] == thisClasses[i]) {
+				this.removeClass(parentClasses[j] );
+			}
+		}
+	}
+}
 
 /**
  * Remove redundant inline styles - those styles inherited already from the parent of an element
@@ -544,7 +576,7 @@ Element.prototype.__normalizeXHTMLTextStyle = function()
 		nextTextNode = tw.nextNode();
 		var thisISC = thisTextNode.parentNode;
 		thisISC.removeRedundantInlineStyles();	
-
+		thisISC.removeRedundantInlineClasses();
 		// nix isc if empty text node or redundant inline styles
 		if((__NodeFilter.nonEmptyText(thisTextNode) == NodeFilter.FILTER_REJECT) ||
 		thisISC.hasOnlyInternalAttributes() ) 
@@ -1525,7 +1557,7 @@ InsertionPoint.prototype.__defineGetter__(
 	{
 		// TODO: check for token
 
-		if(this.__node.nodeType == Node.ELEMENT_NODE)
+		if(this._xmlnode.nodeType == Node.ELEMENT_NODE)
 			return InsertionPoint.EMPTYELEMENT_CONTENTTYPE;
 
 		return InsertionPoint.CHARACTER_CONTENTTYPE;
@@ -2507,6 +2539,7 @@ Range.prototype.styleText = function(styleName, styleValue, isClass)
 				// spans are special: we don't embed spans in a span - we put spans around all 
 				// the text nodes in the span
 				// note: assume not span within a span so we only have a series of text nodes
+				
 				if(textContainer.nodeNamed("span"))
 				{ 
 					if(textNodes[i].previousSibling)

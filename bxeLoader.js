@@ -48,7 +48,9 @@ mozile_js_files.push("widget.js");
 
 
 mozile_js_files.push("eDOMXHTML.js");
+mozile_js_files.push("bxeNodeElements.js");
 
+mozile_js_files.push("bxeXMLDocument.js");
 
 mozile_js_files.push("domlevel3.js");
 mozile_js_files.push("mozCE.js");
@@ -60,8 +62,7 @@ mozile_js_files.push("mozClipboard.js");
 mozile_js_files.push("eDOMEvents.js");
 mozile_js_files.push("xsltTransformer.js");
 
-mozile_js_files.push("bxeNodeElements.js");
-mozile_js_files.push("bxeXMLDocument.js");
+
 mozile_js_files.push("bxeFunctions.js");
 
 var mozile_root_dir = "./";

@@ -46,7 +46,7 @@ function Widget_AreaInfo (areaNode) {
 	this.node.style.width = "0px";
 	this.node.style.height = "0px";
 	areaNode.parentNode.insertBefore(this.node,areaNode);
-	this.MenuPopup = new Widget_MenuPopup(areaNode.xmlNode.getXPathString());
+	this.MenuPopup = new Widget_MenuPopup(areaNode.XMLNode._xmlnode.getXPathString());
 	var doo = this.MenuPopup.addMenuItem("View",null);
 	var submenu = new Widget_MenuPopup();
 	this.NormalModeMenu = submenu.addMenuItem("Normal",function(e) {eDOMEventCall("toggleNormalMode",e.target.Widget.AreaNode )});
@@ -65,7 +65,7 @@ function Widget_AreaInfo (areaNode) {
 function Widget_AreaInfo_eventHandler(e) {
 	this.Widget.MenuPopup.position(e.pageX,e.pageY,"absolute");
 	this.Widget.MenuPopup.draw();
-	//this.Widget.MnuPopup.MenuItems[0].Label = areaNode.xmlNode.getXPathString();
+	//this.Widget.MnuPopup.MenuItems[0].Label = areaNode.XMLNode._xmlnode.getXPathString();
 	e.preventDefault(); 
 	e.stopPropagation();
 }
@@ -223,7 +223,6 @@ Widget_Globals.prototype.addHideOnClick = function (widget,id) {
 		this.HideOnClick = new Array();
 	}
 	/*
-	dump("id: " + id + "\n");
 	if (id) {
 		this.HideOnClick.push(id);
 	} else {
@@ -394,12 +393,15 @@ function Widget_AboutBox() {
 	this.node.style.height = height + "px";
 	this.position((window.innerWidth- width)/2,(window.innerHeight-height)/3,"absolute");
 	this.node.onclick = function(e) { this.style.display = 'none';}
-	var abouttext = this.node.innerHTML ="<a href='http://bitfluxeditor.org' target='_new'>http://bitfluxeditor.org</a> <br/> Version: " + BXE_VERSION;
+	var htmltext = "<a href='http://bitfluxeditor.org' target='_new'>http://bitfluxeditor.org</a> <br/> Version: " + BXE_VERSION;
+	htmltext += "<br/><br/> Based on <a href='http://mozile.mozdev.org' target='_new'>Mozile</a>";
+	
+	var abouttext = this.node.innerHTML = htmltext;
 	var textdiv = document.createElement("div");
 	this.TextNode = document.createTextNode(" ");
 	textdiv.appendChild(this.TextNode);
 	this.node.appendChild(textdiv );
-	textdiv.style.top = (height - 50 ) + "px";;
+	textdiv.style.top = (height - 84 ) + "px";;
 	textdiv.style.position = "relative";
 	this.draw();
 	
@@ -423,22 +425,38 @@ Widget_AboutBox.prototype.addText = function(text) {
 function Widget_StatusBar () {
 	this.node = this.initNode("div","StatusBar","StatusBar");
 	this.node.appendToBody();
-	this.position(0,window.innerHeight - 20,"absolute");
+	this.positionize();
+	window.onresize = this.positionize;
 	this.Display  = "block";
 	this.buildXPath(bxe_globals.xmldoc.documentElement);
-	
 	
 	this.draw();
 }
 
+
+
 Widget_StatusBar.prototype = new Widget();
 
+Widget_StatusBar.prototype.positionize = function (e) {
+	// it's an event, do nothing...
+	if (e) {
+		
+	} else {
+		target = this;
+	}
+	target.position(0,window.innerHeight - 20,"absolute");
+}
+
 Widget_StatusBar.prototype.buildXPath = function (node) {
-	if (node.xmlNode) {
-		node = node.xmlNode;
+	if (node.XMLNode._xmlnode) {
+		node = node.XMLNode;
+	} else {
+		
 	}
 	this.node.removeAllChildren();
+	
 	while(node && node.nodeType == 1) {
+		
 		var rootNode = document.createElement("span");
 		rootNode.appendChild(document.createTextNode(node.nodeName));
 		this.node.insertBefore(rootNode,this.node.firstChild);

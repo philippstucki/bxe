@@ -26,16 +26,13 @@ XMLDocument.prototype.insertIntoHTMLDocument = function() {
 		nodes[i].parentNode.insertBefore(bxe_areaHolder,nodes[i]);
 		bxe_areaHolder.appendChild(nodes[i]);
 		while (xmlnode = xmlresult.iterateNext()) {
-			
 			if (xmlnode.nodeType == 1) {
-				nodes[i].xmlNode = xmlnode;
-				
+				nodes[i].XMLNode.setNode( xmlnode);
 				xmlnode.insertIntoHTMLDocument(nodes[i],true);
 			} else {
-				nodes[i].xmlNode = xmlnode.parentNode;
+				nodes[i].XMLNode._xmlnode = xmlnode.parentNode;
 				xmlnode.insertIntoHTMLDocument(nodes[i]);
 			}
-			nodes[i].XPath = nodes[i].xmlNode.getXPathString();
 			var menu = new Widget_AreaInfo(nodes[i]);
 			bxe_alignAreaNode(menu,nodes[i]);
 			nodes[i].AreaInfo = menu;
