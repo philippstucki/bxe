@@ -120,28 +120,24 @@ ElementVDOM.prototype.isValid = function(ctxt) {
 				for (var j in _attr['__bxe_choices']) {
 					var _choices = _attr['__bxe_choices'][j];
 					//loop through all available attributes
-					var _hasOne = false;
-					var _hasMoreThanOne = false;
+					var _hasIt = 0;
 					var _attrList = "";
 					for (var k in _choices) {
 						_attrList += ", " + _choices[k].name; 
-						// if we already found one attribute of the choices list -> alert
-						if (_hasOne) {
-							_hasMoreThanOne = true;
-						}
 						//check if it's in the node
 						// and if there is one, check it's validity
-						else if ( ctxt.node.getAttribute && ctxt.node.getAttribute(_choices[k].name)) {
+						if ( ctxt.node.getAttribute && ctxt.node.getAttribute(_choices[k].name)) {
 							_choices[k].isValid(ctxt);
-							_hasOne = true;
+							// if we already found one attribute of the choices list -> alert
+							_hasIt ++
 						}
 						_vdomAttr[_choices[k].name] = true;
 					}
-					if (_hasMoreThanOne) {
+					if (_hasIt > 1) {
 						var errMsg = "Only one of the following attributes is allowed in " + ctxt.node.nodeName + ": ";
 						errMsg += _attrList.substring(1,_attrList.length);
 						ctxt.setErrorMessage(errMsg );
-					} else if (!_hasOne) {
+					} else if (_hasIt == 0) {
 						var errMsg = ctxt.node.nodeName +  " needs one of the following attributes : ";
 						errMsg += _attrList.substring(1,_attrList.length);
 						ctxt.setErrorMessage(errMsg );
