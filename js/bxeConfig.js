@@ -11,7 +11,7 @@ function  bxeConfig (filename,fromUrl, configArray) {
 	td.bxeConfig = this;
 	try {
 		debug("td.load " + filename);
-		td.load(filename, bxeConfig.parseConfig);
+		td.load(filename, bxeConfig.parseConfig, false);
 	} catch(e) { bxe_catch_alert(e);}
 	return true;
 }
