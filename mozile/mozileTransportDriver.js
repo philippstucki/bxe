@@ -8,7 +8,7 @@ mozileTransportDriver.prototype.load = function (filename, callback, async) {
 	this.userLoadCallback = callback;
 	this.filename = filename;
 	debug ("load " + filename, { "evalArguments":true});
-	this.container.load(filename, this, async);
+	return this.container.load(filename, this, async);
 }
 
 mozileTransportDriver.prototype.save = function (filename, content, callback) {

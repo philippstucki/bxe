@@ -30,20 +30,30 @@ mozileTransportDriver_http.prototype.load = function(filename, td, async) {
 	docu.td = td;
 	bxe_config.td = td;
 	docu.onload = this.loadCallback;
-	
 	docu.async = async;
+	var reqObj = new Object();
+	reqObj.document = docu;
 	try {
 		docu.load(filename);
 	}
 	catch (e) {
-		var reqObj = new Object();
-		reqObj.document = docu;
 		reqObj.isError = true;
 		reqObj.status = 404;
 		reqObj.statusText = filename + " could not be loaded\n" + e.message;
-		td.loadCallback(reqObj);
+		if (td.loadCallback) {
+			td.loadCallback(reqObj);
+		} else {
+			return reqObj;
+		}
 	}
-	return docu;
+	if (td.loadCallback) {
+		
+	} else {
+		reqObj.isError = false;
+		reqObj.status = 200;
+		reqObj.statusText = "OK";
+	}
+	return reqObj;
 }
 
 mozileTransportDriver_http.prototype.loadCallback = function (e) {
