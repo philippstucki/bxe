@@ -1225,7 +1225,7 @@ function bxe_InsertAsset() {
 	if (bxe_checkForSourceMode(sel)) {
 		return false;
 	}
-	var object = document.createElementNS("http://apache.org/cocoon/lenya/page-envelope/1.0","assset");
+	var object = document.createElementNS("http://apache.org/cocoon/lenya/page-envelope/1.0","asset");
 	var cb = bxe_getCallback("asset","http://apache.org/cocoon/lenya/page-envelope/1.0");
 	if (cb ) {
 		bxe_doCallback(cb, object);
