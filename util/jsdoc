@@ -71,16 +71,18 @@ mkdir .libtmp/td
 mkdir .libtmp/js
 mkdir .libtmp/relaxng
 mkdir .libtmp/mozile
+mkdir .libtmp/mozile/td
 mkdir .lib/td
 mkdir .lib/js
 mkdir .lib/relaxng
 mkdir .lib/mozile
+mkdir .lib/mozile/td
 
 
 PAGER=cat perldoc -t util/js2doxy.pl > .lib/.js2doxy.man
 #cd lib
 echo "*** translating ***"
-for js in `find . ! -name "*eDOM.js" ! -path ".libtmp/*" ! -path "*mozile.ori*" -name "*.js"  `; do 
+for js in `find . ! -path ".libtmp/*" ! -path "*mozile.ori*" -name "*.js"  `; do 
 	#if test $js -nt "doc/index.html"; then 
 		echo $js
         cp $js .libtmp/$js
