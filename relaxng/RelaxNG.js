@@ -1,4 +1,5 @@
 
+const RELAXNGNS= "http://relaxng.org/ns/structure/1.0";
 
 DocumentVDOM.prototype.parseRelaxNG = function () {
 	
@@ -7,7 +8,7 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 	//do includes
 	this.parseIncludes();
 	
-	//debug(this.xmldoc.saveXML(this.xmldoc));
+	debug(this.xmldoc.saveXML(this.xmldoc));
 	var rootChildren = this.xmldoc.documentElement.childNodes;
 
 	for (var i = 0; i < rootChildren.length; i++) {
@@ -43,8 +44,47 @@ DocumentVDOM.prototype.parseIncludes = function() {
 					var child = td.document.documentElement.firstChild;
 					var insertionNode = rootChild.nextSibling;
 					while (child) {
-						var newChild = this.xmldoc.importNode(child,true);
-						rootChild.parentNode.insertBefore(newChild,insertionNode);
+						if (child.isRelaxNGElement("define")) {
+							var xp = "/rng:grammar/rng:define[@name = '" + child.getAttribute("name") + "']";
+							var firstDefine = this.xmldoc.documentElement.getXPathFirst(xp); 
+							if (child.hasAttribute("combine")) {
+								 
+									var comb = child.getAttribute("combine");
+									if(firstDefine) {
+										debug(firstDefine.getAttribute("name") + comb);
+										var firstElement =  firstDefine.getXPathFirst("*[position() = 1]")
+										if (firstElement.nodeName == comb) {
+											debug("*******" + firstElement.nodeName);
+											var newChild = this.xmldoc.importNode(child,true);
+											firstElement.appendAllChildren(newChild);
+											
+										} else {
+											debug ("make new...");
+											var newChild = this.xmldoc.createElementNS(RELAXNGNS,comb);
+											newChild.appendAllChildren(firstDefine);
+											firstDefine.appendChild(newChild);
+											var importedDefine = this.xmldoc.importNode(child,true)
+											newChild.appendAllChildren(importedDefine);
+											
+										}
+									} else {
+										debug ("not already defined");
+										var newChild = this.xmldoc.importNode(child,true);
+										rootChild.parentNode.insertBefore(newChild,insertionNode);
+									}
+							} else {
+								if (firstDefine) {
+									debug("!!! " + child.getAttribute("name") + " already defined !!!!");
+								} else {
+									var newChild = this.xmldoc.importNode(child,true);
+									rootChild.parentNode.insertBefore(newChild,insertionNode);
+								}
+							}
+						
+						} else {
+							var newChild = this.xmldoc.importNode(child,true);
+							rootChild.parentNode.insertBefore(newChild,insertionNode);
+						}
 						child = child.nextSibling;
 					}
 				}
@@ -63,7 +103,7 @@ DocumentVDOM.prototype.parseIncludes = function() {
 }
 
 DocumentVDOM.prototype.replaceIncludePaths = function(doc, currentFile) {
-	var includes = doc.documentElement.getElementsByTagNameNS("http://relaxng.org/ns/structure/1.0","include");
+	var includes = doc.documentElement.getElementsByTagNameNS(RELAXNGNS,"include");
 	var workingdir = bxe_getDirPart(currentFile);
 	//replace includes with fulluri
 	var href;
