@@ -2513,6 +2513,11 @@ Range.prototype.includeExclusiveParents = function()
  * now, certain sequences will leave the span around if style is built up to incrementally cover a
  * larger block.
  */
+ 
+if (typeof eDOM_bxe_mode == "undefined") {
+	var eDOM_bxe_mode = false;
+}
+ 
 Range.prototype.styleText = function(styleName, styleValue, isClass)
 {
 	// if collapsed then return - works for inline style or block: make editor do work
@@ -2543,9 +2548,7 @@ Range.prototype.styleText = function(styleName, styleValue, isClass)
 				// spans are special: we don't embed spans in a span - we put spans around all 
 				// the text nodes in the span
 				// note: assume not span within a span so we only have a series of text nodes
-				// FIX_BY_BXE: We _do_ span in spans
-				// FIXME: maybe a better approach needed?
-				/*if(textContainer.nodeNamed("span"))
+				if(textContainer.nodeNamed("span") && !eDOM_bxe_mode)
 				{ 
 					if(textNodes[i].previousSibling)
 					{
@@ -2568,7 +2571,7 @@ Range.prototype.styleText = function(styleName, styleValue, isClass)
 					}									
 				}
 				// one text node within a non span element - put this text node within a span
-				else*/
+				else
 				{
 					var styleHolder = documentCreateXHTMLElement('span');
 					textContainer.insertBefore(styleHolder, textNodes[i]);
