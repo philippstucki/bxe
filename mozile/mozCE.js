@@ -599,11 +599,15 @@ Selection.prototype.pasteKeyUp = function () {
 	var clipboard = mozilla.getClipboard();
 	if (rng.toString().replace(/\n/," ") != clipboard._clipboardText.replace(/\n/," ")) {
 		var promptText = "Internal and System-Clipboard are differing: \n\n";
-		promptText += "Internal : '" + clipboard._clipboardText + "'\n\n";
-		promptText += "System   : '" + rng.toString() +"'\n\n";
+		promptText += "System   (Cancel): '" + rng.toString() +"'\n\n";
+		promptText += "Internal   (OK)  : '" + clipboard._clipboardText + "'\n\n";
 		promptText += "If you want to use the Internal, click OK, otherwise (using System) Cancel\n";
-			
-		if(!confirm( promptText)) {
+		//this try/catch is here, because we had some problems with confirm and absolutely unrelated errors
+		
+		try {
+			var internal = confirm( promptText)
+		} catch(e) {}
+		if(!internal) {
 			clipboard.setData(rng);
 		}
 	}
