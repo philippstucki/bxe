@@ -1050,6 +1050,7 @@ function bxe_insertContent(node,replaceNode) {
 			docfrag.firstChild.init();
 			var child = docfrag.firstChild.firstChild;
 			var newNode;
+			replaceNode.removeAllChildren();
 			while (child) {
 				newNode = child.XMLNode;
 				replaceNode.insertBeforeIntern(newNode,null);
@@ -1057,6 +1058,8 @@ function bxe_insertContent(node,replaceNode) {
 				child = child.nextSibling;
 			}
 			replaceNode.insertIntoHTMLDocument(replaceNode._node,true);
+			eDOMEventCall("NodeAttributesModified",replaceNode._node);
+
 	} else {
 		docfrag.firstChild.init();
 		var sel= window.getSelection();
