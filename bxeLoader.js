@@ -135,7 +135,11 @@ function bxe_saveOnPart(evt) {
 function bxe_checkSupportedBrowsers() {
 	var mozillaRvVersion = navigator.userAgent.match(/rv:([[0-9a-z\.]*)/)[1];
 	var mozillaRvVersionInt = parseFloat(mozillaRvVersion);
+
 	if (mozillaRvVersionInt >= 1.4) {
+		if (bxe_bug248172_check()) {
+			alert ("You are using a Mozilla release with a broken XMLSerializer implementation.\nMozilla 1.7 and Firefox 0.9/0.9.1 are known to have this bug. Please up- or downgrade");
+		}
 		//register beforeOnload handler
         if (mozillaRvVersionInt > 1.6) {
 			window.onbeforeunload = bxe_saveOnPart;
@@ -148,6 +152,24 @@ function bxe_checkSupportedBrowsers() {
 	}
 	return false;
 }
+/*
+* broken xml serializer. see
+* http://bugzilla.mozilla.org/show_bug.cgi?id=248172
+*/
+function bxe_bug248172_check() {
+	parser = new DOMParser();
+	serializer = new XMLSerializer();
+
+	parsedTree = parser.parseFromString('<xhtml:html xmlns:xhtml="http://www.w3.org/1999/xhtml"/>','text/xml');
+	resultStr = serializer.serializeToString(parsedTree);
+	if (resultStr.match(/xmlns:xhtml/)) {
+		return false;
+	} else {
+		return true;
+	}
+	
+}
+
 
 function bxe_load_xml (xmlfile) {
 	
