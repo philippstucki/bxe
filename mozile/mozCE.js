@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: mozCE.js,v 1.19 2004/01/13 05:03:24 chregu Exp $
+// $Id: mozCE.js,v 1.20 2004/02/20 13:44:52 chregu Exp $
 
 /* 
  * mozCE V0.5
@@ -233,18 +233,21 @@ Selection.prototype.toggleTextStyle = function(styleName, styleValue, defaultVal
 /**
 * adds or removes a class from a selection
 */
-Selection.prototype.toggleTextClass = function(styleClass)
+Selection.prototype.toggleTextClass = function(styleClass, namespaceURI)
 {
+	if (typeof namespaceURI == "undefined") {
+		namespaceURI = "";
+	}
 	var cssr = this.getEditableRange();
 
 	if(!cssr)
 		return;
 
 	if(cssr.hasClass(styleClass)) {
-		cssr.styleText(styleClass,  false, true);
+		cssr.styleText(styleClass,  false, true, namespaceURI);
 	}
 	else
-		cssr.styleText(styleClass, true, true);
+		cssr.styleText(styleClass, true, true, namespaceURI);
 
 	this.selectEditableRange(cssr);
 }

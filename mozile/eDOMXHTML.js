@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: eDOMXHTML.js,v 1.10 2003/12/17 18:24:36 chregu Exp $
+// $Id: eDOMXHTML.js,v 1.11 2004/02/20 13:44:52 chregu Exp $
 
 /**********************************************************************************
  * eDOMXHTML.js V0.5
@@ -496,7 +496,7 @@ if (typeof eDOM_bxe_mode == "undefined") {
 	var eDOM_bxe_mode = false;
 }
  
-Range.prototype.styleText = function(styleName, styleValue, isClass)
+Range.prototype.styleText = function(styleName, styleValue, isClass, namespaceURI)
 {
 	// if collapsed then return - works for inline style or block: make editor do work
 	if(this.collapsed)
@@ -551,12 +551,22 @@ Range.prototype.styleText = function(styleName, styleValue, isClass)
 				// one text node within a non span element - put this text node within a span
 				else
 				{
-					dump("here " + isClass + " " + styleName + " " + styleValue + "\n");
 					//only works reliable for xhtml stuff right now..
+					
 					if (isClass && styleName) {
-						var styleHolder = documentCreateXHTMLElement(styleName);
+						if (namespaceURI != XHTMLNS) {
+							var _node = new XMLNodeElement(namespaceURI,styleName,1,true)
+							var styleHolder = _node._node;
+						} else {
+							var styleHolder = documentCreateXHTMLElement(styleName);
+						}
 					} else {
-						var styleHolder = documentCreateXHTMLElement("span");
+						if (namespaceURI != XHTMLNS) {
+							var _node = new XMLNodeElement(namespaceURI,styleName,1,true)
+							var styleHolder = _node._node;
+						} else {
+							var styleHolder = documentCreateXHTMLElement("span");
+						}
 					}
 					textContainer.insertBefore(styleHolder, textNodes[i]);
 					styleHolder.appendChild(textNodes[i]);

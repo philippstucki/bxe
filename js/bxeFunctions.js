@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.150 2004/02/17 10:30:19 chregu Exp $
+// $Id: bxeFunctions.js,v 1.151 2004/02/20 13:44:52 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -413,10 +413,14 @@ function bxe_toggleSourceMode(e) {
 function bxe_toggleTextClass(e) {
 	var sel = window.getSelection();
 	var cssr = sel.getEditableRange();
+	if (typeof e.additionalInfo.namespaceURI == "undefined") {
+		e.additionalInfo.namespaceURI = "";
+	}
 	if (cssr.top._SourceMode) {
 		alert("You're in Source Mode. Not possible to use this button");
 		return false;
 	}
+	
 	if (!bxe_checkIsAllowedChild( e.additionalInfo.namespaceURI,e.additionalInfo.localName,sel)) {
 		return false;
 	}
@@ -425,10 +429,12 @@ function bxe_toggleTextClass(e) {
 		bxe_doCallback(cb, BXE_SELECTION);
 		return;
 	}
+	
 	if (sel.isCollapsed) {
 			var newNode = new XMLNodeElement(e.additionalInfo.namespaceURI,e.additionalInfo.localName, 1 , true) ;
+		
 			sel.insertNode(newNode._node);
-/*			debug("valid? : " + newNode.isNodeValid());
+	/*		debug("valid? : " + newNode.isNodeValid());
 	*/		
 			newNode.makeDefaultNodes(false);
 			if (newNode._node.firstChild) {
@@ -440,7 +446,8 @@ function bxe_toggleTextClass(e) {
 				
 			}
 	} else {
-		sel.toggleTextClass(e.additionalInfo.localName);
+		
+		sel.toggleTextClass(e.additionalInfo.localName,e.additionalInfo.namespaceURI);
 	}
 	sel = window.getSelection();
 	cssr = sel.getEditableRange();
@@ -1580,18 +1587,7 @@ documentCreateXHTMLElement = function (elementName,attribs) {
 				childNode.setAttributeNS(attribs[i].namespaceURI, attribs[i].localName,attribs[i].value);
 			}
 		}
-		// hack for uni to make the pictures not look like inline objects...
-		/*if (elementName == "object") {
-			var _br = document.createElementNS(XHTMLNS,"br");
-			_br.setAttribute("_edom_internal_node","true");
-			newNode.appendChild(_br);
-		}*/
 		newNode.appendChild(childNode);
-		/*if (elementName == "object") {
-			var _br = document.createElementNS(XHTMLNS,"br");
-			_br.setAttribute("_edom_internal_node","true");
-			newNode.appendChild(_br);
-		}*/
 		newNode.InternalChildNode = childNode;
 		childNode.InternalParentNode = newNode;
 		newNode.eDOMaddEventListener("NodeAttributesModified",bxe_InternalChildNodesAttrChanged,false);

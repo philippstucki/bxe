@@ -6,34 +6,34 @@
         <oneOrMore>
           <element name="Section">
             <attribute name="ID">
-              <data type="NCName"/>
+             <text/>
             </attribute>
             <ref name="title"/>
             <ref name="ID"/>
             <element name="uri">
-              <data type="NCName"/>
+             <text/>
             </element>
             <element name="foreignsectionid">
-              <data type="integer"/>
+              <text/>
             </element>
             <oneOrMore>
               <choice>
                 <element name="button">
-                  <data type="integer"/>
+                  <text/>
                 </element>
                 <element name="fulluri">
-                  <data type="NCName"/>
+                 <text/>
                 </element>
               </choice>
             </oneOrMore>
             <element name="level">
-              <data type="integer"/>
+              <text/>
             </element>
             <element name="l">
-              <data type="integer"/>
+              <text/>
             </element>
             <element name="r">
-              <data type="integer"/>
+              <text/>
             </element>
           </element>
         </oneOrMore>
@@ -41,7 +41,7 @@
       <element name="page">
         <element name="Article">
           <attribute name="ID">
-            <data type="NCName"/>
+           <text/>
           </attribute>
           <ref name="ID"/>
           <element name="main">
@@ -53,7 +53,14 @@
                       <text/>
                       <element name="ulink">
                         <attribute name="url"/>
-                        <data type="NCName"/>
+                       <text/>
+                      </element>
+                      <element name="bold">
+                        
+                       <text/>
+                      </element>
+                      <element name="emphasize">
+                       <text/>
                       </element>
                     </choice>
                   </oneOrMore>
@@ -63,7 +70,7 @@
           </element>
           <ref name="title"/>
           <element name="lang">
-            <data type="NCName"/>
+           <text/>
           </element>
         </element>
       </element>
@@ -75,10 +82,10 @@
         <choice>
           <text/>
           <element name="de">
-            <data type="NCName"/>
+           <text/>
           </element>
           <element name="en">
-            <data type="NCName"/>
+           <text/>
           </element>
         </choice>
       </oneOrMore>
@@ -86,7 +93,7 @@
   </define>
   <define name="ID">
     <element name="ID">
-      <data type="integer"/>
+      <text/>
     </element>
   </define>
 </grammar>
