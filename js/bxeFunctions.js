@@ -17,15 +17,17 @@ function __bxeSave(e) {
 function bxe_getXmlDocument() {
 	
 	var areaNodes = bxe_getAllEditableAreas();
+	var xml;
 	for (var i = 0; i < areaNodes.length; i++) {
 		if ((areaNodes[i]._SourceMode)) {
 			alert("Editable areas must not be in SourceMode while saving. Please switch it");
 			return false;
 		}
 		//xmldoc = areaNodes[i].XMLNode.insertIntoXMLDocument(xmldoc);
+		xml = areaNodes[i].XMLNode.buildXML();
+		
 	}
-	var xml = areaNodes[0].XMLNode.ownerDocument.buildXML();
-	return xml.saveXML(xml);
+	return xml.ownerDocument.saveXML(xml.ownerDocument);
 
 //	return areaNodes[0].XMLNode.ownerDocument.buildXML();
 }
