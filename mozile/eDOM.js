@@ -3260,7 +3260,14 @@ Range.prototype.__defineGetter__(
  */
 Range.prototype.selectInsertionPoint = function(ip)
 {
-	this.selectNode(ip.ipNode);
+	//stupid bug on windows. It doesn't allows work here
+	// we loose the cursor after that, but it seems to be only
+	// an issue with empty paragraphs...
+	// see http://cvs.wyona.org/cgi-bin/bugzilla/show_bug.cgi?id=1715 for how to reproduce it
+	try {
+		this.selectNode(ip.ipNode);
+	}
+	catch (e) {}
 	this.setStart(ip.ipNode, ip.ipOffset);
 	this.collapse(true);
 }
