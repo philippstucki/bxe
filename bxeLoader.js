@@ -61,7 +61,7 @@ mozile_js_files.push("td/webdav.js");
 //mozile_js_files.push("xsltTransformer.js");
 
 
-mozile_js_files.push("bxeFunctions.js");
+mozile_js_files.push("js/bxeFunctions.js");
 
 var mozile_root_dir = "./";
 
