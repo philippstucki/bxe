@@ -443,7 +443,7 @@ Widget_AboutBox.prototype.show = function () {
 	if (navigator.platform == "MacPPC") {
 		this.node.style.MozOpacity = 0.99;
 	} else {
-		this.node.style.style.MozOpacity = 1;
+		this.node.style.MozOpacity = 1;
 	}
 	this.draw();
 }
