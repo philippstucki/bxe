@@ -14,7 +14,7 @@
 // $Id$
 
 var BXE_VERSION = "0.9.5-dev";
-var BXE_BUILD = "200406040330"
+var BXE_BUILD = "200406090330"
 var BXE_REVISION = "$Rev$".replace(/\$Rev: ([0-9]+) \$/,"r$1");
 
 var bxe_notSupportedText = "Bitflux Editor only works with Mozilla >= 1.4 / Firefox on any platform. \nCurrently we recommend Mozilla 1.6 or Firefox 0.8.";
