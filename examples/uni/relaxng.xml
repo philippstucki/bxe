@@ -221,11 +221,10 @@
       <attribute name="data">
         <data type="NCName"/>
       </attribute>
-      <optional>
+      
       <attribute name="height">
         <data type="integer"/>
       </attribute>
-      </optional>
       <attribute name="type">
         <choice>
             <value>image/gif</value>
@@ -233,12 +232,10 @@
             <value>image/png</value>
             </choice>
             </attribute>
-      <optional>
       <attribute name="width">
 
         <data type="integer"/>
       </attribute>
-      </optional>
       <text/>
     </element>
   </define>
