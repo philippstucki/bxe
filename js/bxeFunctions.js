@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: bxeFunctions.js,v 1.147 2004/01/20 16:34:25 chregu Exp $
+// $Id: bxeFunctions.js,v 1.148 2004/01/26 17:15:06 chregu Exp $
 
 const BXENS = "http://bitfluxeditor.org/namespace";
 const XMLNS = "http://www.w3.org/2000/xmlns/";
@@ -559,14 +559,19 @@ function bxe_ContextPopup(e) {
 		delNode.copy();
 	});
 	var clip = mozilla.getClipboard();
+	
 	if (clip._clipboard) {
-		if (node.parentNode.isAllowedChild(clip._clipboard.firstChild.namespaceURI, clip._clipboard.firstChild.localName)) {
-			var _clipboardNodeName = "";
-			if (clip._clipboard.firstChild.XMLNode) {
-				_clipboardNodeName = clip._clipboard.firstChild.XMLNode.nodeName;
-			} else {
-				_clipboardNodeName = lip._clipboard.firstChild.nodeName;
-			}
+		var _clipboardNodeName = "";
+		var _clipboardNamespaceUri = "";
+		if (clip._clipboard.firstChild.XMLNode) {
+			_clipboardNodeName = clip._clipboard.firstChild.XMLNode.nodeName;
+			_clipboardNamespaceUri = clip._clipboard.firstChild.XMLNode.namespaceURI;
+		} else {
+			_clipboardNodeName = clip._clipboard.firstChild.nodeName;
+			_clipboardNamespaceUri = XHTMLNS;
+		}
+		if (node.parentNode.isAllowedChild(_clipboardNamespaceUri, _clipboardNodeName)) {
+			
 			
 			popup.addMenuItem("Append " + _clipboardNodeName + " from Clipboard", function (e) {
 				var widget = e.currentTarget.Widget;
