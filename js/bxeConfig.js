@@ -94,6 +94,7 @@ bxeConfig.parseConfig = function  (e) {
 	while (node) {
 		var tmpArray = new Array();
 		tmpArray["type"] = node.getAttribute("type");
+		tmpArray["precheck"] = node.getAttribute("precheck");
 		tmpArray["content"] = node.firstChild.data;
 		bxe_config.callbacks[node.getAttribute("ns")+":"+node.getAttribute("name")] = tmpArray;
 		node = callbackNodes.iterateNext();
