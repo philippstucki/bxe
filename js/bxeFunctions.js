@@ -975,7 +975,7 @@ function bxe_InsertImage() {
 
 function bxe_checkForSourceMode(sel) {
 	var cssr = sel.getEditableRange();
-	if (cssr.top._SourceMode) {
+	if (cssr && cssr.top._SourceMode) {
 		alert("You're in Source Mode. Not possible to use this button");
 		return true;
 	}
