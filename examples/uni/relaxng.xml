@@ -80,7 +80,10 @@
             </element>
             <element name="table">
               <attribute name="class">
-                <data type="NCName"/>
+                <choice>
+                    <value>basic</value>
+                    <value>ornate</value>
+                 </choice>
               </attribute>
               <optional>
                 <element name="caption">
