@@ -1,6 +1,6 @@
 Document.prototype.loadSchema = function(file ,callback) {
 	this._vdom = new DocumentVDOM();
-	this._vdom.loadSchema(file, callback);
+	return this._vdom.loadSchema(file, callback);
 }
 
 Document.prototype.validateDocument = function() {

@@ -254,7 +254,9 @@ function mozile_loaded() {
 
 function xml_loaded(e) {
 	bxe_about_box.addText("Load RelaxNG ...");
-	e.target.td.Docu.xmldoc.loadSchema(bxe_config.validationfile,validation_loaded);
+	if (!(e.target.td.Docu.xmldoc.loadSchema(bxe_config.validationfile,validation_loaded))) {
+		bxe_about_box.addText("RelaxNG File was not found");
+	}
 	document.eDOMaddEventListener("toggleSourceMode",bxe_toggleSourceMode,false);
 	document.eDOMaddEventListener("toggleTagMode",bxe_toggleTagMode,false);
 	document.eDOMaddEventListener("toggleNormalMode",bxe_toggleNormalMode,false);
