@@ -332,8 +332,10 @@ Selection.prototype.changeLinesContainer = function(containerName, isClass)
 		// - it is a table cell
 		// - it is a list item
 		var keep = ((lines[i].lineType == CSSLine.CONTAINED_LINE) && (lines[i].containedLineType != ContainedLine.BLOCK));
-		newContainer.push(keep)
-		lines[i].setContainer(documentCreateXHTMLElement(containerName), !keep);
+		var line = lines[i].setContainer(documentCreateXHTMLElement(containerName), !keep);
+		
+		newContainer.push(line.__container)
+
 	}
 
 	this.selectEditableRange(cssr);
@@ -390,10 +392,8 @@ Selection.prototype.toggleListLines = function(requestedList, alternateList)
 	listLinesToggle(cssr, requestedList, alternateList);
 
 	this.selectEditableRange(cssr);
-	var lines = cssr.lines;
-	for(var i =0; i <lines.length; i++) {
-		lines[i].container.updateXMLNode();
-	}
+	return  cssr.lines;
+
 }
 
 Selection.prototype.insertNode = function(node)

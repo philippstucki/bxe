@@ -29,8 +29,13 @@ XMLNode.prototype.init = function ( nodein, localName, nodeType, autocreate) {
 	
 	if (this._node && this._node.ownerDocument == document) {
 		if (this._node.nodeType == 1) {
-			if (this._node.nodeName.toLowerCase() != "span" && (this.namespaceURI == XHTMLNS )) {
-				this.localName = this._node.nodeName.toLowerCase();
+			if (this._node.nodeName.toLowerCase() != "span") {
+				if  (this.namespaceURI == XHTMLNS ) {
+					this.localName = this._node.nodeName.toLowerCase();
+				} else if (this.namespaceURI =="") {
+						this.localName = this._node.nodeName.toLowerCase();
+						this.namespaceURI = XHTMLNS;
+				}
 			} else {
 				var classes = this._node.getClasses();
 				if (classes.length > 0) {

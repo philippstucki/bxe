@@ -447,7 +447,10 @@ function bxe_changeLinesContainer(e) {
 	for(var i=0; i<newContainer.length; i++)
 	{ 
 		newContainer[i].XMLNode = new XMLNode( nodeParts[1], nodeParts[0], newContainer[i].nodeType);
-		newContainer[i].updateXMLNode();
+		try {
+			newContainer[i].updateXMLNode();
+		} catch(e) { alert(newContainer[i] + " can't be updateXMLNode()'ed");
+		}
 	}
 	bxe_delayedUpdateXPath();
 }
@@ -682,25 +685,16 @@ function bxe_ContextMenuEvent(e) {
 }
 
 function bxe_UnorderedList() {
-	function callback(e) {
 
-	}
-	//document.eDOMaddEventListener("NodeInsertedParent",callback,false);
-	window.getSelection().toggleListLines("ul", "ol");
-	//document.eDOMremoveEventListener("NodeInsertedParent",callback,false);
-	/*var sel = window.getSelection();
-	var cssr = sel.getEditableRange();
-	if (cssr) {
-		var lines = cssr.lines;
-		var newContainer = lines[0].container.parentNode;
-		newContainer.XMLNode.init(newContainer);
-		newContainer.updateXMLNode();
-	}*/
+	var lines = window.getSelection().toggleListLines("ul", "ol");
+	lines[0].container.updateXMLNode();
 	bxe_updateXPath();
 }
 
 function bxe_OrderedList() {
-	window.getSelection().toggleListLines("ol", "ul");
+	var lines = window.getSelection().toggleListLines("ol", "ul");
+	lines[0].container.updateXMLNode();
+	bxe_updateXPath();
 }
 
 function bxe_InsertImage() {
