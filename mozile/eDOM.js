@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: eDOM.js,v 1.19 2003/11/18 21:41:10 chregu Exp $
+// $Id: eDOM.js,v 1.20 2003/12/17 18:24:35 chregu Exp $
 
 /**********************************************************************************
  * eDOM.js V0.5: editor or extended DOM
@@ -3790,9 +3790,8 @@ Range.prototype.hasClass = function(className)
 	for(var i=0; i<textNodes.length; i++)
 	{
 		var textContainer = textNodes[i].parentNode;
- 
 		// if any node doesn't have the style then the Range doesn't have it!
-		if(!textContainer.hasClass(className))
+		if(!textContainer.hasClassOrIsElement(className))
 		{
 			//this.normalizeText();
 			return false;	

@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: mozilekb.js,v 1.23 2003/11/18 21:41:10 chregu Exp $
+// $Id: mozilekb.js,v 1.24 2003/12/17 18:24:36 chregu Exp $
 
 /* 
  * mozilekb V0.46
@@ -371,10 +371,20 @@ function nonctrlKeyPressHandler(event)
 			td = false;
 			if (ip.line.container == ip.line.tableCellAncestor) {
 				td = true
-			}
-			ip.splitXHTMLLine(); // add logic to split off say a "P" after a Heading element: if at end line
-			if (td) {
-				ip.line.tableCellAncestor.updateXMLNode();
+			}  
+			
+			if (ip.ipNode.parentNode.XMLNode && ip.ipNode.parentNode.XMLNode.localName == "object") {
+				var _par = ip.ipNode.parentNode;
+				
+				var secondTextNode = ip.ipNode.splitText(ip.ipOffset);
+				ip.ipNode.parentNode.insertBefore(documentCreateXHTMLElement("br"), secondTextNode);
+				_par.parentNode.updateXMLNode();
+			} else {
+				
+				ip.splitXHTMLLine(); // add logic to split off say a "P" after a Heading element: if at end line
+				if (td) {
+					ip.line.tableCellAncestor.updateXMLNode();
+				}
 			}
 		}
 		cssr.selectInsertionPoint(ip);

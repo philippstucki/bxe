@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: eDOMXHTML.js,v 1.9 2003/12/01 09:57:42 chregu Exp $
+// $Id: eDOMXHTML.js,v 1.10 2003/12/17 18:24:36 chregu Exp $
 
 /**********************************************************************************
  * eDOMXHTML.js V0.5
@@ -347,11 +347,21 @@ Element.prototype.removeClass = function(className) {
 Element.prototype.hasClass = function(className) {
 	var classes = this.getClasses();
 	for (var i = 0; i < classes.length; i++) {
+		dump("Ele.hasClass " + classes[i] + "\n");
 		if (classes[i] == className) {
 			return true;
 		}
 	}
 	return false;
+}
+
+Element.prototype.hasClassOrIsElement = function(className) {
+	if (this.namespaceURI == XHTMLNS && this.localName == className) {
+		return true;
+	} else {
+		return this.hasClass(className);
+	}
+	
 }
 
 /* returns all classes as an array or an empty
@@ -541,6 +551,7 @@ Range.prototype.styleText = function(styleName, styleValue, isClass)
 				// one text node within a non span element - put this text node within a span
 				else
 				{
+					dump("here " + isClass + " " + styleName + " " + styleValue + "\n");
 					//only works reliable for xhtml stuff right now..
 					if (isClass && styleName) {
 						var styleHolder = documentCreateXHTMLElement(styleName);
