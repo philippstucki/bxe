@@ -457,7 +457,7 @@ function bxe_toggleTextClass(e) {
 	if (typeof e.additionalInfo.namespaceURI == "undefined") {
 		e.additionalInfo.namespaceURI = "";
 	}
-	if (cssr.top._SourceMode) {
+	if (bxe_checkForSourceMode(sel)) {
 		alert("You're in Source Mode. Not possible to use this button");
 		return false;
 	}
