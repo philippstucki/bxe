@@ -375,8 +375,8 @@ function config_loaded(bxe_config_in) {
 	var btn = bxe_config.getButtons();
 	
 	//set button image location and begin preloading
-	if (btn['location']) {
-		buttonImgLoc = btn['location'];
+	if (btn['_location']) {
+		buttonImgLoc = btn['_location'];
 	} else {
 		buttonImgLoc = mozile_root_dir + "/images/buttons.png";
 	}

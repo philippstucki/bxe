@@ -167,7 +167,7 @@ bxeConfig.prototype.getButtons = function() {
 		var result = this.doc.evaluate("/config/buttons/location", this.doc, null, 0, null);
 		node = result.iterateNext();
 		if (node) {
-			this.buttons["location"] = node.getAttribute("src");
+			this.buttons["_location"] = node.getAttribute("src");
 		}
 		// get dimensions
 		var result = this.doc.evaluate("/config/buttons/dimension", this.doc, null, 0, null);

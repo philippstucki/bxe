@@ -405,7 +405,7 @@ Widget_ToolBar.prototype = new Widget();
 
 Widget_ToolBar.prototype.addButtons = function ( buttons) {
 	for (but in buttons) {
-		if (but != "Dimension") {
+		if (but != "Dimension"  && but != "_location") {
 			var button = new Widget_ToolBarButton(but,buttons[but]['ns']);
 			this.addItem(button);	
 		}
@@ -446,13 +446,13 @@ Widget_MenuList.prototype.appendItem = function(label, value) {
 	
 
 function Widget_ToolBarButton (id,namespaceURI) {
-		this.node = this.initNode("div","ToolBarButton",id);
-		this.node.setAttribute("title",id);
-		this.Display = "block";
-		var buttons = bxe_config.getButtons();
-		var col =  buttons[id]['col'];
-		var row =  buttons[id]['row'];
-		
+	this.node = this.initNode("div","ToolBarButton",id);
+	this.node.setAttribute("title",id);
+	this.Display = "block";
+	var buttons = bxe_config.getButtons();
+	var col =  buttons[id]['col'];
+	var row =  buttons[id]['row'];
+	
 		
 	var clipoffset = 
 	    [buttons['Dimension'][2]*col, // left
