@@ -436,21 +436,27 @@ function nonctrlKeyPressHandler(event)
 		{
 			var backspace = false;
 			if (!sel.isCollapsed && sel.anchorNode.nodeType == 3 && sel.anchorOffset == 0) {
-			var n = sel.focusNode;
-			var o = sel.focusOffset;
-			sel.collapse(sel.anchorNode,1)
-			sel.extend(n,o);
-			sel.deleteSelection(backspace);
-			sel = window.getSelection();
-			sel.deleteSelection(false);
-			sel.anchorNode.updateXMLNode();
-		} else if (sel.isCollapsed) {
-			sel.deleteSelection(backspace);
-		} else {
-			sel.deleteSelection(backspace);
-			sel.anchorNode.updateXMLNode();
-		}
-			
+				var n = sel.focusNode;
+				var o = sel.focusOffset;
+				sel.collapse(sel.anchorNode,1)
+				sel.extend(n,o);
+				sel.deleteSelection(backspace);
+				sel = window.getSelection();
+				
+				ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
+				ip.insertCharacter(event.charCode);
+				
+				sel.deleteSelection(false);
+				sel.anchorNode.updateXMLNode();
+				sel.collapse(ip.ipNode, ip.ipOffset);
+				return true;
+				
+			} else if (sel.isCollapsed) {
+				sel.deleteSelection(backspace);
+			} else {
+				sel.deleteSelection(backspace);
+				sel.anchorNode.updateXMLNode();
+			}
 		}
 
 		// seems to mess up the current position!
