@@ -1,8 +1,12 @@
-function AttributeVDOM(node) {
+function AttributeVDOM(node, option) {
 	this.name = node.getAttribute("name");
 	this.dataType = "NCName";
+	if (option == "optional") {
+		this.optional = true;
+	} else {
+		this.optional = false;
+	}
 	for (var i = 0; i < node.childNodes.length;i++  ) {
-		//dump(i + node.childNodes[i].nodeName );
 		if (node.childNodes[i].nodeName == "data") {
 			this.dataType = node.childNodes[i].getAttribute("type");
 		}
@@ -15,8 +19,8 @@ function AttributeVDOM(node) {
 				this.choices.push(choice[j].firstChild.data);
 				}
 			}
-		}
-		
+		} 
 	}
+	
 	
 }

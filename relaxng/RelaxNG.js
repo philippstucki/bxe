@@ -169,9 +169,11 @@ NodeVDOM.prototype.parseChildren = function(node) {
 			newOneOrMore.parseChildren(childNodes[i]);
 			
 		} else if (childNodes[i].isRelaxNGElement("attribute")) {
-			this.addAttributeNode(new AttributeVDOM(childNodes[i]));
-			
-			
+			if (this.node.localName == "optional") {
+				this.parentNode.addAttributeNode(new AttributeVDOM(childNodes[i]), "optional");
+			} else {
+				this.addAttributeNode(new AttributeVDOM(childNodes[i]), "optional");
+			}
 		} else if (childNodes[i].isRelaxNGElement("optional")) {
 			newChoice = new ChoiceVDOM(childNodes[i]);
 			this.appendChild(newChoice);
