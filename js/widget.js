@@ -619,11 +619,10 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 			}
 	} 
 	//this.Popup.insertAllowedChildren(node);
-	this.Popup.appendAllowedSiblings(node);
 	eDOMEventCall("ContextPopup",node, this.Popup);
 	this.Popup._node = node;
 	this.Popup.addSeparator();
-	node = node.XMLNode.parentNode;
+	node = node.XMLNode;
 	
 	//parent nodes
 	while(node && node.nodeType == 1) {
