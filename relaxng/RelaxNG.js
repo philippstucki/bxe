@@ -349,13 +349,14 @@ DefineVDOM.prototype.allowedElements = function() {
 	var ac = new Array();
 	
 	while (child) {
-		debug ("DefineVDOM.prototype.allowedElements" + child.nodeName);
 		var subac = child.allowedElements();
-		if (subac && subac.nodeName) {
-			ac.push(subac);
-		} else if (subac) {
-			for (var i = 0; i < subac.length; i++) {
-				ac.push(subac[i]);
+		if (subac) {
+			if (subac.nodeName) {
+				ac.push(subac);
+			} else if (subac) {
+				for (var i = 0; i < subac.length; i++) {
+					ac.push(subac[i]);
+				}
 			}
 		}
 		child = child.nextSibling;
@@ -445,6 +446,28 @@ InterleaveVDOM.prototype.isValid = function(ctxt) {
 	return false;
 }
 
+InterleaveVDOM.prototype.allowedElements = function() {
+	try {
+	var child = this.firstChild;
+	var ac = new Array();
+	
+	while (child) {
+		var subac = child.allowedElements();
+		if (subac) {
+			if (subac.nodeName) {
+				ac.push(subac);
+			} else {
+				for (var i = 0; i < subac.length; i++) {
+					ac.push(subac[i]);
+				}
+			}
+		}
+		child = child.nextSibling;
+	}
+	return ac;
+	} catch(e) { bxe_catch_alert(e);}
+}
+
 function InterleaveVDOM(node) {
 	this.node = node;
 	this.type = "RELAXNG_INTERLEAVE";
@@ -463,6 +486,11 @@ function EmptyVDOM(node) {
 
 EmptyVDOM.prototype.isValid  = function() {
 	return false;
+}
+
+EmptyVDOM.prototype.allowedElements = function() {
+	
+	return null;
 }
 TextVDOM.prototype = new NodeVDOM();
 
@@ -536,18 +564,21 @@ OneOrMoreVDOM.prototype.isValid = function(ctxt) {
 ChoiceVDOM.prototype.allowedElements = function() {
 	var child = this.firstChild;
 	var ac = new Array();
-	
-	while (child) {
-		var subac = child.allowedElements();
-		if (subac.nodeName) {
-			ac.push(subac);
-		} else {
-			for (var i = 0; i < subac.length; i++) {
-				ac.push(subac[i]);
+	try{
+		while (child) {
+			var subac = child.allowedElements();
+			if (subac) {
+				if (subac.nodeName) {
+					ac.push(subac);
+				} else {
+					for (var i = 0; i < subac.length; i++) {
+						ac.push(subac[i]);
+					}
+				}
 			}
+			child = child.nextSibling;
 		}
-		child = child.nextSibling;
-	}
+	} catch(e) { bxe_catch_alert(e); alert(child.nodeName + " " + subac); }
 	return ac;
 	
 }
@@ -558,11 +589,13 @@ OneOrMoreVDOM.prototype.allowedElements = function() {
 	
 	while (child) {
 		var subac = child.allowedElements();
-		if (subac.nodeName) {
-			ac.push(subac);
-		} else {
-			for (var i = 0; i < subac.length; i++) {
-				ac.push(subac[i]);
+		if (subac) {
+			if (subac.nodeName) {
+				ac.push(subac);
+			} else {
+				for (var i = 0; i < subac.length; i++) {
+					ac.push(subac[i]);
+				}
 			}
 		}
 		child = child.nextSibling;
