@@ -1519,6 +1519,7 @@ function bxe_CleanInline(e) {
 
 function bxe_CleanInlineIntern(localName, namespaceUri) {
 	var sel = window.getSelection();
+	var doitagain = 0;
 	if (bxe_checkForSourceMode(sel)) {
 		return false;
 	}
@@ -1533,7 +1534,7 @@ function bxe_CleanInlineIntern(localName, namespaceUri) {
 		// figure out cssr and then it's on to efficiency before subroutines ... ex of sub ... 
 		// try text nodes returning one node ie/ node itself! could cut down on normalize calls ...
 		var textContainer = textNodes[i].parentNode;
-		if (textContainer.getCStyle("display") == "inline") {
+		if (textContainer && textContainer.getCStyle("display") == "inline") {
 			if (localName) {
 				if (textContainer.parentNode.firstChild == textContainer) {
 					textNodes.push(textContainer);
@@ -1543,28 +1544,35 @@ function bxe_CleanInlineIntern(localName, namespaceUri) {
 					 continue;
 				}
 			}
-					 
 			if(textContainer.childNodes.length > 1) {
 				var siblingHolder;
 				
 				// leave any nodes before or after cssr one with their own copy of the container
 				if(textNodes[i].previousSibling) {
-					var siblingHolder = textContainer.cloneNode(false);
-					textContainer.parentNode.insertBefore(siblingHolder, textContainer);
-					siblingHolder.appendChild(textNodes[i].previousSibling);	
+					if (textNodes[i].previousSibling.nodeType == 3) {
+						var siblingHolder = textContainer.cloneNode(false);
+						textContainer.parentNode.insertBefore(siblingHolder, textContainer);
+						siblingHolder.appendChild(textNodes[i].previousSibling);
+					}
 				}
 				
-				if(textNodes[i].nextSibling) {
-					var siblingHolder = textContainer.cloneNode(false);
-					if(textContainer.nextSibling) {
-						textContainer.parentNode.insertBefore(siblingHolder, textContainer.nextSibling);
-					} else {  
-						textContainer.parentNode.appendChild(siblingHolder);
+				if(textNodes[i].nextSibling) { 
+					if (textNodes[i].nextSibling.nodeType == 3) {
+						var siblingHolder = textContainer.cloneNode(false);
+						if(textContainer.nextSibling) {
+							textContainer.parentNode.insertBefore(siblingHolder, textContainer.nextSibling);
+						} else {  
+							textContainer.parentNode.appendChild(siblingHolder);
+						}
+						siblingHolder.appendChild(textNodes[i].nextSibling);
+					} else {
+						textContainer.split(1);
 					}
-					siblingHolder.appendChild(textNodes[i].nextSibling);	
+					
 				}
 			}
 			// rename it to span and remove its href. If span is empty then delete span
+			doitagain++;
 			textContainer.parentNode.removeChildOnly(textContainer);
 		}
 	}
@@ -1579,6 +1587,10 @@ function bxe_CleanInlineIntern(localName, namespaceUri) {
 	cssr.commonAncestorContainer.parentElement.normalize();
 	sel.selectEditableRange(cssr);
 	sel.anchorNode.updateXMLNode();
+	if (doitagain > 1) {
+		bxe_CleanInlineIntern(localName,namespaceUri);
+	}
+	
 }
 
 
