@@ -67,22 +67,11 @@ XMLNode.prototype.init = function ( nodein, localName, nodeType, autocreate) {
 			if (this._node.nodeName.toLowerCase() != "span" || this._node.getAttribute("__bxe_keep_span")  ) {
 				if  (this.namespaceURI == XHTMLNS ) {
 					this.localName = this._node.nodeName.toLowerCase();
-				} /*
-				removed, otherwise empty namespace nodes get the XHTMLNS namespace...
-				else if (this.namespaceURI == "") {
-						this.localName = this._node.nodeName.toLowerCase();
-						this.namespaceURI = XHTMLNS;
-				}*/
+				} 
 			} else {
 				var classes = this._node.getClasses();
 				if (classes.length > 0) {
 					for (i = classes.length - 1; i >= 0; i--) {
-						/*	if (newElement != null) {
-							newElement.appendChild(xmldoc.createElementNS(this.XMLNode.namespaceURI,classes[i]));
-						} else {
-							newElement = xmldoc.createElementNS(this.XMLNode.namespaceURI,classes[i]);
-						}
-						*/
 						this.localName = classes[i];
 					}
 				} else {
@@ -109,8 +98,6 @@ XMLNode.prototype.init = function ( nodein, localName, nodeType, autocreate) {
 	}
 	
 }
-
-//XMLNode.prototype =  document.createElement("bxe");
 
 XMLNode.prototype.insertAfter = function(newNode, oldNode) {
 
@@ -194,8 +181,6 @@ XMLNode.prototype.unlinkChildren = function () {
 
 
 XMLNode.prototype.appendChild = function(newNode) {
-	//BX_debug(newNode);
-	
 	if (this._node.ownerDocument == document && this.nodeType == 1 ) {
 		newNode.createNS(newNode.namespaceURI, newNode.localName, newNode.attributes);
 	}
@@ -366,29 +351,11 @@ XMLNode.prototype.__defineGetter__(
 );
 
 
-/*
-XMLNode.prototype.__defineSetter__( 
-	"parentNode",
-	function(value)
-	{
-		this._parentNode = value;
-	}
-);
-
-XMLNode.prototype.__defineGetter__( 
-	"parentNode",
-	function()
-	{
-		return this._parentNode;
-	}
-);*/
-
 
 XMLNode.prototype.__defineGetter__( 
 	"attributes",
 	function()
 	{
-//			return this._node.attributes;
 			return Array();
 			
 	}
@@ -437,8 +404,6 @@ XMLNode.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
 	var firstChild = false;
 	do  {
 			var newNode;
-			//newElement =  node.parentNode.XMLNode.appendChild(newElement);
-			//node.NodeMode = "html";
 			if (node.nodeType == 1 ) {
 				newNode = node.makeHTMLNode()
 				if (! node.hasChildNodes() && !(node.namespaceURI == XHTMLNS && ( node.localName == "img" || node.localName == "object")) ) {
@@ -504,7 +469,6 @@ XMLNode.prototype.getXPathString = function() {
 	var prevSibling = this;
 	var position = 1;
 	var xpathstring = "";
-	//dump("***\nxpath " + this+ this.localName + "\n");
 	if (this.parentNode && this.parentNode.nodeType == 1) {
 		xpathstring = this.parentNode.getXPathString() ;
 	}
