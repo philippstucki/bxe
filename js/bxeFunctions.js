@@ -226,9 +226,14 @@ try {
 	
 }
 
-function createTagNameAttributes(startNode) {
+function createTagNameAttributes(startNode, startHere) {
 	var walker = startNode.XMLNode.createTreeWalker();
-	var node = walker.nextNode();
+	if (!startHere) {
+		var node = walker.nextNode();
+	} else {
+		var node = walker.currentNode;
+	}
+	
 	while( node) {
 		if (node.nodeType == 1) {
 			var xmlstring = node.getBeforeAndAfterString(false,true);
@@ -1313,10 +1318,17 @@ function bxe_InternalChildNodesAttrChanged(e) {
 	//we have to replace the old internalnode, redrawing of new object-sources seem not to work...
 	var newNode = document.createElementNS(node.InternalChildNode.namespaceURI, node.InternalChildNode.localName);
 	for (var i = 0; i < attribs.length ;  i++) {
-		newNode.setAttributeNode(attribs[i].cloneNode(true));
+		var prefix = attribs[i].localName.substr(0,5);
+		if (prefix != "_edom" && prefix != "__bxe") {
+			newNode.setAttributeNode(attribs[i].cloneNode(true));
+		}
 	}
 	node.replaceChild(newNode,node.InternalChildNode);
+	newNode.setAttribute("_edom_internal_node","true");
 	node.InternalChildNode = newNode;
+	createTagNameAttributes(node,true)
+	
+	
 	
 	
 }

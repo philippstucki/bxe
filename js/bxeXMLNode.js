@@ -500,10 +500,13 @@ XMLNodeWalker.prototype.nextNode = function() {
 		return this.currentNode;
 	}
 	else if (this.currentNode.nextSibling) {
+		if (this.currentNode == this.startNode) {
+			return null;
+		}
 		this.currentNode = this.currentNode.nextSibling;
 		return this.currentNode;
 	}
-	else if(this.currentNode.parentNode) {
+	else if(this.currentNode.parentNode && this.currentNode != this.startNode) {
 		this.currentNode = this.currentNode.parentNode;
 		while ( this.currentNode && this.currentNode != this.startNode && !this.currentNode.nextSibling ) { 
 			this.currentNode = this.currentNode.parentNode;
@@ -634,8 +637,10 @@ XMLNodeElement.prototype.__defineGetter__(
 		var attributes = new Array();
 		for (var i = 0; i < attribs.length; i++) {
 			var prefix = attribs[i].localName.substr(0,5);
-			if (prefix != "_edom" && prefix != "__bxe" && attribs[i].namespaceURI != "http://www.w3.org/2000/xmlns/" && !(this.namespaceURI != XHTMLNS && attribs[i].localName == "class"))  {
-				attributes.push(attribs[i]);
+			if (prefix != "_edom" && prefix != "__bxe" && attribs[i].namespaceURI != "http://www.w3.org/2000/xmlns/" && !(this.namespaceURI != XHTMLNS && attribs[i].localName == "class") )  {
+				if (! (attribs[i].localName == "class" && attribs[i].value == this.localName)) {
+					attributes.push(attribs[i]);
+				}
 			}
 		}
 		return attributes;
