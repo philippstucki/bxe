@@ -205,7 +205,9 @@ ChoiceVDOM.prototype.isValid = function(ctxt) {
 	}
 	if (hasEmpty) {
 		var vdom = ctxt.nextVDOM();
-		return vdom.isValid(ctxt);
+		if (vdom) {
+			return vdom.isValid(ctxt);
+		}
 	}
 	return false;
 }
