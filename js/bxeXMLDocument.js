@@ -19,7 +19,7 @@ XMLDocument.prototype.init = function (startNode) {
 		startNode = this.documentElement;
 	}
 	
-	var nsResolver = new bxe_nsResolver(this);
+	var nsResolver = new bxe_nsResolver(this.documentElement);
 	// Add text nodes to td elements, when not existent (or when whitespace only...)
 	//FIXME: Make this configurable
 	var xmlresult = this.evaluate("//xhtml:td[not(*|text()) or normalize-space(text()) = '']", this.documentElement, nsResolver, 0, null);
