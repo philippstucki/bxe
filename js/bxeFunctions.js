@@ -693,7 +693,6 @@ function bxe_ContextPopup(e) {
 				var appNode = widget.MenuPopup.MainNode;
 				var clip = mozilla.getClipboard();
 				var clipNode = clip.getData(MozClipboard.TEXT_FLAVOR);
-				
 				eDOMEventCall("appendNode",document,{"appendToNode":appNode, "node": clipNode.firstChild})
 			});
 		}
