@@ -14,12 +14,11 @@
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
- * - Christian Stocker (Bitflux)
  *
  * ***** END LICENSE BLOCK ***** */
 
 /* 
- * mozilekb V0.5
+ * mozilekb V0.46
  * 
  * Keyboard handling for Mozile. You can replace this if you want different keyboard
  * behaviors.
@@ -51,12 +50,20 @@
  * - each editable area gets a CP? If valid (add method that checks TextNode validity?)
  */
 document.addEventListener("keypress", keyPressHandler, true);
+//key up and down handlers are needed for interapplication copy/paste without having native-methods access
+//if you're sure you have native-methods access you can turn them off
+document.addEventListener("keydown", keyDownHandler, true);
+document.addEventListener("keyup", keyUpHandler, true);
 
+//key up and down handlers are needed for interapplication copy/paste without having native-methods access   
+//if you're sure you have native-methods access you can turn them off   
+document.addEventListener("keydown", keyDownHandler, true);   
+document.addEventListener("keyup", keyUpHandler, true);   
 function keyPressHandler(event)
 {	
 	var handled = false;
-
-	// metakey is Mac OSX standard
+//Mac OSX standard is using the "Apple"-Key for Copy/Paste operation and not the Ctrl-Key
+// the Apple Key is event.metaKey in JS Terms
 	if(event.ctrlKey || event.metaKey)
 		handled = ctrlKeyPressHandler(event);
 	else
@@ -85,7 +92,7 @@ function keyDownHandler(event)
 	// handled event so do let things go any further.
 	if(handled)
 	{
-		//cancel event: TODO05: why all three?
+		//cancel event: TODO02: why all three?
 		event.stopPropagation();
 		event.returnValue = false;
   		event.preventDefault();
@@ -122,18 +129,27 @@ function ctrlKeyPressHandler(event)
 
 	if(String.fromCharCode(event.charCode).toLowerCase() == "v")
 	{
-		window.getSelection().paste();
-		return true;
+		if (mozilla.__allowedNativeCalls) {
+			return window.getSelection().paste();
+		} else {
+			return false;
+		}
 	}
 	else if(String.fromCharCode(event.charCode).toLowerCase() == "x")
 	{
-		window.getSelection().cut();
-		return true;
+		if (mozilla.__allowedNativeCalls) {
+			return window.getSelection().cut();
+		} else {
+			return false;
+		}
 	}
 	else if(String.fromCharCode(event.charCode).toLowerCase() == "c")
 	{
-		window.getSelection().copy();
-		return true;
+		if (mozilla.__allowedNativeCalls) {
+			return window.getSelection().copy();
+		} else {
+			return false;
+		}
 	}
 	else if(String.fromCharCode(event.charCode).toLowerCase() == "s")
 	{
@@ -244,7 +260,9 @@ function ctrlKeyUpHandler(event,cssr) {
 function nonctrlKeyPressHandler(event)
 {
 	var sel = window.getSelection();
-
+	var ip;
+	var cssr;
+	var rng;
 	// BACKSPACE AND DELETE (DOM_VK_BACK_SPACE, DOM_VK_DELETE)
 	if((event.keyCode == 8) || (event.keyCode == 46)) {
 		var backspace = (event.keyCode == 46);
@@ -252,6 +270,7 @@ function nonctrlKeyPressHandler(event)
 		return true;
 	}
 
+	
 	// PREV (event.DOM_VK_LEFT) Required as Moz left/right doesn't handle white space properly
 	if(event.keyCode == 37 && !event.shiftKey)
 	{
@@ -325,9 +344,8 @@ function nonctrlKeyPressHandler(event)
 		}
 		sel.removeAllRanges();
 		ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
-
-		ip.splitXHTMLLine(); // add logic to split off say a "P" after a Heading element: if at end line
-
+		// POST04: support concept of not splitting line if mozUserModify indicates writeText ...
+		ip.splitLine(); // add logic to split off say a "P" after a Heading element: if at end line
 		cssr.selectInsertionPoint(ip);
 		sel.removeAllRanges();
 		sel.addRange(cssr);
@@ -335,7 +353,7 @@ function nonctrlKeyPressHandler(event)
 		return true;
 	}
 
-	// POST05: for non-pre, may change to mean switch to next editable area
+	// POST04: for non-pre, may change to mean switch to next editable area
 	if(event.keyCode == event.DOM_VK_TAB)
 	{
 		cssr = sel.getEditableRange();
@@ -347,7 +365,7 @@ function nonctrlKeyPressHandler(event)
 		// if there's a selection then delete it
 		if(!cssr.collapsed)
 		{
-			cssr.deleteTextTree();
+			cssr.extractContentsByCSS();
 		}
 
 		// seems to mess up the current position!
@@ -375,6 +393,7 @@ function nonctrlKeyPressHandler(event)
 		if(!cssr.collapsed)
 		{
 			cssr.extractContentsByCSS();
+			
 		}
 
 		// seems to mess up the current position!

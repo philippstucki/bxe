@@ -537,7 +537,7 @@ Selection.prototype.copy = function()
 	var clipboard = mozilla.getClipboard();
 
 	// clipboard.setData(deletedFragment.saveXML(), "text/html"); // go back to this once, paste supports html paste!
-	clipboard.setData(text, MozClipboard.TEXT_FLAVOR);
+	clipboard.setData(cssr,MozClipboard.TEXT_FLAVOR);
 }
 
 Selection.prototype.cut = function()
