@@ -43,10 +43,17 @@ function AttributeVDOM(node, option) {
 }
 
 AttributeVDOM.prototype.isValid = function(ctxt) {
-	if (ctxt.node._node && !this.optional && !ctxt.node._node.hasAttribute(this.name)) {
+	if (ctxt.node._node && !this.optional && !(ctxt.node._node.hasAttribute(this.name) ||  (ctxt.node.xmlBridge && ctxt.node.xmlBridge.hasAttribute(this.name)))) {
+		if (ctxt.wFValidityCheckLevel & 2) {
+			var newValue = prompt(ctxt.node.nodeName + " does not have the required attribute " + this.name + "\nPlease provide one");
+			if (newValue) {
+				ctxt.node._node.setAttribute(this.name, newValue);
+				return this.isValid(ctxt);
+			}
+		} 
 		ctxt.setErrorMessage(ctxt.node.nodeName + " does not have the required attribute " + this.name);
 		return false;
-	} else if (ctxt.node._node && this.choices) {
+	} else if (ctxt.node._node && this.choices) {
 		var value = ctxt.node._node.getAttribute(this.name);
 		if (value) {
 			for (var i = 0; i < this.choices.length; i++) {
@@ -54,7 +61,8 @@ AttributeVDOM.prototype.isValid = function(ctxt) {
 					return true;
 				}
 			}
-			ctxt.setErrorMessage("'" +value + "' is not an allowed value for attribute '" + this.name + "' in '" + ctxt.node.nodeName +"'");
+			var errMsg = "'" +value + "' is not an allowed value for attribute '" + this.name + "' in '" + ctxt.node.nodeName +"'";
+			ctxt.setErrorMessage(errMsg);
 			return false
 		} else {
 			return true;

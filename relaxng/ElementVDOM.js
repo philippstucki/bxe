@@ -95,9 +95,17 @@ ElementVDOM.prototype.isValid = function(ctxt) {
 		}
 		
 		var _nodeAttr = ctxt.node.attributes;
+		
 		for(var i in _nodeAttr) {
 			if (typeof _vdomAttr[_nodeAttr[i].nodeName] == "undefined") {
-				ctxt.setErrorMessage("The attribute " + _nodeAttr[i].nodeName + " is not allowed in " +  ctxt.node.nodeName );
+				var errMsg = "The attribute " + _nodeAttr[i].nodeName + " is not allowed in " +  ctxt.node.nodeName;
+				if (ctxt.wFValidityCheckLevel & 2) {
+					if (confirm(errMsg + "\n Should it be removed?")) {
+						ctxt.node.removeAttribute(_nodeAttr[i].nodeName);
+						return this.isValid(ctxt);
+					}
+				}
+				ctxt.setErrorMessage(errMsg );
 			}
 		}
 		
