@@ -1,3 +1,7 @@
+.ornate td {
+ border: 1px black solid;
+}
+
 body { 
  margin-top: 0px;
 }
