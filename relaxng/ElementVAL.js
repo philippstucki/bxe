@@ -11,7 +11,7 @@
 // | Author: Christian Stocker <chregu@bitflux.ch>                        |
 // +----------------------------------------------------------------------+
 //
-// $Id: ElementVAL.js,v 1.19 2004/02/20 11:25:52 chregu Exp $
+// $Id: ElementVAL.js,v 1.20 2004/02/20 11:26:30 chregu Exp $
 
 
 XMLNodeElement.prototype.__defineGetter__(
@@ -185,7 +185,6 @@ XMLNodeElement.prototype.isAllowedChild = function(namespaceURI, localName) {
 	}
 	if (ac) {
 	for (var i = 0; i < ac.length; i++) {
-		dump("."+ ac[i].namespaceURI+". ." + ac[i].localName + "\n");
 		if (ac[i].localName == localName && ac[i].namespaceURI == namespaceURI) {
 			return true;
 		}
