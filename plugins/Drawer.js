@@ -13,6 +13,7 @@ function BxeDrawer() {
 		//var librariesURI = mozile_root_dir + "kupu/kupudrawers/demolibraries.xml"; 
 	    var imageLibrariesURI = mozile_root_dir + "kupu/kupudrawers/demolibraries.xml"; 
 	    var linkLibrariesURI = mozile_root_dir + "kupu/kupudrawers/demolibraries.xml"; 
+	    var assetLibrariesURI = mozile_root_dir + "kupu/kupudrawers/demolibraries.xml"; 
         
         if (options["imageLibrariesURI"]) {
 			imageLibrariesURI = options["imageLibrariesURI"];
@@ -22,8 +23,11 @@ function BxeDrawer() {
             linkLibrariesURI = options['linkLibrariesURI'];
         }
         
+        if (options['assetLibrariesURI']) {
+            assetLibrariesURI = options['assetLibrariesURI'];
+        }
+        
         drawertool = new DrawerTool();
-		 
         /* create and register the LinkLibrary-Drawer */
 		var linktool = new LinkToolBxe();
         
@@ -35,10 +39,21 @@ function BxeDrawer() {
         var imagedrawer = new ImageLibraryDrawer(imagetool, mozile_root_dir +"/kupu/kupudrawers/imagedrawer.xsl", imageLibrariesURI, "kupu/kupudrawers/demolibrary1.xml");
 		
         
+        /** 
+        * create and register the Asset Drawer 
+        * the asset Drawer is only called when the
+        * `ShowAssetDrawer` is explicitly configured (config.xml)
+        * for the asset button, otherwise default behaviours
+        * are expected
+        */
+        var assettool = new AssetToolBxe();
+        var assetdrawer = new AssetLibraryDrawer(assettool, mozile_root_dir+"/kupu/kupudrawers/assetdrawer.xsl", assetLibrariesURI, "kupu/kupudrawers/demolibrary1.xml");
+        
+        
         drawertool.registerDrawer('imagedrawer', imagedrawer);
 		drawertool.registerDrawer('liblinkdrawer', liblinkdrawer);
-		
-        
+	    drawertool.registerDrawer('assetdrawer', assetdrawer);	
+         
         liblinkdrawer.editor = new Object();
 		liblinkdrawer.editor.getBrowserName = function () {
 			return "Mozilla";
@@ -46,6 +61,11 @@ function BxeDrawer() {
 		
 		imagedrawer.editor = new Object();
         imagedrawer.editor.getBrowserName = function() {
+            return "Mozilla";
+        }
+
+        assetdrawer.editor = new Object();
+        assetdrawer.editor.getBrowserName = function() {
             return "Mozilla";
         }
 	}
@@ -69,7 +89,8 @@ function ImageToolBxe() {
 		/* attach the event handlers */
 		this.editor = editor;
 		this.editor.logMessage('Image tool initialized');
-	};
+	
+    };
 	
 	this.createImageHandler = function(event) {
 		/* create an image according to a url entered in a popup */
@@ -148,3 +169,25 @@ function LinkToolBxe() {
     };
 }
 
+
+function AssetToolBxe() {
+    
+    this.initialize = function(editor) {
+        this.editor = editor;
+        this.editor.logMessage('Asset tool initialized');
+       
+    };
+
+    this.createAsset =  function(src, type, lang, title, cssClass, target) {
+        
+        var sel = window.getSelection();
+        sel.selectEditableRange(drawertool.cssr);
+       
+        var xml = "<asset xmlns=\"http://bitflux.org/doctypes/bx\" src=\""+src+"\" lang=\""+lang+"\" type=\""+type+"\" ";
+        xml = xml + "target=\""+target+"\" cssclass=\""+cssClass+"\" >"+title+"</asset>";
+        
+        
+
+        return bxe_insertContent(xml, BXE_SELECTION);
+    };
+}

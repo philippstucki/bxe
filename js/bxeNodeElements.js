@@ -502,7 +502,7 @@ function bxe_Node_createNS(nodeType, namespaceURI, localName, attribs) {
 		}
 		if (attribs) {
 			for (var i = 0; i< attribs.length; i++) {
-				_node.setAttributeNS(attribs[i].namespaceURI, attribs[i].localName,attribs[i].value);
+                _node.setAttributeNS(attribs[i].namespaceURI, attribs[i].localName,attribs[i].value);
 			}
 		}
 	}

@@ -332,10 +332,10 @@ function xml_loaded(xmldoc) {
 	document.eDOMaddEventListener("CleanInline",bxe_CleanInline,false);
 	document.eDOMaddEventListener("InsertTable",bxe_InsertTable,false);
 	document.eDOMaddEventListener("InsertImage",bxe_InsertObject,false);
-	document.eDOMaddEventListener("InsertAsset",bxe_InsertAsset,false);
+	document.eDOMaddEventListener("ShowAssetDrawer",bxe_ShowAssetDrawer,false);
 	document.eDOMaddEventListener("OrderedList",bxe_OrderedList,false);
 	document.eDOMaddEventListener("UnorderedList",bxe_UnorderedList,false);
-
+    document.eDOMaddEventListener("InsertAsset", bxe_InsertAsset, false);
 	document.eDOMaddEventListener("changeLinesContainer",bxe_changeLinesContainer,false);
 	document.eDOMaddEventListener("Exit",bxe_exit,false);
 	

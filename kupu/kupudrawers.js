@@ -1225,3 +1225,35 @@ function LinkLibraryDrawer(tool, xsluri, libsuri, searchuri) {
 };
 
 LinkLibraryDrawer.prototype = new LibraryDrawer;
+
+
+function AssetLibraryDrawer(tool, xsluri, libsuri, searchuri) {
+    
+    /* a specific AssetDrawer for assets - a bxcms thingy */
+    
+    this.init(tool, xsluri, libsuri, searchuri); 
+    
+    this.save = function() {
+        
+        var selxpath = "//resource[@selected]";
+        var selnode  = this.xmldata.selectSingleNode(selxpath);
+        if (!selnode) {
+            return;
+        };
+        
+         
+        var src = selnode.selectSingleNode('uri/text()').nodeValue;
+        var type = document.getElementById('asset_type').value;
+        var lang = document.getElementById('asset_lang').value;
+        var title = document.getElementById('asset_title').value;
+        var cssClass = document.getElementById('asset_cssclass').value;
+        var target = document.getElementById('asset_target').value;        
+        
+        this.tool.createAsset(src, type, lang, title, cssClass, target);
+        
+        this.drawertool.closeDrawer();
+    }
+};
+
+AssetLibraryDrawer.prototype = new LibraryDrawer;
+

@@ -1241,7 +1241,6 @@ function bxe_InsertAsset() {
 	//this code is quite lenya specific....
 	// especially the unizh: check
 	var sel = window.getSelection();
-	
 	if (bxe_checkForSourceMode(sel)) {
 		return false;
 	}
@@ -1747,7 +1746,7 @@ function bxe_insertContent(content, replaceNode, options) {
 function bxe_insertContent_async(node,replaceNode, options) {
 	var docfrag;
 	if (typeof node == "string") {
-		docfrag = node.convertToXML()
+        docfrag = node.convertToXML()
 	} else {
 		docfrag = node;
 	}
@@ -1872,4 +1871,10 @@ function bxe_showImageDrawer() {
 	drawertool.openDrawer('imagedrawer');
 }
 
+function bxe_ShowAssetDrawer() {
+    drawertool.cssr = window.getSelection().getEditableRange();
+    if (drawertool.cssr) {
+        drawertool.openDrawer('assetdrawer');
+    }
+}
 
