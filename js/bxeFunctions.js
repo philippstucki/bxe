@@ -21,7 +21,13 @@ function __bxeSave(e) {
 			eDOMEventCall("Exit",document);
 		}
 	}
-	td.save(bxe_config.xmlfile, xmlstr, callback);
+	var url = bxe_config.xmlfile;
+	if (td.Exit) {
+		url += "?exit=true";
+	} else {
+		url += "?exit=false";
+	}
+	td.save(url, xmlstr, callback);
 }
 
 function bxe_getXmlDocument() {
