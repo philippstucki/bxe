@@ -6,6 +6,8 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 	
 	//do includes
 	this.parseIncludes();
+	
+	//debug(this.xmldoc.saveXML(this.xmldoc));
 	var rootChildren = this.xmldoc.documentElement.childNodes;
 
 	for (var i = 0; i < rootChildren.length; i++) {
@@ -80,7 +82,7 @@ DocumentVDOM.prototype.parseStart = function(node) {
 	var startNode = null;
 	Ende:
 	for (var i = 0; i < startChildren.length; i++) {
-		debug ("i" + i + " " +startChildren[i].nodeName);
+		// debug ("i" + i + " " +startChildren[i].nodeName);
 		if (startChildren[i].isRelaxNGElement("element")) {
 			startNode = startChildren[i];
 			break Ende;
@@ -104,10 +106,10 @@ DocumentVDOM.prototype.parseStart = function(node) {
 		startElement.nextSibling = null;
 		startElement.previousSibling = null;
 	}
-	debug(startNode );
-	dump("before parseChildren");
+	// debug(startNode );
+	//dump("before parseChildren");
 	startElement.parseChildren();
-	dump("RelaxNG is parsed\n");
+	//dump("RelaxNG is parsed\n");
 
 }
 
@@ -217,14 +219,15 @@ NodeVDOM.prototype.parseChildren = function(node) {
 			//FIXME this can be done smarter... cache the defines.
 			var xp = "/rng:grammar/rng:define[@name = '" + childNodes[i].getAttribute("name") + "']"
 			var defineChild = this.node.ownerDocument.documentElement.getXPathFirst(xp);
+			//debug("ref " + xp + " " + defineChild); 
+			
 			if (defineChild) {
-				debug ("isParsed " + defineChild.getAttribute("name") + " = " + defineChild.isParsed);
 				//FIXME:...
 				if (!defineChild.isParsed) {
 					var newDefine = new DefineVDOM(defineChild);
 					defineChild.isParsed = true;
 					defineChild.vdom = newDefine;
-					this.parseChildren(defineChild);
+					newDefine.parseChildren(defineChild);
 				} 
 				var newRef = new RefVDOM(childNodes[i]);
 				newRef.DefineVDOM = defineChild.vdom;
@@ -259,8 +262,13 @@ NodeVDOM.prototype.parseChildren = function(node) {
 			newChoice.appendChild(new EmptyVDOM());
 			newChoice.parseChildren();
 		}
-		else if (childNodes[i].isRelaxNGElement("choice") || childNodes[i].isRelaxNGElement("interleave")) {
+		else if (childNodes[i].isRelaxNGElement("choice")) {
 			newChoice = new ChoiceVDOM(childNodes[i]);
+			this.appendChild(newChoice);
+			newChoice.parseChildren();
+		}
+		else if (childNodes[i].isRelaxNGElement("interleave")) {
+			newChoice = new InterleaveVDOM(childNodes[i]);
 			this.appendChild(newChoice);
 			newChoice.parseChildren();
 		}
@@ -278,8 +286,14 @@ function RefVDOM(node) {
 }
 
 RefVDOM.prototype.isValid = function(ctxt) {
-	
-	return this.DefineVDOM.isValid(ctxt);
+	if (this.DefineVDOM.isValid(ctxt)) {
+		ctxt.vdom = this;
+		ctxt.nextVDOM();
+		return true;
+	} else { 
+		return false;
+	}
+
 }
 DefineVDOM.prototype = new NodeVDOM();
 
@@ -293,13 +307,16 @@ function DefineVDOM(node) {
 
 DefineVDOM.prototype.isValid = function(ctxt) {
 	var child = this.firstChild;
+//	debug ("DefineVDOM.isValid " + this.nodeName + this.node.getAttribute("name")); 
 	while (child) {
+		//debug ("DefineVDOM.isValid " + child.nodeName); 
 		if (child.isValid(ctxt)) {
 			ctxt.vdom = this;
 			return true;
 		}
 		child= child.nextSibling;
 	}
+	return false;
 	
 }
 
@@ -335,6 +352,40 @@ function ChoiceVDOM(node) {
 	this.nodeName = "RELAXNG_CHOICE";
 	this.attributes = new Array();
 }
+
+InterleaveVDOM.prototype = new NodeVDOM();
+
+InterleaveVDOM.prototype.isValid = function(ctxt) {
+	var child = this.firstChild;
+	//dump ("Interleave.isValid: " + this.nodeName+"\n");
+	var hasEmpty = false;
+	while (child) {
+		//dump ("Interleave.child.isValid: " + child.nodeName + "\n");
+		if (child.type == "RELAXNG_EMPTY") {
+			hasEmpty = true;
+		}
+		if (child.isValid(ctxt)) {
+			return true;
+		}
+		child= child.nextSibling;
+	}
+	if (hasEmpty) {
+		var vdom = ctxt.nextVDOM();
+		if (vdom) {
+			return vdom.isValid(ctxt);
+		}
+	}
+	return false;
+}
+
+function InterleaveVDOM(node) {
+	this.node = node;
+	this.type = "RELAXNG_INTERLEAVE";
+	this.nodeName = "RELAXNG_INTERLEAVE";
+	this.attributes = new Array();
+}
+
+
 EmptyVDOM.prototype = new NodeVDOM();
 
 function EmptyVDOM(node) {

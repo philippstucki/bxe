@@ -24,3 +24,8 @@ function AttributeVDOM(node, option) {
 	
 	
 }
+
+AttributeVDOM.prototype.isValid = function() {
+	debug ("AttributeVDOM.prototype.isValid");
+	return true;
+}
