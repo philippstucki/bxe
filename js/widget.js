@@ -575,7 +575,7 @@ Widget_StatusBar.prototype.positionize = function (e) {
 	} else {
 		target = this;
 	}
-	target.position(0,window.innerHeight - 20,"fixed");
+	target.position(0,document.documentElement.clientHeight - 20,"fixed");
 	this.Popup = new Widget_MenuPopup();
 }
 
