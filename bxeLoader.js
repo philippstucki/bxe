@@ -14,7 +14,7 @@
 // $Id: bxeLoader.js,v 1.259 2004/04/19 01:30:05 chregu Exp $
 
 var BXE_VERSION = "0.9.4-dev";
-var BXE_BUILD = "200404271203"
+var BXE_BUILD = "200404280330"
 
 
 if (window.location.protocol == "file:" || window.location.host.match(/localhost.*/)) {
