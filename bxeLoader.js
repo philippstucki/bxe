@@ -45,6 +45,7 @@ var mozile_corescript_loaded = 0;
 var mozile_script_loaded = 0;
 var bxe_config = new Object();
 var bxe_about_box = null;
+var bxe_format_list = null;
 var bxe_context_menu = null;
 
 function bxe_start(config_file,fromUrl) {
@@ -266,6 +267,7 @@ function xml_loaded(e) {
 	document.eDOMaddEventListener("toggleNormalMode",bxe_toggleNormalMode,false);
 	document.eDOMaddEventListener("DocumentSave",__bxeSave,false);
 	document.eDOMaddEventListener("ToggleTextClass",bxe_toggleTextClass,false);
+	document.eDOMaddEventListener("appendNode",bxe_appendNode,false);
 	document.eDOMaddEventListener("InsertLink",bxe_InsertLink,false);
 	document.eDOMaddEventListener("InsertTable",bxe_InsertTable,false);
 	document.eDOMaddEventListener("InsertImage",bxe_InsertImage,false);

@@ -1,5 +1,5 @@
 
-.MenuItem, .MenuItemDisabled, .MenuItemChecked {
+.MenuItem, .MenuItemDisabled, .MenuItemChecked, .MenuItemSeparator {
 	font-family: Arial, Helvetica, sans-serif; 
     font-size: 12px; 
     text-decoration: none; 
@@ -14,7 +14,7 @@
 	background-color: #aa3300 !important;
 	color: #FFFFFF;
 }
-.MenuItemDisabled {
+.MenuItemDisabled,.MenuItemSeparator {
     cursor: default;
     color: #992200;
 }
@@ -37,7 +37,7 @@
 	background-color:     #ff6600;
     padding: 0px 0px 0px 0px;
     border-style: outset;
-    width: 10em;
+    width: 15em;
     z-index: 10000;
     
      border: 1px dotted black;
@@ -107,6 +107,7 @@
 
 
 .MenuList {
+    width: 10em;
 }
 
 .ToolBar {

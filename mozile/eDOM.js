@@ -2773,7 +2773,7 @@ Range.prototype.deleteTextTree = function()
 		return null;
 
 	var top = this.__top;
-
+	
 	if((this.startContainer.nodeType != Node.TEXT_NODE) ||
 	   (this.endContainer.nodeType != Node.TEXT_NODE))
 		return null; // tmp - doesn't handle non text ranges

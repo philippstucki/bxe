@@ -252,7 +252,6 @@ function ctrlKeyUpHandler(event,cssr) {
 function nonctrlKeyPressHandler(event)
 {
 	var sel = window.getSelection();
-
 	// BACKSPACE AND DELETE (DOM_VK_BACK_SPACE, DOM_VK_DELETE)
 	if((event.keyCode == 8) || (event.keyCode == 46))
 	{
@@ -263,7 +262,7 @@ function nonctrlKeyPressHandler(event)
 		}
 
 		// first let's test collapsed
-		if(cssr.collapsed)
+		if(cssr.collapsed )
 		{
 			var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
 			if (event.keyCode == 46) {
@@ -395,6 +394,7 @@ function nonctrlKeyPressHandler(event)
 		if(!cssr.collapsed)
 		{
 			cssr.deleteTextTree();
+			
 		}
 
 		// seems to mess up the current position!

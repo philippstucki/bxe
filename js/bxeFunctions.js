@@ -213,6 +213,29 @@ function bxe_toggleTextClass(e) {
 	dump("is valid" +_node.XMLNode._xmlnode.isNodeValid(true));
 }
 
+function bxe_appendNode(e) {
+	var aNode = e.additionalInfo.appendToNode;
+	
+	
+	var newNode  = document.createElement(e.additionalInfo.localName);
+	newNode.appendChild(document.createTextNode("#"+e.additionalInfo.localName + " "));
+	
+	aNode.parentNode._htmlnode.insertBefore(newNode,aNode._htmlnode.nextSibling);
+	var _node = newNode;
+	while (!(_node.XMLNode && _node.XMLNode._xmlnode)) {
+		_node = _node.parentNode;
+	}
+	_node.XMLNode._htmlnode.convertToXMLDocFrag();
+	_node.XMLNode._xmlnode.insertIntoHTMLDocument(_node.XMLNode._htmlnode);
+	var sel = window.getSelection();
+	sel.removeAllRanges();
+	var rng = document.createRange();
+	rng.setStart(newNode.firstChild,1);
+	rng.setEnd(newNode.firstChild,newNode.firstChild.data.length-1);
+	dump(e.additionalInfo.localName + " is valid " +_node.XMLNode._xmlnode.isNodeValid(true));
+	sel.addRange(rng);
+}
+
 function bxe_changeLinesContainer(e) {
 	window.getSelection().changeLinesContainer(e.additionalInfo);
 }
@@ -310,11 +333,11 @@ function bxe_draw_widgets() {
 	//make toolbar
 	
 	var toolbar = new Widget_ToolBar();
-	var menulist = new Widget_MenuList("m",function(e) {eDOMEventCall("changeLinesContainer",document,this.value)});
-	menulist.appendItem("H1","h1");
-	menulist.appendItem("H2","h2");
-	menulist.appendItem("H3","h3");
-	toolbar.addItem(menulist);
+	bxe_format_list = new Widget_MenuList("m",function(e) {eDOMEventCall("changeLinesContainer",document,this.value)});
+	bxe_format_list.appendItem("H1","h1");
+	bxe_format_list.appendItem("H2","h2");
+	bxe_format_list.appendItem("H3","h3");
+	toolbar.addItem(bxe_format_list);
 	
 	
 	toolbar.addButtons(buttons);
@@ -338,10 +361,28 @@ function MouseClickEvent(e) {
 	
 	
 	var target = e.target.parentElement;
+	
+	
 	if(target.userModifiable) {
 		bxe_status_bar.buildXPath(target);
+		
+		
+		var sel = window.getSelection();
+		var cssr = sel.getEditableRange();
+		var lines = cssr.lines();
+		bxe_format_list.removeAllItems();
+		
+		if (lines[0].container) {
+			bxe_format_list.appendItem(lines[0].container.XMLNode.localName,lines[0].container.XMLNode.localName);
+			var ac = lines[0].container.XMLNode.parentNode._xmlnode.allowedChildren;
+			ac.sort();
+			for (i = 0; i < ac.length; i++) {
+				bxe_format_list.appendItem(ac[i], ac[i]);
+			}
+		} else {
+			bxe_format_list.appendItem("no block found","");
+		}
 	}
-	
 }
 
 function bxe_ContextMenuEvent(e) {

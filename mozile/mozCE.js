@@ -508,12 +508,11 @@ Selection.prototype.getEditableRange = function()
 		var selr = window.getSelection().getRangeAt(0);
 		var commonAncestor = selr.commonAncestorContainer;
 
-		if(!commonAncestor.parentElement.userModifiable)
+		if(!commonAncestor.parentElement.userModifiable) {
 			return null;
-
+		}
 		var cec = commonAncestor.parentElement.userModifiableContext;
-
-		var cssr = documentCreateCSSTextRange(selr.cloneRange(), cec); 
+		var cssr = documentCreateCSSTextRange(selr.cloneRange(), cec);
 		return cssr;
 	}
 	catch(e)

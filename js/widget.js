@@ -104,7 +104,15 @@ Widget_MenuPopup.prototype.draw = function() {
 
 }
 
-
+Widget_MenuPopup.prototype.addSeparator = function () {
+	//don't do a separator, if there are no elements in the popup
+	if (this.MenuItems.length > 0) {
+		var sep  = document.createElement("div");
+		sep.setAttribute("class","MenuItemSeparator");
+		sep.appendChild(document.createTextNode("------"));
+		this.node.appendChild(sep);
+	}
+}
 
 Widget_MenuPopup.prototype.addMenuItem = function 	(label,action) {
 	var menuitem = new Widget_MenuItem(label,action);
@@ -116,6 +124,7 @@ Widget_MenuPopup.prototype.addMenuItem = function 	(label,action) {
 
 Widget_MenuPopup.prototype.removeAllMenuItems = function () {
 	this.node.removeAllChildren();
+	this.MenuItems = new Array();
 }
 
 function Widget_MenuItem(label, action) {
@@ -350,6 +359,7 @@ Widget_ToolBar.prototype.addItem = function(item) {
 
 function Widget_MenuList(id, event) {
 	this.node= document.createElement("select");
+	this.node.setAttribute("class","MenuList");
 	if (event) {
 		this.node.addEventListener("change", event, false);
 	}
@@ -358,6 +368,9 @@ function Widget_MenuList(id, event) {
 
 Widget_MenuList.prototype = new Widget();
 
+Widget_MenuList.prototype.removeAllItems = function() {
+	this.node.removeAllChildren();
+}
 Widget_MenuList.prototype.appendItem = function(label, value) {
 	var option = document.createElement("option");
 	option.text = label;
@@ -459,6 +472,7 @@ Widget_StatusBar.prototype.positionize = function (e) {
 		target = this;
 	}
 	target.position(0,window.innerHeight - 20,"fixed");
+	this.Popup = new Widget_MenuPopup();
 }
 
 Widget_StatusBar.prototype.buildXPath = function (node) {
@@ -467,7 +481,7 @@ Widget_StatusBar.prototype.buildXPath = function (node) {
 	this.node.removeAllChildren();
 	
 	
-	this.Popup = new Widget_MenuPopup();
+	
 	
 	this.Popup.position(0,0,"absolute");
 	this.Popup.StatusBar = this;
@@ -530,22 +544,46 @@ Widget_ContextMenu.prototype.buildPopup = function (e,node) {
 	}
 	var sel  = window.getSelection();
 	var cssr = sel.getEditableRange();
-	var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
+	//var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
 	var ac = node.XMLNode._xmlnode.allowedChildren;
-	for (i = 0; i < ac.length; i++) {
-			var menui = this.Popup.addMenuItem("Add " + ac[i], function(e) { 
+	if (!(sel.isCollapsed)) {
+		for (i = 0; i < ac.length; i++) {
+			var menui = this.Popup.addMenuItem(ac[i], function(e) { 
 				var widget = e.currentTarget.Widget;
 				var sel = window.getSelection();
 				sel.removeAllRanges();
 				var rng = widget.Cssr.cloneRange();
 				sel.addRange(rng);
 				eDOMEventCall("toggleTextClass",document,{"localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI})
-		});
-		menui.Cssr = cssr;
-		menui.InsertLocalName = ac[i];
-		menui.InsertNamespaceURI;
-			
+			});
+			menui.Cssr = cssr;
+			menui.InsertLocalName = ac[i];
+			menui.InsertNamespaceURI;
+		}
 	}
+	var ac = node.XMLNode._xmlnode.parentNode.allowedChildren;
+	ac.sort();
+	for (i = 0; i < ac.length; i++) {
+			var menui = this.Popup.addMenuItem("Append " + ac[i], function(e) { 
+				var widget = e.currentTarget.Widget;
+				eDOMEventCall("appendNode",document,{"appendToNode": widget.AppendToNode, "localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI})
+			});
+			menui.Cssr = cssr;
+			menui.InsertLocalName = ac[i];
+			menui.InsertNamespaceURI;
+			menui.AppendToNode = node.XMLNode;
+		}
+	this.Popup._node = node;
+	this.Popup.addSeparator();
+	node = node.XMLNode.parentNode;
+	while(node && node.nodeType == 1) {
+		var ele = this.Popup.addMenuItem(node.nodeName);
+		var sub = new Widget_MenuPopup(node.nodeName);
+		ele.addMenu(sub);
+		node = node.parentNode;
+	} 
+	
+	
 	this.Popup.position(e.pageX, e.pageY, "absolute");
 	this.Popup.draw();
 	this.Popup._node = node;
