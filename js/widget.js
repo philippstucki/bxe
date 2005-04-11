@@ -868,6 +868,16 @@ Widget_ModalBox.prototype.addItem = function (name, value, type, description, op
 			td.appendChild(inputfield);
 		break;
 		
+		case "textarea":
+			var td = this.addFormEntry(name, description);
+			var inputfield = document.createElement("textarea");
+			var text = document.createTextNode(value);
+			
+			inputfield.name = name;
+			inputfield.appendChild(text);
+			td.appendChild(inputfield);
+		break;
+		
 		case "select":
 			var td = this.addFormEntry(name, description);
 			var inputfield = document.createElement("select");
@@ -949,6 +959,7 @@ Widget_ModalBox.prototype.show = function(x,y, position) {
 		subm.setAttribute("value","OK");
 		this.hasTable.parentNode.addEventListener("submit", function(e) {
 			var Widget = e.currentTarget.Widget;
+			e.preventDefault();
 			Widget.hide();
 			bxe_registerKeyHandlers();
 			var elem = e.target.elements;

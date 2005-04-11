@@ -1669,10 +1669,25 @@ function bxe_catch_alert_message(e) {
 }
 
 function bxe_exit(e) {
+	if (bxe_checkChangedDocument()) {
+		if (confirm( "You have unsaved changes.\n Click cancel to return to the document.\n Click OK to really leave to page.")) {
+			bxe_lastSavedXML = bxe_getXmlDocument();
+			window.location = bxe_config.exitdestination;
+		}
+	} else {
+		bxe_lastSavedXML = bxe_getXmlDocument();
+		window.location = bxe_config.exitdestination;
+	}
 	
-	bxe_saveOnPart(e);
-	bxe_lastSavedXML = bxe_getXmlDocument();
-	window.location = bxe_config.exitdestination;
+}
+
+function bxe_checkChangedDocument() {
+	var xmlstr = bxe_getXmlDocument();
+	if (bxe_editable_page && xmlstr && xmlstr != bxe_lastSavedXML) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 function bxe_not_yet_implemented() {
