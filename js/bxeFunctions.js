@@ -698,6 +698,9 @@ function bxe_ContextPopup(e) {
 			var appNode = widget.MenuPopup.MainNode;
 			var prevSibling = appNode.previousSibling;
 			while (prevSibling && prevSibling._node.nodeType != 1) {
+				if (prevSibling._node.nodeType == 3 && !prevSibling._node.isWhitespaceOnly) {
+					break;
+				}
 				prevSibling = prevSibling.previousSibling;
 			}
 			if (prevSibling) {
@@ -712,6 +715,10 @@ function bxe_ContextPopup(e) {
 			var appNode = widget.MenuPopup.MainNode;
 			var nextSibling = appNode.nextSibling;
 			while (nextSibling && nextSibling._node.nodeType != 1) {
+				if (nextSibling._node.nodeType == 3 && !nextSibling._node.isWhitespaceOnly) {
+					break;
+				}
+
 				nextSibling = nextSibling.nextSibling;
 			}
 			if (nextSibling) {

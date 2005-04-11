@@ -115,6 +115,7 @@ XMLNode.prototype.insertBefore = function(newNode,oldNode) {
 	} else {
 		newNode._node=this._node.insertBefore(newNode._node,null);
 	}
+	
 	this.insertBeforeIntern(newNode,oldNode);
 
 	newNode._node.XMLNode = newNode;
@@ -185,10 +186,20 @@ XMLNode.prototype.unlinkChildren = function () {
 
 
 XMLNode.prototype.appendChild = function(newNode) {
+	
+	var child = newNode._node.firstChild;
+	while (child) {
+		var nextchild = child.nextSibling;
+		if ( child.nodeType == 1 && child.getAttribute("_edom_internal_node")) {
+			child.parentNode.removeChild(child);
+		}
+		child = nextchild;
+		
+	}
+	
 	if (this._node.ownerDocument == document && this.nodeType == 1 ) {
 		newNode.createNS(newNode.namespaceURI, newNode.localName, newNode.attributes);
 	}
-
 	
 	var child = newNode.firstChild;
 	while (child) {
