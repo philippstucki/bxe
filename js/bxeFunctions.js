@@ -668,7 +668,8 @@ function bxe_ContextPopup(e) {
 				var appNode = widget.MenuPopup.MainNode;
 				var clip = mozilla.getClipboard();
 				var clipNode = clip.getData(MozClipboard.TEXT_FLAVOR);
-				eDOMEventCall("appendNode",document,{"appendToNode":appNode, "node": clipNode.firstChild})
+				
+				eDOMEventCall("appendNode",document,{"appendToNode":appNode, "node": clipNode})
 			});
 		}
 	}
@@ -855,20 +856,37 @@ function bxe_appendNode(e) {
 	bxe_history_snapshot();
 	
 	if (e.additionalInfo.node) {
-		var cb = bxe_getCallback(e.additionalInfo.node.localName, e.additionalInfo.node.namespaceURI);
-		if (cb ) {
-			if (bxe_doCallback(cb, aNode)) {
-				return;
+		if (e.additionalInfo.node.nodeType == 11) {
+			var _fragNode = e.additionalInfo.node;
+			var _child = _fragNode.lastChild;
+			
+			while (_child) {
+				
+				var _next = _child.previousSibling;
+				if (_child.nodeType == 1) {
+					var newNode = _child.init();
+					aNode.parentNode.insertAfter(newNode,aNode);
+					newNode._node.updateXMLNode();
+					newNode.parentNode.isNodeValid(true,2);
+				} 
+				_child = _next;
 			}
+		} else {
+			var cb = bxe_getCallback(e.additionalInfo.node.localName, e.additionalInfo.node.namespaceURI);
+			
+			if (cb ) {
+				if (bxe_doCallback(cb, aNode)) {
+					return;
+				}
+			}
+			
+			var newNode = e.additionalInfo.node.init();
+			
+			aNode.parentNode.insertAfter(newNode,aNode);
+			newNode._node.updateXMLNode();
+			newNode.parentNode.isNodeValid(true,2);
 		}
-		
-		var newNode = e.additionalInfo.node.init();
-
-		aNode.parentNode.insertAfter(newNode,aNode);
-		newNode._node.updateXMLNode();
-		newNode.parentNode.isNodeValid(true,2);
 	} else {
-
 		var cb = bxe_getCallback(e.additionalInfo.localName,e.additionalInfo.namespaceURI);
 		
 		if (cb ) {
