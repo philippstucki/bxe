@@ -134,9 +134,7 @@ function bxe_start(config_file,fromUrl, configArray) {
 }
 
 function bxe_saveOnPart(evt) { 
-	
-	var xmlstr = bxe_getXmlDocument();
-	if (bxe_editable_page && xmlstr && xmlstr != bxe_lastSavedXML) {
+	if (bxe_checkChangedDocument()) {
 		if (evt.type == 'beforeunload') {
 			return "You have unsaved changes.\n Click cancel to return to the document.\n Click OK to really leave to page.";
 		}
