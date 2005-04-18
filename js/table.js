@@ -75,7 +75,7 @@ HTMLTableCellElement.prototype.TableAppendCol = function () {
 			if ( row.localName.toLowerCase() == "tr") {
 				var cell = row.findCellPosition(pos);
 				if (cell) {
-					var newtd = document.createElementNS(XHTMLNS,"td");
+					var newtd = document.createElementNS(XHTMLNS,cell.localName.toLowerCase());
 					newtd.appendChild(document.createTextNode(STRING_NBSP));
 					row.insertBefore(newtd,cell.nextSibling);
 				}
@@ -249,7 +249,7 @@ HTMLTableRowElement.prototype.findCellPosition = function(pos) {
 	var nextpos = 1;
 	
 	while (cell) {
-		if (cell.nodeType == 1 && cell.localName.toLowerCase() == "td") {
+		if (cell.nodeType == 1 && (cell.localName.toLowerCase() == "td" || cell.localName.toLowerCase() == "th")) {
 			if (nextpos >= pos) {
 				return cell;
 			}
