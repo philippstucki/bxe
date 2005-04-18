@@ -1902,6 +1902,7 @@ function bxe_insertContent_async(node,replaceNode, options) {
 		docfrag = node;
 	}
 	var oldStyleInsertion = false;
+	bxe_history_snapshot();
 	if (replaceNode == BXE_SELECTION) {
 		var sel = window.getSelection();
 		var  _currentNode = docfrag.lastChild;
@@ -1933,6 +1934,7 @@ function bxe_insertContent_async(node,replaceNode, options) {
 				_node = _currentNode.prepareForInsert();
 			}
 		}
+		bxe_history_snapshot_async();
 		return _node;
 	} else if (replaceNode) {
 		
@@ -1941,6 +1943,7 @@ function bxe_insertContent_async(node,replaceNode, options) {
 		
 		replaceNode.parentNode.insertAfter(newNode,replaceNode);
 		newNode._node.updateXMLNode();
+		bxe_history_snapshot_async();
 		debug("valid? : " + newNode.isNodeValid());
 	} else {
 		docfrag.firstChild.init();
