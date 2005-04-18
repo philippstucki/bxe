@@ -423,13 +423,23 @@ Selection.prototype.outdentLines = function()
 
 Selection.prototype.toggleListLines = function(requestedList, alternateList)
 {	
+	var _moved = false;
+	//if cursor at end, shit happens. prevent that here
+	// see http://cvs.wyona.org/cgi-bin/bugzilla/show_bug.cgi?id=3188
+	if(this.isCollapsed && this.anchorOffset > 0) {
+		this.collapse(this.anchorNode, this.anchorOffset -1);
+		 _moved = true;
+	}
 	var cssr = this.getEditableRange();
 
 	if(!cssr)
 		return;
 	listLinesToggle(cssr, requestedList, alternateList);
-
 	this.selectEditableRange(cssr);
+	if (_moved) {
+		this.collapse(this.anchorNode, this.anchorOffset +1);
+		 
+	}
 	return  cssr.lines;
 
 }
