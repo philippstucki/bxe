@@ -141,17 +141,37 @@ function bxe_saveOnPart(evt) {
 		else if (!confirm('You have unsaved changes.\n Are you sure you want to leave to page unsaved?\n Click OK for leaving the page and *NOT* saving \n Click Cancel for leaving the page and saving')) {
 			eDOMEventCall("DocumentSave",document);
 		}
-		
 	}
 	
 }
 
+/*
+* broken prototype implementation. see
+* http://bugzilla.mozilla.org/show_bug.cgi?id=290777
+*/
+Text.prototype.__defineGetter__("bug290777_check",function() { return this.nodeValue;} )
+
+function bxe_bug290777_check() {
+	try {
+		var text = document.createTextNode("foobar");
+		
+		var test = text.bug290777_check;
+		text = null;
+		return false;
+	} catch (e) {
+		return true;
+	}
+}
 
 function bxe_checkSupportedBrowsers() {
 	var mozillaRvVersion = navigator.userAgent.match(/rv:([[0-9a-z\.]*)/)[1];
 	var mozillaRvVersionInt = parseFloat(mozillaRvVersion);
-
+	
 	if (mozillaRvVersionInt >= 1.4) {
+		if (bxe_bug290777_check()) {
+			alert ("You are using a Mozilla release with a broken prototype implementation.\nMozilla 1.7.7 and Firefox 1.0.3 are known to have this bug.\n Please up- or downgrade.");
+			return true;
+		}
 		if (bxe_bug248172_check()) {
 			alert ("You are using a Mozilla release with a broken XMLSerializer implementation.\n SAVE (and others) WILL NOT WORK!\nMozilla 1.7.x and Firefox 0.9.x are known to have this bug.\n Please up- or downgrade.");
 		}
