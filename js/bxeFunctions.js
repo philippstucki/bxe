@@ -1695,7 +1695,7 @@ function bxe_catch_alert_message(e) {
 
 function bxe_exit(e) {
 	if (bxe_checkChangedDocument()) {
-		if (confirm( "You have unsaved changes.\n Click cancel to return to the document.\n Click OK to really leave to page.")) {
+		if (confirm( "You have unsaved changes.\n Click cancel to return to the document.\n Click OK to really leave the page.")) {
 			bxe_lastSavedXML = bxe_getXmlDocument();
 			window.location = bxe_config.exitdestination;
 		}
