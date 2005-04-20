@@ -123,7 +123,7 @@ HTMLTableCellElement.prototype.TableCellMergeRight = function () {
 	}
 	this.normalize();
 	nextSibling.parentNode.removeChild(nextSibling);
-	var colspan = this.getAttribute("colspan");
+	var colspan = parseInt(this.getAttribute("colspan"));
 	if (!colspan) {
 		colspan = 1;
 	}
@@ -137,7 +137,7 @@ HTMLTableCellElement.prototype.TableCellMergeDown = function () {
 	var pos = this.findPosition();
 	var thisRowspan = 1;
 	if (this.hasAttribute("rowspan")) {
-		thisRowspan = this.getAttribute("rowspan");
+		thisRowspan = parseInt(this.getAttribute("rowspan"));
 	}
 	this.setAttribute("rowspan",thisRowspan+1);	
 	
@@ -191,7 +191,7 @@ HTMLTableCellElement.prototype.TableCellSplitRight = function () {
 	var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
 	ip.splitContainedLine();
 
-	var colspan = this.getAttribute("colspan");
+	var colspan = parseInt(this.getAttribute("colspan"));
 	if (colspan > 2) {
 		this.setAttribute("colspan", colspan-1);
 	} else {
@@ -215,7 +215,7 @@ HTMLTableCellElement.prototype.TableCellSplitDown = function() {
 	var ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
 	ip.splitContainedLine();
 
-	var rowspan = this.getAttribute("rowspan");
+	var rowspan = parseInt(this.getAttribute("rowspan"));
 	if (rowspan > 2) {
 		this.setAttribute("rowspan", rowspan-1);
 	} else {
