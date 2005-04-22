@@ -738,12 +738,14 @@ function bxe_ContextPopup(e) {
 		
 		
 		//split
-		var menui = popup.addMenuItem("Split right", function(e) {
-			var widget = e.currentTarget.Widget;
-			var _par = widget.MenuPopup.MainNode._node.parentNode;
-			widget.MenuPopup.MainNode._node.TableCellSplitRight();
-			_par.updateXMLNode();
-		});
+		if (node._node.getAttribute("colspan") > 1) {
+			var menui = popup.addMenuItem("Split right", function(e) {
+				var widget = e.currentTarget.Widget;
+				var _par = widget.MenuPopup.MainNode._node.parentNode;
+				widget.MenuPopup.MainNode._node.TableCellSplitRight();
+				_par.updateXMLNode();
+			});
+		}
 		
 		if (node._node.getAttribute("rowspan") > 1) {
 			
