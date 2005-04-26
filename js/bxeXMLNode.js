@@ -186,15 +186,16 @@ XMLNode.prototype.unlinkChildren = function () {
 
 
 XMLNode.prototype.appendChild = function(newNode) {
-	
-	var child = newNode._node.firstChild;
-	while (child) {
-		var nextchild = child.nextSibling;
-		if ( child.nodeType == 1 && child.getAttribute("_edom_internal_node")) {
-			child.parentNode.removeChild(child);
+	if (newNode._node) {
+		var child = newNode._node.firstChild;
+		while (child) {
+			var nextchild = child.nextSibling;
+			if ( child.nodeType == 1 && child.getAttribute("_edom_internal_node")) {
+				child.parentNode.removeChild(child);
+			}
+			child = nextchild;
+			
 		}
-		child = nextchild;
-		
 	}
 	
 	if (this._node.ownerDocument == document && this.nodeType == 1 ) {
