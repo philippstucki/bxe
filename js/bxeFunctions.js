@@ -741,9 +741,8 @@ function bxe_ContextPopup(e) {
 		if (node._node.getAttribute("colspan") > 1) {
 			var menui = popup.addMenuItem("Split right", function(e) {
 				var widget = e.currentTarget.Widget;
-				var _par = widget.MenuPopup.MainNode._node.parentNode;
-				widget.MenuPopup.MainNode._node.TableCellSplitRight();
-				_par.updateXMLNode();
+				var table =  widget.MenuPopup.MainNode._node.TableCellSplitRight();
+				table.updateXMLNode();
 			});
 		}
 		
@@ -751,9 +750,8 @@ function bxe_ContextPopup(e) {
 			
 			var menui = popup.addMenuItem("Split down", function(e) {
 				var widget = e.currentTarget.Widget;
-				var _par = widget.MenuPopup.MainNode._node.parentNode;
-				widget.MenuPopup.MainNode._node.TableCellSplitDown();
-				_par.updateXMLNode();
+				var table = widget.MenuPopup.MainNode._node.TableCellSplitDown();
+				table.updateXMLNode();
 			});
 		}
 		
@@ -766,42 +764,37 @@ function bxe_ContextPopup(e) {
 			var menui = popup.addMenuItem("Merge right", function(e) {
 				var widget = e.currentTarget.Widget;
 				var _par = widget.MenuPopup.MainNode._node.parentNode;
-				widget.MenuPopup.MainNode._node.TableCellMergeRight();
-				_par.updateXMLNode();
+				var table = widget.MenuPopup.MainNode._node.TableCellMergeRight();
+				table.updateXMLNode();
 			});
 		}
 		//TODO fix for last row
 		var menui = popup.addMenuItem("Merge down", function(e) {
 			var widget = e.currentTarget.Widget;
-			var _par = widget.MenuPopup.MainNode._node.parentNode;
-			widget.MenuPopup.MainNode._node.TableCellMergeDown();
-			_par.updateXMLNode();
+			var table = widget.MenuPopup.MainNode._node.TableCellMergeDown();
+			table.updateXMLNode();
 		});
 		
 		var menui = popup.addMenuItem("Append Row", function(e) {
 			var widget = e.currentTarget.Widget;
-			var _par = widget.MenuPopup.MainNode._node.parentNode;
-			widget.MenuPopup.MainNode._node.TableAppendRow();
-			_par.updateXMLNode();
+			var table = widget.MenuPopup.MainNode._node.TableAppendRow();
+			table.updateXMLNode();
 		});
 		var menui = popup.addMenuItem("Append Col", function(e) {
 			var widget = e.currentTarget.Widget;
-			var _par = widget.MenuPopup.MainNode._node.parentNode.parentNode;
-			widget.MenuPopup.MainNode._node.TableAppendCol();
-			_par.updateXMLNode();
+			var table = widget.MenuPopup.MainNode._node.TableAppendCol();
+			table.updateXMLNode();
 		});
 		var menui = popup.addMenuItem("Remove Row", function(e) {
 			var widget = e.currentTarget.Widget;
-			var _par = widget.MenuPopup.MainNode._node.parentNode.parentNode;
-			widget.MenuPopup.MainNode._node.TableRemoveRow();
-			_par.updateXMLNode();
+			var table = widget.MenuPopup.MainNode._node.TableRemoveRow();
+			table.updateXMLNode();
 		});
 		
 		var menui = popup.addMenuItem("Remove Col", function(e) {
 			var widget = e.currentTarget.Widget;
-			var _par = widget.MenuPopup.MainNode._node.parentNode.parentNode;
-			widget.MenuPopup.MainNode._node.TableRemoveCol();
-			_par.updateXMLNode();
+			var table = widget.MenuPopup.MainNode._node.TableRemoveCol();
+			table.updateXMLNode();
 		});
 		
 		
@@ -858,6 +851,45 @@ function bxe_NodeInsertedBefore(e) {
 	}
 	
 
+}
+function bxe_getChildPosition(node) {
+	if (!node) {
+		return 0;
+	}
+	
+	var z = 0;
+	var textNode = node.previousSibling;
+	while (textNode) {
+		textNode = textNode.previousSibling;
+		z++;
+	}
+	return z;
+}
+
+function bxe_splitAtSelection(node) {
+	
+	var sel= window.getSelection();
+	var cssr = sel.getEditableRange();
+	var xmlnode = cssr.startContainer;
+	xmlnode.normalize();
+	
+	var newnode = xmlnode.splitText(cssr.startOffset);
+	if (newnode.nodeValue == '') {
+		newnode.appendChild(document.createTextNode(STRING_NBSP));
+	}
+	
+	//split all up to node	
+	if (node) {
+		var _pos = 0;
+		while (xmlnode && xmlnode != node) {
+			_pos = bxe_getChildPosition(xmlnode);
+			xmlnode = xmlnode.parentNode
+			xmlnode.split(_pos + 1);
+		}
+	} else {
+		xmlnode.parentNode.split(1);
+	}
+	return xmlnode;
 }
 
 function bxe_appendNode(e) {
