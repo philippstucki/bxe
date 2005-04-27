@@ -114,11 +114,12 @@ Element.prototype.TableCellMergeDown = function () {
 	}
 	
 	var downColSpanCount = bxe_table_getSpanCount(downCol.getAttribute("colspan"));
-	if (downColSpanCount > 1) {
-		if (bxe_table_getSpanCount(this.getAttribute("colspan")) != downColSpanCount) {
+	var thisColSpanCount = bxe_table_getSpanCount(this.getAttribute("colspan"));
+	
+	if (downColSpanCount != thisColSpanCount) {
 			alert("Down cell's colspan is different to this cell's colspan, merging not possible");
 			return;
-		}
+		
 	}
 	
 	this.setAttribute("rowspan",thisRowspan+1);	
