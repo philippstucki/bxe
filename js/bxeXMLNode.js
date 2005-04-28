@@ -109,15 +109,20 @@ XMLNode.prototype.insertAfter = function(newNode, oldNode) {
 }
 
 XMLNode.prototype.insertBefore = function(newNode,oldNode) {
-	newNode = this.appendChild(newNode);
+	var oldHtmlNode = newNode._node;
+	var newNode = this.appendChild(newNode);
+	if (oldHtmlNode) {
+		oldHtmlNode.parentNode.removeChild(oldHtmlNode);
+	}
 	if (oldNode) {
+		
 		newNode._node = this._node.insertBefore(newNode._node,oldNode._node);
 	} else {
 		newNode._node=this._node.insertBefore(newNode._node,null);
 	}
 	
 	this.insertBeforeIntern(newNode,oldNode);
-
+	
 	newNode._node.XMLNode = newNode;
 
 }
@@ -211,6 +216,9 @@ XMLNode.prototype.appendChild = function(newNode) {
 	newNode_node = this._node.appendChild(newNode._node);
 	newNode._node = newNode_node;
 	this.appendChildIntern(newNode);
+	if (!newNode.hasChildNodes()) {
+		createTagNameAttributes(newNode._node,true);
+	}
 	return newNode;
 }
 
