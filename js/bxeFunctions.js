@@ -1890,12 +1890,11 @@ function bxe_InternalChildNodesAttrChanged(e) {
 	}
 	node.replaceChild(newNode,node.InternalChildNode);
 	newNode.setAttribute("_edom_internal_node","true");
+	newNode.InternalParentNode = node;
 	node.InternalChildNode = newNode;
-	createTagNameAttributes(node,true)
-	
-	
-	
-	
+	if (!node.XMLNode.hasChildNodes()) {
+		createTagNameAttributes(node,true);
+	}
 }
 
 function bxe_registerKeyHandlers() {
