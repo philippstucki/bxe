@@ -530,17 +530,30 @@ function bxe_deleteWholeSelection(sel,backspace) {
 	sel.anchorNode.parentNode.updateXMLNode();
 }
 
+function bxe_switchSelectionEnds(sel) {
+		var an = sel.anchorNode;
+			var ao = sel.anchorOffset;
+			var fn = sel.focusNode;
+			var fo = sel.focusOffset;
+			
+			sel.collapse(fn,fo)
+			sel.extend(an,ao);
+}
+
 function bxe_deleteEventKey(sel, backspace) {
 
 		//switch focus and anchor, if focus is before anchor
 		// this prevents some problems with updateXMLNode and unifies the handling
-		// Bug 635 caused this
-		//BX_debug(sel.focusNode);
-		if (!sel.isCollapsed && sel.focusNode.nodeType == 3 && sel.focusOffset == 0 && sel.focusNode.compareDocumentPosition(sel.anchorNode) & 4) {
-			var n = sel.anchorNode;
-			var o = sel.anchorOffset;
-			sel.collapse(sel.focusNode,0)
-			sel.extend(n,o);
+		// Bug 635 caused this and
+		// http://cvs.wyona.org/cgi-bin/bugzilla/show_bug.cgi?id=3015
+		
+		if (!sel.isCollapsed && sel.focusNode.nodeType == 3 ) {
+			var _pos = sel.focusNode.compareDocumentPosition(sel.anchorNode);
+			if (_pos  & 4) {
+				bxe_switchSelectionEnds(sel);
+			} else if ( _pos == 0 && sel.focusOffset < sel.anchorOffset) {
+				bxe_switchSelectionEnds(sel);
+			}
 		}
 		if (sel.isCollapsed) {
 			sel.deleteSelection(backspace);
