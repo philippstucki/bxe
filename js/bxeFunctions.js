@@ -968,6 +968,8 @@ function bxe_appendChildNode(e) {
 			if (cHT) {
 				if (!e.additionalInfo.noPlaceholderText) {
 					newNode.setContent("#" + e.additionalInfo.localName + " ");
+					newNode._node.removeAttribute("_edom_tagnameopen");
+					newNode.parentNode._node.removeAttribute("_edom_tagnameopen");
 				}
 			} else {
 				var ac = newNode.allowedChildren;
