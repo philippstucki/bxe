@@ -738,6 +738,8 @@ XMLNodeElement.prototype.makeDefaultNodes = function(noPlaceholderText) {
 	if (cHT ) {
 		if (!noPlaceholderText) {
 			this.setContent("#" + this.localName + " ");
+			
+			this._node.removeAttribute("_edom_tagnameopen");
 		}
 	} else {
 		var ac = this.allowedChildren;
