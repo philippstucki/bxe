@@ -453,7 +453,12 @@ Selection.prototype.insertNodeRaw = function (node, oldStyleInsertion) {
 	if(!cssr.collapsed)
 	{
 		bxe_deleteEventKey(window.getSelection(), false);
-	}
+	} /*else {
+		if (cssr.startContainer.nodeType == 3 && cssr.startContainer.data == STRING_NBSP) {
+			cssr.startContainer.data = "llll";
+		}
+	}*/
+	
 	if (oldStyleInsertion) {
 		var ip = cssr.firstInsertionPoint;
 		ip.insertNode(node);
@@ -530,7 +535,7 @@ Selection.prototype.paste = function()
 			window.getSelection().insertNode(content);
 		}
 	} else {
-		window.getSelection().insertNode(content);
+		bxe_insertContent_async(content,BXE_SELECTION,BXE_SPLIT_IF_INLINE);
 	} 
 	
 	var node = window.getSelection().anchorNode;
