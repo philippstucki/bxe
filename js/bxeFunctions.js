@@ -2092,7 +2092,7 @@ function bxe_start_plugins () {
 		for (var i = 0; i < ps.length; i++) {
 			var p = bxe_plugins[ps[i]];
 			if (p.start) {
-				p.start();
+				p.start(bxe_config.getPluginOptions(ps[i]));
 			}
 		}
 	}
