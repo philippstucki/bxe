@@ -45,7 +45,7 @@ Element.prototype.findPosition = function () {
 	var prevSibling = this.previousSibling;
 	var pos = 1;
 	while(prevSibling) {
-		if (prevSibling.nodeType == 1 && (prevSibling.localName== "td" || cell.localName.toLowerCase() == "th")) {
+		if (prevSibling.nodeType == 1 && (prevSibling.localName.toLowerCase() == "td" || cell.localName.toLowerCase() == "th")) {
 			var _attr = prevSibling.getAttribute("colspan");
 			if (_attr > 0) {
 				pos += parseInt( _attr);
@@ -199,7 +199,7 @@ Element.prototype.findCellPosition = function(pos) {
 	var nextpos = 1;
 	
 	while (cell) {
-		if (cell.nodeType == 1 && cell.localName == "td") {
+		if (cell.nodeType == 1 && (cell.localName == "td" || cell.localName == "th")) {
 			if (nextpos >= pos) {
 				return cell;
 			}
@@ -380,7 +380,7 @@ function bxe_table_insert_row_or_col(roworcol)
 	BX_popup.style.top=BX_popup.offsetTop - 1 + "px";
 	
 }
-
+/*
 function bxe_table_find_current_cell()
 {
 	
@@ -397,7 +397,7 @@ function bxe_table_find_current_cell()
 	
 	return cell;
 	
-}
+}*/
 
 function bxe_table_insert_row(cell)
 {
@@ -973,7 +973,7 @@ function bxe_createTableMatrix(td) {
 		//loop all real existing table cells
 		for(var c = 0; c < row.childNodes.length; c++) {
 			cell = row.childNodes[c];
-			if(cell.nodeName.toLowerCase() != "td")  continue; //caution: may be there are text nodes (CRLF or whitespace)
+			if(cell.nodeName.toLowerCase() != "td" && cell.nodeName.toLowerCase() != "th")  continue; //caution: may be there are text nodes (CRLF or whitespace)
 			tc++;
 			//find the homogenious matrix pos
 			//alert("tr="+tr+" tc="+tc);
