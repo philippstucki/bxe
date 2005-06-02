@@ -45,7 +45,7 @@ Element.prototype.findPosition = function () {
 	var prevSibling = this.previousSibling;
 	var pos = 1;
 	while(prevSibling) {
-		if (prevSibling.nodeType == 1 && (prevSibling.localName.toLowerCase() == "td" || cell.localName.toLowerCase() == "th")) {
+		if (prevSibling.nodeType == 1 && (prevSibling.localName == "td" || cell.localName == "th")) {
 			var _attr = prevSibling.getAttribute("colspan");
 			if (_attr > 0) {
 				pos += parseInt( _attr);
@@ -175,19 +175,24 @@ Element.prototype.TableCellSplitDown = function() {
 		first.removeAttribute("rowspan");
 	}
 	
-	
-	var nextSibling = first.nextSibling;
+	if (first.nextSibling) {
+		var nextSibling = first.nextSibling;
+	} 
 	while (nextSibling && nextSibling.nodeType != 1) {
 		nextSibling = nextSibling.nextSibling;
 	}
 	if (nextSibling) {
 		nextSibling.removeAttribute("rowspan");
 	}
-	
-	cell = matrix[rowPos + rowspan - 1][colPos + 1][1];
+	var cell = matrix[rowPos + rowspan - 1][colPos + 1];
+	if (cell) {
+		cell = cell[1];
+	}
 	if (cell) {
 		cell.parentNode.insertBefore(nextSibling,cell);
 	} else {
+		//get next tr from first td cell of next row
+		var nexttr = matrix[rowPos + rowspan - 1][1][1].parentNode;
 		nexttr.appendChild(nextSibling);
 	}
 	return first.parentNode.parentNode;

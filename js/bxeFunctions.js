@@ -875,8 +875,13 @@ function bxe_splitAtSelection(node) {
 	
 	var newnode = xmlnode.splitText(cssr.startOffset);
 	if (newnode.nodeValue == '') {
-		newnode.appendChild(document.createTextNode(STRING_NBSP));
+		newnode.nodeValue = STRING_NBSP;
 	}
+	
+	if (xmlnode.nodeValue == '') {
+		xmlnode.nodeValue = STRING_NBSP;
+	}
+	
 	
 	//split all up to node	
 	if (node) {
