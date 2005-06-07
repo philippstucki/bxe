@@ -13,7 +13,7 @@ xmlns:em="http://www.mozilla.org/2004/em-rdf#">
 		<em:homepageURL>http://bxe.oscom.org/</em:homepageURL>
 		<!--<em:iconURL>chrome://helloworld/skin/helloworld.png</em:iconURL>
 		<em:aboutURL>chrome://helloworld/content/about.xul</em:aboutURL>-->
-		<em:updateURL>http://bxe.oscom.org/update.rdf</em:updateURL>
+		<em:updateURL>http://bitflux.org/download/update.rdf</em:updateURL>
 		<em:file>
 			<Description about="urn:mozilla:extension:file:bxehelper.jar">
 				<em:package>content/</em:package>
