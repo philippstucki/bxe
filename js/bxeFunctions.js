@@ -1872,7 +1872,9 @@ documentCreateXHTMLElement = function (elementName,attribs) {
 	if (childNode) {
 		if (attribs) {
 			for (var i = 0; i < attribs.length ;  i++) {
-				childNode.setAttributeNS(attribs[i].namespaceURI, attribs[i].localName,attribs[i].value);
+				if (attribs[i].namespaceURI != XMLNS) {
+					childNode.setAttributeNS(attribs[i].namespaceURI, attribs[i].localName,attribs[i].value);
+				}
 			}
 		}
 		newNode.appendChild(childNode);
