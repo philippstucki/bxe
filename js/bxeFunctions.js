@@ -477,6 +477,10 @@ function bxe_toggleTextClass(e) {
 	if (typeof e.additionalInfo.namespaceURI == "undefined") {
 		e.additionalInfo.namespaceURI = "";
 	}
+	if (cssr == null) {
+		alert("Not possible to use this button. You must select a field to edit first");
+		return false;
+	}	 
 	if (bxe_checkForSourceMode(sel)) {
 		alert("You're in Source Mode. Not possible to use this button");
 		return false;
@@ -1321,6 +1325,22 @@ function bxe_UnorderedList() {
 	if (bxe_checkForSourceMode(sel)) {
 		return false;
 	}
+	
+		var cssr = sel.getEditableRange();
+
+	if(!cssr) {
+		return;
+	}
+	var lines = cssr.lines;
+	if (lines[0].container.XMLNode.xmlBridge) {
+		alert("You can't change '" + lines[0].container.XMLNode.nodeName + "' to a list");
+		return;
+	}
+	
+	if (lines[0].container.XMLNode.nodeName != "li" && !bxe_checkIsAllowedChildOfNode( XHTMLNS,"ul",lines[0].container.parentNode)) {
+		return;
+	}
+
 	var lines = window.getSelection().toggleListLines("ul", "ol");
 	lines[0].container.updateXMLNode();
 	var li = lines[0].container;
@@ -1345,6 +1365,21 @@ function bxe_OrderedList() {
 	var sel = window.getSelection();
 	if (bxe_checkForSourceMode(sel)) {
 		return false;
+	}
+	
+	var cssr = sel.getEditableRange();
+
+	if(!cssr) {
+		return;
+	}
+	var lines = cssr.lines;
+	if (lines[0].container.XMLNode.xmlBridge) {
+		alert("You can't change " + lines[0].container.XMLNode.nodeName + " to a list");
+		return;
+	}
+	
+	if (lines[0].container.XMLNode.nodeName != "li" && !bxe_checkIsAllowedChildOfNode( XHTMLNS,"ol",lines[0].container.parentNode)) {
+		return;
 	}
 	
 	var lines = window.getSelection().toggleListLines("ol", "ul");
