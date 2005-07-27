@@ -476,7 +476,7 @@ Selection.prototype.insertNodeRaw = function (node, oldStyleInsertion) {
 		_upNode = _upNode.parentNode;
 	}
 	
-	
+	_upNode.normalize();
 	_upNode.updateXMLNode();
 
 	
