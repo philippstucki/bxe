@@ -83,8 +83,9 @@ Element.prototype.TableCellMergeRight = function () {
 	}*/
 	var child = rightCol.firstChild;
 	while (child) {
+		var nextchild = child.nextSibling;
 		this.appendChild(child);
-		child = child.nextSibling;
+		child = nextchild;
 	}
 	this.normalize();
 	rightCol.parentNode.removeChild(rightCol);
@@ -126,8 +127,9 @@ Element.prototype.TableCellMergeDown = function () {
 	
 	var child = downCol.firstChild;
 	while (child) {
+		var nextchild = child.nextSibling;
 		this.appendChild(child);
-		child = child.nextSibling;
+		child = nextchild;
 	}
 	this.normalize();
 	downCol.parentNode.removeChild(downCol);
