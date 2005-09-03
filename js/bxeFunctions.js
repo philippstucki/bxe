@@ -2007,10 +2007,19 @@ function bxe_insertContent_async(node,replaceNode, options) {
 				oldStyleInsertion = true;
 			}
 		}
-		
-		while (_currentNode) {
+		if (sel.anchorNode.nodeType == 3) {
+			// if nodeValue == " ", shit happens.
 			
+			var regexp = new RegExp('^[ '+STRING_NBSP+']+$');
+			sel.anchorNode.parentNode.normalize();
+			if (regexp.test(sel.anchorNode.nodeValue)) {
+				sel.anchorNode.nodeValue = "";
+			}
+		}
+		sel.anchorNode.normalize();
+		while (_currentNode) {
 			sel.insertNodeRaw(_node,oldStyleInsertion);
+		
 			_node.updateXMLNode();
 			
 			_currentNode = _currentNode.previousSibling;
