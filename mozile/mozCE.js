@@ -453,6 +453,8 @@ Selection.prototype.insertNodeRaw = function (node, oldStyleInsertion) {
 	if(!cssr.collapsed)
 	{
 		bxe_deleteEventKey(window.getSelection(), false);
+		cssr = this.getEditableRange();
+	
 	} /*else {
 		if (cssr.startContainer.nodeType == 3 && cssr.startContainer.data == STRING_NBSP) {
 			cssr.startContainer.data = "llll";

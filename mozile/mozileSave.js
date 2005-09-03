@@ -17,7 +17,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// $Id: mozileSave.js,v 1.3 2003/11/18 21:41:10 chregu Exp $
+// $Id$
 
 /**********************************************************************************
  * mozileSave.js V0.5: this file implements save/post option in Mozile.
