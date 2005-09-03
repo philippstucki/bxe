@@ -1685,6 +1685,13 @@ function bxe_DeleteLink(e) {
 	sel.anchorNode.updateXMLNode();
 }
 
+function bxe_InsertLinkExtern(href,title) {
+	var sel = window.getSelection();
+	sel.linkText(href,title);
+	sel.anchorNode.parentNode.updateXMLNode(true);
+	sel.focusNode.parentNode.updateXMLNode(true);
+}
+
 
 function bxe_InsertLink(e) {
 	

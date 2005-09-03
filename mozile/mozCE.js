@@ -280,7 +280,7 @@ Selection.prototype.styleText = function(styleName, styleValue)
 	this.selectEditableRange(cssr);
 }
 
-Selection.prototype.linkText = function(href)
+Selection.prototype.linkText = function(href,title)
 {
 	
 	
@@ -289,7 +289,7 @@ Selection.prototype.linkText = function(href)
 	if(!cssr)
 		return;
 
-	cssr.linkText(href);
+	cssr.linkText(href,title);
 
 	this.selectEditableRange(cssr);
 }

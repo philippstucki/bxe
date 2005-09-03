@@ -521,7 +521,7 @@ Range.prototype.styleText = function(styleName, foo, bar, namespaceURI)
 /**
  * Apply a link to a selection of text
  */
-Range.prototype.linkText = function(hrefValue)
+Range.prototype.linkText = function(hrefValue,titleValue)
 {
 	// if collapsed then return - works for inline style or block: make editor do work
 	if(this.collapsed)
@@ -578,7 +578,10 @@ Range.prototype.linkText = function(hrefValue)
 		}
 
 		textNodes[i] = textContainer.firstChild;
-		textContainer.setAttribute("href", hrefValue);		
+		textContainer.setAttribute("href", hrefValue);
+		if (titleValue) {
+			textContainer.setAttribute("title", titleValue);
+		}
 	}
 
 	// normalize A elements [may be a waste - why not normalizeElements at the node level?]
@@ -639,6 +642,7 @@ Range.prototype.clearTextLinks = function()
 			{
 				textContainer = textContainer.parentNode.replaceChildOnly(textContainer, "span");
 				textContainer.removeAttribute("href");
+				textContainer.removeAttribute("title");
 			}
 			// else remove the A!
 			else
