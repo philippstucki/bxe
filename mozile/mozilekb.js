@@ -484,27 +484,8 @@ function nonctrlKeyPressHandler(event)
 		if(!cssr.collapsed)
 		{
 			var backspace = false;
-			if (!sel.isCollapsed && sel.anchorNode.nodeType == 3 && sel.anchorOffset == 0) {
-				
-				
-				bxe_deleteWholeSelection(sel,backspace);
-				sel.anchorNode.parentNode.updateXMLNode();
-				sel = window.getSelection();
-				
-				ip = documentCreateInsertionPoint(cssr.top, cssr.startContainer, cssr.startOffset);
-				ip.insertCharacter(event.charCode);
-				
-				sel.deleteSelection(false);
-				sel.anchorNode.updateXMLNode();
-				sel.collapse(ip.ipNode, ip.ipOffset);
-				return true;
-				
-			} else if (sel.isCollapsed) {
-				sel.deleteSelection(backspace);
-			} else {
-				sel.deleteSelection(backspace);
-				sel.anchorNode.parentNode.updateXMLNode();
-			}
+			
+			bxe_deleteEventKey(sel);
 		}
 
 		// seems to mess up the current position!
@@ -546,7 +527,6 @@ function bxe_deleteEventKey(sel, backspace) {
 		// this prevents some problems with updateXMLNode and unifies the handling
 		// Bug 635 caused this and
 		// http://cvs.wyona.org/cgi-bin/bugzilla/show_bug.cgi?id=3015
-		
 		if (!sel.isCollapsed && sel.focusNode.nodeType == 3 ) {
 			var _pos = sel.focusNode.compareDocumentPosition(sel.anchorNode);
 			if (_pos  & 4) {
