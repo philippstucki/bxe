@@ -416,13 +416,13 @@ NodeVDOM.prototype.parseChildren = function(node) {
 	}
 	var newChoice;
 	var newOneOrMore;
-	var newZeroOrMore;
+	
 	
 	for (var i = 0; i < childNodes.length; i++) {
 		
-		if (!(childNodes[i].nodeType == Node.ELEMENT_NODE && childNodes[i].hasRelaxNGNamespace)) {continue;}
+		if (!(childNodes[i].nodeType == 1 && childNodes[i].hasRelaxNGNamespace)) {continue;}
 		switch (childNodes[i].localName) {
-			case "element":
+			case "element": 
 				var newElement = new ElementVDOM(childNodes[i]);
 				var nsParts = rng_nsResolver.parseNodeNameOnElement(childNodes[i]);
 				newElement.nodeName = nsParts.nodeName;
@@ -470,10 +470,11 @@ NodeVDOM.prototype.parseChildren = function(node) {
 				this._hasEmpty = false;
 				break;
 			case "zeroOrMore":
-				newZeroOrMore = new ZeroOrMoreVDOM(childNodes[i]);
-				this.appendChild(newZeroOrMore);
-				this._hasEmpty = true;
-				newZeroOrMore.parseChildren(childNodes[i]);
+				newOneOrMore = new OneOrMoreVDOM(childNodes[i]);
+				this.appendChild(newOneOrMore);
+				newOneOrMore.appendChild(new EmptyVDOM());
+				newOneOrMore.parseChildren(childNodes[i]);
+				this._hasEmpty = false;
 				break;
 			case "attribute":
 				this.addAttributeNode( new AttributeVDOM(childNodes[i]));
