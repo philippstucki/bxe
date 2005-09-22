@@ -310,7 +310,7 @@ DocumentVDOM.prototype.parseStart = function(node) {
 
 function bxe_RelaxNG_nsResolver(node) {
 	var rootAttr = node.attributes;
-	this.defaultNamespace = null;
+	this.defaultNamespace = "";
 	this.namespaces = new Array();
 	this.prefixes = new Array();
 
