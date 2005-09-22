@@ -102,7 +102,7 @@ DocumentVDOM.prototype.dereferenceAttributes = function() {
 	}
 	
 	// group  is currently not supported.. removeit
-	var xp = "/rng:grammer//rng:group";
+	var xp = "/rng:grammar//rng:group";
 	var defRes= this.xmldoc.documentElement.getXPathResult(xp);
 	var defNode = defRes.iterateNext();
 	var defNodes = new Array();
