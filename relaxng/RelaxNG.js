@@ -45,10 +45,16 @@ DocumentVDOM.prototype.parseRelaxNG = function () {
 	
 	var rootChildren = this.xmldoc.documentElement.childNodes;
 	
+	var startExists = false;
 	for (var i = 0; i < rootChildren.length; i++) {
 		if (rootChildren[i].isRelaxNGElement("start")) {
 			this.parseStart(rootChildren[i]);
+			startExists = true;
+			break;
 		}
+	}
+	if (!startExists) {
+		alert("No <start> element found.");
 	}
 	dump ("End parsing RNG " + (new Date() - startTimer)/1000 + " sec\n"); 
 	return true;
@@ -90,7 +96,7 @@ DocumentVDOM.prototype.dereferenceAttributes = function() {
 		var child = defNodes[j].firstChild;
 			while (child) {
 				var nextSib = child.nextSibling;
-				if (child.nodeType == 1) {
+				if (child.nodeType == Node.ELEMENT_NODE) {
 					child.setAttribute("type","optional");
 				}
 				
@@ -115,6 +121,9 @@ DocumentVDOM.prototype.dereferenceAttributes = function() {
 		defNodes[j].parentNode.removeChild(defNodes[j]);
 	}
 	
+	if (defNodes.length > 0) {
+	    alert("Removed " + defNodes.length + " unsupported group nodes");
+	}
 	
 	return true;
 }
@@ -126,7 +135,7 @@ DocumentVDOM.prototype.parseIncludes = function() {
 	var loadedPaths = new Array();
 	while (rootChild) {
 		alreadyNext = false;
-		if (rootChild.nodeType == 3 && rootChild.isWhitespaceOnly) {
+		if (rootChild.nodeType == Node.TEXT_NODE && rootChild.isWhitespaceOnly) {
 			var rootChildOld = rootChild;
 			var rootChild = rootChild.nextSibling;
 			alreadyNext = true;
@@ -347,7 +356,7 @@ bxe_RelaxNG_nsResolver.prototype.parseNodeNameOnElement = function(node) {
 	var child = node.firstChild;
 	var ret = new Object();
 	while (child) {
-		if (child.nodeType == 1 && child.localName == "name") {
+		if (child.nodeType == Node.ELEMENT_NODE && child.localName == "name") {
 			child.getAttribute("ns");
 			ret.namespaceURI = child.getAttribute("ns");
 			ret.localName = child.firstChild.data;
@@ -389,7 +398,7 @@ Node.prototype.__defineGetter__ ("hasRelaxNGNamespace", function() {
 Node.prototype.isRelaxNGElement = function(nodename) {
 	
 //	dump ("isRelaxNGElement" + this.nodeType  +  " " + this.nodeName + " " + this.hasRelaxNGNamespace + "\n");
-	if (this.nodeType == 1 && this.nodeName == nodename && this.hasRelaxNGNamespace) {
+	if (this.nodeType == Node.ELEMENT_NODE && this.nodeName == nodename && this.hasRelaxNGNamespace) {
 		return true;
 	} else {
 		return false;
@@ -407,13 +416,13 @@ NodeVDOM.prototype.parseChildren = function(node) {
 	}
 	var newChoice;
 	var newOneOrMore;
-	
+	var newZeroOrMore;
 	
 	for (var i = 0; i < childNodes.length; i++) {
 		
-		if (!(childNodes[i].nodeType == 1 && childNodes[i].hasRelaxNGNamespace)) {continue;}
+		if (!(childNodes[i].nodeType == Node.ELEMENT_NODE && childNodes[i].hasRelaxNGNamespace)) {continue;}
 		switch (childNodes[i].localName) {
-			case "element": 
+			case "element":
 				var newElement = new ElementVDOM(childNodes[i]);
 				var nsParts = rng_nsResolver.parseNodeNameOnElement(childNodes[i]);
 				newElement.nodeName = nsParts.nodeName;
@@ -461,11 +470,10 @@ NodeVDOM.prototype.parseChildren = function(node) {
 				this._hasEmpty = false;
 				break;
 			case "zeroOrMore":
-				newOneOrMore = new OneOrMoreVDOM(childNodes[i]);
-				this.appendChild(newOneOrMore);
-				newOneOrMore.appendChild(new EmptyVDOM());
-				newOneOrMore.parseChildren(childNodes[i]);
-				this._hasEmpty = false;
+				newZeroOrMore = new ZeroOrMoreVDOM(childNodes[i]);
+				this.appendChild(newZeroOrMore);
+				this._hasEmpty = true;
+				newZeroOrMore.parseChildren(childNodes[i]);
 				break;
 			case "attribute":
 				this.addAttributeNode( new AttributeVDOM(childNodes[i]));
@@ -493,11 +501,11 @@ NodeVDOM.prototype.parseChildren = function(node) {
 				this.appendChild(new EmptyVDOM());
 				this._hasEmpty = true;
 				break;
-			
+			default:
+				alert("Unknown RelaxNG element: " + this.localName);
 		}
 	}
 }
-
 
 RefVDOM.prototype = new NodeVDOM();
 
@@ -509,11 +517,10 @@ function RefVDOM(node) {
 }
 
 RefVDOM.prototype.isValid = function(ctxt) {
-	debug("HERE WE ARE ***************************");
-	debug ("**** " +this.name);
-	var b = this.getFirstChild(ctxt);
-	if (b) {
-		b = b.isValid(ctxt);
+	var c = this.getFirstChild(ctxt);
+	var b;
+	if (c) {
+		b = c.isValid(ctxt);
 	}
 //	debug (b);
 	return b;
@@ -633,9 +640,8 @@ function DefineVDOM(node) {
 }
 
 DefineVDOM.prototype.isValid = function(ctxt, RefVDOM) {
- debug("HHHHEEERRREEE");
-	
 }
+
 /*
 DefineVDOM.prototype.__defineGetter__("nextSibling", 
 	function() {
@@ -643,6 +649,58 @@ DefineVDOM.prototype.__defineGetter__("nextSibling",
 		return null;
 	}
 )*/
+
+ZeroOrMoreVDOM.prototype = new NodeVDOM();
+
+function ZeroOrMoreVDOM(node) {
+	this.node = node;
+	this.type = "RELAXNG_ZEROORMORE";
+	this.nodeName = "RELAXNG_ZEROORMORE";
+}
+
+ZeroOrMoreVDOM.prototype.isValid = function(ctxt) {
+	var refsPosition = ctxt.refs.length;
+	var child = this.getFirstChild(ctxt);
+
+	while (child) {
+		if (child.isValid(ctxt)) {
+			return true;
+		}
+		child = child.getNextSibling(ctxt);
+	}
+	var vdom = ctxt.nextVDOM();
+	if (vdom) {
+		var v =  vdom.isValid(ctxt);
+		if (v) {
+			ctxt.setVDOM(this, refsPosition);
+		}
+		return v;
+	}
+	return false;
+}
+
+ZeroOrMoreVDOM.prototype.allowedElements = function(ctxt) {
+	var child = this.getFirstChild(ctxt);
+	var ac = new Array();
+	try{
+		while (child) {
+			var subac = child.allowedElements(ctxt);
+			if (subac) {
+				if (subac.nodeName) {
+					ac.push(subac);
+				} else {
+					for (var i = 0; i < subac.length; i++) {
+						ac.push(subac[i]);
+					}
+				}
+			}
+			child = child.getNextSibling(ctxt);
+		}
+	} catch(e) { bxe_catch_alert(e); alert(child.nodeName + " " + subac); }
+	return ac;
+	
+}
+
 ChoiceVDOM.prototype = new NodeVDOM();
 
 ChoiceVDOM.prototype.isValid = function(ctxt) {
@@ -684,7 +742,6 @@ function ChoiceVDOM(node) {
 InterleaveVDOM.prototype = new NodeVDOM();
 
 InterleaveVDOM.prototype.isValid = function(ctxt) {
-	
 	var refsPosition = ctxt.refs.length;
 	var child = this.getFirstChild(ctxt);
 	var hasEmpty = false;
@@ -766,7 +823,7 @@ function TextVDOM(node ) {
 
 TextVDOM.prototype.isValid = function(ctxt) {
 	//dump("TextVDOM.isValid :" + ctxt.node.data + ":\n");
-	if (ctxt.node.nodeType == 3) {
+	if (ctxt.node.nodeType == Node.TEXT_NODE) {
 		return true;
 	} else {
 		return false;
@@ -775,11 +832,8 @@ TextVDOM.prototype.isValid = function(ctxt) {
 }
 
 TextVDOM.prototype.allowedElements = function (ctxt){
-	debug("TTTTTTTTTTTTTTEEEEEEEEEEEXXXXXXXXXXXTTTTTTTTTTTT");
 	return {"nodeName": "#text", "namespaceURI": null, "localName": "#text", "nodeType": 3};
 }
-
-
 
 OneOrMoreVDOM.prototype = new NodeVDOM();
 
@@ -809,7 +863,7 @@ OneOrMoreVDOM.prototype.isValid = function(ctxt) {
 	if (this.hit) {
 		var vdom = ctxt.nextVDOM();
 		if (vdom) {
-			return vdom.isValid(ctxt);
+			return vdom.isValid(ctxt); 
 		} else { 
 			return false;
 		}
@@ -909,7 +963,7 @@ XMLNode.prototype.__defineGetter__(
 "isWhitespaceOnly",
 function()
 {
-	if (this.nodeType == 3) {
+	if (this.nodeType == Node.TEXT_NODE) {
 		if(/\S+/.test(this._node.nodeValue)) // any non white space visible characters
 			return false;
 		
@@ -919,8 +973,5 @@ function()
 	}
 }
 );
-
-
-
 
 
