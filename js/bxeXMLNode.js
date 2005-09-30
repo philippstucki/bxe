@@ -304,6 +304,9 @@ XMLNode.prototype.setNode = function(xmlnode) {
 
 XMLNode.prototype.setAttribute = function(name, value) {
 	this._node.setAttribute(name,value);
+	if (this._sernode) {
+		this._sernode.setAttribute(name,value);
+	}
 }
 
 
@@ -409,6 +412,9 @@ XMLNode.prototype.__defineSetter__(
 
 XMLNode.prototype.setAttributeNS = function (namespaceURI, localName, value) {
 	this._node.setAttributeNS(namespaceURI,localName, value);
+	if (this._sernode) {
+		this._sernode.setAttributeNS(namespaceURI,localName, value);
+	}
 }
 
 XMLNode.prototype.insertIntoHTMLDocument = function(htmlnode,onlyChildren) {
@@ -688,7 +694,11 @@ XMLNodeElement.prototype.__defineGetter__(
 
 XMLNodeElement.prototype.setAttribute = function(name,value) {
 	try {
+	if (this._sernode) {
+		this._sernode.setAttribute(name,value);
+	}
 	return this._node.setAttribute(name, value);
+	
 	} catch(e) {
 		alert(e + "\n" + name + " = " + value + " could not be inserted");
 	}
@@ -696,10 +706,15 @@ XMLNodeElement.prototype.setAttribute = function(name,value) {
 
 XMLNodeElement.prototype.setAttributeNode = function(node) {
 	return this._node.setAttributeNS(node.namespaceURI,node.localName, node.value);
+	
 }
 
 
 XMLNodeElement.prototype.setAttributeNS = function(namespace,name,value) {
+	
+	if (this._sernode) {
+		this._sernode.setAttribute(namespace,name,value);
+	}
 	if(name != "xmlns" && namespace != "http://www.w3.org/2000/xmlns/") { 
 		return this._node.setAttributeNS(namespace,name, value);
 	}
