@@ -646,7 +646,6 @@ function bxe_ContextPopup(e) {
 		var menui = popup.addMenuItem("Edit " + e.target.XMLNode.nodeName  + " Attributes", mozilla.getWidgetGlobals().EditAttributes.popup);
 		menui.MenuPopup._node = node._node;
 	}
-
 	popup.addMenuItem("Copy "  + e.target.XMLNode.nodeName  + " Element", function (e) {
 		var widget = e.currentTarget.Widget;
 		var delNode = widget.MenuPopup.MainNode;
@@ -940,13 +939,18 @@ function bxe_appendNode(e) {
 		var cb = bxe_getCallback(e.additionalInfo.localName,e.additionalInfo.namespaceURI);
 		
 		if (cb ) {
-			bxe_doCallback(cb, aNode);
+			var sel = window.getSelection();
+			sel.collapse(aNode._node.nextSibling,0);
+			bxe_doCallback(cb, aNode, true);
 			return;
 		}
 		var newNode = new XMLNodeElement(e.additionalInfo.namespaceURI,e.additionalInfo.localName, 1 ) ;
+		
 		aNode.parentNode.insertAfter(newNode,aNode);
 		
 		newNode.parentNode.isNodeValid(true,2);
+		newNode._node.parentNode.insertBefore(newNode._node.ownerDocument.createTextNode(" "),newNode._node);
+		
 		newNode.makeDefaultNodes(e.additionalInfo.noPlaceholderText);
 		
 	}
@@ -1685,9 +1689,21 @@ function bxe_DeleteLink(e) {
 	sel.anchorNode.updateXMLNode();
 }
 
-function bxe_InsertLinkExtern(href,title) {
+function bxe_InsertLinkExtern(href,title,text) {
 	var sel = window.getSelection();
-	sel.linkText(href,title);
+	if (sel.toString().length == 0) {
+		var text = document.createTextNode(text);
+		var  a = document.createElementNS(XHTMLNS,"span");
+		a.setAttribute("class","a");
+		a.setAttribute("href",href);
+		if (title) {
+			a.setAttribute("title",title);
+		}
+		a.appendChild(text);
+		sel.insertNodeRaw(a);
+	} else {
+		sel.linkText(href,title);
+	}
 	sel.anchorNode.parentNode.updateXMLNode(true);
 	sel.focusNode.parentNode.updateXMLNode(true);
 }
@@ -2075,10 +2091,10 @@ function bxe_getCallback (nodeName, namespaceURI) {
 	}
 }
 
-function bxe_doCallback(cb, node ) {
+function bxe_doCallback(cb, node,dontPrecheck ) {
 	window.bxe_ContextNode = node;
 	//this is for prechecking, if an eventual popup should be called at all
-	if (cb["precheck"]) {
+	if (cb["precheck"] && !dontPrecheck) {
 		if (!(eval(cb["precheck"] +"(node)"))) {
 			return false;
 		} 

@@ -811,7 +811,14 @@ Widget_MenuPopup.prototype.appendAllowedChildren = function( node) {
 	}
 	
 	ac.sort(nodeSort);
-	
+		
+	if (node.XMLNode.vdom && node.XMLNode.vdom.hasAttributes ) {
+		
+		var menui = this.addMenuItem("Edit Attributes", mozilla.getWidgetGlobals().EditAttributes.popup);
+		menui.MenuPopup.MainNode = node.XMLNode;
+		
+	}
+				
 	for (i = 0; i < ac.length; i++) {
 		if (!bxe_config.dontShowInContext[ac[i].namespaceURI + ":" +ac[i].localName] && ac[i].nodeType != 3 ) {
 				var menui = this.addMenuItem("Insert " + ac[i].nodeName, function(e) { 
@@ -1035,6 +1042,7 @@ Widget_ModalAttributeBox.prototype.popup = function(e) {
 		
 	var box = mozilla.getWidgetGlobals().EditAttributes;
 	var xmlnode = e.target.Widget.MenuPopup.MainNode;
+
 	box.reset("Edit Attributes of " + xmlnode.localName, function(values) {
 		
 		this.setAttributes(values);
