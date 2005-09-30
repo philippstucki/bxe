@@ -111,8 +111,11 @@
 
         <button name="Copy" col="0" row="4" action="ClipboardCopy"/>
         <button name="Cut" col="1" row="4" action="ClipboardCut"/>
-
+        
         <button name="Paste" col="2" row="4" action="ClipboardPasteDialog"/>
+        <button name="PasteDialog" col="4" row="4" action="ClipboardPasteDialog"/>
+     
+        
         <button name="Image" col="3" row="5" action="InsertImage"/>
         <button name="Save" col="1" row="6" action="DocumentSave"/>
         <button name="Undo" col="3" row="6" action="Undo"/>
@@ -187,4 +190,12 @@
          <attribute name="id"/>      
          <attribute name="style"/>      
          <attribute name="xml:lang"/>      
-    </context></config>
+    </context>
+    
+    
+    <plugins>
+    <plugin name="ClipboardPasteDialog">
+    </plugin>
+    </plugins>
+    
+    </config>
