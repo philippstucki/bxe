@@ -949,7 +949,8 @@ function bxe_appendNode(e) {
 		aNode.parentNode.insertAfter(newNode,aNode);
 		
 		newNode.parentNode.isNodeValid(true,2);
-		newNode._node.parentNode.insertBefore(newNode._node.ownerDocument.createTextNode(" "),newNode._node);
+		// looks like not needed, not sure...
+		//newNode._node.parentNode.insertBefore(newNode._node.ownerDocument.createTextNode(" "),newNode._node);
 		
 		newNode.makeDefaultNodes(e.additionalInfo.noPlaceholderText);
 		
