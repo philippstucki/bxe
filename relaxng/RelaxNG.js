@@ -502,8 +502,11 @@ NodeVDOM.prototype.parseChildren = function(node) {
 				this.appendChild(new EmptyVDOM());
 				this._hasEmpty = true;
 				break;
+			case "data":
+				//donothing
+				break;
 			default:
-				alert("Unknown RelaxNG element: " + this.localName);
+				alert("Unknown/not-implemented RelaxNG element: " + childNodes[i].localName);
 		}
 	}
 }
