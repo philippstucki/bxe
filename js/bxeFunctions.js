@@ -205,8 +205,10 @@ function bxe_history_undo() {
 			} catch(e) {
 				bxe_catch_alert(e);
 			}
+			return true;
 		}
 	} 
+	return false;
 	/*bxe_snapshots[bxe_snapshots_position] == xmlstr;
 	bxe_snapshots_position++;*/
 }
@@ -916,7 +918,7 @@ function bxe_appendNode(e) {
 					var newNode = _child.init();
 					aNode.parentNode.insertAfter(newNode,aNode);
 					newNode._node.updateXMLNode();
-					newNode.parentNode.isNodeValid(true,2);
+					newNode.parentNode.isNodeValid(true,2,false,true);
 				} 
 				_child = _next;
 			}
@@ -933,7 +935,7 @@ function bxe_appendNode(e) {
 			
 			aNode.parentNode.insertAfter(newNode,aNode);
 			newNode._node.updateXMLNode();
-			newNode.parentNode.isNodeValid(true,2);
+			newNode.parentNode.isNodeValid(true,2,false,true);
 		}
 	} else {
 		var cb = bxe_getCallback(e.additionalInfo.localName,e.additionalInfo.namespaceURI);
@@ -947,8 +949,7 @@ function bxe_appendNode(e) {
 		var newNode = new XMLNodeElement(e.additionalInfo.namespaceURI,e.additionalInfo.localName, 1 ) ;
 		
 		aNode.parentNode.insertAfter(newNode,aNode);
-		
-		newNode.parentNode.isNodeValid(true,2);
+		newNode.parentNode.isNodeValid(true,2,false,true);
 		// looks like not needed, not sure...
 		//newNode._node.parentNode.insertBefore(newNode._node.ownerDocument.createTextNode(" "),newNode._node);
 		
@@ -973,7 +974,7 @@ function bxe_appendChildNode(e) {
 		var aNode = e.additionalInfo.appendToNode;
 		var newNode = new XMLNodeElement(e.additionalInfo.namespaceURI,e.additionalInfo.localName, 1 ) ;
 		aNode.appendChild(newNode);
-		debug("valid? : " + newNode.isNodeValid());
+		newNode.parentNode.isNodeValid(true,2,false,true);
 		var cb = bxe_getCallback(e.additionalInfo.localName, e.additionalInfo.namespaceURI);
 		if (cb ) {
 			bxe_doCallback(cb, newNode);
@@ -1019,9 +1020,7 @@ function bxe_changeLinesContainer(e) {
 		} catch(e) {alert(newContainer[i] + " can't be updateXMLNode()'ed\n" + e);
 		}
 	}
-	if (!newContainer[0].XMLNode.parentNode.isNodeValid(false, 2)) {
-		bxe_history_undo();
-	}
+	newContainer[0].XMLNode.parentNode.isNodeValid(false, 2,false,true);
 	bxe_history_snapshot_async();
 	bxe_delayedUpdateXPath();
 }
@@ -1574,7 +1573,7 @@ function bxe_InsertTableCallback(node) {
 			te.setAttribute("class", bxe_config.options[OPTION_DEFAULTTABLECLASS]);
 			var newNode = te.init();
 			window.bxe_ContextNode.parentNode.insertAfter(newNode, window.bxe_ContextNode);
-			debug("valid? : " + newNode.isNodeValid());
+			newNode.isNodeValid();
 		}
 	});
 	mod.addItem("rows",2,"textfield","number of rows");
@@ -2053,8 +2052,9 @@ function bxe_insertContent_async(node,replaceNode, options) {
 		
 		replaceNode.parentNode.insertAfter(newNode,replaceNode);
 		newNode._node.updateXMLNode();
+		newNode.isNodeValid(true,2,false,true);
 		bxe_history_snapshot_async();
-		debug("valid? : " + newNode.isNodeValid());
+		
 	} else {
 		docfrag.firstChild.init();
 		var sel= window.getSelection();

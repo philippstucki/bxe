@@ -20,7 +20,7 @@
 
 const BXE_VALID_NOMESSAGE = 1;
 
-XMLNode.prototype.isNodeValid = function(deep, wFValidityCheckLevel, noError ) {
+XMLNode.prototype.isNodeValid = function(deep, wFValidityCheckLevel, noError, undo ) {
 	if ( this._node && this._node._SourceMode == true) {
 		return true;
 	}
@@ -39,7 +39,9 @@ XMLNode.prototype.isNodeValid = function(deep, wFValidityCheckLevel, noError ) {
 				bxe_validationAlert(c.errormsg);
 			}
 		} 
-			
+		if (undo) {
+			bxe_history_undo();
+		}
 		return false;
 	} else {
 		return true;
