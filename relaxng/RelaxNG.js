@@ -481,6 +481,7 @@ NodeVDOM.prototype.parseChildren = function(node) {
 				break;
 			case "optional":
 				newChoice = new ChoiceVDOM(childNodes[i]);
+				newChoice.optional = true;
 				this.appendChild(newChoice);
 				newChoice.appendChild(new EmptyVDOM());
 				this._hasEmpty = false;
@@ -488,6 +489,7 @@ NodeVDOM.prototype.parseChildren = function(node) {
 				break;
 			case "choice":
 				newChoice = new ChoiceVDOM(childNodes[i]);
+				newChoice.optional = true;
 				this.appendChild(newChoice);
 				newChoice.parseChildren();
 				this._hasEmpty = false;
@@ -887,9 +889,15 @@ ChoiceVDOM.prototype.allowedElements = function(ctxt) {
 			var subac = child.allowedElements(ctxt);
 			if (subac) {
 				if (subac.nodeName) {
+					if (this.optional) {
+						subac.optional = true;
+					}
 					ac.push(subac);
 				} else {
 					for (var i = 0; i < subac.length; i++) {
+						if (this.optional) {
+							subac[i].optional = true;
+						}
 						ac.push(subac[i]);
 					}
 				}

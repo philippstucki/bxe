@@ -41,7 +41,7 @@ XMLNodeElement.prototype.__defineGetter__(
 					}
 				} while (ctxt.nextVDOM())
 			}
-			ac.sort(bxe_nodeSort);
+			//ac.sort(bxe_nodeSort);
 
 			this._allowedChildren = ac;
 			return ac;

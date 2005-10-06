@@ -763,7 +763,21 @@ XMLNodeElement.prototype.makeDefaultNodes = function(noPlaceholderText) {
 		if (ac.length == 1)  {
 			eDOMEventCall("appendChildNode",document,{"appendToNode": this, "localName":ac[0].nodeName,"namespaceURI":ac[0].namespaceURI});
 		} else if (ac.length > 1) {
-			bxe_context_menu.buildElementChooserPopup(this,ac);
+			var _hasMust = false;
+			for ( var i in ac) {
+				if (!(ac[i].optional ) ) { 
+					eDOMEventCall("appendChildNode",document,{ "appendToNode": this, "localName":ac[i].nodeName,"namespaceURI":ac[i].namespaceURI});
+					_hasMust =true;
+				}
+				
+			}
+			if (!_hasMust) {
+				bxe_context_menu.buildElementChooserPopup(this,ac);
+			} else {
+				ret = this;
+				
+			}
+			
 		}
 		else {
 			var xmlstring = this.getBeforeAndAfterString(false,true);
