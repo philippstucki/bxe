@@ -93,7 +93,7 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 			
 			if(ctxt.node.hasChildNodes()) {
 				if (deep) {
-					dump (ctxt.node.localName + " has  ChildNodes\n");
+					//dump (ctxt.node.localName + " has  ChildNodes\n");
 					var refsPosition = ctxt.refs.length;
 					//var oldVdom = ctxt.node.vdom;
 					oldVdom = ctxt.vdom;	
@@ -103,7 +103,7 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 					} 
 				}
 			} else if (ctxt.node.nodeType == 1) {
-				dump (ctxt.node.localName + " has no ChildNodes\n");
+				//dump (ctxt.node.localName + " has no ChildNodes\n");
 				/*var refsPosition = ctxt.refs.length;
 				oldVdom = ctxt.vdom;	
 				var retctxt = ctxt.node._isNodeValid(deep,  wFValidityCheckLevel )

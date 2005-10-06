@@ -474,6 +474,7 @@ NodeVDOM.prototype.parseChildren = function(node) {
 				this.appendChild(newOneOrMore);
 				newOneOrMore.appendChild(new EmptyVDOM());
 				newOneOrMore.parseChildren(childNodes[i]);
+				newOneOrMore.optional = true;
 				this._hasEmpty = false;
 				break;
 			case "attribute":
@@ -693,9 +694,11 @@ ZeroOrMoreVDOM.prototype.allowedElements = function(ctxt) {
 			var subac = child.allowedElements(ctxt);
 			if (subac) {
 				if (subac.nodeName) {
+					subac.optional = true;
 					ac.push(subac);
 				} else {
 					for (var i = 0; i < subac.length; i++) {
+						subac[i].optional = true;
 						ac.push(subac[i]);
 					}
 				}
@@ -917,9 +920,15 @@ OneOrMoreVDOM.prototype.allowedElements = function(ctxt) {
 		var subac = child.allowedElements(ctxt);
 		if (subac) {
 			if (subac.nodeName) {
+				if (this.optional) {
+					subac.optional = true;
+				}
 				ac.push(subac);
 			} else {
 				for (var i = 0; i < subac.length; i++) {
+					if (this.optional) {
+						subac[i].optional = true;
+					}
 					ac.push(subac[i]);
 				}
 			}

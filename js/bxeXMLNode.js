@@ -761,12 +761,12 @@ XMLNodeElement.prototype.makeDefaultNodes = function(noPlaceholderText) {
 	} else {
 		var ac = this.allowedChildren;
 		if (ac.length == 1)  {
-			eDOMEventCall("appendChildNode",document,{"appendToNode": this, "localName":ac[0].nodeName,"namespaceURI":ac[0].namespaceURI});
+			eDOMEventCall("appendChildNode",document,{"appendToNode": this, "localName":ac[0].localName,"namespaceURI":ac[0].namespaceURI});
 		} else if (ac.length > 1) {
 			var _hasMust = false;
 			for ( var i in ac) {
 				if (!(ac[i].optional ) ) { 
-					eDOMEventCall("appendChildNode",document,{ "appendToNode": this, "localName":ac[i].nodeName,"namespaceURI":ac[i].namespaceURI});
+					eDOMEventCall("appendChildNode",document,{ "appendToNode": this, "localName":ac[i].localName,"namespaceURI":ac[i].namespaceURI});
 					_hasMust =true;
 				}
 				
