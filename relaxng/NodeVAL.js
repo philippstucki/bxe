@@ -204,7 +204,9 @@ ContextVDOM.prototype.dumpErrorMessages = function() {
 }
 
 ContextVDOM.prototype.nextVDOM = function() {
-	var startVdom =this.vdom;
+	if (this.vdom == null || typeof this.vdom == 'undefined') {
+		return null;
+	}
 	var nextSib = this.vdom.getNextSibling(this);
 	if (nextSib) {
 		this.vdom = nextSib;
