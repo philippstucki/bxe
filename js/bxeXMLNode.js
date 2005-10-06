@@ -607,7 +607,7 @@ XMLNode.prototype.__defineGetter__ (
 	}
 );
 XMLNode.prototype.hasChildNodes = function() {
-	if (typeof this.firstChild != "undefined" && this.firstChild != null) {
+	if (typeof this.firstChild != "undefined" && this.firstChild != null && this.firstChild._node.nodeValue != '') {
 		return true;
 	} else {
 		return false;
@@ -756,6 +756,8 @@ XMLNodeElement.prototype.makeDefaultNodes = function(noPlaceholderText) {
 			
 			this._node.removeAttribute("_edom_tagnameopen");
 		}
+		this.parentNode.isNodeValid(true,2,false,true);
+
 	} else {
 		var ac = this.allowedChildren;
 		if (ac.length == 1)  {
@@ -766,6 +768,7 @@ XMLNodeElement.prototype.makeDefaultNodes = function(noPlaceholderText) {
 		else {
 			var xmlstring = this.getBeforeAndAfterString(false,true);
 			this.setAttribute("_edom_tagnameopen",xmlstring[0]);
+			this.parentNode.isNodeValid(true,2,false,true);
 		}
 	}
 }
