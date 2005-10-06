@@ -65,7 +65,6 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 		// TODO: test if this node is valid, we do only check childrens for the moment..	
 		}
 	}
-	debug ("_isNodeValid " + this.nodeName );
 	try {
 		if (this.vdom) {
 			var ctxt = new ContextVDOM(this, this.vdom);
@@ -91,14 +90,27 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 		if (  ctxt.isValid()) {
 			/*dump(ctxt.node.parentNode.nodeName +  " -> " +ctxt.node.nodeName + " is valid and has ");
 			dump(ctxt.node.hasChildNodes() + " childNodes \n");*/
-			if(ctxt.node.hasChildNodes() && deep) {
-				var refsPosition = ctxt.refs.length;
-				//var oldVdom = ctxt.node.vdom;
+			
+			if(ctxt.node.hasChildNodes()) {
+				if (deep) {
+					dump (ctxt.node.localName + " has  ChildNodes\n");
+					var refsPosition = ctxt.refs.length;
+					//var oldVdom = ctxt.node.vdom;
+					oldVdom = ctxt.vdom;	
+					var retctxt = ctxt.node._isNodeValid(deep,  wFValidityCheckLevel )
+					if (retctxt.isError) {
+						ctxt.addErrorMessages(retctxt.errormsg);
+					} 
+				}
+			} else if (ctxt.node.nodeType == 1) {
+				dump (ctxt.node.localName + " has no ChildNodes\n");
+				/*var refsPosition = ctxt.refs.length;
 				oldVdom = ctxt.vdom;	
 				var retctxt = ctxt.node._isNodeValid(deep,  wFValidityCheckLevel )
 				if (retctxt.isError) {
 					ctxt.addErrorMessages(retctxt.errormsg);
-				} 
+				}*/
+				
 			}
 		} else {
 				var _msg = "";
@@ -107,7 +119,7 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 					} else { 
 						_msg = ctxt.node.localName +"("+ctxt.node.namespaceURI+ ") ";
 					}
-				if (ctxt.node.parentNode.isAllowedChild(ctxt.node)) {
+				if (ctxt.node.parentNode.isAllowedChild(ctxt.node.namespaceURI, ctxt.node.localName)) {
 					
 					_msg += "is not allowed at this position as child of  " + this.localName ;
 				}
@@ -117,6 +129,7 @@ XMLNode.prototype._isNodeValid = function(deep,wFValidityCheckLevel ) {
 				ctxt.setErrorMessage(_msg);
 		}
 		//debug ("---------");
+		
 	} while (ctxt.next() )
 
 	
@@ -128,8 +141,9 @@ ctxtcounter = 0;
 function ContextVDOM (node,vdom) {
 	this.node = node.firstChild;
 	this.nr = ctxtcounter++;
-	debug (node.nodeName);
-/*	debug (vdom.nodeName);
+	
+/*	debug (node.nodeName);
+	debug (vdom.nodeName);
 */	this.isError = false;
 	this.errormsg = new Array();
 	this.refs = new Array();
@@ -139,7 +153,6 @@ function ContextVDOM (node,vdom) {
 	} else {
 		this.vdom = null;
 	}
-	
 	
 }
 
@@ -196,6 +209,7 @@ ContextVDOM.prototype.nextVDOM = function() {
 	if (nextSib) {
 		this.vdom = nextSib;
 	}  else {
+		this.vdom = null;
 		return null;
 	}
 	return this.vdom;

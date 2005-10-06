@@ -157,7 +157,7 @@ XMLNodeElement.prototype.__defineGetter__(
 XMLNodeElement.prototype.__defineGetter__ ("canHaveText",
 	function() {
 		
-		if (typeof this.vdom == "undefined") {
+		if (this.vdom ==null || typeof this.vdom == "undefined") {
 			//bad hack...
 			return true;
 		}
