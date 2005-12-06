@@ -107,6 +107,7 @@ ElementVDOM.prototype.__defineGetter__ (
 
 
 ElementVDOM.prototype.isValid = function(ctxt) {
+	//dump("ElementVDOM.isValid " + this.localName + "\n");
 	if (ctxt.node.localName == this.localName && ctxt.node.namespaceURI == this.namespaceURI) {
 		
 		

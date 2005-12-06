@@ -470,12 +470,10 @@ NodeVDOM.prototype.parseChildren = function(node) {
 				this._hasEmpty = false;
 				break;
 			case "zeroOrMore":
-				newOneOrMore = new OneOrMoreVDOM(childNodes[i]);
-				this.appendChild(newOneOrMore);
-				newOneOrMore.appendChild(new EmptyVDOM());
-				newOneOrMore.parseChildren(childNodes[i]);
-				newOneOrMore.optional = true;
-				this._hasEmpty = false;
+				newZeroOrMore = new ZeroOrMoreVDOM(childNodes[i]);
+				this.appendChild(newZeroOrMore);
+				this._hasEmpty = true;
+				newZeroOrMore.parseChildren(childNodes[i]);
 				break;
 			case "attribute":
 				this.addAttributeNode( new AttributeVDOM(childNodes[i]));
@@ -671,19 +669,20 @@ ZeroOrMoreVDOM.prototype.isValid = function(ctxt) {
 
 	while (child) {
 		if (child.isValid(ctxt)) {
+			ctxt.setVDOM(this, refsPosition);
 			return true;
 		}
 		child = child.getNextSibling(ctxt);
 	}
+	
+	ctxt.setVDOM(this, refsPosition);
 	var vdom = ctxt.nextVDOM();
 	if (vdom) {
-		var v =  vdom.isValid(ctxt);
-		if (v) {
-			ctxt.setVDOM(this, refsPosition);
-		}
-		return v;
+		return vdom.isValid(ctxt); 
+	} else { 
+		return false;
 	}
-	return false;
+	
 }
 
 ZeroOrMoreVDOM.prototype.allowedElements = function(ctxt) {
