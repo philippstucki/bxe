@@ -1002,6 +1002,29 @@ function bxe_appendChildNode(e) {
 		
 }
 
+function bxe_changeLinesContainer2(e) {
+	bxe_history_snapshot();
+	//alert (window.bxe_ContextNode.nodeName);
+	
+	var nodeParts = e.split("=");
+	if (nodeParts.length < 2 ) {
+		nodeParts[1] = null;
+	}
+	
+	var newContainer = window.bxe_ContextNode._node.changeContainer(nodeParts[1],  nodeParts[0]);
+	
+		newContainer.XMLNode = new XMLNodeElement( nodeParts[1], nodeParts[0], window.bxe_ContextNode._node.nodeType);
+		try {
+			newContainer.updateXMLNode();
+		} catch(e) {alert(newContainer + " can't be updateXMLNode()'ed\n" + e);
+		}
+	
+	newContainer.XMLNode.parentNode.isNodeValid(false, 2,false,true);
+	bxe_history_snapshot_async();
+	window.bxe_ContextNode = newContainer.XMLNode;
+	//bxe_delayedUpdateXPath();
+}
+
 
 
 function bxe_changeLinesContainer(e) {
@@ -1011,7 +1034,6 @@ function bxe_changeLinesContainer(e) {
 		nodeParts[1] = null;
 	}
 	var newContainer = window.getSelection().changeLinesContainer(nodeParts[0],  nodeParts[1]);
-	
 	for(var i=0; i<newContainer.length; i++)
 	{ 
 		newContainer[i].XMLNode = new XMLNodeElement( nodeParts[1], nodeParts[0], newContainer[i].nodeType);
@@ -1192,7 +1214,10 @@ function bxe_draw_widgets() {
 	//make toolbar
 	
 	bxe_toolbar = new Widget_ToolBar();
-	bxe_format_list = new Widget_MenuList("m",function(e) {eDOMEventCall("changeLinesContainer",document,this.value)});
+	bxe_format_list = new Widget_MenuList("m",function(e) {
+		bxe_changeLinesContainer2(this.value);
+	//	eDOMEventCall("changeLinesContainer",document,this.value)
+	});
 
 	bxe_toolbar.addItem(bxe_format_list);
 	
@@ -1258,6 +1283,7 @@ function bxe_updateXPath(e) {
 					}
 					menuitem = bxe_format_list.appendItem(pref + thisNode.nodeName, thisNode.localName + "=" + thisNode.namespaceURI);
 				} else {
+					window.bxe_ContextNode = thisNode;
 					var ac = thisNode.parentNode.allowedChildren;
 					var menuitem;
 					var thisLocalName = thisNode.localName;

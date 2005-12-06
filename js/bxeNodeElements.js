@@ -93,6 +93,44 @@ Element.prototype.getCStyle = function(style) {
 	return document.defaultView.getComputedStyle(this, null).getPropertyValue(style);
 }
 
+Element.prototype.changeContainer = function(namespace, localName) {
+	var keep = false;
+	if (namespace == XHTMLNS) {
+		var removeClass = false;
+		//if (lines[i].__container.getAttribute("class"));
+		if (this.XMLNode) {
+			if (this.XMLNode.nodeName == this.getAttribute("class")) {
+				removeClass = true;
+			}
+		}
+		var newNode = documentCreateXHTMLElement(localName)
+		if (removeClass) {
+			this.removeAttribute("class");
+		}
+	} else {
+		var newNode = document.createElementNS(XHTMLNS,"div");
+		this.setAttribute("class", containerName);
+	}
+	
+	for(var i=0; i<this.attributes.length; i++)
+	{
+		var childAttribute = this.attributes.item(i);
+		var childAttributeCopy = childAttribute.cloneNode(true);
+		newNode.setAttributeNode(childAttributeCopy);
+	}
+	var childContents = document.createRange();
+	childContents.selectNodeContents(this);
+
+	newNode.appendChild(childContents.extractContents());
+	childContents.detach();
+	this.parentNode.replaceChild(newNode, this);
+
+	
+	newNode.setAttribute("__bxe_ns", namespace);
+	return newNode;
+	
+}
+
 Element.prototype.getBeforeAndAfterString = function (hasChildNodes, noParent) {
 	
 	var lastChild = this;
