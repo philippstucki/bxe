@@ -250,6 +250,14 @@ table.beauty  {
     text-decoration: none;
 }
 
+[bxe_xpath] td {
+   border: 1px #666666 dashed;
+}
+
+[bxe_xpath] table {
+   border: 1px #666666 dashed;
+}
+
 
 
 .ToolBar td {
