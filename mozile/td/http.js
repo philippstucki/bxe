@@ -29,7 +29,7 @@ mozileTransportDriver_http.prototype.load = function(filename, td, async) {
 	docu.loader = this.parent;
 	docu.td = td;
 	bxe_config.td = td;
-	docu.onload = this.loadCallback;
+	docu.addEventListener("load", this.loadCallback, false);
 	docu.async = async;
 	var reqObj = new Object();
 	reqObj.document = docu;
