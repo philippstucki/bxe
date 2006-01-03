@@ -52,7 +52,11 @@ function LinkToolBxe() {
         var sel = window.getSelection();
         sel.selectEditableRange(drawertool.cssr);
         
-        var xml = "<a xmlns='"+ XHTMLNS + "' href='"+url+"' target='"+target+"'>"+sel+"</a>";
+		if (typeof target == "object") {
+			var xml = "<a xmlns='"+ XHTMLNS + "' href='"+url+"'>"+sel+"</a>";
+		} else {
+			var xml = "<a xmlns='"+ XHTMLNS + "' href='"+url+"' target='"+target+"'>"+sel+"</a>";
+		}
         
         return bxe_insertContent(xml, BXE_SELECTION);
         
