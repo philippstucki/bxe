@@ -1290,7 +1290,8 @@ function bxe_updateXPath(e) {
 					var thisNamespaceURI = thisNode.namespaceURI;
 					
 					for (i = 0; i < ac.length; i++) {
-						if (!bxe_config.dontShowInContext[ac[i].namespaceURI + ":" +ac[i].localName] && ac[i].nodeType != 3 && ac[i].vdom.canHaveChildren)  {
+						var _name = ac[i].namespaceURI + ":" +ac[i].localName;
+						if (!bxe_config.dontShowInContext[_name]  && !bxe_config.dontShowInContextBlock[_name] && ac[i].nodeType != 3 && ac[i].vdom.canHaveChildren)  {
 							menuitem = bxe_format_list.appendItem(ac[i].nodeName, ac[i].localName + "=" + ac[i].namespaceURI);
 							if (ac[i].localName == thisLocalName &&  ac[i].namespaceURI == thisNamespaceURI) {
 								menuitem.selected=true;

@@ -76,7 +76,7 @@ bxeConfig.parseConfig = function  (e) {
 		bxe_config.scriptfiles.push("plugins/" + ps[i] + ".js");
 	}
 	
-	var dSIC = bxe_config.doc.evaluate("/config/context[@type='dontShow']/element", bxe_config.doc, null, 0, null); 
+	var dSIC = bxe_config.doc.evaluate("/config/context[@type='dontShow']/element[not (@blockLevelOnly and @blockLevelOnly ='true')]", bxe_config.doc, null, 0, null); 
 	
 	bxe_config.dontShowInContext = new Array();
 	node = dSIC.iterateNext();
@@ -84,6 +84,17 @@ bxeConfig.parseConfig = function  (e) {
 		bxe_config.dontShowInContext[node.getAttribute("ns")+":"+node.getAttribute("name")] = true;
 		node = dSIC.iterateNext();
 	}
+	
+	var dSIC = bxe_config.doc.evaluate("/config/context[@type='dontShow']/element[@blockLevelOnly and @blockLevelOnly ='true']", bxe_config.doc, null, 0, null); 
+	
+	bxe_config.dontShowInContextBlock = new Array();
+	node = dSIC.iterateNext();
+	while (node) {
+		bxe_config.dontShowInContextBlock[node.getAttribute("ns")+":"+node.getAttribute("name")] = true;
+		node = dSIC.iterateNext();
+	}
+	
+	
 	
 	var dSIC = bxe_config.doc.evaluate("/config/context[@type='dontShow']/attribute", bxe_config.doc, null, 0, null); 
 	

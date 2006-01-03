@@ -679,7 +679,8 @@ Widget_ContextMenu.prototype.buildElementChooserPopup = function (node, ac ) {
 	this.Popup.initTitle("Choose Subelement of " + node.localName);
 	ac.sort(bxe_nodeSort);
 	for (i = 0; i < ac.length; i++) {
-				if (!bxe_config.dontShowInContext[ac[i].namespaceURI + ":" +ac[i].localName] && ac[i].nodeType != 3 && ac[i].vdom.canHaveChildren ) {
+				var _name = ac[i].namespaceURI + ":" +ac[i].localName;
+				if (!bxe_config.dontShowInContext[_name] && ac[i].nodeType != 3 && ac[i].vdom.canHaveChildren ) {
 					var menui =this.Popup.addMenuItem( ac[i].nodeName, function(e) { 
 						var widget = e.currentTarget.Widget;
 						eDOMEventCall("appendChildNode",document,{"appendToNode": widget.AppendToNode, "localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI});
@@ -782,9 +783,14 @@ Widget_MenuPopup.prototype.appendAllowedSiblings = function( node) {
 	
 	ac.sort(nodeSort);
 	
+	var _display = node.XMLNode._node.getCStyle("display");
 	for (i = 0; i < ac.length; i++) {
-		if (!bxe_config.dontShowInContext[ac[i].namespaceURI + ":" +ac[i].localName] && ac[i].nodeType != 3 ) {
-				if (i == 0 || ac[i].vdom != ac[i-1].vdom) {
+		var _name = ac[i].namespaceURI + ":" +ac[i].localName;
+		if (!bxe_config.dontShowInContext[_name]  && ac[i].nodeType != 3 ) {
+			if (_display == "block" && bxe_config.dontShowInContextBlock[_name]) {
+				continue;
+			}
+			if (i == 0 || ac[i].vdom != ac[i-1].vdom) {
 				var menui = this.addMenuItem("Append " + ac[i].nodeName, function(e) { 
 					var widget = e.currentTarget.Widget;
 					eDOMEventCall("appendNode",document,{"appendToNode": widget.AppendToNode, "localName":widget.InsertLocalName,"namespaceURI":widget.InsertNamespaceURI})
@@ -794,7 +800,8 @@ Widget_MenuPopup.prototype.appendAllowedSiblings = function( node) {
 				menui.InsertNamespaceURI = ac[i].namespaceURI;
 				menui.AppendToNode = node.XMLNode;
 				}
-		}
+			}
+		
 		}
 }
 
