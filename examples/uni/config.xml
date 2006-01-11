@@ -112,7 +112,7 @@
         <button name="Copy" col="0" row="4" action="ClipboardCopy"/>
         <button name="Cut" col="1" row="4" action="ClipboardCut"/>
         
-        <button name="Paste" col="2" row="4" action="ClipboardPasteDialog"/>
+        <button name="Paste" col="2" row="4" action="ClipboardPaste"/>
         <button name="PasteDialog" col="4" row="4" action="ClipboardPasteDialog"/>
      
         
