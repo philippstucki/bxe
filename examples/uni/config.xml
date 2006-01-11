@@ -191,11 +191,4 @@
          <attribute name="style"/>      
          <attribute name="xml:lang"/>      
     </context>
-    
-    
-    <plugins>
-    <plugin name="ClipboardPasteDialog">
-    </plugin>
-    </plugins>
-    
     </config>
