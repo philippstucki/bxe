@@ -236,6 +236,7 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
 
 .ModalBox .ModalBoxPane td {
     border: 10px;
+    padding: 1px ! important;
 }
     
 select {
