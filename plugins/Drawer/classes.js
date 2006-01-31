@@ -51,11 +51,13 @@ function LinkToolBxe() {
         
         var sel = window.getSelection();
         sel.selectEditableRange(drawertool.cssr);
-        
+        //make string
+		var te = "" + sel;
+		te = te.replace(/</,"&lt;");
 		if (typeof target == "object") {
-			var xml = "<a xmlns='"+ XHTMLNS + "' href='"+url+"'>"+sel+"</a>";
+			var xml = "<a xmlns='"+ XHTMLNS + "' href='"+url+"'>"+te+"</a>";
 		} else {
-			var xml = "<a xmlns='"+ XHTMLNS + "' href='"+url+"' target='"+target+"'>"+sel+"</a>";
+			var xml = "<a xmlns='"+ XHTMLNS + "' href='"+url+"' target='"+target+"'>"+te+"</a>";
 		}
         
         return bxe_insertContent(xml, BXE_SELECTION);
