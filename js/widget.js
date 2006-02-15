@@ -468,11 +468,12 @@ function Widget_ToolBarButton (id,namespaceURI) {
 	if (buttons[id]['type'] == "function") {
 		this.node.addEventListener("click", function(e) { eval(buttons[id]['data']+"(e)") }, false);
 	} else if (buttons[id]['type'] == "insertElement" || buttons[id]['type'] == "InsertElement") {
-			this.node.addEventListener("click",function(e) { var sel = window.getSelection();
+		this.node.addEventListener("click",function(e) { var sel = window.getSelection();
 			if (bxe_checkForSourceMode(sel)) {
 				return false;
 			}
 			var object = bxe_Node_createNS(1, e.target.ElementNamespaceURI, buttons[id]['data']);
+			
 			sel.insertNode(object);}, false);
 	} else if (buttons[id]['type'] == "event") {
 		this.node.addEventListener("click",function(e) { 
@@ -509,7 +510,8 @@ function Widget_AboutBox( ) {
 	htmltext += '<tr><td><a href="http://playsophy.com">Playsophy</a> </td><td> (<a href="http://mozile.mozdev.org">Mozile/eDOM</a> Development) </td></tr>';
 	htmltext += '<tr><td><a href="http://twingle.mozdev.org">Twingle</a>/Stephan Richter &nbsp;</td><td> (jsdav.js library) </td></tr>';
 	htmltext += '<tr><td><a href="http://kupu.oscom.org">Kupu</a> &nbsp;</td><td> (ImageDrawer) </td></tr>';
-	
+	htmltext += '<tr><td><br/></td></tr>';	
+	htmltext += '<tr><td><b>Hit F7 to get a cursor.</b></td></tr>';
 	htmltext += '<tr id="okButton" style="display: none" ><td> </td><td><p/><input type="submit" value="OK"/></td></tr>';
 	htmltext += '<tr ><td colspan="2" id="AboutBoxScroller" > </td></tr>';
 
