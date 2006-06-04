@@ -219,19 +219,28 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
 
 .ModalBox .ModalBoxPane {
     
-     padding-left: 10px;
-    padding-right: 2px;
+   padding-left: 10px;
+   padding-right: 2px;
+   
 }
 
-.ModalBox .ModalBoxPane input, .ModalBoxPane select {
+
+
+.ModalBox .ModalBoxPane input, .ModalBoxPane select, .ModalBoxPane textarea {
     border: dotted black 1px;
     width: 300px;
 }
+
+.ModalBoxPane textarea {
+    width: 400px;
+}
+
 
 .ModalBox .ModalBoxPane input[type="submit"] , .ModalBoxPane input[type="reset"], .AboutBox input[type="submit"] {
     border: dotted black 1px;
     width: 50px;
     margin-right: 10px;
+    margin-bottom: 10px;
 }
 
 .ModalBox .ModalBoxPane td {

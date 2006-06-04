@@ -889,8 +889,11 @@ Widget_ModalBox.prototype.addItem = function (name, value, type, description, op
 		case "textarea":
 			var td = this.addFormEntry(name, description);
 			var inputfield = document.createElement("textarea");
-			inputfield.setAttribute("cols","50");
-			inputfield.setAttribute("rows","30");
+			//inputfield.setAttribute("cols","50");
+			//inputfield.setAttribute("rows","30");
+			var _height = window.innerHeight - 150;
+			if (_height > 450) { _height = 450;};
+			inputfield.style.height = _height + "px"; 
 			var text = document.createTextNode(value);
 			
 			inputfield.name = name;
