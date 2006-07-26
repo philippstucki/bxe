@@ -1388,7 +1388,7 @@ function bxe_UnorderedList() {
 
 		li = li.nextSibling;
 	}
-	lines[0].container.parentNode.setAttribute("class","type1");
+	//lines[0].container.parentNode.setAttribute("class","type1");
 	bxe_updateXPath();
 }
 
@@ -1432,7 +1432,7 @@ function bxe_OrderedList() {
 	}
 	
 	// needed by unizh
-	lines[0].container.parentNode.setAttribute("class","type1");
+	//lines[0].container.parentNode.setAttribute("class","type1");
 	bxe_updateXPath();
 }
 
