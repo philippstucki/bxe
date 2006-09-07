@@ -252,9 +252,30 @@ MozClipboard.prototype.setData = function(data, dataFlavor)
 		this._clipboardText = data.data;
 	} else {
 	//copy the selection to the internal clipboard
-		this._clipboard = data.cloneContents();
+		var _c = data.cloneContents();
+		
+			var walker = document.createTreeWalker(
+			_c, NodeFilter.SHOW_ELEMENT,
+			null, 
+			true);
+		var node = _c;
+		
+		do {
+			var nextnode =   walker.nextNode()
+			if (node.nodeType == 1 && node.hasAttribute("_edom_internal_node")) {
+				if (node.localName == "img" && node.parentNode.localName == "span" && node.parentNode.getAttribute("class") == "img") {
+					var _parent = node.parentNode;
+					_parent.parentNode.insertBefore(node,_parent);
+					_parent.parentNode.removeChild(_parent);
+				} else {
+					node.parentNode.removeChild(node);
+				}
+			}
+			node =   nextnode;
+		} while(node)
+		this._clipboard = _c
 	//to allow easier comparing of system and internal clipboard, store the plaintext in this variable
-		this._clipboardText = data.toString();
+		this._clipboardText = _c.toString();
 	}
 	//if nativeSupport, add the content to the system clipboard
 	if (this.nativeSupport) {
