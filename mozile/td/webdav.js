@@ -38,7 +38,22 @@ mozileTransportDriver_webdav.prototype.loadCallback = function (e) {
 		reqObj.status = 200;
 		reqObj.statusText = "OK";
 	} else if (p.responseXML) {
-		reqObj =  td.container.parseResponseXML(p.responseXML);
+		
+		//looks like a parse error, try removing script tags inserted by eg. ZoneAlarm
+		var parser = new DOMParser();
+		
+		var xmlstr = p.responseText;
+		xmlstr = xmlstr.replace(/<script[^>]+>[^<]*<\/script>/g,"");
+		var xmldoc = parser.parseFromString(xmlstr,"text/xml");
+		if (xmldoc.documentElement.nodeName != 'parsererror') {
+			reqObj.document = xmldoc;
+			reqObj.isError = false;
+			reqObj.status = 200;
+			reqObj.statusText = "OK";
+		} else {
+		
+			reqObj =  td.container.parseResponseXML(p.responseXML);
+		}
 	}
 	else {
 		reqObj = td.container.parseResponseText(p.responseText);
