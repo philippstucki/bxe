@@ -633,6 +633,11 @@ Widget_StatusBar.prototype.buildXPath = function (node) {
 		rootNode.addEventListener("click", function(e) {
 			this.Widget.buildPopup(this);
 		}, false );
+		
+		rootNode.addEventListener("contextmenu", function(e) {
+			this.Widget.buildPopup(this);
+			e.stopPropagation();
+		}, false );
 		rootNode.XMLNode = node;
 		
 		node = node.parentNode;
