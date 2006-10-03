@@ -74,7 +74,10 @@ function BxeFCKBrowser_Open(e) {
 		     
         var sel = window.getSelection();
         sel.selectEditableRange(BxeFCKBrowser.cssr);
-        //make string
+        sel.linkText(url);
+		return true;
+        //old method, maybe needed one day for inserting other stuff than links :)
+		//make string
 		var te = "" + sel;
 		te = te.replace(/</,"&lt;");
 		if (typeof target == "object") {
@@ -82,8 +85,7 @@ function BxeFCKBrowser_Open(e) {
 		} else {
 			var xml = "<a xmlns='"+ XHTMLNS + "' href='"+url+"' target='"+target+"'>"+te+"</a>";
 		}
-        
-        return bxe_insertContent(xml, BXE_SELECTION);
+        //return bxe_insertContent(xml, BXE_SELECTION);
     }
     
 }
