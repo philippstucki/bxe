@@ -74,8 +74,9 @@ function BxeFCKBrowser_Open(e) {
 		     
         var sel = window.getSelection();
         sel.selectEditableRange(BxeFCKBrowser.cssr);
-        /*sel.linkText(url);
-		return true;*/
+        sel.linkText(url);
+		sel.anchorNode.parentNode.updateXMLNode();
+		return true;
         //old method, maybe needed one day for inserting other stuff than links :)
 		//make string
 		var te = "" + sel;
