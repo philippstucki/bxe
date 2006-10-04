@@ -399,7 +399,7 @@ function config_loaded(bxe_config_in) {
 	if (btn['_location']) {
 		buttonImgLoc = btn['_location'];
 	} else {
-		buttonImgLoc = mozile_root_dir + "/images/buttons.png";
+		buttonImgLoc = mozile_root_dir + "images/buttons.png";
 	}
 	var preloadthebutton = new Image();
 	preloadthebutton.src = buttonImgLoc;
