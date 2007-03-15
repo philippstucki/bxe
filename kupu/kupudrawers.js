@@ -508,6 +508,7 @@ function LibraryDrawer(tool, xsluri, libsuri, searchuri) {
           // something
           body = null;
         };
+        xmlhttp.overrideMimeType("text/xml");
         xmlhttp.open(method, uri, true);
         // use ContextFixer to wrap the Sarissa callback, both for isolating 
         // the 'this' problem and to be able to pass in an extra argument 
@@ -1091,6 +1092,7 @@ function LibraryDrawer(tool, xsluri, libsuri, searchuri) {
           // something
           body = null;
         };
+        xmlhttp.overrideMimeType("text/xml");
         
         xmlhttp.open(method, uri, true);
         // use ContextFixer to wrap the Sarissa callback, both for isolating 
