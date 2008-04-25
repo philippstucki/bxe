@@ -658,7 +658,7 @@ function bxe_ContextPopup(e) {
 	if (clip._clipboard) {
 		var _clipboardNodeName = "";
 		var _clipboardNamespaceUri = "";
-		if (clip._clipboard.firstChild.XMLNode) {
+		if (clip._clipboard.firstChild && clip._clipboard.firstChild.XMLNode) {
 			_clipboardNodeName = clip._clipboard.firstChild.XMLNode.nodeName;
 			_clipboardNamespaceUri = clip._clipboard.firstChild.XMLNode.namespaceURI;
 		} else {
