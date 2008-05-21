@@ -27,9 +27,17 @@ DocumentVDOM.prototype = new NodeVDOM();
 DocumentVDOM.prototype.parseSchema = function() {
 	//if it's an XMLSchema File
 	if (!this.xmldoc.documentElement) {
-		
 		alert("Validation Document could not be loaded. \n" + this.xmldoc.saveXML(this.xmldoc));
 	}
+	//fix firefox 3 issue (can't access node, without making a new documenting and adopting the node;
+	try {
+		this.xmldoc.documentElement.localName;
+	} catch (e) {
+		var d = document.implementation.createDocument("","",null);
+		d.appendChild(d.adoptNode(this.xmldoc.documentElement,true));
+		this.xmldoc = d;
+	}
+
 	if (this.xmldoc.documentElement.localName == "schema" &&
 		this.xmldoc.documentElement.namespaceURI == "http://www.w3.org/2001/XMLSchema" ) {
 		alert("XML Schema validation is not supported. You have to use Relax NG");

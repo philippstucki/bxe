@@ -87,6 +87,16 @@ mozileTransportDriver_http.prototype.loadCallback = function (e) {
 	// if there's no element called parsererror...
 
 	if (p.getElementsByTagNameNS("http://www.mozilla.org/newlayout/xml/parsererror.xml","parsererror").length == 0) {
+		//fix firefox 3 issue (can't access node, without making a new documenting and adopting the node;
+		try {
+			p.documentElement.nodeName;
+		} catch (e) {
+			var d = document.implementation.createDocument("","",null);
+			d.appendChild(d.adoptNode(p.documentElement,true));
+			d.td = p.td;
+			d.loader =p.loader;
+			p = d;
+		}
 		reqObj.document = p;
 		reqObj.isError = false;
 		reqObj.status = 200;
