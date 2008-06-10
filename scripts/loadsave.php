@@ -9,6 +9,8 @@
  needs PHP 4.3 or PHP 5. similar is also possible with PHP < 4.3
 */
 
+die("remove this die() line, if you really want to use this script");
+
 header("Content-Type: text/html");
 
 $xmlfile = realpath($_GET['XML']);
