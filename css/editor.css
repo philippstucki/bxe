@@ -78,6 +78,8 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
     width: 100%;
     background-color:     #ff6600;
     z-index:1000;
+    -moz-user-select: none;
+    
 }
 
 .Menubar {
@@ -144,6 +146,8 @@ div.MenuItem:hover, div.MenuItemChecked:hover, .MenuPopupTitle {
     border-left: 5px;
     border-bottom: 1px dotted black;
     border-top: 1px dotted black;
+    -moz-user-select: none;
+    
 }
 
 .ToolBarButton {
