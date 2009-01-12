@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!-- $Id: transformxsl.xsl,v 1.1 2003/08/14 07:52:42 chregu Exp $ -->
+<!-- $Id$ -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 
 xmlns:xhtml="http://www.w3.org/1999/xhtml"
