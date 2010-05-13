@@ -64,7 +64,7 @@ if (_SARISSA_IS_MOZ)
 	*/
 	function _sarissa_setReadyState(oDoc, iReadyState) 
 	{
-		oDoc.readyState = iReadyState;
+		//Doc.readyState = iReadyState;
 		if (oDoc.onreadystatechange != null && typeof oDoc.onreadystatechange == "function")
 			oDoc.onreadystatechange();
 	};
@@ -178,7 +178,7 @@ if (_SARISSA_IS_MOZ)
 	* <li>3 == INTERACTIVE,</li> 
 	* <li>4 == COMPLETED</li></ul>
 	*/
-	XMLDocument.prototype.readyState = 0;
+	// XMLDocument.prototype.readyState = 0;
 	// NOTE: setting async to false will only work with documents 
 	// called over HTTP (meaning a server), not the local file system,
 	// unless you are using Moz 1.4+.
